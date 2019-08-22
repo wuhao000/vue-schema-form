@@ -2,6 +2,7 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import BaseArrayComponent from './base-array-component';
 import PlainDisplayField from './display/plain-display-field';
+import SelectDisplayField from './display/select-display-field';
 import TimeDisplayField from './display/time-display-field';
 import ElExtCheckbox from './element/checkbox-group';
 import ElExtRadio from './element/radio-group';
@@ -10,7 +11,7 @@ import Empty from './empty';
 
 export const ASchemaForm = 'ASchemaForm';
 
-const enum TYPES {
+export const enum TYPES {
   url = 'url',
   string = 'string',
   datetime = 'datetime',
@@ -22,7 +23,8 @@ const enum TYPES {
   boolean = 'boolean',
   expandSelect = 'expand-select',
   empty = 'empty',
-  text = 'text'
+  text = 'text',
+  subForm = 'sub-form'
 }
 
 const DESKTOP = 'desktop';
@@ -103,17 +105,17 @@ Vue.component('BaseArrayComponent', BaseArrayComponent);
 
 registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
 registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
-register(ASchemaForm, DESKTOP, ['SubForm', 'sub-form'], false, definition => {
+registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], ['select', 'expand-select'], null);
+register(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definition, platform) => {
   return {
-    platform: DESKTOP,
-    definition: {fields: definition.properties}
+    platform,
+    definition: {fields: definition.fields}
   };
 });
-register(ASchemaForm, MOBILE, ['SubForm', 'sub-form'], false, definition => {
+registerDisplay(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definition, platform) => {
   return {
-    title: definition.title,
-    platform: MOBILE,
-    definition: {fields: definition.properties}
+    platform,
+    definition: {fields: definition.fields}
   };
 });
 
@@ -159,9 +161,9 @@ export function registerAntdMobile() {
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
   register('m-date-picker', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-    (definition: SchemaFormField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: SchemaFormField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   register('m-textarea', MOBILE, [TYPES.text], false);
   register('m-switch-item', MOBILE, [TYPES.boolean], false);
   register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
@@ -233,7 +235,7 @@ export const getDefaultValue = (definition: SchemaFormField) => {
 
 
 export const getFormComponent = (platform: Platform) => {
-  return platform === 'desktop' ? formComponent : 'm-list';
+  return platform === DESKTOP ? formComponent : 'm-list';
 };
 
 export const getRowComponent = () => {

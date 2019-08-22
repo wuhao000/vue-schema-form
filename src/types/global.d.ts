@@ -5,4 +5,5 @@ declare global {
     Vue: any;
     _: typeof _;
   }
+  const moment: any;
 }

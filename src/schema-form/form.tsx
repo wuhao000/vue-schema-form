@@ -107,6 +107,7 @@ export default class SchemaForm extends Vue {
   }
 
   get realFields() {
+    console.log(this.definition);
     return this.definition.fields.filter(it => it !== null && it !== undefined);
   }
 

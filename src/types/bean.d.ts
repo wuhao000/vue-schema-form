@@ -7,7 +7,7 @@ export interface SchemaFormField {
   array?: boolean;
   depends?: ShowFieldCondition[] | ((value: any) => boolean);
   notice?: string;
-  properties?: SchemaFormField[];
+  fields?: SchemaFormField[];
   property: string;
   required?: boolean;
   span?: number;

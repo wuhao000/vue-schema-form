@@ -2,14 +2,7 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import {
-  getColComponent,
-  getComponent,
-  getDisplayComponent,
-  getFormComponent,
-  getOptions,
-  SchemaFormComponent
-} from './utils';
+import {getColComponent, getComponent, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
 
 @Component({
   name: 'FormField'
@@ -80,22 +73,22 @@ export default class FormField extends Vue {
     }
     // @ts-ignore
     const component = this.content ? this.content : <InputFieldDefinition
-      attrs={componentAttrs}
-      value={currentValue}
-      title={this.platform === 'mobile' ? definition.title : null}
-      onInput={this.onInput}/>;
+        attrs={componentAttrs}
+        value={currentValue}
+        title={this.platform === 'mobile' ? definition.title : null}
+        onInput={this.onInput}/>;
     let item = null;
     const FormItemComponent = getFormComponent(this.platform) + '-item';
     const ColComponent = getColComponent();
     if (platform === 'desktop') {
-      const formItem = this.definition.type === 'SubForm' ? component :
-        <FormItemComponent required={definition.required}
-                           prop={this.validate ? definition.property : null}
-                           title={definition.title}
-                           label={definition.title}>
-          {component}
-          {this.renderNotice()}
-        </FormItemComponent>;
+      const formItem = this.definition.type === TYPES.subForm ? component :
+          <FormItemComponent required={definition.required}
+                             prop={this.validate ? definition.property : null}
+                             title={definition.title}
+                             label={definition.title}>
+            {component}
+            {this.renderNotice()}
+          </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {
