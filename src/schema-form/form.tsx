@@ -1,12 +1,13 @@
-import {FormDescriptor, SchemaFormField, ShowFieldCondition} from '@/types/bean';
+import {FormDescriptor, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
 import difference from 'lodash.difference';
 import eq from 'lodash.eq';
 import get from 'lodash.get';
-import Vue from 'vue';
+import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import FormField from './field';
 import {
+  ASchemaForm,
   getDefaultValue,
   getFormComponent,
   getRowComponent,
@@ -18,12 +19,16 @@ import {
 } from './utils';
 
 @Component({
-  name: 'SchemaForm'
+  name: ASchemaForm
 })
 export default class SchemaForm extends Vue {
 
   @Prop(Object)
   public definition: FormDescriptor;
+  @Prop({type: String, default: 'desktop'})
+  public platform: Platform;
+  @Prop({type: Object, default: () => ({})})
+  public props: FormProps;
   @Prop([Array, Object])
   public value: { [key: string]: any } | Array<{ [key: string]: any }>;
   @Prop({type: String, default: 'edit'})
@@ -36,6 +41,8 @@ export default class SchemaForm extends Vue {
   public static registerElement = registerElement;
   public static registerComponent = register;
   public static registerDisplayComponent = registerDisplay;
+  @Prop()
+  public title: VNode | string;
 
 
   @Watch('currentValue', {deep: true})
@@ -167,9 +174,9 @@ export default class SchemaForm extends Vue {
   }
 
   private renderButtons() {
-    const {definition: {props}} = this;
+    const {props} = this;
     if (props && this.mode === 'edit') {
-      if (this.definition.platform === 'mobile') {
+      if (this.platform === 'mobile') {
         return <div class="action-buttons">
           {props.onOk ? <m-white-space/> : null}
           {props.onOk ? <m-button type="primary"
@@ -204,13 +211,13 @@ export default class SchemaForm extends Vue {
   private renderTitle() {
     if (this.$slots.title) {
       return this.$slots.title;
-    } else if (this.definition.platform === 'desktop' && this.definition.props && this.definition.props.title) {
-      return <h2 class="form-title">{this.definition.props.title}</h2>;
+    } else if (this.props && this.title) {
+      return <h2 class="form-title">{this.title}</h2>;
     }
   }
 
-  private async onOk() {
-    const {definition: {props}} = this;
+  private async onOk(this: any) {
+    const {props} = this;
     if (props && props.onOk) {
       if (this.form && props.rules && this.form.validate) {
         const valid = await this.form.validate();
@@ -300,7 +307,7 @@ export default class SchemaForm extends Vue {
   }
 
   private renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number) {
-    const {definition: {platform}} = this;
+    const {platform} = this;
     let value = null;
     if (field.property.includes('.')) {
       value = SchemaForm.getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
@@ -310,7 +317,7 @@ export default class SchemaForm extends Vue {
     const propertyName = field.property.substr(field.property.lastIndexOf('.') + 1);
     // @ts-ignore
     return this.calcShowState(field) ? <FormField vModel={value[propertyName]}
-                                                  validate={!!this.definition.props.rules}
+                                                  validate={!!(this.props && this.props.rules)}
                                                   display={this.mode === 'display'}
                                                   content={this.$slots[field.slot]}
                                                   definition={field}
@@ -331,7 +338,7 @@ export default class SchemaForm extends Vue {
 
   private renderSingleFields(currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
     const RowComponent = getRowComponent();
-    const {definition: {props}} = this;
+    const {props} = this;
     const formEvents: any = {};
     if (props) {
       if (props.onOk) {
@@ -341,13 +348,14 @@ export default class SchemaForm extends Vue {
         formEvents.cancel = props.onCancel;
       }
     }
-    const FormComponent = getFormComponent(this.definition.platform);
+    const FormComponent = getFormComponent(this.platform);
     const groups = this.getGroups(currentValue);
     return <FormComponent attrs={Object.assign({}, props)}
+                          title={this.platform === 'mobile' ? (this.$slots.title || this.title) : null}
                           ref="form"
                           on={formEvents}>
       {
-        !this.definition.array ? this.renderTitle() : null
+        !this.definition.array && this.platform === 'desktop' ? this.renderTitle() : null
       }
       {
         props && props.inline ? groups.reduce((a, b) => a.concat(b))

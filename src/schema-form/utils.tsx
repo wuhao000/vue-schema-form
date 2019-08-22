@@ -1,18 +1,43 @@
 import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
-import ElInputArray from './element/input-array';
+import BaseArrayComponent from './base-array-component';
+import PlainDisplayField from './display/plain-display-field';
+import TimeDisplayField from './display/time-display-field';
+import ElExtCheckbox from './element/checkbox-group';
+import ElExtRadio from './element/radio-group';
 import ElExtSelect from './element/select';
 import Empty from './empty';
+
+export const ASchemaForm = 'ASchemaForm';
+
+const enum TYPES {
+  url = 'url',
+  string = 'string',
+  datetime = 'datetime',
+  time = 'time',
+  select = 'select',
+  date = 'date',
+  integer = 'integer',
+  double = 'double',
+  boolean = 'boolean',
+  expandSelect = 'expand-select',
+  empty = 'empty',
+  text = 'text'
+}
+
+const DESKTOP = 'desktop';
+const MOBILE = 'mobile';
 
 let formComponent = 'd-form';
 let rowComponent = 'd-row';
 let colComponent = 'd-col';
+let buttonComponent = 'd-button';
 
 export interface SchemaFormComponent {
   platform: Platform;
   type: string;
   component: string | object;
-  forArray: boolean;
+  forArray: boolean | null;
   getProps: (definition: SchemaFormField) => object;
 }
 
@@ -20,135 +45,165 @@ const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
 const DisplayComponentDefinitions: SchemaFormComponent[] = [];
 
 export const registerDisplay = (component: string | object,
-                                platform: Platform,
+                                platform: Platform | Platform[],
                                 type: string | string[],
                                 forArray: boolean = null,
                                 getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
-  if (typeof type === 'string') {
-    addComponent(component, platform, type, forArray, getProps, true);
-  } else if (Array.isArray(type)) {
-    type.forEach(t => {
-      addComponent(component, platform, t, forArray, getProps, true);
-    });
-  }
+  addComponent(component, platform, type, forArray, getProps, true);
 };
 export const register = (component: string,
-                         platform: Platform,
-                         type: string | string[],
+                         platform: Platform | Platform[],
+                         types: string | string[],
                          forArray: boolean = null,
                          getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
-  if (typeof type === 'string') {
-    addComponent(component, platform, type, forArray, getProps, false);
-  } else if (Array.isArray(type)) {
-    type.forEach(t => {
-      addComponent(component, platform, t, forArray, getProps, false);
-    });
-  }
+  addComponent(component, platform, types, forArray, getProps, false);
 };
 
 const addComponent = (component: string | object,
-                      platform: Platform,
-                      type: string,
+                      platforms: Platform | Platform[],
+                      types: string | string[],
                       forArray: boolean = null,
                       getProps: (definition: SchemaFormField, platform: Platform) => object = () => ({}),
                       forDisplay: boolean) => {
-  const def = {
-    component,
-    platform,
-    type,
-    forArray,
-    getProps: (definition: SchemaFormField) => {
-      const props: any = getProps(definition, platform) || {};
-      if (definition.title && platform === 'mobile') {
-        props.labelNumber = definition.title.length > 7 ? 7 : definition.title.length;
-      }
-      if (definition.props) {
-        Object.assign(props, definition.props);
-      }
-      return props;
-    }
-  };
-  if (forDisplay) {
-    DisplayComponentDefinitions.push(def);
+  if (Array.isArray(types)) {
+    types.forEach(type => {
+      addComponent(component, platforms, type, forArray, getProps, forDisplay);
+    });
+  } else if (Array.isArray(platforms)) {
+    platforms.forEach(platform => {
+      addComponent(component, platform, types, forArray, getProps, forDisplay);
+    });
   } else {
-    SchemaFormComponentDefinitions.push(def);
+    const def = {
+      component,
+      platform: platforms,
+      type: types,
+      forArray,
+      getProps: (definition: SchemaFormField) => {
+        const props: any = getProps(definition, platforms) || {};
+        if (definition.title && platforms === MOBILE) {
+          props.labelNumber = definition.title.length > 7 ? 7 : definition.title.length;
+        }
+        if (definition.props) {
+          Object.assign(props, definition.props);
+        }
+        return props;
+      }
+    };
+    if (forDisplay) {
+      DisplayComponentDefinitions.push(def);
+    } else {
+      SchemaFormComponentDefinitions.push(def);
+    }
   }
 };
 
 Vue.component('empty', Empty);
+Vue.component('BaseArrayComponent', BaseArrayComponent);
+
+registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
+registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
+register(ASchemaForm, DESKTOP, ['SubForm', 'sub-form'], false, definition => {
+  return {
+    platform: DESKTOP,
+    definition: {fields: definition.properties}
+  };
+});
+register(ASchemaForm, MOBILE, ['SubForm', 'sub-form'], false, definition => {
+  return {
+    title: definition.title,
+    platform: MOBILE,
+    definition: {fields: definition.properties}
+  };
+});
 
 export function registerAntd() {
   formComponent = 'd-form';
   rowComponent = 'd-row';
   colComponent = 'd-col';
-  register('d-input', 'desktop', ['String', 'Url']);
-  register('d-textarea', 'desktop', 'Text');
-  register('d-date-picker', 'desktop', ['DateTime', 'Date', 'Time'], null, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-input-number', 'desktop', ['Double', 'Integer']);
-  register('d-switch', 'desktop', 'Boolean');
-  register('d-select', 'desktop', 'Select', null, definition => {
+  register('d-input', DESKTOP, [TYPES.string, TYPES.url]);
+  register('d-textarea', DESKTOP, [TYPES.text]);
+  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer]);
+  register('d-switch', DESKTOP, TYPES.boolean);
+  register('d-select', DESKTOP, TYPES.select, null, definition => {
     return {dropdownMatchSelectWidth: false, multiple: definition.array};
   });
-  register('d-checkbox-group', 'desktop', 'ExpandSelect', true);
-  register('d-radio-group', 'desktop', 'ExpandSelect', false);
-  register('d-color-picker', 'desktop', 'Color');
+  register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true);
+  register('d-radio-group', DESKTOP, TYPES.expandSelect, false);
+  register('d-color-picker', DESKTOP, 'color');
 }
 
 export function registerElement() {
   formComponent = 'el-form';
   rowComponent = 'el-row';
   colComponent = 'el-col';
-  Vue.component('ElExtSelect', ElExtSelect);
-  Vue.component('ElInputArray', ElInputArray);
-  register('el-input', 'desktop', ['String', 'Url']);
-  register('el-input', 'desktop', 'Text', null, definition => {
+  buttonComponent = 'el-button';
+  Vue.component('el-ext-select', ElExtSelect);
+  Vue.component('el-ext-checkbox', ElExtCheckbox);
+  Vue.component('el-ext-radio', ElExtRadio);
+  register('el-input', DESKTOP, [TYPES.string, TYPES.url], false);
+  register('el-input', DESKTOP, [TYPES.text], false, definition => {
     return {type: 'textarea'};
   });
-  register('el-input-array', 'desktop', ['String', 'Url'], true);
-  register('el-input-array', 'desktop', 'Text', true, () => {
-    return {type: 'textarea'};
-  });
-  register('el-date-picker', 'desktop', ['DateTime', 'Date', 'Time'], null, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('el-input-number', 'desktop', ['Double', 'Integer']);
-  register('el-switch', 'desktop', 'Boolean');
-  register('el-ext-select', 'desktop', 'Select', null);
-  register('el-checkbox-group', 'desktop', 'ExpandSelect', true);
-  register('el-radio-group', 'desktop', 'ExpandSelect', false);
+  register('el-date-picker', DESKTOP, [TYPES.datetime, TYPES.date, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
+  register('el-switch', DESKTOP, [TYPES.boolean], false);
+  register('el-ext-select', DESKTOP, [TYPES.select], false);
+  register('el-ext-radio', DESKTOP, [TYPES.expandSelect], false);
+  register('el-ext-checkbox', DESKTOP, [TYPES.expandSelect], true);
 }
 
 export function registerAntdMobile() {
-  register('m-input', 'mobile', ['String', 'Url']);
-  register('m-date-picker', 'desktop', ['DateTime', 'Date', 'Time'], null, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('m-input', 'mobile', ['Double', 'Integer'], null,
+  register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
+  register('m-date-picker', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
     (definition: SchemaFormField) => {
-      return {type: definition.type === 'Double' ? 'digit' : 'number', textAlign: 'right'};
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
     });
-  register('m-textarea', 'mobile', 'Text');
-  register('m-switch-item', 'mobile', 'Boolean');
-  register('m-checkbox-popup-list', 'mobile', 'Select', true);
-  register('m-radio-popup-list', 'mobile', 'Select', false);
-  register('m-checkbox-list', 'mobile', 'ExpandSelect', true);
-  register('m-radio-list', 'mobile', 'ExpandSelect', false);
+  register('m-textarea', MOBILE, [TYPES.text], false);
+  register('m-switch-item', MOBILE, [TYPES.boolean], false);
+  register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
+  register('m-radio-popup-list', MOBILE, [TYPES.select], false);
+  register('m-checkbox-list', MOBILE, [TYPES.expandSelect], true);
+  register('m-radio-list', MOBILE, [TYPES.expandSelect], false);
 }
 
+const EmptyDefinition = {
+  component: 'empty',
+  getProps: (_) => ({})
+} as SchemaFormComponent;
 
-function search(components: SchemaFormComponent[], platform: Platform, definition: SchemaFormField) {
+function search(components: SchemaFormComponent[], platform: Platform, definition: SchemaFormField): SchemaFormComponent {
   const matchedComponents = components.filter(it => it.platform === platform && it.type === definition.type);
-  if (matchedComponents.length === 1) {
-    return matchedComponents[0];
-  } else if (matchedComponents.length > 1) {
-    let def = null;
-    if (definition.array) {
-      def = matchedComponents.find(it => it.forArray === definition.array);
+  if (matchedComponents.length > 0) {
+    const defaultArrayComponent: SchemaFormComponent = {
+      component: 'base-array-component',
+      forArray: true,
+      type: null,
+      platform: DESKTOP,
+      getProps: () => {
+        return Object.assign({
+          component: matchedComponents[0].component,
+          props: {title: definition.title}
+        }, matchedComponents[0].getProps(definition));
+      }
+    };
+    if (matchedComponents.length === 1) {
+      if (definition.array && matchedComponents[0].forArray === false) {
+        return defaultArrayComponent;
+      }
+      return matchedComponents[0];
     } else {
-      def = matchedComponents.find(it => !it.forArray);
+      if (definition.array) {
+        return matchedComponents.find(it => it.forArray) || defaultArrayComponent;
+      } else {
+        return matchedComponents.find(it => !it.forArray) || EmptyDefinition;
+      }
     }
-    return def || matchedComponents[0];
   } else {
-    return {
-      component: 'empty',
-      getProps: (_) => ({})
-    } as SchemaFormComponent;
+    return EmptyDefinition;
   }
 }
 
@@ -173,13 +228,7 @@ export const getOptions = (definition: SchemaFormField) => {
 };
 
 export const getDefaultValue = (definition: SchemaFormField) => {
-  if (definition.type === 'Color') {
-    return '';
-  } else if (definition.array) {
-    return [];
-  } else {
-    return null;
-  }
+  return definition.array ? [] : null;
 };
 
 
@@ -193,6 +242,10 @@ export const getRowComponent = () => {
 
 export const getColComponent = () => {
   return colComponent;
+};
+
+export const getButtonComponent = () => {
+  return buttonComponent;
 };
 
 export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {

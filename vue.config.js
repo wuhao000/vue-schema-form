@@ -32,6 +32,7 @@ module.exports = {
         port: 8021
       };
     }
+    config.output.libraryExport = 'default';
     config.resolve.alias['@ant-design/icons/lib/dist'] = path.resolve(__dirname, './src/icons.ts');
     config.module.rules.push({
       test: /\.md$/,

@@ -5,7 +5,7 @@ import {Prop} from 'vue-property-decorator';
 @Component({
   name: 'DisplayField'
 })
-class DisplayField extends Vue {
+class PlainDisplayField extends Vue {
 
   @Prop()
   public value: any;
@@ -17,4 +17,4 @@ class DisplayField extends Vue {
 
 }
 
-export default DisplayField as any;
+export default PlainDisplayField as any;

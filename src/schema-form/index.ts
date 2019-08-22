@@ -4,8 +4,8 @@ import SchemaForm from '@/schema-form/form';
 SchemaForm.Field = SchemaFormField;
 
 SchemaForm.install = (Vue) => {
-  Vue.component('SchemaForm', SchemaForm);
-  Vue.component('SchemaFormField', SchemaForm.Field);
+  Vue.component('ASchemaForm', SchemaForm);
+  Vue.component('ASchemaFormField', SchemaForm.Field);
 };
 
 export default SchemaForm;

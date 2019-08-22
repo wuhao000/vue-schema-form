@@ -48,8 +48,6 @@ export interface ShowFieldCondition {
 export interface FormDescriptor {
   array?: boolean;
   fields: SchemaFormField[];
-  platform: Platform;
-  props?: FormProps;
 }
 
 interface FormProps {

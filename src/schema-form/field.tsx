@@ -1,4 +1,4 @@
-import {Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
+import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
@@ -29,15 +29,20 @@ export default class FormField extends Vue {
   @Prop()
   public value: any;
   public currentValue: any;
-  public shouldShowField = true;
   @Prop()
   private content: any;
 
   get componentType(): SchemaFormComponent {
+    let component: SchemaFormComponent = null;
     if (this.display) {
-      return getDisplayComponent(this.platform, this.definition);
+      component = getDisplayComponent(this.platform, this.definition);
+    } else {
+      component = getComponent(this.platform, this.definition);
     }
-    return getComponent(this.platform, this.definition);
+    if (component.component === 'empty') {
+      console.warn(`类型${this.definition.type}${this.definition.array ? '（数组）' : ''}没有对应的${this.display ? '展示' : '编辑'}组件`);
+    }
+    return component;
   }
 
   get options() {
@@ -59,126 +64,56 @@ export default class FormField extends Vue {
     this.$emit('input', currentValue);
   }
 
-  @Watch('formValue', {deep: true, immediate: true})
-  public modelChanged() {
-    this.calcShowState();
-  }
-
-  @Watch('value')
+  @Watch('value', {immediate: true})
   public valueChanged(value: any) {
     if (this.currentValue !== this.value) {
-      this.onInput(value);
+      this.currentValue = this.value;
     }
-  }
-
-  public created() {
-    const value = this.value;
-    if (this.definition.type === 'Integer') {
-      if (value !== null && value !== undefined) {
-        if (this.definition.array) {
-          this.onInput(value.map(v => parseInt(v)));
-        } else {
-          this.onInput(parseInt(value));
-        }
-      }
-    } else if (this.definition.type === 'Double') {
-      if (value !== null && value !== undefined) {
-        if (this.definition.array) {
-          this.onInput(value.map(v => parseFloat(v)));
-        } else {
-          this.onInput(parseFloat(value));
-        }
-      }
-    } else {
-      this.onInput(value);
-    }
-  }
-
-  public calcShowState() {
-    const {definition} = this;
-    if (!definition.depends) {
-      this.shouldShowField = true;
-    } else {
-      if (typeof definition.depends === 'function') {
-        this.shouldShowField = definition.depends(this.formValue);
-      } else {
-        this.shouldShowField = !definition.depends
-          .map(condition => this.matchCondition(condition))
-          .some(it => !it);
-      }
-    }
-  }
-
-  private matchCondition(condition: ShowFieldCondition): boolean {
-    if (!this.formValue) {
-      return false;
-    } else {
-      const currentValue = this.formValue[condition.property];
-      const compareValue = condition.value;
-      if (currentValue === null || currentValue === undefined) {
-        switch (condition.operator) {
-          case 'in':
-            return compareValue.includes(currentValue);
-          case 'notIn':
-            return !compareValue.includes(currentValue);
-        }
-        return false;
-      } else {
-        switch (condition.operator) {
-          case '=':
-            return compareValue.toString() === currentValue.toString();
-          case '<':
-            return parseFloat(currentValue) < parseFloat(compareValue);
-          case '>':
-            return parseFloat(currentValue) > parseFloat(compareValue);
-          case '>=':
-            return parseFloat(currentValue) >= parseFloat(compareValue);
-          case '<=':
-            return parseFloat(currentValue) <= parseFloat(compareValue);
-          case 'in':
-            return compareValue.includes(currentValue);
-          case 'notIn':
-            return !compareValue.includes(currentValue);
-        }
-      }
-    }
-    return true;
   }
 
   public render() {
-    const {shouldShowField, props, currentValue, definition, platform} = this;
+    const {props, currentValue, definition, platform} = this;
     const InputFieldDefinition = this.componentType.component;
+    const componentAttrs = Object.assign({}, props);
+    if (this.display) {
+      componentAttrs.definition = this.definition;
+    }
     // @ts-ignore
-    const component = this.content ? this.content : <InputFieldDefinition attrs={props}
-                                                                          value={currentValue}
-                                                                          title={this.platform === 'mobile' ? definition.title : null}
-                                                                          onInput={this.onInput}/>;
-
+    const component = this.content ? this.content : <InputFieldDefinition
+      attrs={componentAttrs}
+      value={currentValue}
+      title={this.platform === 'mobile' ? definition.title : null}
+      onInput={this.onInput}/>;
     let item = null;
     const FormItemComponent = getFormComponent(this.platform) + '-item';
     const ColComponent = getColComponent();
     if (platform === 'desktop') {
-      const formItem = <FormItemComponent required={definition.required}
-                                          prop={this.validate ? definition.property : null}
-                                          label={definition.title}>
-        {component}
-        {this.renderNotice()}
-      </FormItemComponent>;
+      const formItem = this.definition.type === 'SubForm' ? component :
+        <FormItemComponent required={definition.required}
+                           prop={this.validate ? definition.property : null}
+                           title={definition.title}
+                           label={definition.title}>
+          {component}
+          {this.renderNotice()}
+        </FormItemComponent>;
       if (definition.span) {
-        item = shouldShowField ? <ColComponent span={definition.span}>{formItem}</ColComponent> : null;
+        item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {
-        item = shouldShowField ? component : null;
+        item = component;
       } else {
-        item = shouldShowField ? formItem : null;
+        item = formItem;
       }
     } else {
-      item = shouldShowField ? component : null;
+      if (this.display) {
+        item = <m-list-item title={definition.title} extra={component}/>;
+      } else {
+        item = component;
+      }
     }
     return item;
   }
 
   public onInput(value) {
-    this.currentValue = value;
     this.$emit('input', value);
     this.$forceUpdate();
   }

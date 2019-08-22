@@ -1,14 +1,12 @@
-import Element from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
 import App from './App.vue';
 import SchemaForm from './index';
-import 'element-ui/lib/theme-chalk/index.css';
 
 
-Vue.use(Element);
-SchemaForm.registerElement();
+SchemaForm.registerAntd();
+SchemaForm.registerAntdMobile();
 
-Vue.use(SchemaForm);
 
 new Vue({
   render: h => h(App)

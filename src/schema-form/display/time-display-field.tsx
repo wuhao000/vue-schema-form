@@ -4,7 +4,7 @@ import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
 @Component({
-  name: 'DisplayField'
+  name: 'TimeDisplayField'
 })
 class DisplayField extends Vue {
 
@@ -15,8 +15,11 @@ class DisplayField extends Vue {
 
   public render() {
     const {value} = this;
+    if (this.definition.type === 'time') {
+      return <span>{this.value}</span>;
+    }
     let format = 'YYYY-MM-DD HH:mm:ss';
-    if (this.definition.type === 'Date') {
+    if (this.definition.type === 'date') {
       format = 'YYYY-MM-DD';
     }
     return <span vTime={value} format={format}/>;
