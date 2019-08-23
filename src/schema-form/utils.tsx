@@ -296,3 +296,30 @@ export const getOptionProperty = function getOptionProperty(option: any, propert
     return property(option);
   }
 };
+
+export function addRule(rules: any, field: SchemaFormField, rule: any) {
+  const property = field.property;
+  const type = field.type as any;
+  if (!rules[property]) {
+    rules[property] = [];
+  }
+  let validateType = 'string';
+  if (field.array) {
+    validateType = 'array';
+  } else if (type === TYPES.integer) {
+    validateType = 'integer';
+  } else if (type === TYPES.double) {
+    validateType = 'number';
+  } else if (type === TYPES.subForm) {
+    validateType = 'object';
+  } else if (type === TYPES.date || type === TYPES.datetime) {
+    validateType = 'date';
+  } else if (type === TYPES.select || type === TYPES.expandSelect) {
+    const options = getOptions(field);
+    if (options.length) {
+      validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
+    }
+  }
+  rule.type = validateType;
+  rules[property].push(rule);
+}

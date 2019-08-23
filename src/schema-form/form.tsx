@@ -7,55 +7,20 @@ import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import FormField from './field';
-import {
-  ASchemaForm,
-  DESKTOP,
-  getButtonComponent,
-  getDefaultValue,
-  getFormComponent,
-  getOptionProperty,
-  getOptions,
-  getRowComponent,
-  MOBILE,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement,
-  TYPES
-} from './utils';
-
-function addRule(rules: any, field: SchemaFormField, rule: any) {
-  const property = field.property;
-  const type = field.type as any;
-  if (!rules[property]) {
-    rules[property] = [];
-  }
-  let validateType = 'string';
-  if (field.array) {
-    validateType = 'array';
-  } else if (type === TYPES.integer) {
-    validateType = 'integer';
-  } else if (type === TYPES.double) {
-    validateType = 'number';
-  } else if (type === TYPES.subForm) {
-    validateType = 'object';
-  } else if (type === TYPES.date || type === TYPES.datetime) {
-    validateType = 'date';
-  } else if (type === TYPES.select || type === TYPES.expandSelect) {
-    const options = getOptions(field);
-    if (options.length) {
-      validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
-    }
-  }
-  rule.type = validateType;
-  rules[property].push(rule);
-}
+import {addRule, ASchemaForm, DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, TYPES} from './utils';
 
 @Component({
   name: ASchemaForm
 })
 export default class SchemaForm extends Vue {
+
+  public static Field: any;
+  public static install: (Vue) => void;
+  public static registerAntd = registerAntd;
+  public static registerAntdMobile = registerAntdMobile;
+  public static registerElement = registerElement;
+  public static registerComponent = register;
+  public static registerDisplayComponent = registerDisplay;
 
   @Prop(Object)
   public definition: FormDescriptor;
@@ -71,17 +36,16 @@ export default class SchemaForm extends Vue {
   public inline: boolean;
   @Prop(Object)
   public rules: ValidateRules;
-  public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
-  public static Field: any;
-  public static install: (Vue) => void;
-  public static registerAntd = registerAntd;
-  public static registerAntdMobile = registerAntdMobile;
-  public static registerElement = registerElement;
-  public static registerComponent = register;
-  public static registerDisplayComponent = registerDisplay;
   @Prop()
   public title: VNode | string;
+  @Prop({type: Boolean, default: false})
+  public disabled: boolean;
+  @Prop({type: Boolean, default: false})
+  public readonly: boolean;
+  @Prop({type: Boolean, default: false})
+  public loading: boolean;
 
+  public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
 
   @Watch('currentValue', {deep: true})
   public currentValueChanged(currentValue: any) {
@@ -95,7 +59,7 @@ export default class SchemaForm extends Vue {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-        .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
         this.buildExtraProperties();
       }
     } else if (!eq(currentValue, value)) {
@@ -119,7 +83,7 @@ export default class SchemaForm extends Vue {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+            .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
           this.buildExtraProperties();
         }
@@ -230,6 +194,8 @@ export default class SchemaForm extends Vue {
         return <div class="action-btns">
           {this.hasListener('ok') ? <m-white-space/> : null}
           {this.hasListener('ok') ? <m-button type="primary"
+                                              disabled={this.disabled}
+                                              loading={this.loading}
                                               attrs={props && props.okProps}
                                               onClick={() => {
                                                 this.onOk();
@@ -238,33 +204,37 @@ export default class SchemaForm extends Vue {
           </m-button> : null}
           {this.hasListener('cancel') ? <m-white-space/> : null}
           {this.hasListener('cancel') ? <m-button
-            onClick={() => {
-              this.$emit('cancel');
-            }}
-            attrs={props && props.cancelProps}>
+              disabled={this.disabled || this.loading}
+              onClick={() => {
+                this.$emit('cancel');
+              }}
+              attrs={props && props.cancelProps}>
             {props && props.cancelText || '取消'}
           </m-button> : null}
-          {this.hasListener('cancel') ? <m-white-space/> : null}
+          {this.hasListener('reset') ? <m-white-space/> : null}
           {this.hasListener('reset') ? <m-button
-            type="error"
-            onClick={() => {
-              this.$emit('reset');
-            }}
-            attrs={props && props.resetProps}>
+              disabled={this.disabled || this.loading}
+              type="error"
+              onClick={() => {
+                this.$emit('reset');
+              }}
+              attrs={props && props.resetProps}>
             {props && props.resetText || '重置'}
           </m-button> : null}
         </div>;
       } else {
         return <div class="action-btns">
-          {this.hasListener('cancel') ? <ButtonComponent
-            onClick={() => {
-              this.$emit('cancel');
-            }}
-            class="cancel-btn"
-            attrs={props && props.cancelProps}>
+          {this.hasListener('cancel') ? <ButtonComponent disabled={this.disabled || this.loading}
+                                                         onClick={() => {
+                                                           this.$emit('cancel');
+                                                         }}
+                                                         class="cancel-btn"
+                                                         attrs={props && props.cancelProps}>
             {props && props.cancelText || '取消'}
           </ButtonComponent> : null}
           {this.hasListener('ok') ? <ButtonComponent type="primary"
+                                                     disabled={this.disabled}
+                                                     loading={this.loading}
                                                      class="confirm-btn"
                                                      attrs={props && props.okProps}
                                                      onClick={() => {
@@ -274,6 +244,7 @@ export default class SchemaForm extends Vue {
           </ButtonComponent> : null}
           {this.hasListener('reset') ? <ButtonComponent type="danger"
                                                         class="reset-btn"
+                                                        disabled={this.disabled || this.loading}
                                                         attrs={props && props.resetProps}
                                                         onClick={() => {
                                                           this.$emit('reset', this.currentValue);
@@ -340,8 +311,8 @@ export default class SchemaForm extends Vue {
         return definition.depends(this.currentValue);
       } else {
         return !definition.depends
-          .map(condition => this.matchCondition(condition))
-          .some(it => !it);
+            .map(condition => this.matchCondition(condition))
+            .some(it => !it);
       }
     }
   }
@@ -390,26 +361,30 @@ export default class SchemaForm extends Vue {
     } else {
       value = currentValue;
     }
-    if (field.type === TYPES.subForm && (!field.props || !field.props.props)) {
+    if (field.type === TYPES.subForm) {
       if (!field.props) {
         field.props = {props: this.props};
       } else {
         field.props.props = this.props;
       }
+      field.props.disabled = this.disabled;
+      field.props.readonly = this.readonly;
     }
     const propertyName = field.property.substr(field.property.lastIndexOf('.') + 1);
     // @ts-ignore
-    return this.calcShowState(field) ? <FormField vModel={value[propertyName]}
-                                                  validate={!!(this.props && this.validateRules)}
-                                                  display={this.mode === 'display'}
-                                                  content={this.$slots[field.slot]}
-                                                  definition={field}
-                                                  key={'field-' + field.property + '-' + index}
-                                                  onChange={(value) => {
-                                                    this.onFieldValueChange(value, field);
-                                                  }}
-                                                  formValue={currentValue}
-                                                  platform={platform}/> : null;
+    return this.calcShowState(field) ? <FormField
+        vModel={value[propertyName]}
+        validate={!!(this.props && this.validateRules)}
+        display={this.mode === 'display'}
+        disabled={this.disabled}
+        content={this.$slots[field.slot]}
+        definition={field}
+        key={'field-' + field.property + '-' + index}
+        onChange={(value) => {
+          this.onFieldValueChange(value, field);
+        }}
+        formValue={currentValue}
+        platform={platform}/> : null;
   }
 
   private renderFields() {
@@ -456,18 +431,14 @@ export default class SchemaForm extends Vue {
     const {props} = this;
     const FormComponent = getFormComponent(this.platform);
     const groups = this.getGroups(currentValue);
-    const formProps = Object.assign({}, props);
-    formProps.title = this.isMobile ? (this.$slots.title || this.title) : null;
-    formProps.model = currentValue;
-    formProps.rules = this.validateRules;
-    formProps.inline = this.inline;
+    const formProps = this.getFormProps(currentValue);
     return <FormComponent attrs={formProps}
                           ref="form"
                           on={this.$listeners}>
       {this.$slots.prepend}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {props && props.inline ? groups.reduce((a, b) => a.concat(b))
-        : groups.map((group) => this.wrapGroup(group))}
+          : groups.map((group) => this.wrapGroup(group))}
       {this.renderDeleteSubFormButton(currentValue)}
       {this.$slots.append}
     </FormComponent>;
@@ -477,6 +448,7 @@ export default class SchemaForm extends Vue {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.mode === 'edit') {
       return <ButtonComponent block icon="plus"
+                              disabled={this.disabled}
                               class="m-b"
                               onClick={() => {
                                 this.addSubItem();
@@ -492,7 +464,7 @@ export default class SchemaForm extends Vue {
   private renderDeleteSubFormButton(value: { [p: string]: any } | Array<{ [p: string]: any }>) {
     const ButtonComponent = getButtonComponent();
     return this.definition.array && this.currentValue.length > 1 ? <div class="delete-profile-enhan">
-      <ButtonComponent onClick={() => {
+      <ButtonComponent disabled={this.disabled} onClick={() => {
         this.currentValue.splice(this.currentValue.indexOf(value), 1);
       }} text icon="delete" type="danger">删除该条
       </ButtonComponent>
@@ -514,5 +486,15 @@ export default class SchemaForm extends Vue {
 
   private onFieldValueChange(value: any, field: SchemaFormField) {
     this.$emit('change', this.currentValue);
+  }
+
+  private getFormProps(currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
+    const formProps = Object.assign({}, this.props);
+    formProps.title = this.isMobile ? (this.$slots.title || this.title) : null;
+    formProps.model = currentValue;
+    formProps.rules = this.validateRules;
+    formProps.inline = this.inline;
+    formProps.disabled = this.disabled || this.loading;
+    return formProps;
   }
 }

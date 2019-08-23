@@ -9,6 +9,11 @@ import Component from 'vue-class-component';
 export default class Base extends Vue {
   public props = getProps();
   public value: any = getValue();
+  public options = {
+    disabled: false,
+    loading: false,
+    readonly: false
+  };
 
   get definition() {
     return getFormDefinition();

@@ -2,17 +2,7 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import {
-  DESKTOP,
-  getAlertComponent,
-  getColComponent,
-  getComponent,
-  getDisplayComponent,
-  getFormComponent,
-  getOptions,
-  SchemaFormComponent,
-  TYPES
-} from './utils';
+import {DESKTOP, getAlertComponent, getColComponent, getComponent, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
 
 @Component({
   name: 'FormField'
@@ -33,7 +23,9 @@ export default class FormField extends Vue {
   public value: any;
   public currentValue: any = null;
   @Prop()
-  private content: any;
+  public content: any;
+  @Prop({type: Boolean, default: false})
+  public disabled: boolean;
 
   get componentType(): SchemaFormComponent {
     let component: SchemaFormComponent = null;
@@ -92,19 +84,20 @@ export default class FormField extends Vue {
     }
     // @ts-ignore
     const component = this.content ? this.content : <InputFieldDefinition
-      attrs={props}
-      value={currentValue}
-      title={this.platform === 'mobile' ? definition.title : null}
-      onInput={this.onInput}/>;
+        attrs={props}
+        disabled={this.disabled}
+        value={currentValue}
+        title={this.platform === 'mobile' ? definition.title : null}
+        onInput={this.onInput}/>;
     let item = null;
     const FormItemComponent = getFormComponent(this.platform) + '-item';
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
       const formItem = this.definition.type === TYPES.subForm ? component :
-        <FormItemComponent attrs={this.getFormItemProps()}>
-          {component}
-          {this.renderNotice()}
-        </FormItemComponent>;
+          <FormItemComponent attrs={this.getFormItemProps()}>
+            {component}
+            {this.renderNotice()}
+          </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {

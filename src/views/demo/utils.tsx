@@ -38,83 +38,84 @@ export const getValue = () => {
 };
 export const getFormDefinition = (): FormDescriptor => {
   return {
-    fields: [{
-      title: '单行文本',
-      property: 'string',
-      type: 'string',
-      required: true,
-      placeholder: '请输入文本'
-    }, {
-      title: '多行文本',
-      property: 'text',
-      required: true,
-      type: 'text'
-    }, {
-      title: '链接',
-      property: 'url',
-      required: true,
-      type: 'url'
-    }, {
-      title: '整数',
-      property: 'integer',
-      type: 'integer',
-      required: true,
-      min: 100,
-      max: 200
-    }, {
-      title: '小数',
-      property: 'double',
-      required: true,
-      type: 'double'
-    }, {
-      title: '日期',
-      property: 'date',
-      required: true,
-      type: 'date'
-    }, {
-      title: '日期时间',
-      property: 'datetime',
-      required: true,
-      type: 'datetime'
-    }, {
-      title: '单选',
-      property: 'select',
-      required: true,
-      type: 'select',
-      props: {options, clearable: true}
-    }, {
-      title: '展开单选',
-      property: 'expandSelect',
-      required: true,
-      type: 'expand-select',
-      props: {options}
-    }, {
-      title: '多选',
-      required: true,
-      property: 'multiSelect',
-      type: 'select',
-      array: true,
-      props: {options}
-    }, {
-      title: '展开多选',
-      property: 'expandMultiSelect',
-      required: true,
-      type: 'expand-select',
-      array: true,
-      props: {options}
-    }, {
-      title: '子表单',
-      property: 'values',
-      type: TYPES.subForm,
-      fields: [{
-        title: '输入框',
+    fields: [
+      {
+        title: '单行文本',
+        property: 'string',
         type: 'string',
-        property: 'input',
-        required: true
-      }],
-      props: {
-        addBtnText: '添加子表单', addBtnProps: {block: true}
-      }
-    }]
+        required: true,
+        placeholder: '请输入文本'
+      }, {
+        title: '多行文本',
+        property: 'text',
+        required: true,
+        type: 'text'
+      }, {
+        title: '链接',
+        property: 'url',
+        required: true,
+        type: 'url'
+      }, {
+        title: '整数',
+        property: 'integer',
+        type: 'integer',
+        required: true,
+        min: 100,
+        max: 200
+      }, {
+        title: '小数',
+        property: 'double',
+        required: true,
+        type: 'double'
+      }, {
+        title: '日期',
+        property: 'date',
+        required: true,
+        type: 'date'
+      }, {
+        title: '日期时间',
+        property: 'datetime',
+        required: true,
+        type: 'datetime'
+      }, {
+        title: '单选',
+        property: 'select',
+        required: true,
+        type: 'select',
+        props: {options, clearable: true}
+      }, {
+        title: '展开单选',
+        property: 'expandSelect',
+        required: true,
+        type: 'expand-select',
+        props: {options}
+      }, {
+        title: '多选',
+        required: true,
+        property: 'multiSelect',
+        type: 'select',
+        array: true,
+        props: {options}
+      }, {
+        title: '展开多选',
+        property: 'expandMultiSelect',
+        required: true,
+        type: 'expand-select',
+        array: true,
+        props: {options}
+      }, {
+        title: '子表单',
+        property: 'values',
+        type: TYPES.subForm,
+        fields: [{
+          title: '输入框',
+          type: 'string',
+          property: 'input',
+          required: true
+        }],
+        props: {
+          addBtnText: '添加子表单', addBtnProps: {block: true}
+        }
+      }]
   };
 };

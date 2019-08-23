@@ -1,7 +1,6 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      {{value}}
       <a-schema-form class="demo-form"
                      mode="display"
                      :definition="definition"
