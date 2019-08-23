@@ -1,5 +1,6 @@
 import SchemaFormField from '@/schema-form/field';
 import SchemaForm from '@/schema-form/form';
+import './style.less';
 
 SchemaForm.Field = SchemaFormField;
 

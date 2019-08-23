@@ -1,13 +1,17 @@
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
-import App from './App.vue';
+import App from './views/index.vue';
 import SchemaForm from './index';
+import './styles/index.less';
+import router from './router';
+import store from './store';
 
 
-SchemaForm.registerAntd();
 SchemaForm.registerAntdMobile();
 
 
 new Vue({
+  store,
+  router,
   render: h => h(App)
 }).$mount('#app');

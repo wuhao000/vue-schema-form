@@ -25,15 +25,7 @@ module.exports = {
   },
   runtimeCompiler: false,
   configureWebpack: (config) => {
-    if (config.devServer) {
-      config.devServer.port = 8021;
-    } else {
-      config.devServer = {
-        port: 8021
-      };
-    }
     config.output.libraryExport = 'default';
-    config.resolve.alias['@ant-design/icons/lib/dist'] = path.resolve(__dirname, './src/icons.ts');
     config.module.rules.push({
       test: /\.md$/,
       use: [
@@ -46,14 +38,6 @@ module.exports = {
         }
       ]
     });
-    config.module.rules.push({
-      test: /\.txt$/,
-      use: [
-        { loader: 'raw-loader' },
-        { loader: 'decoded-text-loader' }
-      ]
-    });
-    config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
     config.plugins.push(
         new CompressionWebpackPlugin({
           test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
@@ -64,11 +48,7 @@ module.exports = {
     );
     config.externals = {
       'vue': 'Vue',
-      'axios': 'axios',
-      'moment': 'moment',
-      'highlight': 'hljs',
-      'codemirror': 'CodeMirror',
-      'core-js': 'CoreJS'
+      'moment': 'moment'
     };
     if (analyze) {
       config.plugins.push(new BundleAnalyzerPlugin({

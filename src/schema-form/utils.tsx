@@ -11,6 +11,11 @@ import Empty from './empty';
 
 export const ASchemaForm = 'ASchemaForm';
 
+export const enum Mode {
+  edit = 'edit',
+  display = 'display'
+}
+
 export const enum TYPES {
   url = 'url',
   string = 'string',
@@ -27,13 +32,25 @@ export const enum TYPES {
   subForm = 'sub-form'
 }
 
-const DESKTOP = 'desktop';
-const MOBILE = 'mobile';
+const store: { [key: string]: { [key: string]: any } } = {
+  display: {
+    desktop: {},
+    mobile: {}
+  },
+  edit: {
+    desktop: {},
+    mobile: {}
+  }
+};
+
+export const DESKTOP = 'desktop';
+export const MOBILE = 'mobile';
 
 let formComponent = 'd-form';
 let rowComponent = 'd-row';
 let colComponent = 'd-col';
 let buttonComponent = 'd-button';
+let alertComponent = 'a-alert';
 
 export interface SchemaFormComponent {
   platform: Platform;
@@ -64,7 +81,7 @@ export const register = (component: string,
 const addComponent = (component: string | object,
                       platforms: Platform | Platform[],
                       types: string | string[],
-                      forArray: boolean = null,
+                      forArray: boolean | null = null,
                       getProps: (definition: SchemaFormField, platform: Platform) => object = () => ({}),
                       forDisplay: boolean) => {
   if (Array.isArray(types)) {
@@ -92,6 +109,18 @@ const addComponent = (component: string | object,
         return props;
       }
     };
+    const mode = forDisplay ? 'display' : 'edit';
+    const typeDef = store[mode][platforms];
+    if (!typeDef[types]) {
+      typeDef[types] = {};
+    }
+    if (forArray === true) {
+      typeDef[types][1] = def;
+    } else if (forArray === false) {
+      typeDef[types][2] = def;
+    } else {
+      typeDef[types][0] = def;
+    }
     if (forDisplay) {
       DisplayComponentDefinitions.push(def);
     } else {
@@ -120,14 +149,17 @@ registerDisplay(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definitio
 });
 
 export function registerAntd() {
+  console.log('注册Ant Design Vue表单组件');
   formComponent = 'd-form';
   rowComponent = 'd-row';
   colComponent = 'd-col';
-  register('d-input', DESKTOP, [TYPES.string, TYPES.url]);
-  register('d-textarea', DESKTOP, [TYPES.text]);
+  buttonComponent = 'd-button';
+  alertComponent = 'a-alert';
+  register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
+  register('d-textarea', DESKTOP, [TYPES.text], false);
   register('d-date-picker', DESKTOP, [TYPES.date, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer]);
+  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
   register('d-switch', DESKTOP, TYPES.boolean);
   register('d-select', DESKTOP, TYPES.select, null, definition => {
     return {dropdownMatchSelectWidth: false, multiple: definition.array};
@@ -138,32 +170,38 @@ export function registerAntd() {
 }
 
 export function registerElement() {
+  console.log('注册ElementUI表单组件');
   formComponent = 'el-form';
   rowComponent = 'el-row';
   colComponent = 'el-col';
   buttonComponent = 'el-button';
+  alertComponent = 'el-alert';
   Vue.component('el-ext-select', ElExtSelect);
   Vue.component('el-ext-checkbox', ElExtCheckbox);
   Vue.component('el-ext-radio', ElExtRadio);
   register('el-input', DESKTOP, [TYPES.string, TYPES.url], false);
-  register('el-input', DESKTOP, [TYPES.text], false, definition => {
+  register('el-input', DESKTOP, [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
   register('el-date-picker', DESKTOP, [TYPES.datetime, TYPES.date, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
   register('el-switch', DESKTOP, [TYPES.boolean], false);
-  register('el-ext-select', DESKTOP, [TYPES.select], false);
+  register('el-ext-select', DESKTOP, [TYPES.select], null, definition => {
+    return {multiple: definition.array};
+  });
   register('el-ext-radio', DESKTOP, [TYPES.expandSelect], false);
   register('el-ext-checkbox', DESKTOP, [TYPES.expandSelect], true);
 }
 
 export function registerAntdMobile() {
+  console.log('注册Ant Design Mobile表单组件');
+
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
   register('m-date-picker', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-      (definition: SchemaFormField) => {
-        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-      });
+    (definition: SchemaFormField) => {
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+    });
   register('m-textarea', MOBILE, [TYPES.text], false);
   register('m-switch-item', MOBILE, [TYPES.boolean], false);
   register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
@@ -177,44 +215,39 @@ const EmptyDefinition = {
   getProps: (_) => ({})
 } as SchemaFormComponent;
 
-function search(components: SchemaFormComponent[], platform: Platform, definition: SchemaFormField): SchemaFormComponent {
-  const matchedComponents = components.filter(it => it.platform === platform && it.type === definition.type);
-  if (matchedComponents.length > 0) {
-    const defaultArrayComponent: SchemaFormComponent = {
-      component: 'base-array-component',
-      forArray: true,
-      type: null,
-      platform: DESKTOP,
-      getProps: () => {
-        return Object.assign({
-          component: matchedComponents[0].component,
-          props: {title: definition.title}
-        }, matchedComponents[0].getProps(definition));
-      }
-    };
-    if (matchedComponents.length === 1) {
-      if (definition.array && matchedComponents[0].forArray === false) {
-        return defaultArrayComponent;
-      }
-      return matchedComponents[0];
-    } else {
-      if (definition.array) {
-        return matchedComponents.find(it => it.forArray) || defaultArrayComponent;
-      } else {
-        return matchedComponents.find(it => !it.forArray) || EmptyDefinition;
-      }
-    }
-  } else {
+function searchStore(mode: Mode, platform: Platform, definition: SchemaFormField): SchemaFormComponent {
+  const typeDef = store[mode][platform][definition.type];
+  if (!typeDef) {
     return EmptyDefinition;
+  }
+  if (definition.array) {
+    let res = EmptyDefinition;
+    if (typeDef[2]) {
+      res = {
+        component: 'base-array-component',
+        forArray: true,
+        type: definition.type,
+        platform: DESKTOP,
+        getProps: () => {
+          return Object.assign({
+            component: typeDef[2].component,
+            props: {title: definition.title}
+          }, typeDef[2].getProps(definition));
+        }
+      };
+    }
+    return typeDef[1] || typeDef[0] || res;
+  } else {
+    return typeDef[2] || typeDef[0];
   }
 }
 
 export const getComponent = (platform: Platform, definition: SchemaFormField): SchemaFormComponent => {
-  return search(SchemaFormComponentDefinitions, platform, definition);
+  return searchStore(Mode.edit, platform, definition);
 };
 
 export const getDisplayComponent = (platform: Platform, definition: SchemaFormField): SchemaFormComponent => {
-  return search(DisplayComponentDefinitions, platform, definition);
+  return searchStore(Mode.display, platform, definition);
 };
 
 export const getOptions = (definition: SchemaFormField) => {
@@ -248,6 +281,10 @@ export const getColComponent = () => {
 
 export const getButtonComponent = () => {
   return buttonComponent;
+};
+
+export const getAlertComponent = () => {
+  return alertComponent;
 };
 
 export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {

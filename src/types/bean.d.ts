@@ -1,19 +1,65 @@
-import {ValidateRules} from "async-validator";
+import {ValidateRules} from 'async-validator';
 
 export type Platform = 'desktop' | 'mobile';
 
 
 export interface SchemaFormField {
+  /**
+   * 字段值是否数组类型
+   */
   array?: boolean;
+  /**
+   * 依赖显示的条件，支持条件选项或函数，当函数返回false时不显示该字段
+   */
   depends?: ShowFieldCondition[] | ((value: any) => boolean);
+  /**
+   * 提示信息
+   */
   notice?: string;
+  /**
+   * 当字段类型为sub-form时，子表单的字段列表
+   */
   fields?: SchemaFormField[];
+  /**
+   * 表单属性名称
+   */
   property: string;
+  /**
+   * 字段是否为必填
+   */
   required?: boolean;
+
+  /**
+   * 数值输入组件的最小值
+   */
+  min?: number;
+  /**
+   * 数值输入组件的最大值
+   */
+  max?: number;
+  /**
+   * 输入内容为空时的占位文字
+   */
+  placeholder?: string;
+  /**
+   * 栅格布局下的栅格数
+   */
   span?: number;
+  /**
+   * 表单输入组件的自定义属性
+   */
   props?: SchemaFormFieldProps;
+  /**
+   * 表单项渲染使用插槽，当指定插槽时，字段的类型无效
+   */
   slot?: string;
+  /**
+   * 表单项名称
+   */
   title?: string;
+  /**
+   * 表单项类型
+   */
   type: string;
 }
 
@@ -56,4 +102,3 @@ interface FormProps {
 
   [key: string]: any;
 }
-

@@ -4,6 +4,6 @@ declare global {
   export interface Window {
     Vue: any;
     _: typeof _;
+    moment: any;
   }
-  const moment: any;
 }

@@ -2,7 +2,17 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import {getColComponent, getComponent, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
+import {
+  DESKTOP,
+  getAlertComponent,
+  getColComponent,
+  getComponent,
+  getDisplayComponent,
+  getFormComponent,
+  getOptions,
+  SchemaFormComponent,
+  TYPES
+} from './utils';
 
 @Component({
   name: 'FormField'
@@ -44,10 +54,20 @@ export default class FormField extends Vue {
 
   get props() {
     const {definition} = this;
-    const props: any = this.componentType.getProps(definition);
+    const props: any = Object.assign({}, this.componentType.getProps(definition));
     const type = definition.type;
-    if (type === 'Select') {
+    if (type === TYPES.select || type === TYPES.expandSelect) {
       props.options = this.options;
+    }
+    if (type === TYPES.subForm) {
+      props.platform = this.platform;
+      props.mode = this.display ? 'display' : 'edit';
+    }
+    if (definition.placeholder) {
+      props.placeholder = definition.placeholder;
+    }
+    if (this.display) {
+      delete props.required;
     }
     return props;
   }
@@ -67,28 +87,24 @@ export default class FormField extends Vue {
   public render() {
     const {props, currentValue, definition, platform} = this;
     const InputFieldDefinition = this.componentType.component;
-    const componentAttrs = Object.assign({}, props);
     if (this.display) {
-      componentAttrs.definition = this.definition;
+      props.definition = this.definition;
     }
     // @ts-ignore
     const component = this.content ? this.content : <InputFieldDefinition
-        attrs={componentAttrs}
-        value={currentValue}
-        title={this.platform === 'mobile' ? definition.title : null}
-        onInput={this.onInput}/>;
+      attrs={props}
+      value={currentValue}
+      title={this.platform === 'mobile' ? definition.title : null}
+      onInput={this.onInput}/>;
     let item = null;
     const FormItemComponent = getFormComponent(this.platform) + '-item';
     const ColComponent = getColComponent();
-    if (platform === 'desktop') {
+    if (platform === DESKTOP) {
       const formItem = this.definition.type === TYPES.subForm ? component :
-          <FormItemComponent required={definition.required}
-                             prop={this.validate ? definition.property : null}
-                             title={definition.title}
-                             label={definition.title}>
-            {component}
-            {this.renderNotice()}
-          </FormItemComponent>;
+        <FormItemComponent attrs={this.getFormItemProps()}>
+          {component}
+          {this.renderNotice()}
+        </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {
@@ -98,7 +114,11 @@ export default class FormField extends Vue {
       }
     } else {
       if (this.display) {
-        item = <m-list-item title={definition.title} extra={component}/>;
+        if (this.definition.type === TYPES.subForm) {
+          item = component;
+        } else {
+          item = <m-list-item title={definition.title} extra={component}/>;
+        }
       } else {
         item = component;
       }
@@ -108,12 +128,24 @@ export default class FormField extends Vue {
 
   public onInput(value) {
     this.$emit('input', value);
+    this.$emit('change', value);
     this.$forceUpdate();
   }
 
   private renderNotice() {
+    const AlertComponent = getAlertComponent();
     if (this.definition.notice) {
-      return <a-alert message={this.definition.notice}/>;
+      return <AlertComponent message={this.definition.notice}/>;
     }
+  }
+
+  public getFormItemProps() {
+    const {definition} = this;
+    return {
+      required: this.display ? null : definition.required,
+      prop: this.validate ? definition.property : null,
+      title: definition.title,
+      label: definition.title
+    };
   }
 }
