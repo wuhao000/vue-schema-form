@@ -31,7 +31,7 @@ export default class FormField extends Vue {
   public validate: boolean;
   @Prop()
   public value: any;
-  public currentValue: any;
+  public currentValue: any = null;
   @Prop()
   private content: any;
 
@@ -79,8 +79,8 @@ export default class FormField extends Vue {
 
   @Watch('value', {immediate: true})
   public valueChanged(value: any) {
-    if (this.currentValue !== this.value) {
-      this.currentValue = this.value;
+    if (this.currentValue !== value) {
+      this.currentValue = value;
     }
   }
 

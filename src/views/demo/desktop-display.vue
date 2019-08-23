@@ -1,6 +1,7 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
+      {{value}}
       <a-schema-form class="demo-form"
                      mode="display"
                      :definition="definition"
@@ -12,7 +13,6 @@
 <script lang="tsx">
   import SchemaForm from '@/index';
   import Base from '@/views/demo/base';
-  import {getFormDefinition, getValue} from '@/views/demo/utils';
   import Component from 'vue-class-component';
 
   @Component({
@@ -23,6 +23,13 @@
 
     public created() {
       SchemaForm.registerAntd();
+      setTimeout(() => {
+        this.value.string = 'deffffffff';
+        setTimeout(() => {
+          this.value = {string: 'abc'};
+        }, 2000);
+      }, 3000);
+
     }
 
   }

@@ -127,6 +127,9 @@ export default class SchemaForm extends Vue {
         this.currentValue = value || {};
         this.buildExtraProperties();
       }
+    } else if (!value) {
+      this.currentValue = {};
+      this.buildExtraProperties();
     }
   }
 
