@@ -15,6 +15,16 @@ export default class Base extends Vue {
     readonly: false
   };
 
+  public optionFormDefinition = {
+    fields: [{
+      title: '禁用', type: 'boolean', property: 'disabled'
+    }, {
+      title: '加载中', type: 'boolean', property: 'loading'
+    }, {
+      title: '只读', type: 'boolean', property: 'readonly'
+    }]
+  };
+
   get definition() {
     return getFormDefinition();
   }

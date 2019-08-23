@@ -20,6 +20,8 @@ export const enum TYPES {
   url = 'url',
   string = 'string',
   datetime = 'datetime',
+  year = 'year',
+  month = 'month',
   time = 'time',
   select = 'select',
   date = 'date',
@@ -157,7 +159,7 @@ export function registerAntd() {
   alertComponent = 'a-alert';
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
-  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
   register('d-switch', DESKTOP, TYPES.boolean);
@@ -183,7 +185,7 @@ export function registerElement() {
   register('el-input', DESKTOP, [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
-  register('el-date-picker', DESKTOP, [TYPES.datetime, TYPES.date, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({type: definition.type.toLowerCase()}));
   register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
   register('el-switch', DESKTOP, [TYPES.boolean], false);
   register('el-ext-select', DESKTOP, [TYPES.select], null, definition => {
@@ -199,9 +201,9 @@ export function registerAntdMobile() {
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
   register('m-date-picker', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-    (definition: SchemaFormField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: SchemaFormField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   register('m-textarea', MOBILE, [TYPES.text], false);
   register('m-switch-item', MOBILE, [TYPES.boolean], false);
   register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
@@ -312,7 +314,7 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
     validateType = 'number';
   } else if (type === TYPES.subForm) {
     validateType = 'object';
-  } else if (type === TYPES.date || type === TYPES.datetime) {
+  } else if (type === TYPES.date || type === TYPES.datetime || type === TYPES.year || type === TYPES.month) {
     validateType = 'date';
   } else if (type === TYPES.select || type === TYPES.expandSelect) {
     const options = getOptions(field);

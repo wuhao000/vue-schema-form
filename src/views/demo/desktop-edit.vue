@@ -28,15 +28,6 @@
   })
   export default class DesktopEdit extends Base {
 
-    public optionFormDefinition = {
-      fields: [{
-        title: '禁用', type: 'boolean', property: 'disabled'
-      }, {
-        title: '加载中', type: 'boolean', property: 'loading'
-      }, {
-        title: '只读', type: 'boolean', property: 'readonly'
-      }]
-    };
 
     public created() {
       SchemaForm.registerAntd();

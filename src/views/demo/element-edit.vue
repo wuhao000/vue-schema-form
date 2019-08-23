@@ -1,10 +1,16 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
+      <a-schema-form inline
+                     v-model="options"
+                     :definition="optionFormDefinition"></a-schema-form>
       <a-schema-form v-model="value"
                      class="demo-form"
                      :definition="definition"
                      :props="props"
+                     :disabled="options.disabled"
+                     :loading="options.loading"
+                     :readonly="options.readonly"
                      @cancel="onCancel"
                      @ok="onOk"
                      @reset="onReset"></a-schema-form>

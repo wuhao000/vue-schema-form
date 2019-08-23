@@ -31,6 +31,8 @@ export const getValue = () => {
     multiSelect: [1, 3],
     expandSelect: 2,
     expandMultiSelect: [2, 3],
+    month: null,
+    year: null,
     values: {
       input: 'sssssssss'
     }
@@ -77,6 +79,16 @@ export const getFormDefinition = (): FormDescriptor => {
         property: 'datetime',
         required: true,
         type: 'datetime'
+      }, {
+        title: '年份',
+        property: 'year',
+        required: true,
+        type: 'year'
+      }, {
+        title: '月份',
+        property: 'month',
+        required: true,
+        type: 'month'
       }, {
         title: '单选',
         property: 'select',
