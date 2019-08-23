@@ -1,5 +1,5 @@
 import {FormDescriptor, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {ValidateRules} from "async-validator";
+import {ValidateRules} from 'async-validator';
 import difference from 'lodash.difference';
 import eq from 'lodash.eq';
 import get from 'lodash.get';
