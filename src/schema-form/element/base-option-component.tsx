@@ -18,7 +18,7 @@ export default {
           const props = {};
           props[this.labelProp] = getOptionProperty(option, this.labelProperty);
           props[this.valueProp] = getOptionProperty(option, this.valueProperty);
-          return <OptionComponent props={props}>
+          return <OptionComponent attrs={props}>
             {this.labelProp === 'text' ? props[this.labelProp] : null}
           </OptionComponent>;
         })

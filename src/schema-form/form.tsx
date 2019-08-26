@@ -7,7 +7,22 @@ import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import FormField from './field';
-import {addRule, ASchemaForm, DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, TYPES} from './utils';
+import {
+  addRule,
+  ASchemaForm,
+  DESKTOP,
+  getButtonComponent,
+  getDefaultValue,
+  getFormComponent,
+  getRowComponent,
+  MOBILE,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement,
+  TYPES
+} from './utils';
 
 @Component({
   name: ASchemaForm
@@ -59,7 +74,7 @@ export default class SchemaForm extends Vue {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+        .concat(difference(value as any[], currentValue as any[])).length > 0) {
         this.buildExtraProperties();
       }
     } else if (!eq(currentValue, value)) {
@@ -83,7 +98,7 @@ export default class SchemaForm extends Vue {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-            .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
           this.buildExtraProperties();
         }
@@ -204,21 +219,21 @@ export default class SchemaForm extends Vue {
           </m-button> : null}
           {this.hasListener('cancel') ? <m-white-space/> : null}
           {this.hasListener('cancel') ? <m-button
-              disabled={this.disabled || this.loading}
-              onClick={() => {
-                this.$emit('cancel');
-              }}
-              attrs={props && props.cancelProps}>
+            disabled={this.disabled || this.loading}
+            onClick={() => {
+              this.$emit('cancel');
+            }}
+            attrs={props && props.cancelProps}>
             {props && props.cancelText || '取消'}
           </m-button> : null}
           {this.hasListener('reset') ? <m-white-space/> : null}
           {this.hasListener('reset') ? <m-button
-              disabled={this.disabled || this.loading}
-              type="error"
-              onClick={() => {
-                this.$emit('reset');
-              }}
-              attrs={props && props.resetProps}>
+            disabled={this.disabled || this.loading}
+            type="error"
+            onClick={() => {
+              this.$emit('reset');
+            }}
+            attrs={props && props.resetProps}>
             {props && props.resetText || '重置'}
           </m-button> : null}
         </div>;
@@ -311,8 +326,8 @@ export default class SchemaForm extends Vue {
         return definition.depends(this.currentValue);
       } else {
         return !definition.depends
-            .map(condition => this.matchCondition(condition))
-            .some(it => !it);
+          .map(condition => this.matchCondition(condition))
+          .some(it => !it);
       }
     }
   }
@@ -373,18 +388,18 @@ export default class SchemaForm extends Vue {
     const propertyName = field.property.substr(field.property.lastIndexOf('.') + 1);
     // @ts-ignore
     return this.calcShowState(field) ? <FormField
-        vModel={value[propertyName]}
-        validate={!!(this.props && this.validateRules)}
-        display={this.mode === 'display'}
-        disabled={this.disabled}
-        content={this.$slots[field.slot]}
-        definition={field}
-        key={'field-' + field.property + '-' + index}
-        onChange={(value) => {
-          this.onFieldValueChange(value, field);
-        }}
-        formValue={currentValue}
-        platform={platform}/> : null;
+      vModel={value[propertyName]}
+      validate={!!(this.props && this.validateRules)}
+      display={this.mode === 'display'}
+      disabled={this.disabled}
+      content={this.$slots[field.slot]}
+      definition={field}
+      key={'field-' + field.property + '-' + index}
+      onChange={(value) => {
+        this.onFieldValueChange(value, field);
+      }}
+      formValue={currentValue}
+      platform={platform}/> : null;
   }
 
   private renderFields() {
@@ -410,7 +425,7 @@ export default class SchemaForm extends Vue {
       return this.rules;
     }
     const rules = {};
-    this.definition.fields.map(field => {
+    this.realFields.map(field => {
       if (field.required) {
         addRule(rules, field, {required: true, message: `${field.title}为必填项`});
       }
@@ -438,7 +453,7 @@ export default class SchemaForm extends Vue {
       {this.$slots.prepend}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {props && props.inline ? groups.reduce((a, b) => a.concat(b))
-          : groups.map((group) => this.wrapGroup(group))}
+        : groups.map((group) => this.wrapGroup(group))}
       {this.renderDeleteSubFormButton(currentValue)}
       {this.$slots.append}
     </FormComponent>;
@@ -447,12 +462,16 @@ export default class SchemaForm extends Vue {
   private renderAddFormButton() {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.mode === 'edit') {
-      return <ButtonComponent block icon="plus"
-                              disabled={this.disabled}
-                              class="m-b"
-                              onClick={() => {
-                                this.addSubItem();
-                              }}>新增一条</ButtonComponent>;
+      return <ButtonComponent
+        attrs={{
+          block: true,
+          icon: 'plus',
+          disabled: this.disabled
+        }}
+        class="m-b"
+        onClick={() => {
+          this.addSubItem();
+        }}>新增一条</ButtonComponent>;
     }
   }
 
@@ -463,12 +482,13 @@ export default class SchemaForm extends Vue {
 
   private renderDeleteSubFormButton(value: { [p: string]: any } | Array<{ [p: string]: any }>) {
     const ButtonComponent = getButtonComponent();
-    return this.definition.array && this.currentValue.length > 1 ? <div class="delete-profile-enhan">
-      <ButtonComponent disabled={this.disabled} onClick={() => {
-        this.currentValue.splice(this.currentValue.indexOf(value), 1);
-      }} text icon="delete" type="danger">删除该条
-      </ButtonComponent>
-    </div> : null;
+    return this.definition.array && this.currentValue.length > 1 && this.mode !== 'display' ?
+      <div class="delete-profile-enhan">
+        <ButtonComponent disabled={this.disabled} onClick={() => {
+          this.currentValue.splice(this.currentValue.indexOf(value), 1);
+        }} text icon="delete" type="danger">删除该条
+        </ButtonComponent>
+      </div> : null;
   }
 
   private wrapGroup(group: any) {
