@@ -1,4 +1,5 @@
 import {ValidateRules} from 'async-validator';
+import {VNode} from 'vue';
 
 export type Platform = 'desktop' | 'mobile';
 
@@ -25,10 +26,13 @@ export interface SchemaFormField {
    */
   property: string;
   /**
+   * 当表单模式为详情模式时显示的内容
+   */
+  displayValue?: string | VNode | ((value: any) => any);
+  /**
    * 字段是否为必填
    */
   required?: boolean;
-
   /**
    * 数值输入组件的最小值
    */

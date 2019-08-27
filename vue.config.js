@@ -25,6 +25,9 @@ module.exports = {
   },
   runtimeCompiler: false,
   configureWebpack: (config) => {
+    config.devServer = {
+      port: 8025
+    };
     config.output.libraryExport = 'default';
     config.module.rules.push({
       test: /\.md$/,

@@ -2,7 +2,17 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import {DESKTOP, getAlertComponent, getColComponent, getComponent, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
+import {
+  DESKTOP,
+  getAlertComponent,
+  getColComponent,
+  getComponent,
+  getDisplayComponent,
+  getFormComponent,
+  getOptions,
+  SchemaFormComponent,
+  TYPES
+} from './utils';
 
 @Component({
   name: 'FormField'
@@ -76,28 +86,43 @@ export default class FormField extends Vue {
     }
   }
 
-  public render() {
-    const {props, currentValue, definition, platform} = this;
+  public renderInputComponent() {
+    const {props, currentValue, definition} = this;
     const InputFieldDefinition = this.componentType.component;
+    if (this.content) {
+      return this.content;
+    }
+    if (this.display && this.definition.displayValue) {
+      if (typeof this.definition.displayValue === 'function') {
+        return this.definition.displayValue(this.currentValue);
+      } else {
+        return this.definition.displayValue;
+      }
+    }
+    // @ts-ignore
+    return <InputFieldDefinition
+      attrs={props}
+      disabled={this.disabled}
+      value={currentValue}
+      title={this.platform === 'mobile' ? definition.title : null}
+      onInput={this.onInput}/>;
+  }
+
+  public render() {
+    const {props, definition, platform} = this;
     if (this.display) {
       props.definition = this.definition;
     }
-    // @ts-ignore
-    const component = this.content ? this.content : <InputFieldDefinition
-        attrs={props}
-        disabled={this.disabled}
-        value={currentValue}
-        title={this.platform === 'mobile' ? definition.title : null}
-        onInput={this.onInput}/>;
+    const component = this.renderInputComponent();
     let item = null;
     const FormItemComponent = getFormComponent(this.platform) + '-item';
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
       const formItem = this.definition.type === TYPES.subForm ? component :
-          <FormItemComponent attrs={this.getFormItemProps()}>
-            {component}
-            {this.renderNotice()}
-          </FormItemComponent>;
+        <FormItemComponent attrs={this.getFormItemProps()}>
+          {component}
+          {this.renderNotice()}
+        </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {

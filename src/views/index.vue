@@ -22,6 +22,9 @@
             <a-menu-item key="desktop-detail"
                          @click="$router.push('/demo/desktop/display')">详情模式
             </a-menu-item>
+            <a-menu-item key="subform-display"
+                         @click="$router.push('/demo/desktop/subform/display')">子表单详情
+            </a-menu-item>
             <a-menu-item key="desktop-validate"
                          @click="$router.push('/demo/desktop/validate')">表单校验
             </a-menu-item>

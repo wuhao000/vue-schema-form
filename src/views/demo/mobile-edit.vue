@@ -1,6 +1,7 @@
 <template>
   <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+    <ae-layout-content style="background: #f9f9f9;">
+      <m-date-picker title="abbc"/>
       <a-schema-form v-model="value"
                      class="demo-form"
                      platform="mobile"

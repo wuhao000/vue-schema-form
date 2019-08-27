@@ -30,7 +30,13 @@ export default {
     const ColComponent = getColComponent();
     const content = [
       this.current.map((v, index) => {
-        const input = <InputComponent attrs={Object.assign({}, this.$attrs)} vModel={this.current[index]}/>;
+        const input = <InputComponent attrs={Object.assign({arrayIndex: index}, this.$attrs)}
+                                      onRemoveArrayItem={async (index) => {
+                                        console.log('remove: ' + index);
+                                        await this.$mconfirm('确定删除此项吗?', '提示');
+                                        this.current.splice(index, 1);
+                                      }}
+                                      vModel={this.current[index]}/>;
         if (this.component === ASchemaForm) {
           return input;
         }
@@ -41,14 +47,21 @@ export default {
     if (this.component === ASchemaForm) {
       return <div>{content}</div>;
     }
-    return <RowComponent gutter={this.$attrs.gutter || 20} type="flex">{content}</RowComponent>;
+    if (this.$attrs.platform === 'mobile') {
+      return content;
+    } else {
+      return <RowComponent gutter={this.$attrs.gutter || 20} type="flex">{content}</RowComponent>;
+    }
   },
   methods: {
     renderAddButton(this: any) {
       const ColComponent = getColComponent();
-      const ButtonComponent = getButtonComponent();
+      let ButtonComponent = getButtonComponent();
       if (this.maxLength > 0 && this.current.length >= this.maxLength) {
         return null;
+      }
+      if (this.$attrs.platform === 'mobile') {
+        ButtonComponent = 'm-button';
       }
       const buttonStyle: any = {};
       if (this.addBtnProps && this.addBtnProps.block) {
@@ -56,10 +69,10 @@ export default {
       }
       const button = <ButtonComponent onClick={this.onAddClick}
                                       style={buttonStyle}
-                                      type="primary"
+                                      icon="plus"
                                       attrs={Object.assign({}, this.addBtnProps)}>{this.addBtnText || '添加'}</ButtonComponent>;
       if (this.component === ASchemaForm) {
-        return button;
+        return <div style={{margin: '10px 15px'}}>{button}</div>;
       }
       return <ColComponent span={this.cellSpan}>{button}</ColComponent>;
     },

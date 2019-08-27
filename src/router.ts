@@ -11,6 +11,9 @@ export default new VueRouter({
     path: '/demo/element/edit',
     component: () => import('@/views/demo/element-edit.vue')
   }, {
+    path: '/demo/desktop/subform/display',
+    component: () => import('@/views/demo/subform-display.vue')
+  }, {
     path: '/demo/desktop/validate',
     component: () => import('@/views/demo/desktop-validate.vue')
   }, {

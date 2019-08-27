@@ -59,6 +59,8 @@ export default class SchemaForm extends Vue {
   public readonly: boolean;
   @Prop({type: Boolean, default: false})
   public loading: boolean;
+  @Prop({type: Number})
+  public arrayIndex: number;
 
   public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
 
@@ -510,7 +512,26 @@ export default class SchemaForm extends Vue {
 
   private getFormProps(currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
     const formProps = Object.assign({}, this.props);
-    formProps.title = this.isMobile ? (this.$slots.title || this.title) : null;
+    if (this.isMobile) {
+      const title = this.$slots.title || this.title;
+      if (this.arrayIndex !== null && this.arrayIndex !== undefined) {
+        formProps.title = <div style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}>
+          <span>{title + ' (' + (this.arrayIndex + 1) + ')'}</span>
+          {this.arrayIndex > 0 ? <a style={{color: '#e94721', cursor: 'pointer'}}
+                                    onclick={(e) => {
+                                      this.$emit('removeArrayItem', this.arrayIndex);
+                                    }}>
+            <ae-icon type="delete"/>
+            删除
+          </a> : null}
+        </div>;
+      } else {
+        formProps.title = title;
+      }
+    }
     formProps.model = currentValue;
     formProps.rules = this.validateRules;
     formProps.inline = this.inline;

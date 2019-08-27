@@ -132,7 +132,6 @@ const addComponent = (component: string | object,
 };
 
 Vue.component('empty', Empty);
-Vue.component('BaseArrayComponent', BaseArrayComponent);
 
 registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
 registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
@@ -199,11 +198,11 @@ export function registerAntdMobile() {
   console.log('注册Ant Design Mobile表单组件');
 
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
-  register('m-date-picker', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
+  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
   register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-      (definition: SchemaFormField) => {
-        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-      });
+    (definition: SchemaFormField) => {
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+    });
   register('m-textarea', MOBILE, [TYPES.text], false);
   register('m-switch-item', MOBILE, [TYPES.boolean], false);
   register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
@@ -226,14 +225,15 @@ function searchStore(mode: Mode, platform: Platform, definition: SchemaFormField
     let res = EmptyDefinition;
     if (typeDef[2]) {
       res = {
-        component: 'base-array-component',
+        component: BaseArrayComponent,
         forArray: true,
         type: definition.type,
         platform: DESKTOP,
         getProps: () => {
           return Object.assign({
             component: typeDef[2].component,
-            props: {title: definition.title}
+            platform,
+            props: {title: definition.title, platform}
           }, typeDef[2].getProps(definition));
         }
       };
