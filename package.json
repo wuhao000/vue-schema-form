@@ -33,6 +33,7 @@
     "html-loader": "^0.5.5",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "rxjs": "^6.5.2",
     "typescript": "^3.4.3",
     "vue-class-component": "^7.1.0",
     "vue-property-decorator": "^8.1.0",
