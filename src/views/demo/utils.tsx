@@ -38,43 +38,6 @@ export const getValue = () => {
     }
   };
 };
-
-export const getSubFormValue = () => {
-  return {
-    values: {
-      input: 'abc',
-      switch: false
-    }
-  };
-};
-
-export const getSubFormDefinition = (): FormDescriptor => {
-  return {
-    fields: [
-      {
-        title: '子表单',
-        property: 'values',
-        type: 'sub-form',
-        fields: [{
-          title: '文本',
-          type: 'string',
-          property: 'input'
-        }, {
-          title: '文本2',
-          type: 'string',
-          property: 'input2'
-        }, {
-          title: '开关',
-          type: 'boolean',
-          property: 'switch',
-          displayValue: (value) => {
-            return value !== undefined && value !== null && value.toString();
-          }
-        }]
-      }
-    ]
-  };
-};
 export const getFormDefinition = (): FormDescriptor => {
   return {
     fields: [
@@ -171,7 +134,7 @@ export const getFormDefinition = (): FormDescriptor => {
         type: TYPES.subForm,
         array: true,
         fields: [{
-          title: '输入框',
+          title: '输入框(数组)',
           type: 'string',
           property: 'input',
           required: true

@@ -2,11 +2,12 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
+import ArrayWrapper from './array-wrapper';
 import {
   DESKTOP,
   getAlertComponent,
   getColComponent,
-  getComponent,
+  getComponent, getConfirmFunction,
   getDisplayComponent,
   getFormComponent,
   getOptions,
@@ -21,14 +22,12 @@ export default class FormField extends Vue {
 
   @Prop(Object)
   public definition: SchemaFormField;
-  @Prop(Object)
-  public formValue: { [key: string]: any };
+  @Prop([Object, Array])
+  public formValue: { [key: string]: any } | [];
   @Prop({type: Boolean, default: false})
   public display: boolean;
   @Prop({type: String, default: 'mobile'})
   public platform: Platform;
-  @Prop({type: Boolean, default: false})
-  public validate: boolean;
   @Prop()
   public value: any;
   public currentValue: any = null;
@@ -36,6 +35,8 @@ export default class FormField extends Vue {
   public content: any;
   @Prop({type: Boolean, default: false})
   public disabled: boolean;
+  @Prop(String)
+  public path: string;
 
   get componentType(): SchemaFormComponent {
     let component: SchemaFormComponent = null;
@@ -64,6 +65,7 @@ export default class FormField extends Vue {
     if (type === TYPES.subForm) {
       props.platform = this.platform;
       props.mode = this.display ? 'display' : 'edit';
+      props.pathPrefix = this.path;
     }
     if (definition.placeholder) {
       props.placeholder = definition.placeholder;
@@ -88,7 +90,8 @@ export default class FormField extends Vue {
 
   public renderInputComponent() {
     const {props, currentValue, definition} = this;
-    const InputFieldDefinition = this.componentType.component;
+    const inputFieldDef = this.componentType;
+    const InputFieldComponent = inputFieldDef.component;
     if (this.content) {
       return this.content;
     }
@@ -99,9 +102,45 @@ export default class FormField extends Vue {
         return this.definition.displayValue;
       }
     }
+    if (this.definition.array && inputFieldDef.forArray === false) {
+      // @ts-ignore
+      return <ArrayWrapper
+        subForm={this.definition.type === TYPES.subForm}
+        addBtnText={props.addBtnText}
+        ref="array"
+        platform={this.platform}
+        addBtnProps={props.addBtnProps}
+        cellSpan={props.cellSpan}
+        onAdd={() => {
+          this.addArrayItem();
+        }}>
+        {
+          this.currentValue.map((v, index) => {
+            // @ts-ignore
+            return <InputFieldComponent
+              attrs={props}
+              arrayIndex={index}
+              disabled={this.disabled}
+              onRemoveArrayItem={async () => {
+                const confirmFunc = getConfirmFunction(this.platform);
+                await this[confirmFunc]('确定删除该条吗？', '提示');
+                this.currentValue.splice(index, 1);
+              }}
+              value={v}
+              title={this.platform === 'mobile' ? definition.title : null}
+              onInput={(val) => {
+                this.currentValue[index] = val;
+                this.onInput(this.currentValue);
+              }}/>;
+          })
+        }
+
+      </ArrayWrapper>;
+    }
     // @ts-ignore
-    return <InputFieldDefinition
+    return <InputFieldComponent
       attrs={props}
+      ref="input"
       disabled={this.disabled}
       value={currentValue}
       title={this.platform === 'mobile' ? definition.title : null}
@@ -161,9 +200,36 @@ export default class FormField extends Vue {
     const {definition} = this;
     return {
       required: this.display ? null : definition.required,
-      prop: this.validate ? definition.property : null,
+      prop: definition.property,
       title: definition.title,
       label: definition.title
     };
+  }
+
+  public validate() {
+    if (this.definition.type === TYPES.subForm
+      && this.$refs.array) {
+      const array = this.$refs.array as any;
+      const validateFields = array.$children.filter(it => it.validate);
+      return new Promise((resolve) => {
+        Promise.all(validateFields.map(it => {
+          return it.validate();
+        })).then((values) => {
+          if (values.some(it => !it)) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        }).catch(() => {
+          console.log(2);
+          resolve(false);
+        });
+      });
+    }
+    return true;
+  }
+
+  private addArrayItem() {
+    this.currentValue.push(null);
   }
 }

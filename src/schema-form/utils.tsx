@@ -1,6 +1,5 @@
 import {Platform, SchemaFormField} from '@/types/bean';
 import Vue from 'vue';
-import BaseArrayComponent from './base-array-component';
 import PlainDisplayField from './display/plain-display-field';
 import SelectDisplayField from './display/select-display-field';
 import TimeDisplayField from './display/time-display-field';
@@ -53,6 +52,7 @@ let rowComponent = 'd-row';
 let colComponent = 'd-col';
 let buttonComponent = 'd-button';
 let alertComponent = 'a-alert';
+let confirmFunction = '$dconfirm';
 
 export interface SchemaFormComponent {
   platform: Platform;
@@ -156,6 +156,7 @@ export function registerAntd() {
   colComponent = 'd-col';
   buttonComponent = 'd-button';
   alertComponent = 'a-alert';
+  confirmFunction = '$dconfirm';
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
   register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
@@ -177,6 +178,7 @@ export function registerElement() {
   colComponent = 'el-col';
   buttonComponent = 'el-button';
   alertComponent = 'el-alert';
+  confirmFunction = '$confirm';
   Vue.component('el-ext-select', ElExtSelect);
   Vue.component('el-ext-checkbox', ElExtCheckbox);
   Vue.component('el-ext-radio', ElExtRadio);
@@ -224,19 +226,7 @@ function searchStore(mode: Mode, platform: Platform, definition: SchemaFormField
   if (definition.array) {
     let res = EmptyDefinition;
     if (typeDef[2]) {
-      res = {
-        component: BaseArrayComponent,
-        forArray: true,
-        type: definition.type,
-        platform: DESKTOP,
-        getProps: () => {
-          return Object.assign({
-            component: typeDef[2].component,
-            platform,
-            props: {title: definition.title, platform}
-          }, typeDef[2].getProps(definition));
-        }
-      };
+      res = typeDef[2];
     }
     return typeDef[1] || typeDef[0] || res;
   } else {
@@ -265,7 +255,15 @@ export const getOptions = (definition: SchemaFormField) => {
 };
 
 export const getDefaultValue = (definition: SchemaFormField) => {
-  return definition.array ? [] : null;
+  if (definition.type === TYPES.subForm) {
+    if (definition.array) {
+      return [{}];
+    } else {
+      return {};
+    }
+  } else {
+    return definition.array ? [] : null;
+  }
 };
 
 
@@ -325,3 +323,7 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
   rule.type = validateType;
   rules[property].push(rule);
 }
+
+export const getConfirmFunction = (platform: Platform) => {
+  return platform === 'mobile' ? '$mconfirm' : confirmFunction;
+};

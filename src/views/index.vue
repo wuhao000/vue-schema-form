@@ -7,34 +7,12 @@
         <a-menu>
           <a-menu-item>安装</a-menu-item>
           <a-menu-item @click="to('/doc')">使用</a-menu-item>
-          <a-menu-item-group title="Element UI">
-            <a-menu-item key="element-desktop-edit"
-                         @click="to('/demo/element/edit')">编辑模式
-            </a-menu-item>
-            <a-menu-item key="element-desktop-detail"
-                         @click="$router.push('/demo/element/display')">详情模式
-            </a-menu-item>
-          </a-menu-item-group>
-          <a-menu-item-group title="Ant Design Vue">
-            <a-menu-item key="desktop-edit"
-                         @click="to('/demo/desktop/edit')">编辑模式
-            </a-menu-item>
-            <a-menu-item key="desktop-detail"
-                         @click="$router.push('/demo/desktop/display')">详情模式
-            </a-menu-item>
-            <a-menu-item key="subform-display"
-                         @click="$router.push('/demo/desktop/subform/display')">子表单详情
-            </a-menu-item>
-            <a-menu-item key="desktop-validate"
-                         @click="$router.push('/demo/desktop/validate')">表单校验
-            </a-menu-item>
-          </a-menu-item-group>
-          <a-menu-item-group title="移动端示例">
-            <a-menu-item key="mobile-edit"
-                         @click="$router.push('/demo/mobile/edit')">编辑模式
-            </a-menu-item>
-            <a-menu-item key="mobile-display"
-                         @click="$router.push('/demo/mobile/display')">详情模式
+          <a-menu-item-group v-for="(items, key) in groups"
+                             :key="key"
+                             :title="key">
+            <a-menu-item v-for="item in items"
+                         :key="item.path"
+                         @click="to(item.path)">{{item.meta && item.meta.name}}
             </a-menu-item>
           </a-menu-item-group>
         </a-menu>
@@ -47,6 +25,7 @@
   </ae-layout>
 </template>
 <script lang="ts">
+  import {demoRoutes} from '@/router';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import HelloWorld from '../components/HelloWorld.vue';
@@ -68,9 +47,20 @@
     }
   })
   export default class App extends Vue {
+    private groups: object = {};
+
+    public created() {
+      const groups = {};
+      demoRoutes.forEach(route => {
+        const key = route.meta && route.meta.tag || '其他';
+        groups[key] = groups[key] || [];
+        groups[key].push(route);
+      });
+      this.groups = groups;
+    }
 
     public to(path: string) {
-      return this.$router.push(path);
+      return this.$router.push('/demo/' + path);
     }
   }
 </script>

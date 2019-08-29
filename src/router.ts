@@ -1,32 +1,53 @@
-import VueRouter from 'vue-router';
+import DemoIndex from '@/views/demo/index.vue';
+import VueRouter, {RouteConfig} from 'vue-router';
 
+export const demoRoutes: RouteConfig[] = [
+  {
+    path: 'element/display',
+    component: () => import('@/views/demo/element/display.vue'),
+    meta: {tag: 'Element UI', name: '详情'}
+  }, {
+    path: 'element/edit',
+    component: () => import('@/views/demo/element/edit.vue'),
+    meta: {tag: 'Element UI', name: '编辑'}
+  }, {
+    path: 'desktop/subform/display',
+    component: () => import('@/views/demo/subform/display.vue'),
+    meta: {tag: '子表单', name: '详情'}
+  }, {
+    path: 'desktop/subform/edit',
+    component: () => import('@/views/demo/subform/edit.vue'),
+    meta: {tag: '子表单', name: '编辑'}
+  }, {
+    path: 'desktop/display',
+    component: () => import('@/views/demo/antd/display.vue'),
+    meta: {tag: 'Ant Design Vue', name: '详情'}
+  }, {
+    path: 'desktop/edit',
+    component: () => import('@/views/demo/antd/edit.vue'),
+    meta: {tag: 'Ant Design Vue', name: '编辑'}
+  }, {
+    path: 'desktop/validate',
+    component: () => import('@/views/demo/antd/validate.vue'),
+    meta: {tag: 'Ant Design Vue', name: '表单校验'}
+  }, {
+    path: 'mobile/display',
+    component: () => import('@/views/demo/mobile/display.vue'),
+    meta: {tag: '移动端示例', name: '详情模式'}
+  }, {
+    path: 'mobile/edit',
+    component: () => import('@/views/demo/mobile/edit.vue'),
+    meta: {tag: '移动端示例', name: '编辑模式'}
+  }
+];
 export default new VueRouter({
   routes: [{
     path: '/doc',
     component: () => import('@/views/readme.vue')
   }, {
-    path: '/demo/element/display',
-    component: () => import('@/views/demo/element-display.vue')
-  }, {
-    path: '/demo/element/edit',
-    component: () => import('@/views/demo/element-edit.vue')
-  }, {
-    path: '/demo/desktop/subform/display',
-    component: () => import('@/views/demo/subform-display.vue')
-  }, {
-    path: '/demo/desktop/validate',
-    component: () => import('@/views/demo/desktop-validate.vue')
-  }, {
-    path: '/demo/desktop/display',
-    component: () => import('@/views/demo/desktop-display.vue')
-  }, {
-    path: '/demo/desktop/edit',
-    component: () => import('@/views/demo/desktop-edit.vue')
-  }, {
-    path: '/demo/mobile/display',
-    component: () => import('@/views/demo/mobile-display.vue')
-  }, {
-    path: '/demo/mobile/edit',
-    component: () => import('@/views/demo/mobile-edit.vue')
+    path: '/demo',
+    name: 'demo',
+    component: DemoIndex,
+    children: demoRoutes
   }]
 });

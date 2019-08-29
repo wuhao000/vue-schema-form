@@ -61,6 +61,8 @@ export default class SchemaForm extends Vue {
   public loading: boolean;
   @Prop({type: Number})
   public arrayIndex: number;
+  @Prop(String)
+  public pathPrefix: string;
 
   public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
 
@@ -151,10 +153,14 @@ export default class SchemaForm extends Vue {
   }
 
   public buildExtraProperties() {
-    const {value, currentValue} = this;
+    const {value} = this;
+    let currentValue = this.currentValue;
     this.realFields.forEach(field => {
       const property = field.property;
       if (this.definition.array) {
+        if (!currentValue || !Array.isArray(currentValue)) {
+          currentValue = [];
+        }
         currentValue.forEach(tmpValue => {
           if (property.includes('.')) {
             this.setDefaultValue(property, tmpValue, field);
@@ -283,12 +289,12 @@ export default class SchemaForm extends Vue {
 
   private async onOk(this: any) {
     if (this.hasListener('ok')) {
-      if (this.form && this.validateRules && this.form.validate) {
-        const valid = await this.form.validate();
-        if (valid) {
-          this.$emit('ok', this.currentValue);
+      if (this.form && this.form.validate) {
+        const valid = await this.validate();
+        if (valid.some(it => !it)) {
+          this.$message.error('表单数据有误，请检查');
         } else {
-          this.$message.error('表单数据有误');
+          this.$emit('ok', this.currentValue);
         }
       } else {
         this.$emit('ok', this.currentValue);
@@ -390,8 +396,9 @@ export default class SchemaForm extends Vue {
     const propertyName = field.property.substr(field.property.lastIndexOf('.') + 1);
     // @ts-ignore
     return this.calcShowState(field) ? <FormField
+      ref="field"
       vModel={value[propertyName]}
-      validate={!!(this.props && this.validateRules)}
+      path={this.getFieldPath(field)}
       display={this.mode === 'display'}
       disabled={this.disabled}
       content={this.$slots[field.slot]}
@@ -484,10 +491,10 @@ export default class SchemaForm extends Vue {
 
   private renderDeleteSubFormButton(value: { [p: string]: any } | Array<{ [p: string]: any }>) {
     const ButtonComponent = getButtonComponent();
-    return this.definition.array && this.currentValue.length > 1 && this.mode !== 'display' ?
-      <div class="delete-profile-enhan">
+    return Number.isInteger(this.arrayIndex) && this.mode !== 'display' ?
+      <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
         <ButtonComponent disabled={this.disabled} onClick={() => {
-          this.currentValue.splice(this.currentValue.indexOf(value), 1);
+          this.$emit('removeArrayItem');
         }} text icon="delete" type="danger">删除该条
         </ButtonComponent>
       </div> : null;
@@ -532,10 +539,30 @@ export default class SchemaForm extends Vue {
         formProps.title = title;
       }
     }
-    formProps.model = currentValue;
-    formProps.rules = this.validateRules;
+
+    if (!Array.isArray(currentValue)) {
+      formProps.model = currentValue;
+      formProps.rules = this.validateRules;
+    }
     formProps.inline = this.inline;
     formProps.disabled = this.disabled || this.loading;
     return formProps;
+  }
+
+  public validate(): Promise<boolean[]> {
+    const field = this.$refs.field as any;
+    const res = [this.form.validate()];
+    if (field.validate && typeof field.validate === 'function') {
+      res.push(field.validate());
+    }
+    return Promise.all(res);
+  }
+
+  private getFieldPath(field: SchemaFormField) {
+    if (this.pathPrefix) {
+      return this.pathPrefix + '.' + field.property;
+    } else {
+      return field.property;
+    }
   }
 }
