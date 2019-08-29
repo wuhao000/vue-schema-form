@@ -1,4 +1,4 @@
-import { IRuleDescription, Rule } from '../../types';
+import { IRuleDescription, Rule } from '@/uform/types';
 import { isObj, isStr, isFn } from '../utils';
 import formatValidate from './format';
 import requiredValidate from './required';

@@ -1,13 +1,5 @@
 import FormField from '@/schema-form/field';
-import {
-  DESKTOP,
-  getButtonComponent,
-  getDefaultValue,
-  getFormComponent,
-  getRowComponent,
-  MOBILE,
-  TYPES
-} from '@/schema-form/utils';
+import {DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE, TYPES} from '@/schema-form/utils';
 import {getFieldValue, setFieldValue} from '@/schema-form/utils/field';
 import {FormDescriptor, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
 import {Effects} from '@/types/form';
@@ -49,8 +41,8 @@ export default class BaseForm extends Vue {
   public title: VNode | string;
   @Prop({type: Number})
   public arrayIndex: number;
-  @Prop(String)
-  public pathPrefix: string;
+  @Prop(Array)
+  public pathPrefix: string[];
   @Prop()
   public effects: Effects;
   public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
@@ -68,7 +60,7 @@ export default class BaseForm extends Vue {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-        .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
         this.buildExtraProperties();
       }
     } else if (!eq(currentValue, value)) {
@@ -92,7 +84,7 @@ export default class BaseForm extends Vue {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+            .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
           this.buildExtraProperties();
         }
@@ -127,11 +119,11 @@ export default class BaseForm extends Vue {
     const fields = this.definition.fields;
     if (typeof fields === 'object') {
       return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => ({
-          property: key,
-          ...fields[key]
-        }));
+          .filter(key => fields[key])
+          .map(key => ({
+            property: key,
+            ...fields[key]
+          }));
     } else {
       return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
     }
@@ -226,21 +218,21 @@ export default class BaseForm extends Vue {
           </m-button> : null}
           {this.hasListener('cancel') ? <m-white-space/> : null}
           {this.hasListener('cancel') ? <m-button
-            disabled={this.isDisabled || this.isDisabled}
-            onClick={() => {
-              this.$emit('cancel');
-            }}
-            attrs={props && props.cancelProps}>
+              disabled={this.isDisabled || this.isDisabled}
+              onClick={() => {
+                this.$emit('cancel');
+              }}
+              attrs={props && props.cancelProps}>
             {props && props.cancelText || '取消'}
           </m-button> : null}
           {this.hasListener('reset') ? <m-white-space/> : null}
           {this.hasListener('reset') ? <m-button
-            disabled={this.isDisabled || this.isLoading}
-            type="error"
-            onClick={() => {
-              this.$emit('reset');
-            }}
-            attrs={props && props.resetProps}>
+              disabled={this.isDisabled || this.isLoading}
+              type="error"
+              onClick={() => {
+                this.$emit('reset');
+              }}
+              attrs={props && props.resetProps}>
             {props && props.resetText || '重置'}
           </m-button> : null}
         </div>;
@@ -333,8 +325,8 @@ export default class BaseForm extends Vue {
         return definition.depends(this.currentValue);
       } else {
         return !definition.depends
-          .map(condition => this.matchCondition(condition))
-          .some(it => !it);
+            .map(condition => this.matchCondition(condition))
+            .some(it => !it);
       }
     }
   }
@@ -394,23 +386,22 @@ export default class BaseForm extends Vue {
     const iField = this.createField(field);
     // @ts-ignore
     return <FormField
-      ref="field"
-      value={getFieldValue(value, iField)}
-      onInput={(v) => {
-        setFieldValue(value, iField, v);
-      }}
-      field={iField}
-      path={this.buildFieldPath(field)}
-      display={this.mode === 'display'}
-      disabled={this.isDisabled}
-      content={this.$slots[field.slot]}
-      definition={field}
-      key={'field-' + field.property + '-' + index}
-      onChange={(value) => {
-        this.onFieldChange(iField, value);
-      }}
-      formValue={currentValue}
-      platform={platform}/>;
+        value={getFieldValue(value, iField)}
+        onInput={(v) => {
+          setFieldValue(value, iField, v);
+        }}
+        field={iField}
+        path={this.buildFieldPath(field)}
+        display={this.mode === 'display'}
+        disabled={this.isDisabled}
+        content={this.$slots[field.slot]}
+        definition={field}
+        key={'field-' + field.property + '-' + index}
+        onChange={(value) => {
+          this.onFieldChange(iField, value);
+        }}
+        formValue={currentValue}
+        platform={platform}/>;
   }
 
   private renderFields() {
@@ -442,7 +433,7 @@ export default class BaseForm extends Vue {
       {this.$slots.prepend}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {props && props.inline ? groups.reduce((a, b) => a.concat(b))
-        : groups.map((group) => this.wrapGroup(group))}
+          : groups.map((group) => this.wrapGroup(group))}
       {this.renderDeleteSubFormButton()}
       {this.$slots.append}
     </FormComponent>;
@@ -452,15 +443,15 @@ export default class BaseForm extends Vue {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.mode === 'edit') {
       return <ButtonComponent
-        attrs={{
-          block: true,
-          icon: 'plus',
-          disabled: this.isDisabled
-        }}
-        class="m-b"
-        onClick={() => {
-          this.addSubItem();
-        }}>新增一条</ButtonComponent>;
+          attrs={{
+            block: true,
+            icon: 'plus',
+            disabled: this.isDisabled
+          }}
+          class="m-b"
+          onClick={() => {
+            this.addSubItem();
+          }}>新增一条</ButtonComponent>;
     }
   }
 
@@ -471,12 +462,12 @@ export default class BaseForm extends Vue {
   private renderDeleteSubFormButton() {
     const ButtonComponent = getButtonComponent();
     return Number.isInteger(this.arrayIndex) && this.mode !== 'display' && this.platform === 'desktop' ?
-      <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
-        <ButtonComponent disabled={this.isDisabled} onClick={() => {
-          this.$emit('removeArrayItem');
-        }} text icon="delete" type="danger">删除该条
-        </ButtonComponent>
-      </div> : null;
+        <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
+          <ButtonComponent disabled={this.isDisabled} onClick={() => {
+            this.$emit('removeArrayItem');
+          }} text icon="delete" type="danger">删除该条
+          </ButtonComponent>
+        </div> : null;
   }
 
   private wrapGroup(group: any) {
@@ -490,8 +481,7 @@ export default class BaseForm extends Vue {
 
 
   public createField(definition: SchemaFormField): IField {
-
-    const field: IField = {
+    return {
       array: definition.array,
       type: definition.type,
       processor: definition.processor,
@@ -499,7 +489,7 @@ export default class BaseForm extends Vue {
       editable: !this.isDisabled && !this.isReadonly,
       name: definition.property,
       path: this.buildArrayPath(definition),
-      plainPath: this.buildFieldPath(definition),
+      plainPath: this.buildFieldPath(definition).join('.'),
       destructPath: parseDestructPath(definition.property),
       props: definition.props,
       visible: this.calcShowState(definition),
@@ -513,8 +503,6 @@ export default class BaseForm extends Vue {
       invalid: false,
       value: null
     };
-    this['store'].fields[field.plainPath] = field;
-    return field;
   }
 
   public hasListener(event: string): boolean {
@@ -586,17 +574,17 @@ export default class BaseForm extends Vue {
 
   private buildArrayPath(field: SchemaFormField): string[] {
     if (this.pathPrefix) {
-      return this.pathPrefix.split('.').concat(field.property.split('.'));
+      return this.pathPrefix.concat(field.property);
     } else {
       return field.property.split('.');
     }
   }
 
-  private buildFieldPath(field: SchemaFormField) {
+  private buildFieldPath(field: SchemaFormField): string[] {
     if (this.pathPrefix) {
-      return this.pathPrefix + '.' + field.property;
+      return this.pathPrefix.concat(field.property);
     } else {
-      return field.property;
+      return [field.property];
     }
   }
 

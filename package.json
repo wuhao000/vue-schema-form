@@ -14,7 +14,7 @@
     "antd-mobile": "^2.2.14",
     "classnames": "^2.2.6",
     "core-js": "^2.6.5",
-    "dot-match": "latest",
+    "dot-match": "^0.1.22",
     "element-ui": "^2.11.1",
     "lodash.difference": "^4.5.0",
     "lodash.eq": "^4.0.0",

@@ -6,29 +6,33 @@ export const getSubFormValue = () => {
       input: 'abc',
       switch: false
     },
-    valueArray: []
+    valueArray: [{
+      input: 'abc'
+    }, {
+      input: 'def'
+    }]
   };
 };
 
 export const getSubFormDefinition = (): FormDescriptor => {
   return {
-    fields: [
-      {
+    fields: {
+      valueArray: {
         title: '子表单数组',
-        property: 'valueArray',
         type: 'object',
         array: true,
-        fields: [{
-          title: '数组文本',
-          type: 'string',
-          property: 'input',
-          required: true
-        }],
+        fields: {
+          input: {
+            title: '数组文本',
+            type: 'string',
+            required: true
+          }
+        },
         props: {
           addBtnText: '添加子表单',
           addBtnProps: {block: true}
         }
       }
-    ]
+    }
   };
 };

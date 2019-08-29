@@ -1,4 +1,4 @@
-import {getDefault} from '@/uform/builder/utils/lang';
+import {resolveFieldPath} from '@/uform/core/utils';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
 import SchemaForm from './index';
@@ -8,7 +8,6 @@ import './styles/index.less';
 import App from './views/index.vue';
 
 SchemaForm.registerAntdMobile();
-
 
 new Vue({
   store,

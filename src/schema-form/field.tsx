@@ -5,19 +5,7 @@ import AsyncValidator from 'async-validator';
 import Component, {mixins} from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from './array-wrapper';
-import {
-  addRule,
-  DESKTOP,
-  getAlertComponent,
-  getColComponent,
-  getComponent,
-  getConfirmFunction,
-  getDisplayComponent,
-  getFormComponent,
-  getOptions,
-  SchemaFormComponent,
-  TYPES
-} from './utils';
+import {addRule, DESKTOP, getAlertComponent, getColComponent, getComponent, getConfirmFunction, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
 
 @Component({
   name: 'FormField'
@@ -39,8 +27,8 @@ export default class FormField extends mixins(Emitter) {
   public content: any;
   @Prop({type: Boolean, default: false})
   public disabled: boolean;
-  @Prop(String)
-  public path: string;
+  @Prop(Array)
+  public path: string[];
   @Prop({required: true})
   public field: IField;
 
@@ -104,8 +92,14 @@ export default class FormField extends mixins(Emitter) {
     this.dispatch('ASchemaForm', 'SchemaForm.addField', [this]);
   }
 
+  @Watch('field', {immediate: true})
+  public fieldChanged(field: IField) {
+    this.dispatch('ASchemaForm', 'SchemaForm.addSchemaField', [field]);
+  }
+
   public beforeDestroy() {
     this.dispatch('ASchemaForm', 'SchemaForm.removeField', [this]);
+    this.dispatch('ASchemaForm', 'SchemaForm.removeSchemaField', [this.field]);
   }
 
   public renderInputComponent() {
@@ -125,46 +119,48 @@ export default class FormField extends mixins(Emitter) {
     if (this.definition.array && inputFieldDef.forArray === false) {
       // @ts-ignore
       return <ArrayWrapper
-        disabled={this.disabled}
-        subForm={this.definition.type === TYPES.object}
-        addBtnText={props.addBtnText}
-        ref="array"
-        platform={this.platform}
-        addBtnProps={props.addBtnProps}
-        cellSpan={props.cellSpan}
-        onAdd={() => {
-          this.addArrayItem();
-        }}>
+          disabled={this.disabled}
+          subForm={this.definition.type === TYPES.object}
+          addBtnText={props.addBtnText}
+          ref="array"
+          platform={this.platform}
+          addBtnProps={props.addBtnProps}
+          cellSpan={props.cellSpan}
+          onAdd={() => {
+            this.addArrayItem();
+          }}>
         {
           this.currentValue ? this.currentValue.map((v, index) => {
+            const itemProps = Object.assign({}, props, {
+              pathPrefix: this.path.concat(index)
+            });
             // @ts-ignore
             return <InputFieldComponent
-              attrs={props}
-              arrayIndex={index}
-              disabled={this.disabled}
-              onRemoveArrayItem={async () => {
-                const confirmFunc = getConfirmFunction(this.platform);
-                await this[confirmFunc]('确定删除该条吗？', '提示');
-                this.currentValue.splice(index, 1);
-              }}
-              value={v}
-              title={this.platform === 'mobile' ? definition.title : null}
-              onInput={(val) => {
-                this.onArrayItemInput(val, index);
-              }}/>;
+                attrs={itemProps}
+                arrayIndex={index}
+                disabled={this.disabled}
+                onRemoveArrayItem={async () => {
+                  const confirmFunc = getConfirmFunction(this.platform);
+                  await this[confirmFunc]('确定删除该条吗？', '提示');
+                  this.currentValue.splice(index, 1);
+                }}
+                value={v}
+                title={this.platform === 'mobile' ? definition.title : null}
+                onInput={(val) => {
+                  this.onArrayItemInput(val, index);
+                }}/>;
           }) : null
         }
-
       </ArrayWrapper>;
     }
     // @ts-ignore
     return <InputFieldComponent
-      attrs={props}
-      ref="input"
-      disabled={this.disabled}
-      value={currentValue}
-      title={this.platform === 'mobile' ? definition.title : null}
-      onInput={this.onInput}/>;
+        attrs={props}
+        ref="input"
+        disabled={this.disabled}
+        value={currentValue}
+        title={this.platform === 'mobile' ? definition.title : null}
+        onInput={this.onInput}/>;
   }
 
   get formItemComponent() {
@@ -185,10 +181,10 @@ export default class FormField extends mixins(Emitter) {
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
       const formItem = this.definition.type === TYPES.object ? component :
-        <FormItemComponent attrs={this.getFormItemProps()}>
-          {component}
-          {this.renderNotice()}
-        </FormItemComponent>;
+          <FormItemComponent attrs={this.getFormItemProps()}>
+            {component}
+            {this.renderNotice()}
+          </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {
@@ -264,7 +260,7 @@ export default class FormField extends mixins(Emitter) {
 
   public validate() {
     if (this.definition.type === TYPES.object
-      && this.$refs.array) {
+        && this.$refs.array) {
       const array = this.$refs.array as any;
       const validateFields = array.$children.filter(it => it.validate);
       return new Promise((resolve) => {

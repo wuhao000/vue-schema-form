@@ -28,7 +28,6 @@
   import {demoRoutes} from '@/router';
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import HelloWorld from '../components/HelloWorld.vue';
 
   const options = [{
     label: '选项1',
@@ -42,9 +41,6 @@
   }];
   @Component({
     name: 'App',
-    components: {
-      HelloWorld
-    }
   })
   export default class App extends Vue {
     private groups: object = {};

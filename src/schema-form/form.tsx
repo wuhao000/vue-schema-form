@@ -1,12 +1,6 @@
 import BaseForm from '@/schema-form/internal/base-form';
-import {
-  ASchemaForm,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement
-} from '@/schema-form/utils';
+import {ASchemaForm, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils';
+import {IField} from '@/uform/types';
 import Component, {mixins} from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
 
@@ -59,10 +53,19 @@ export default class SchemaForm extends mixins(BaseForm) {
         this.fields.push(field);
       }
     });
-    /* istanbul ignore next */
+    this.$on('SchemaForm.addSchemaField', (field) => {
+      if (field) {
+        this.store.fields[field.plainPath] = field;
+      }
+    });
     this.$on('SchemaForm.removeField', (field) => {
       if (field.prop) {
         this.fields.splice(this.fields.indexOf(field), 1);
+      }
+    });
+    this.$on('SchemaForm.removeSchemaField', (field) => {
+      if (field) {
+        delete this.store.fields[field.plainPath];
       }
     });
   }
