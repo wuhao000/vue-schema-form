@@ -1,4 +1,6 @@
+import InternalForm from '@/schema-form/internal/form';
 import {Platform, SchemaFormField} from '@/types/bean';
+import {IField} from '@/uform/types';
 import Vue from 'vue';
 import PlainDisplayField from './display/plain-display-field';
 import SelectDisplayField from './display/select-display-field';
@@ -16,6 +18,7 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  daterange = 'daterange',
   url = 'url',
   string = 'string',
   datetime = 'datetime',
@@ -30,7 +33,7 @@ export const enum TYPES {
   expandSelect = 'expand-select',
   empty = 'empty',
   text = 'text',
-  subForm = 'sub-form'
+  object = 'object'
 }
 
 const store: { [key: string]: { [key: string]: any } } = {
@@ -72,7 +75,7 @@ export const registerDisplay = (component: string | object,
                                 getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
   addComponent(component, platform, type, forArray, getProps, true);
 };
-export const register = (component: string,
+export const register = (component: string | object,
                          platform: Platform | Platform[],
                          types: string | string[],
                          forArray: boolean = null,
@@ -136,13 +139,13 @@ Vue.component('empty', Empty);
 registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
 registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
 registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], ['select', 'expand-select'], null);
-register(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definition, platform) => {
+register(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {
     platform,
     definition: {fields: definition.fields}
   };
 });
-registerDisplay(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definition, platform) => {
+registerDisplay(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {
     platform,
     definition: {fields: definition.fields}
@@ -150,13 +153,14 @@ registerDisplay(ASchemaForm, [DESKTOP, MOBILE], TYPES.subForm, false, (definitio
 });
 
 export function registerAntd() {
-  console.log('注册Ant Design Vue表单组件');
+  console.info('注册Ant Design Vue表单组件');
   formComponent = 'd-form';
   rowComponent = 'd-row';
   colComponent = 'd-col';
   buttonComponent = 'd-button';
   alertComponent = 'a-alert';
   confirmFunction = '$dconfirm';
+  register('d-range-picker', DESKTOP, [TYPES.daterange], false);
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
   register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
@@ -172,7 +176,7 @@ export function registerAntd() {
 }
 
 export function registerElement() {
-  console.log('注册ElementUI表单组件');
+  console.info('注册ElementUI表单组件');
   formComponent = 'el-form';
   rowComponent = 'el-row';
   colComponent = 'el-col';
@@ -197,7 +201,7 @@ export function registerElement() {
 }
 
 export function registerAntdMobile() {
-  console.log('注册Ant Design Mobile表单组件');
+  console.info('注册Ant Design Mobile表单组件');
 
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
   register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
@@ -254,15 +258,18 @@ export const getOptions = (definition: SchemaFormField) => {
   }
 };
 
-export const getDefaultValue = (definition: SchemaFormField) => {
-  if (definition.type === TYPES.subForm) {
-    if (definition.array) {
+export const getDefaultValue = (field: IField) => {
+  if (typeof field.destructPath.destruct !== 'string') {
+    return null;
+  }
+  if (field.type === TYPES.object) {
+    if (field.array) {
       return [{}];
     } else {
       return {};
     }
   } else {
-    return definition.array ? [] : null;
+    return field.array ? [] : null;
   }
 };
 
@@ -298,19 +305,15 @@ export const getOptionProperty = function getOptionProperty(option: any, propert
 };
 
 export function addRule(rules: any, field: SchemaFormField, rule: any) {
-  const property = field.property;
   const type = field.type as any;
-  if (!rules[property]) {
-    rules[property] = [];
-  }
   let validateType = 'string';
   if (field.array) {
     validateType = 'array';
   } else if (type === TYPES.integer) {
     validateType = 'integer';
   } else if (type === TYPES.double) {
-    validateType = 'number';
-  } else if (type === TYPES.subForm) {
+    validateType = 'string';
+  } else if (type === TYPES.object) {
     validateType = 'object';
   } else if (type === TYPES.date || type === TYPES.datetime || type === TYPES.year || type === TYPES.month) {
     validateType = 'date';
@@ -319,9 +322,11 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
     if (options.length) {
       validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
     }
+  } else if (type === TYPES.daterange) {
+    validateType = 'array';
   }
   rule.type = validateType;
-  rules[property].push(rule);
+  rules.push(rule);
 }
 
 export const getConfirmFunction = (platform: Platform) => {

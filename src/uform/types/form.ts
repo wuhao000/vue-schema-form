@@ -55,8 +55,8 @@ export interface IFormActions {
   dispatch: <T = any>(type: string, payload: T) => void;
   getFieldState: {
     (
-        name: Path | IFormPathMatcher,
-        callback: (fieldState: IFieldState) => void
+      name: Path | IFormPathMatcher,
+      callback: (fieldState: IFieldState) => void
     ): void
     (name: Path | IFormPathMatcher): IFieldState
   };
@@ -66,15 +66,15 @@ export interface IFormActions {
   };
   getSchema: (path: Path) => ISchema;
   reset: (
-      forceClear?: boolean | {
-        forceClear?: boolean;
-        validate?: boolean
-      },
+    forceClear?: boolean | {
+      forceClear?: boolean;
       validate?: boolean
+    },
+    validate?: boolean
   ) => void;
   setFieldState: (
-      name: Path | IFormPathMatcher,
-      callback: (fieldState: IFieldState) => void
+    name: Path | IFormPathMatcher,
+    callback: (fieldState: IFieldState) => void
   ) => Promise<void>;
   setFormState: (callback: (formState: IFormState) => void) => Promise<void>;
   submit: () => Promise<IFormState>;
@@ -86,8 +86,8 @@ export interface IAsyncFormActions {
   dispatch: <T = any>(type: string, payload: T) => Promise<void>;
   getFieldState: {
     (
-        name: Path | IFormPathMatcher,
-        callback: (fieldState: IFieldState) => void
+      name: Path | IFormPathMatcher,
+      callback: (fieldState: IFieldState) => void
     ): Promise<void>
     (name: Path | IFormPathMatcher): Promise<IFieldState>
   };
@@ -97,15 +97,15 @@ export interface IAsyncFormActions {
   };
   getSchema: (path: Path) => Promise<ISchema>;
   reset: (
-      forceClear?: boolean | {
-        forceClear?: boolean;
-        validate?: boolean
-      },
+    forceClear?: boolean | {
+      forceClear?: boolean;
       validate?: boolean
+    },
+    validate?: boolean
   ) => Promise<void>;
   setFieldState: (
-      name: Path | IFormPathMatcher,
-      callback: (fieldState: IFieldState) => void
+    name: Path | IFormPathMatcher,
+    callback: (fieldState: IFieldState) => void
   ) => Promise<void>;
   setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>;
   submit: () => Promise<IFormState>;

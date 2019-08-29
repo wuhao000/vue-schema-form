@@ -317,7 +317,7 @@ const mapReduce = (obj: any, callback: any) => {
   return internalTraverse(obj, []);
 };
 
-const parseDesturctPath = (path: Path): any => {
+const parseDestructPath = (path: Path): any => {
   const newPath = getPathSegments(path);
   const lastKey = newPath[newPath.length - 1];
   const startPath = newPath.slice(0, newPath.length - 1);
@@ -332,7 +332,7 @@ const parseDesturctPath = (path: Path): any => {
 
 const parsePaths = (path: Path): any => {
   const result = [];
-  const parsed = parseDesturctPath(path);
+  const parsed = parseDestructPath(path);
   if (isStr(parsed.destruct)) {
     return path;
   } else if (parsed.destruct) {
@@ -356,7 +356,7 @@ const resolveGetIn = (get: Getter) => {
     let ast = null;
 
     if (!cache.get(path)) {
-      ast = parseDesturctPath(path);
+      ast = parseDestructPath(path);
       cache.set(path, ast);
     } else {
       ast = cache.get(path);
@@ -580,4 +580,4 @@ export const getIn = resolveGetIn(_getIn);
 export const setIn = resolveUpdateIn(_setIn, getIn);
 export const deleteIn = resolveUpdateIn(_deleteIn, getIn);
 export const existIn = resolveExistIn(_existIn);
-export {parseDesturctPath, parseDestruct, parsePaths};
+export {parseDestructPath, parseDestruct, parsePaths};

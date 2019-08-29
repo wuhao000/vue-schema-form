@@ -66,17 +66,16 @@ const schemaTraverse = (
     schemaPath = []
 ) => {
   if (schema) {
-    let copyPath = null;
     if (isVirtualBoxSchema(schema)) {
-      copyPath = path.slice(0, path.length - 1);
+      path = path.slice(0, path.length - 1);
     }
-    callback(schema, {path: copyPath, schemaPath});
+    callback(schema, {path, schemaPath});
     if (schemaIs(schema, 'object') || schema.properties) {
       each(schema.properties, (subSchema, key) => {
         schemaTraverse(
             subSchema,
             callback,
-            copyPath.concat(key),
+            path.concat(key),
             schemaPath.concat(key)
         );
       });
@@ -88,11 +87,11 @@ const schemaTraverse = (
               schemaTraverse(
                   schema.items,
                   callback,
-                  copyPath.concat(key),
+                  path.concat(key),
                   schemaPath.concat(key)
               );
             },
-            copyPath
+            path
         );
       }
     }
@@ -104,11 +103,11 @@ export const calculateSchemaInitialValues = (
     initialValues: any,
     callback?: (pathInfo: IPathInfo, schema: ISchema, value: any) => void
 ) => {
-  const copyInitialValues = initialValues || schema.default || {};
+  initialValues = initialValues || schema.default || {};
   schemaTraverse(schema, (subSchema, $path, parentPath) => {
     const defaultValue = subSchema.default;
     if (isFn($path) && parentPath) {
-      each(toArr(getIn(copyInitialValues, parentPath)), (value, index) => {
+      each(toArr(getIn(initialValues, parentPath)), (value, index) => {
         $path(index);
       });
     } else if ($path) {
@@ -118,10 +117,10 @@ export const calculateSchemaInitialValues = (
           : $path.path.join('.');
       const path = isVirtualBoxInstance ? $path.schemaPath : $path.path;
       const schemaPath = $path.schemaPath;
-      const initialValue = getIn(copyInitialValues, name);
+      const initialValue = getIn(initialValues, name);
       const value = !isEmpty(initialValue) ? initialValue : defaultValue;
       if (!isEmpty(value)) {
-        setIn(copyInitialValues, name, value);
+        setIn(initialValues, name, value);
       }
       if (callback && isFn(callback)) {
         const newPath = {
@@ -133,5 +132,5 @@ export const calculateSchemaInitialValues = (
       }
     }
   });
-  return copyInitialValues;
+  return initialValues;
 };

@@ -8,7 +8,8 @@ export default {
     addBtnText: String,
     addBtnProps: Object,
     maxLength: {type: Number, default: 0},
-    component: String
+    component: String,
+    disabled: {type: Boolean, default: false}
   },
   data(this: any) {
     return {
@@ -32,7 +33,6 @@ export default {
       this.current.map((v, index) => {
         const input = <InputComponent attrs={Object.assign({arrayIndex: index}, this.$attrs)}
                                       onRemoveArrayItem={async (index) => {
-                                        console.log('remove: ' + index);
                                         await this.$mconfirm('确定删除此项吗?', '提示');
                                         this.current.splice(index, 1);
                                       }}
@@ -75,6 +75,7 @@ export default {
         buttonStyle.width = '100%';
       }
       const button = <ButtonComponent onClick={this.onAddClick}
+                                      disabled={this.disabled}
                                       style={buttonStyle}
                                       icon="plus"
                                       attrs={Object.assign({}, this.addBtnProps)}>{this.addBtnText || '添加'}</ButtonComponent>;

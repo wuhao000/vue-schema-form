@@ -1,13 +1,17 @@
+import Emitter from '@/mixins/emitter';
 import {Platform, SchemaFormField} from '@/types/bean';
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {IField} from '@/uform/types';
+import AsyncValidator from 'async-validator';
+import Component, {mixins} from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from './array-wrapper';
 import {
+  addRule,
   DESKTOP,
   getAlertComponent,
   getColComponent,
-  getComponent, getConfirmFunction,
+  getComponent,
+  getConfirmFunction,
   getDisplayComponent,
   getFormComponent,
   getOptions,
@@ -18,7 +22,7 @@ import {
 @Component({
   name: 'FormField'
 })
-export default class FormField extends Vue {
+export default class FormField extends mixins(Emitter) {
 
   @Prop(Object)
   public definition: SchemaFormField;
@@ -37,6 +41,8 @@ export default class FormField extends Vue {
   public disabled: boolean;
   @Prop(String)
   public path: string;
+  @Prop({required: true})
+  public field: IField;
 
   get componentType(): SchemaFormComponent {
     let component: SchemaFormComponent = null;
@@ -62,7 +68,7 @@ export default class FormField extends Vue {
     if (type === TYPES.select || type === TYPES.expandSelect) {
       props.options = this.options;
     }
-    if (type === TYPES.subForm) {
+    if (type === TYPES.object) {
       props.platform = this.platform;
       props.mode = this.display ? 'display' : 'edit';
       props.pathPrefix = this.path;
@@ -76,9 +82,15 @@ export default class FormField extends Vue {
     return props;
   }
 
+  get visible() {
+    return this.field.visible;
+  }
+
   @Watch('currentValue')
   public currentValueChanged(currentValue: any) {
     this.$emit('input', currentValue);
+    this.$emit('change', currentValue);
+    this.$forceUpdate();
   }
 
   @Watch('value', {immediate: true})
@@ -86,6 +98,14 @@ export default class FormField extends Vue {
     if (this.currentValue !== value) {
       this.currentValue = value;
     }
+  }
+
+  public created() {
+    this.dispatch('ASchemaForm', 'SchemaForm.addField', [this]);
+  }
+
+  public beforeDestroy() {
+    this.dispatch('ASchemaForm', 'SchemaForm.removeField', [this]);
   }
 
   public renderInputComponent() {
@@ -105,7 +125,8 @@ export default class FormField extends Vue {
     if (this.definition.array && inputFieldDef.forArray === false) {
       // @ts-ignore
       return <ArrayWrapper
-        subForm={this.definition.type === TYPES.subForm}
+        disabled={this.disabled}
+        subForm={this.definition.type === TYPES.object}
         addBtnText={props.addBtnText}
         ref="array"
         platform={this.platform}
@@ -115,7 +136,7 @@ export default class FormField extends Vue {
           this.addArrayItem();
         }}>
         {
-          this.currentValue.map((v, index) => {
+          this.currentValue ? this.currentValue.map((v, index) => {
             // @ts-ignore
             return <InputFieldComponent
               attrs={props}
@@ -129,10 +150,9 @@ export default class FormField extends Vue {
               value={v}
               title={this.platform === 'mobile' ? definition.title : null}
               onInput={(val) => {
-                this.currentValue[index] = val;
-                this.onInput(this.currentValue);
+                this.onArrayItemInput(val, index);
               }}/>;
-          })
+          }) : null
         }
 
       </ArrayWrapper>;
@@ -147,17 +167,24 @@ export default class FormField extends Vue {
       onInput={this.onInput}/>;
   }
 
+  get formItemComponent() {
+    return getFormComponent(this.platform) + '-item';
+  }
+
   public render() {
+    if (!this.visible) {
+      return null;
+    }
     const {props, definition, platform} = this;
     if (this.display) {
       props.definition = this.definition;
     }
     const component = this.renderInputComponent();
     let item = null;
-    const FormItemComponent = getFormComponent(this.platform) + '-item';
+    const FormItemComponent = this.formItemComponent;
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
-      const formItem = this.definition.type === TYPES.subForm ? component :
+      const formItem = this.definition.type === TYPES.object ? component :
         <FormItemComponent attrs={this.getFormItemProps()}>
           {component}
           {this.renderNotice()}
@@ -171,7 +198,7 @@ export default class FormField extends Vue {
       }
     } else {
       if (this.display) {
-        if (this.definition.type === TYPES.subForm) {
+        if (this.definition.type === TYPES.object) {
           item = component;
         } else {
           item = <m-list-item title={definition.title} extra={component}/>;
@@ -183,10 +210,25 @@ export default class FormField extends Vue {
     return item;
   }
 
+  public getRules() {
+    const field = this.definition;
+    const rules = field.rules || [];
+    if (rules.length === 0) {
+      if (field.required) {
+        addRule(rules, field, {required: true, message: `${field.title}为必填项`});
+      }
+      if (typeof field.min === 'number') {
+        addRule(rules, field, {min: field.min, message: `${field.title}不能小于${field.min}`});
+      }
+      if (typeof field.max === 'number') {
+        addRule(rules, field, {max: field.max, message: `${field.title}不能大于${field.max}`});
+      }
+    }
+    return rules;
+  }
+
   public onInput(value) {
-    this.$emit('input', value);
-    this.$emit('change', value);
-    this.$forceUpdate();
+    this.currentValue = value;
   }
 
   private renderNotice() {
@@ -196,18 +238,32 @@ export default class FormField extends Vue {
     }
   }
 
+  get error() {
+    return this.field.errors.join('、');
+  }
+
   public getFormItemProps() {
     const {definition} = this;
-    return {
+    const component = this.formItemComponent;
+    const props: any = {
       required: this.display ? null : definition.required,
-      prop: definition.property,
       title: definition.title,
       label: definition.title
     };
+    if (component === 'd-form-item' || component === 'a-form-item') {
+      props.help = this.field.errors.join('、');
+      if (props.help) {
+        props.hasFeedback = true;
+        props.validateStatus = 'error';
+      }
+    } else if (component === 'el-form-item') {
+      props.error = this.field.errors.join('、');
+    }
+    return props;
   }
 
   public validate() {
-    if (this.definition.type === TYPES.subForm
+    if (this.definition.type === TYPES.object
       && this.$refs.array) {
       const array = this.$refs.array as any;
       const validateFields = array.$children.filter(it => it.validate);
@@ -221,8 +277,29 @@ export default class FormField extends Vue {
             resolve(true);
           }
         }).catch(() => {
-          console.log(2);
           resolve(false);
+        });
+      });
+    }
+    const rules = this.getRules();
+    if (rules.length) {
+      const validator = new AsyncValidator({
+        [this.field.plainPath]: rules
+      });
+      const model = {
+        [this.field.plainPath]: this.currentValue
+      };
+      return new Promise((resolve) => {
+        validator.validate(model, {firstFields: true}, (errors, invalidFields) => {
+          if (errors) {
+            this.field.valid = false;
+            this.field.errors = errors.map(error => error.message);
+          } else {
+            this.field.valid = true;
+            this.field.errors = [];
+          }
+          this.$forceUpdate();
+          resolve(this.field.valid);
         });
       });
     }
@@ -230,6 +307,23 @@ export default class FormField extends Vue {
   }
 
   private addArrayItem() {
-    this.currentValue.push(null);
+    if (this.currentValue) {
+      if (this.definition.type === TYPES.object) {
+        this.currentValue.push({});
+      } else {
+        this.currentValue.push(null);
+      }
+    } else {
+      if (this.definition.type === TYPES.object) {
+        this.currentValue = [{}];
+      } else {
+        this.currentValue = [null];
+      }
+    }
+  }
+
+  private onArrayItemInput(val: any, index: number) {
+    this.currentValue[index] = val;
+    this.onInput(this.currentValue);
   }
 }

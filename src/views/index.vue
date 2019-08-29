@@ -2,7 +2,7 @@
   <ae-layout theme="light">
     <ae-layout-header></ae-layout-header>
     <ae-layout>
-      <ae-layout-sider style="margin:10px;"
+      <ae-layout-sider style="margin: 10px;overflow:auto;"
                        width="200px">
         <a-menu>
           <a-menu-item>安装</a-menu-item>

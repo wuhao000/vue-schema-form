@@ -1,3 +1,4 @@
+import {IField} from '@/uform/types';
 import {ValidateRules} from 'async-validator';
 import {VNode} from 'vue';
 
@@ -18,17 +19,21 @@ export interface SchemaFormField {
    */
   notice?: string;
   /**
-   * 当字段类型为sub-form时，子表单的字段列表
+   * 当字段类型为object时，子表单的字段列表
    */
-  fields?: SchemaFormField[];
+  fields?: FormFields;
   /**
    * 表单属性名称
    */
-  property: string;
+  property?: string;
   /**
    * 当表单模式为详情模式时显示的内容
    */
   displayValue?: string | VNode | ((value: any) => any);
+  /**
+   * 表单项校验规则（async-validator）
+   */
+  rules?: any[];
   /**
    * 字段是否为必填
    */
@@ -65,8 +70,16 @@ export interface SchemaFormField {
    * 表单项类型
    */
   type: string;
+  /**
+   * 自定数据转换器
+   */
+  processor?: ValueProcessor;
 }
 
+interface ValueProcessor {
+  getValue: (parentValue: object, field: IField) => any;
+  setValue: (parentValue: object, field: IField, fieldValue: any) => any;
+}
 
 interface SchemaFormFieldProps {
   /**
@@ -95,9 +108,11 @@ export interface ShowFieldCondition {
   value?: any;
 }
 
+export type FormFields = SchemaFormField[] | { [key: string]: SchemaFormField };
+
 export interface FormDescriptor {
   array?: boolean;
-  fields: SchemaFormField[];
+  fields: FormFields;
 }
 
 interface FormProps {

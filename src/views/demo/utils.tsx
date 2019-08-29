@@ -21,7 +21,7 @@ export const getValue = () => {
   return {
     string: '111',
     text: 'abc',
-    integer: '22',
+    integer: 122,
     double: '0.2',
     url: 'http://www.aegis-info.com',
     datetime: new Date(),
@@ -38,110 +38,134 @@ export const getValue = () => {
     }
   };
 };
+
+const fields = {
+  string: {
+    title: '单行文本',
+    type: 'string',
+    required: true,
+    placeholder: '请输入文本'
+  },
+  text: {
+    title: '多行文本',
+    required: true,
+    type: 'text'
+  },
+  url: {
+    title: '链接',
+    required: true,
+    type: 'url'
+  },
+  integer: {
+    title: '整数',
+    type: 'integer',
+    required: true,
+    min: 100,
+    max: 200
+  },
+  double: {
+    title: '小数',
+    required: true,
+    type: 'double'
+  },
+  date: {
+    title: '日期',
+    required: true,
+    type: 'date'
+  },
+  dateRange: {
+    title: '日期范围',
+    required: true,
+    type: 'daterange',
+    processor: {
+      getValue: (value, field) => {
+        return [value && value['start'], value && value['end']];
+      },
+      setValue: (parentValue, field, value) => {
+        if (value) {
+          parentValue['start'] = value[0];
+          parentValue['end'] = value[1];
+        } else {
+          parentValue['start'] = null;
+          parentValue['end'] = null;
+        }
+      }
+    }
+  },
+  datetime: {
+    title: '日期时间',
+    required: true,
+    type: 'datetime'
+  },
+  year: {
+    title: '年份',
+    required: true,
+    type: 'year'
+  },
+  month: {
+    title: '月份',
+    required: true,
+    type: 'month'
+  },
+  select: {
+    title: '单选',
+    required: true,
+    type: 'select',
+    props: {options, clearable: true}
+  },
+  expandSelect: {
+    title: '展开单选',
+    required: true,
+    type: 'expand-select',
+    props: {options}
+  },
+  multiSelect: {
+    title: '多选',
+    required: true,
+    type: 'select',
+    array: true,
+    props: {options}
+  },
+  expandMultiSelect: {
+    title: '展开多选',
+    required: true,
+    type: 'expand-select',
+    array: true,
+    props: {options}
+  },
+  subForm: {
+    title: '子表单',
+    type: TYPES.object,
+    fields: {
+      input: {
+        title: '输入框',
+        type: 'string',
+        required: true
+      }
+    },
+    props: {
+      addBtnText: '添加子表单', addBtnProps: {block: true}
+    }
+  },
+  subFormArray: {
+    title: '子表单数组',
+    type: TYPES.object,
+    array: true,
+    fields: {
+      input: {
+        title: '输入框(数组)',
+        type: 'string',
+        required: true
+      }
+    },
+    props: {
+      addBtnText: '添加子表单', addBtnProps: {block: true}
+    }
+  }
+};
+
 export const getFormDefinition = (): FormDescriptor => {
   return {
-    fields: [
-      {
-        title: '单行文本',
-        property: 'string',
-        type: 'string',
-        required: true,
-        placeholder: '请输入文本'
-      }, {
-        title: '多行文本',
-        property: 'text',
-        required: true,
-        type: 'text'
-      }, {
-        title: '链接',
-        property: 'url',
-        required: true,
-        type: 'url'
-      }, {
-        title: '整数',
-        property: 'integer',
-        type: 'integer',
-        required: true,
-        min: 100,
-        max: 200
-      }, {
-        title: '小数',
-        property: 'double',
-        required: true,
-        type: 'double'
-      }, {
-        title: '日期',
-        property: 'date',
-        required: true,
-        type: 'date'
-      }, {
-        title: '日期时间',
-        property: 'datetime',
-        required: true,
-        type: 'datetime'
-      }, {
-        title: '年份',
-        property: 'year',
-        required: true,
-        type: 'year'
-      }, {
-        title: '月份',
-        property: 'month',
-        required: true,
-        type: 'month'
-      }, {
-        title: '单选',
-        property: 'select',
-        required: true,
-        type: 'select',
-        props: {options, clearable: true}
-      }, {
-        title: '展开单选',
-        property: 'expandSelect',
-        required: true,
-        type: 'expand-select',
-        props: {options}
-      }, {
-        title: '多选',
-        required: true,
-        property: 'multiSelect',
-        type: 'select',
-        array: true,
-        props: {options}
-      }, {
-        title: '展开多选',
-        property: 'expandMultiSelect',
-        required: true,
-        type: 'expand-select',
-        array: true,
-        props: {options}
-      }, {
-        title: '子表单',
-        property: 'values',
-        type: TYPES.subForm,
-        fields: [{
-          title: '输入框',
-          type: 'string',
-          property: 'input',
-          required: true
-        }],
-        props: {
-          addBtnText: '添加子表单', addBtnProps: {block: true}
-        }
-      }, {
-        title: '子表单数组',
-        property: 'valuesArray',
-        type: TYPES.subForm,
-        array: true,
-        fields: [{
-          title: '输入框(数组)',
-          type: 'string',
-          property: 'input',
-          required: true
-        }],
-        props: {
-          addBtnText: '添加子表单', addBtnProps: {block: true}
-        }
-      }]
+    fields
   };
 };

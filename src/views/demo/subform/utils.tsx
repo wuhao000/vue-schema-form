@@ -16,7 +16,7 @@ export const getSubFormDefinition = (): FormDescriptor => {
       {
         title: '子表单数组',
         property: 'valueArray',
-        type: 'sub-form',
+        type: 'object',
         array: true,
         fields: [{
           title: '数组文本',

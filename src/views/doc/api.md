@@ -70,6 +70,6 @@ double|小数|el-input-numberr|d-input-number|m-input
 boolean|布尔|el-switch|d-switch|m-switch-item
 date|日期|el-date-picker|d-date-picker|m-date-picker
 datetime|日期时间|el-date-picker|d-date-picker|m-date-picker
-sub-form|子表单|el-form|d-form|m-list
+object|子表单|el-form|d-form|m-list
 
 

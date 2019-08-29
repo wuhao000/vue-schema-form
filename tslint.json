@@ -20,7 +20,7 @@
     ],
     "no-string-literal": false,
     "interface-name": false,
-    "no-parameter-reassignment": true,
+    "no-parameter-reassignment": false,
     "no-bitwise": false,
     "no-object-literal-type-assertion": false,
     "no-unused-expression": false,
