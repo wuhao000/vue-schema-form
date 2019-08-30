@@ -31,9 +31,7 @@ export default class Base extends Vue {
 
   public onOk() {
     // @ts-ignore
-    this.$message.success(
-      <pre>{JSON.stringify(this.value.start)}</pre>
-    );
+    this.$message.success('ok clicked');
   }
 
   public onReset() {

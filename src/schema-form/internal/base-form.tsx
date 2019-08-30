@@ -10,7 +10,7 @@ import {
 } from '@/schema-form/utils';
 import {getFieldValue, setFieldValue} from '@/schema-form/utils/field';
 import {FormDescriptor, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
+import {Effects} from '@/types/form';
 import {IField} from '@/uform/types';
 import {parseDestructPath} from '@/uform/utils';
 import {ValidateRules} from 'async-validator';
@@ -285,8 +285,10 @@ export default class BaseForm extends Vue {
     if (this.hasListener('ok')) {
       if (this.form && this.form.validate) {
         const valid = await this.validate();
-        if (valid.some(it => !it)) {
-          this.$message.error('表单数据有误，请检查');
+        const errors = valid.filter((it: any) => it && it !== true).flat();
+        if (errors.length) {
+          console.warn('有错误', errors);
+          this.$message.error(errors[0].message);
         } else {
           this.$emit('ok', this.currentValue);
         }

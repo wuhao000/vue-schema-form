@@ -21,21 +21,24 @@ export const getValue = () => {
   return {
     string: '111',
     text: 'abc',
-    integer: 122,
+    integer: '122',
     double: '0.2',
     url: 'http://www.aegis-info.com',
     datetime: new Date(),
     date: new Date(),
+    year: new Date(),
+    month: new Date(),
     time: window.moment(),
     select: 1,
     multiSelect: [1, 3],
     expandSelect: 2,
     expandMultiSelect: [2, 3],
-    month: null,
-    year: null,
-    values: {
+    subForm: {
+      input: 'abs'
+    },
+    subFormArray: [{
       input: 'sssssssss'
-    }
+    }]
   };
 };
 

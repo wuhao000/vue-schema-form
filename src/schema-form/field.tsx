@@ -283,13 +283,7 @@ export default class FormField extends mixins(Emitter) {
         Promise.all(validateFields.map(it => {
           return it.validate();
         })).then((values) => {
-          if (values.some(it => !it)) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        }).catch(() => {
-          resolve(false);
+          resolve(values.filter(it => !!it).flat());
         });
       });
     }
@@ -298,11 +292,15 @@ export default class FormField extends mixins(Emitter) {
       const validator = new AsyncValidator({
         [field.plainPath]: rules
       });
+      let value = this.currentValue;
+      if ([TYPES.integer, TYPES.double, TYPES.number].includes(this.field.type as any)) {
+        value = parseFloat(value);
+      }
       const model = {
-        [field.plainPath]: this.currentValue
+        [field.plainPath]: value
       };
       return new Promise((resolve) => {
-        validator.validate(model, {firstFields: true}, (errors, invalidFields) => {
+        validator.validate(model, {firstFields: true}, (errors) => {
           if (errors) {
             field.valid = false;
             field.errors = errors.map(error => error.message);
@@ -310,7 +308,11 @@ export default class FormField extends mixins(Emitter) {
             field.valid = true;
             field.errors = [];
           }
-          resolve(this.field.valid);
+          if (errors) {
+            resolve(errors.map(it => ({message: it.message, path: this.field.plainPath})));
+          } else {
+            resolve(null);
+          }
         });
       });
     }

@@ -234,7 +234,8 @@ export function registerAntdMobile() {
   console.info('注册Ant Design Mobile表单组件');
 
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
-  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
+    (definition: IField) => ({mode: definition.type.toLowerCase()}));
   register('m-input', MOBILE, [TYPES.integer, TYPES.double, TYPES.number], false,
     (definition: IField) => {
       return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
@@ -347,9 +348,9 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
   } else if (type === 'number') {
     validateType = 'number';
   } else if (type === TYPES.integer) {
-    validateType = 'integer';
+    validateType = 'number';
   } else if (type === TYPES.double) {
-    validateType = 'string';
+    validateType = 'number';
   } else if (type === TYPES.object) {
     validateType = 'object';
   } else if (type === TYPES.date || type === TYPES.datetime || type === TYPES.year || type === TYPES.month) {
