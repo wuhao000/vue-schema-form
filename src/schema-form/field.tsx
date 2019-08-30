@@ -2,10 +2,23 @@ import Emitter from '@/mixins/emitter';
 import {Platform, SchemaFormField} from '@/types/bean';
 import {IField} from '@/uform/types';
 import AsyncValidator from 'async-validator';
+import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from './array-wrapper';
-import {addRule, DESKTOP, getAlertComponent, getColComponent, getComponent, getConfirmFunction, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
+import {
+  addRule,
+  DESKTOP,
+  getAlertComponent,
+  getColComponent,
+  getComponent,
+  getConfirmFunction,
+  getDisplayComponent,
+  getFormComponent,
+  getOptions,
+  SchemaFormComponent,
+  TYPES
+} from './utils';
 
 @Component({
   name: 'FormField'
@@ -40,19 +53,19 @@ export default class FormField extends mixins(Emitter) {
       component = getComponent(this.platform, this.definition);
     }
     if (component.component === 'empty') {
-      console.warn(`类型${this.definition.type}${this.definition.array ? '（数组）' : ''}没有对应的${this.display ? '展示' : '编辑'}组件`);
+      console.warn(`类型${this.field.type}${this.field.array ? '（数组）' : ''}没有对应的${this.display ? '展示' : '编辑'}组件`);
     }
     return component;
   }
 
   get options() {
-    return getOptions(this.definition);
+    return getOptions(this.field);
   }
 
   get props() {
-    const {definition} = this;
-    const props: any = Object.assign({}, this.componentType.getProps(definition));
-    const type = definition.type;
+    const {field} = this;
+    const props: any = Object.assign({}, this.componentType.getProps(field));
+    const type = field.type;
     if (type === TYPES.select || type === TYPES.expandSelect) {
       props.options = this.options;
     }
@@ -61,23 +74,19 @@ export default class FormField extends mixins(Emitter) {
       props.mode = this.display ? 'display' : 'edit';
       props.pathPrefix = this.path;
     }
-    if (definition.placeholder) {
-      props.placeholder = definition.placeholder;
-    }
     if (this.display) {
       delete props.required;
     }
     return props;
   }
 
-  get visible() {
-    return this.field.visible;
-  }
-
   @Watch('currentValue')
   public currentValueChanged(currentValue: any) {
     this.$emit('input', currentValue);
     this.$emit('change', currentValue);
+    if (this.field.onChange) {
+      this.field.onChange(currentValue);
+    }
     this.$forceUpdate();
   }
 
@@ -116,51 +125,55 @@ export default class FormField extends mixins(Emitter) {
         return this.definition.displayValue;
       }
     }
-    if (this.definition.array && inputFieldDef.forArray === false) {
+    if (this.field.array && inputFieldDef.forArray === false) {
       // @ts-ignore
       return <ArrayWrapper
-          disabled={this.disabled}
-          subForm={this.definition.type === TYPES.object}
-          addBtnText={props.addBtnText}
-          ref="array"
-          platform={this.platform}
-          addBtnProps={props.addBtnProps}
-          cellSpan={props.cellSpan}
-          onAdd={() => {
-            this.addArrayItem();
-          }}>
+        disabled={this.disabled}
+        subForm={this.field.type === TYPES.object}
+        addBtnText={props.addBtnText}
+        ref="array"
+        platform={this.platform}
+        addBtnProps={props.addBtnProps}
+        cellSpan={props.cellSpan}
+        onAdd={() => {
+          this.addArrayItem();
+        }}>
         {
           this.currentValue ? this.currentValue.map((v, index) => {
             const itemProps = Object.assign({}, props, {
               pathPrefix: this.path.concat(index)
             });
+            if (this.field.type === TYPES.object) {
+              itemProps.definition = Object.assign({}, itemProps.definition);
+              delete itemProps.definition.array;
+            }
             // @ts-ignore
             return <InputFieldComponent
-                attrs={itemProps}
-                arrayIndex={index}
-                disabled={this.disabled}
-                onRemoveArrayItem={async () => {
-                  const confirmFunc = getConfirmFunction(this.platform);
-                  await this[confirmFunc]('确定删除该条吗？', '提示');
-                  this.currentValue.splice(index, 1);
-                }}
-                value={v}
-                title={this.platform === 'mobile' ? definition.title : null}
-                onInput={(val) => {
-                  this.onArrayItemInput(val, index);
-                }}/>;
+              attrs={itemProps}
+              arrayIndex={index}
+              disabled={this.disabled}
+              onRemoveArrayItem={async () => {
+                const confirmFunc = getConfirmFunction(this.platform);
+                await this[confirmFunc]('确定删除该条吗？', '提示');
+                this.currentValue.splice(index, 1);
+              }}
+              value={v}
+              title={this.platform === 'mobile' ? this.field.title : null}
+              onInput={(val) => {
+                this.onArrayItemInput(val, index);
+              }}/>;
           }) : null
         }
       </ArrayWrapper>;
     }
     // @ts-ignore
     return <InputFieldComponent
-        attrs={props}
-        ref="input"
-        disabled={this.disabled}
-        value={currentValue}
-        title={this.platform === 'mobile' ? definition.title : null}
-        onInput={this.onInput}/>;
+      attrs={props}
+      ref="input"
+      disabled={this.disabled}
+      value={currentValue}
+      title={this.platform === 'mobile' ? this.field.title : null}
+      onInput={this.onInput}/>;
   }
 
   get formItemComponent() {
@@ -168,10 +181,7 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public render() {
-    if (!this.visible) {
-      return null;
-    }
-    const {props, definition, platform} = this;
+    const {props, field, definition, platform} = this;
     if (this.display) {
       props.definition = this.definition;
     }
@@ -180,11 +190,11 @@ export default class FormField extends mixins(Emitter) {
     const FormItemComponent = this.formItemComponent;
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
-      const formItem = this.definition.type === TYPES.object ? component :
-          <FormItemComponent attrs={this.getFormItemProps()}>
-            {component}
-            {this.renderNotice()}
-          </FormItemComponent>;
+      const formItem = field.type === TYPES.object ? component :
+        <FormItemComponent attrs={this.getFormItemProps()}>
+          {component}
+          {this.renderNotice()}
+        </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else if (definition.type === 'Extra') {
@@ -203,6 +213,11 @@ export default class FormField extends mixins(Emitter) {
         item = component;
       }
     }
+    const style: any = {};
+    if (!field.visible) {
+      style.display = 'none';
+    }
+    (item as VNode).data.staticStyle = style;
     return item;
   }
 
@@ -259,8 +274,9 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public validate() {
+    const {field} = this;
     if (this.definition.type === TYPES.object
-        && this.$refs.array) {
+      && this.$refs.array) {
       const array = this.$refs.array as any;
       const validateFields = array.$children.filter(it => it.validate);
       return new Promise((resolve) => {
@@ -280,21 +296,20 @@ export default class FormField extends mixins(Emitter) {
     const rules = this.getRules();
     if (rules.length) {
       const validator = new AsyncValidator({
-        [this.field.plainPath]: rules
+        [field.plainPath]: rules
       });
       const model = {
-        [this.field.plainPath]: this.currentValue
+        [field.plainPath]: this.currentValue
       };
       return new Promise((resolve) => {
         validator.validate(model, {firstFields: true}, (errors, invalidFields) => {
           if (errors) {
-            this.field.valid = false;
-            this.field.errors = errors.map(error => error.message);
+            field.valid = false;
+            field.errors = errors.map(error => error.message);
           } else {
-            this.field.valid = true;
-            this.field.errors = [];
+            field.valid = true;
+            field.errors = [];
           }
-          this.$forceUpdate();
           resolve(this.field.valid);
         });
       });

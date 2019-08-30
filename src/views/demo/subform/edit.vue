@@ -29,16 +29,6 @@
 
     public created() {
       SchemaForm.registerAntd();
-      setTimeout(() => {
-        // this.value2.values.input = 'defffffffs';
-        // this.value2.values.input2 = 'defffffffs';
-        this.value2 = {
-          values: {
-            input: 'def',
-            input2: 'fsgff'
-          }
-        };
-      }, 1000);
     }
 
   }

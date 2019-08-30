@@ -69,3 +69,6 @@ setStructValue(parentValue, ['start', 'end'], [3, 4]);
 console.log(parentValue);
 setStructValue(parentValue, { startDate: { year: 'start' }, endDate: 'end' }, { startDate: { year: 6 }, endDate: 9 });
 console.log(parentValue);
+
+console.log(Object.assign({}, undefined));
+// console.log(Object.assign(undefined, {}));

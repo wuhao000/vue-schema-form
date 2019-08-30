@@ -1,8 +1,14 @@
-import {IField} from '@/uform/types';
+export type EffectsContext = (
+  path: string | string[]
+) => EffectsHandlers;
 
-export interface EffectsContext {
+export interface EffectsHandlers {
+  hide: () => any;
+  show: () => any;
+  setEnum: (options: any) => any;
+  setFieldProps: (props: object) => void;
+  onFieldChange: (value: any) => any;
+  subscribe: (event: string, handler: (...args: any) => any) => any;
 }
 
-export interface Effects {
-  onFieldChange: (field: IField, value: any, context: EffectsContext) => {};
-}
+export type Effects = (context: EffectsContext) => any;

@@ -2,6 +2,7 @@ import InternalForm from '@/schema-form/internal/form';
 import {Platform, SchemaFormField} from '@/types/bean';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
+import AntdUpload from './antd/upload.vue';
 import PlainDisplayField from './display/plain-display-field';
 import SelectDisplayField from './display/select-display-field';
 import TimeDisplayField from './display/time-display-field';
@@ -18,6 +19,9 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  transfer = 'transfer',
+  rate = 'rate',
+  upload = 'upload',
   daterange = 'daterange',
   url = 'url',
   string = 'string',
@@ -28,9 +32,11 @@ export const enum TYPES {
   select = 'select',
   date = 'date',
   integer = 'integer',
+  number = 'number',
   double = 'double',
   boolean = 'boolean',
   expandSelect = 'expand-select',
+  range = 'range',
   empty = 'empty',
   text = 'text',
   object = 'object'
@@ -62,7 +68,7 @@ export interface SchemaFormComponent {
   type: string;
   component: string | object;
   forArray: boolean | null;
-  getProps: (definition: SchemaFormField) => object;
+  getProps: (field: IField) => object;
 }
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
@@ -72,14 +78,14 @@ export const registerDisplay = (component: string | object,
                                 platform: Platform | Platform[],
                                 type: string | string[],
                                 forArray: boolean = null,
-                                getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
+                                getProps: ((definition: IField, platform: Platform) => object) = () => ({})) => {
   addComponent(component, platform, type, forArray, getProps, true);
 };
 export const register = (component: string | object,
                          platform: Platform | Platform[],
                          types: string | string[],
                          forArray: boolean = null,
-                         getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
+                         getProps: ((definition: IField, platform: Platform) => object) = () => ({})) => {
   addComponent(component, platform, types, forArray, getProps, false);
 };
 
@@ -87,7 +93,7 @@ const addComponent = (component: string | object,
                       platforms: Platform | Platform[],
                       types: string | string[],
                       forArray: boolean | null = null,
-                      getProps: (definition: SchemaFormField, platform: Platform) => object = () => ({}),
+                      getProps: (definition: IField, platform: Platform) => object = () => ({}),
                       forDisplay: boolean) => {
   if (Array.isArray(types)) {
     types.forEach(type => {
@@ -103,7 +109,7 @@ const addComponent = (component: string | object,
       platform: platforms,
       type: types,
       forArray,
-      getProps: (definition: SchemaFormField) => {
+      getProps: (definition: IField) => {
         const props: any = getProps(definition, platforms) || {};
         if (definition.title && platforms === MOBILE) {
           props.labelNumber = definition.title.length > 7 ? 7 : definition.title.length;
@@ -136,9 +142,9 @@ const addComponent = (component: string | object,
 
 Vue.component('empty', Empty);
 
-registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
-registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
-registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], ['select', 'expand-select'], null);
+registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], [TYPES.datetime, TYPES.date]);
+registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], [TYPES.string, TYPES.text, TYPES.url, TYPES.integer, TYPES.double, TYPES.number], false);
+registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], [TYPES.select, TYPES.expandSelect], null);
 register(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {
     platform,
@@ -163,16 +169,39 @@ export function registerAntd() {
   register('d-range-picker', DESKTOP, [TYPES.daterange], false);
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
-  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
+  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
   register('d-switch', DESKTOP, TYPES.boolean);
   register('d-select', DESKTOP, TYPES.select, null, definition => {
     return {dropdownMatchSelectWidth: false, multiple: definition.array};
   });
+  register(AntdUpload, DESKTOP, TYPES.upload, null, def => {
+    return {multiple: def.array};
+  });
   register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true);
   register('d-radio-group', DESKTOP, TYPES.expandSelect, false);
   register('d-color-picker', DESKTOP, 'color');
+  register('d-rate', DESKTOP, TYPES.rate);
+  register('d-transfer', DESKTOP, TYPES.transfer, false, def => {
+    const data = (def.props && def.props.dataSource) || def.enum || [];
+    const dataSource = data.map((item: any) => {
+      if (typeof item === 'string') {
+        return {key: item, title: item};
+      } else {
+        return {
+          key: (item.key || item.value).toString(),
+          title: item.title || item.label,
+          description: item.description || item.label,
+          disabled: item.disabled || false
+        };
+      }
+    });
+    return {dataSource};
+  });
+  register('d-slider', DESKTOP, TYPES.range, false, () => {
+    return {range: true};
+  });
 }
 
 export function registerElement() {
@@ -190,8 +219,9 @@ export function registerElement() {
   register('el-input', DESKTOP, [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
-  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({type: definition.type.toLowerCase()}));
-  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
+  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false,
+    (definition: IField) => ({type: definition.type.toLowerCase()}));
+  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
   register('el-switch', DESKTOP, [TYPES.boolean], false);
   register('el-ext-select', DESKTOP, [TYPES.select], null, definition => {
     return {multiple: definition.array};
@@ -204,9 +234,9 @@ export function registerAntdMobile() {
   console.info('注册Ant Design Mobile表单组件');
 
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
-  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-    (definition: SchemaFormField) => {
+  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('m-input', MOBILE, [TYPES.integer, TYPES.double, TYPES.number], false,
+    (definition: IField) => {
       return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
     });
   register('m-textarea', MOBILE, [TYPES.text], false);
@@ -246,7 +276,10 @@ export const getDisplayComponent = (platform: Platform, definition: SchemaFormFi
   return searchStore(Mode.display, platform, definition);
 };
 
-export const getOptions = (definition: SchemaFormField) => {
+export const getOptions = (definition: IField) => {
+  if (definition.enum) {
+    return definition.enum;
+  }
   if (definition.props && definition.props.options) {
     if (typeof definition.props.options === 'function') {
       return definition.props.options() || [];
@@ -262,7 +295,9 @@ export const getDefaultValue = (field: IField) => {
   if (typeof field.destructPath.destruct !== 'string') {
     return null;
   }
-  if (field.type === TYPES.object) {
+  if (field.type === TYPES.range) {
+    return [];
+  } else if (field.type === TYPES.object) {
     if (field.array) {
       return [{}];
     } else {
@@ -309,6 +344,8 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
   let validateType = 'string';
   if (field.array) {
     validateType = 'array';
+  } else if (type === 'number') {
+    validateType = 'number';
   } else if (type === TYPES.integer) {
     validateType = 'integer';
   } else if (type === TYPES.double) {

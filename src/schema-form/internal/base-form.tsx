@@ -1,8 +1,16 @@
 import FormField from '@/schema-form/field';
-import {DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE, TYPES} from '@/schema-form/utils';
+import {
+  DESKTOP,
+  getButtonComponent,
+  getDefaultValue,
+  getFormComponent,
+  getRowComponent,
+  MOBILE,
+  TYPES
+} from '@/schema-form/utils';
 import {getFieldValue, setFieldValue} from '@/schema-form/utils/field';
 import {FormDescriptor, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {Effects} from '@/types/form';
+import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IField} from '@/uform/types';
 import {parseDestructPath} from '@/uform/utils';
 import {ValidateRules} from 'async-validator';
@@ -60,7 +68,7 @@ export default class BaseForm extends Vue {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+        .concat(difference(value as any[], currentValue as any[])).length > 0) {
         this.buildExtraProperties();
       }
     } else if (!eq(currentValue, value)) {
@@ -73,18 +81,13 @@ export default class BaseForm extends Vue {
     this.$forceUpdate();
   }
 
-  @Watch('definition.mode')
-  public modeChanged() {
-    this.$forceUpdate();
-  }
-
   @Watch('value', {immediate: true, deep: true})
   public valueChanged(value: any[] | any) {
     if (value !== this.currentValue) {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-            .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
           this.buildExtraProperties();
         }
@@ -119,11 +122,11 @@ export default class BaseForm extends Vue {
     const fields = this.definition.fields;
     if (typeof fields === 'object') {
       return Object.keys(fields)
-          .filter(key => fields[key])
-          .map(key => ({
-            property: key,
-            ...fields[key]
-          }));
+        .filter(key => fields[key])
+        .map(key => ({
+          property: key,
+          ...fields[key]
+        }));
     } else {
       return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
     }
@@ -218,21 +221,21 @@ export default class BaseForm extends Vue {
           </m-button> : null}
           {this.hasListener('cancel') ? <m-white-space/> : null}
           {this.hasListener('cancel') ? <m-button
-              disabled={this.isDisabled || this.isDisabled}
-              onClick={() => {
-                this.$emit('cancel');
-              }}
-              attrs={props && props.cancelProps}>
+            disabled={this.isDisabled || this.isDisabled}
+            onClick={() => {
+              this.$emit('cancel');
+            }}
+            attrs={props && props.cancelProps}>
             {props && props.cancelText || '取消'}
           </m-button> : null}
           {this.hasListener('reset') ? <m-white-space/> : null}
           {this.hasListener('reset') ? <m-button
-              disabled={this.isDisabled || this.isLoading}
-              type="error"
-              onClick={() => {
-                this.$emit('reset');
-              }}
-              attrs={props && props.resetProps}>
+            disabled={this.isDisabled || this.isLoading}
+            type="error"
+            onClick={() => {
+              this.$emit('reset');
+            }}
+            attrs={props && props.resetProps}>
             {props && props.resetText || '重置'}
           </m-button> : null}
         </div>;
@@ -319,14 +322,14 @@ export default class BaseForm extends Vue {
 
   public calcShowState(definition: SchemaFormField) {
     if (!definition.depends) {
-      return true;
+      return definition.visible || definition.visible === null || definition.visible === undefined;
     } else {
       if (typeof definition.depends === 'function') {
         return definition.depends(this.currentValue);
       } else {
         return !definition.depends
-            .map(condition => this.matchCondition(condition))
-            .some(it => !it);
+          .map(condition => this.matchCondition(condition))
+          .some(it => !it);
       }
     }
   }
@@ -386,32 +389,23 @@ export default class BaseForm extends Vue {
     const iField = this.createField(field);
     // @ts-ignore
     return <FormField
-        value={getFieldValue(value, iField)}
-        onInput={(v) => {
-          setFieldValue(value, iField, v);
-        }}
-        field={iField}
-        path={this.buildFieldPath(field)}
-        display={this.mode === 'display'}
-        disabled={this.isDisabled}
-        content={this.$slots[field.slot]}
-        definition={field}
-        key={'field-' + field.property + '-' + index}
-        onChange={(value) => {
-          this.onFieldChange(iField, value);
-        }}
-        formValue={currentValue}
-        platform={platform}/>;
+      value={getFieldValue(value, iField)}
+      onInput={(v) => {
+        setFieldValue(value, iField, v);
+      }}
+      field={iField}
+      path={this.buildFieldPath(field)}
+      display={this.mode === 'display'}
+      disabled={this.isDisabled}
+      content={this.$slots[field.slot]}
+      definition={field}
+      key={'field-' + field.property + '-' + index}
+      formValue={currentValue}
+      platform={platform}/>;
   }
 
   private renderFields() {
-    if (this.definition.array) {
-      return this.currentValue.map(currentValue => {
-        return this.renderSingleFields(currentValue);
-      });
-    } else {
-      return this.renderSingleFields(this.currentValue);
-    }
+    return this.renderSingleFields(this.currentValue);
   }
 
   get isMobile() {
@@ -433,7 +427,7 @@ export default class BaseForm extends Vue {
       {this.$slots.prepend}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {props && props.inline ? groups.reduce((a, b) => a.concat(b))
-          : groups.map((group) => this.wrapGroup(group))}
+        : groups.map((group) => this.wrapGroup(group))}
       {this.renderDeleteSubFormButton()}
       {this.$slots.append}
     </FormComponent>;
@@ -443,15 +437,15 @@ export default class BaseForm extends Vue {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.mode === 'edit') {
       return <ButtonComponent
-          attrs={{
-            block: true,
-            icon: 'plus',
-            disabled: this.isDisabled
-          }}
-          class="m-b"
-          onClick={() => {
-            this.addSubItem();
-          }}>新增一条</ButtonComponent>;
+        attrs={{
+          block: true,
+          icon: 'plus',
+          disabled: this.isDisabled
+        }}
+        class="m-b"
+        onClick={() => {
+          this.addSubItem();
+        }}>新增一条</ButtonComponent>;
     }
   }
 
@@ -462,12 +456,12 @@ export default class BaseForm extends Vue {
   private renderDeleteSubFormButton() {
     const ButtonComponent = getButtonComponent();
     return Number.isInteger(this.arrayIndex) && this.mode !== 'display' && this.platform === 'desktop' ?
-        <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
-          <ButtonComponent disabled={this.isDisabled} onClick={() => {
-            this.$emit('removeArrayItem');
-          }} text icon="delete" type="danger">删除该条
-          </ButtonComponent>
-        </div> : null;
+      <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
+        <ButtonComponent disabled={this.isDisabled} onClick={() => {
+          this.$emit('removeArrayItem');
+        }} text icon="delete" type="danger">删除该条
+        </ButtonComponent>
+      </div> : null;
   }
 
   private wrapGroup(group: any) {
@@ -481,56 +475,43 @@ export default class BaseForm extends Vue {
 
 
   public createField(definition: SchemaFormField): IField {
-    return {
-      array: definition.array,
-      type: definition.type,
-      processor: definition.processor,
-      display: this.mode === 'display',
-      editable: !this.isDisabled && !this.isReadonly,
-      name: definition.property,
-      path: this.buildArrayPath(definition),
-      plainPath: this.buildFieldPath(definition).join('.'),
-      destructPath: parseDestructPath(definition.property),
-      props: definition.props,
-      visible: this.calcShowState(definition),
-      required: definition.required,
-      effectErrors: [],
-      errors: [],
-      hiddenFromParent: false,
-      initialValue: null,
-      initialize: () => {
-      },
-      invalid: false,
-      value: null
-    };
+    const plainPath = this.buildFieldPath(definition).join('.');
+    const existsField: IField = this['store'].fields[plainPath];
+    if (existsField) {
+      existsField.display = this.mode === 'display';
+      existsField.editable = !this.isDisabled && !this.isReadonly;
+      return existsField;
+    } else {
+      return Vue.observable({
+        title: definition.title,
+        array: definition.array,
+        type: definition.type,
+        enum: definition.enum,
+        processor: definition.processor,
+        display: this.mode === 'display',
+        editable: !this.isDisabled && !this.isReadonly,
+        name: definition.property,
+        path: this.buildArrayPath(definition),
+        plainPath: this.buildFieldPath(definition).join('.'),
+        destructPath: parseDestructPath(definition.property),
+        props: Object.assign({}, definition.props),
+        visible: this.calcShowState(definition),
+        required: definition.required,
+        fields: definition.fields,
+        effectErrors: [],
+        errors: [],
+        hiddenFromParent: false,
+        initialValue: null,
+        initialize: () => {
+        },
+        invalid: false,
+        value: null
+      });
+    }
   }
 
   public hasListener(event: string): boolean {
     return !!this.$listeners[event];
-  }
-
-  get context() {
-    return (paths: string | string[]) => {
-      let fields: IField[] = [];
-      if (typeof paths === 'string') {
-        fields.push(this['store'].fields[paths]);
-      } else if (Array.isArray(paths)) {
-        fields = paths.map(path => this['store'].fields[path]);
-      }
-      fields = fields.filter(it => !!it);
-      return {
-        hide: () => {
-          fields.forEach(field => {
-            field.visible = false;
-          });
-        },
-        show: () => {
-          fields.forEach(field => {
-            field.visible = true;
-          });
-        }
-      };
-    };
   }
 
   private getFormProps() {
@@ -585,12 +566,6 @@ export default class BaseForm extends Vue {
       return this.pathPrefix.concat(field.property);
     } else {
       return [field.property];
-    }
-  }
-
-  private onFieldChange(iField: IField<any>, v: any) {
-    if (this.effects && this.effects.onFieldChange) {
-      this.effects.onFieldChange(iField, v, this.context);
     }
   }
 

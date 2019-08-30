@@ -3,9 +3,11 @@
     <ae-layout-content>
       <a-schema-form v-model="value"
                      class="demo-form"
+                     ref="form"
                      :definition="definition"
-                     :effects="effects"
+                     :effects="formProps.effects"
                      :props="props"></a-schema-form>
+      <d-button @click="setOptions">设置选项</d-button>
     </ae-layout-content>
   </ae-layout>
 </template>
@@ -17,7 +19,6 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
-  SchemaForm.registerAntd();
   @Component({
     name: 'DesktopEdit'
   })
@@ -44,27 +45,36 @@
       }
     };
 
-    public effects = ($: EffectsContext) => {
-      $('select').onFieldChange((value) => {
-        if (value === 1) {
-          $('text').hide();
-          $('select2').show();
-          $('select2').setFieldProps({
-            options: [{label: '特殊选项1', value: 5}]
-          });
-        } else {
-          $('text').show();
-          $('select2').hide();
-        }
-      });
-    }
+    public formProps = {
+      effects: ($: EffectsContext) => {
+        $('select').onFieldChange((value) => {
+          if (value === 1) {
+            $('text').hide();
+            $('select2').show();
+            $('select2').setEnum([{label: '特殊选项1', value: 5}]);
+          } else {
+            $('text').show();
+            $('select2').hide();
+          }
+        });
+      }
+    };
 
     public props = getProps();
 
     public value = {};
 
+    get form(): any {
+      return this.$refs.form;
+    }
+
     public created() {
-      SchemaForm.registerAntd();
+      SchemaForm.registerElement();
+    }
+
+    public setOptions() {
+      const $ = this.form.context;
+      $('select').setFieldProps({options: [{label: '1', value: '2'}]});
     }
   }
 </script>

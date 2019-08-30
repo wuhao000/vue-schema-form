@@ -11,6 +11,10 @@ export interface SchemaFormField {
    */
   array?: boolean;
   /**
+   * 枚举选项
+   */
+  enum?: any[];
+  /**
    * 依赖显示的条件，支持条件选项或函数，当函数返回false时不显示该字段
    */
   depends?: ShowFieldCondition[] | ((value: any) => boolean);
@@ -70,6 +74,7 @@ export interface SchemaFormField {
    * 表单项类型
    */
   type: string;
+  visible?: boolean;
   /**
    * 自定数据转换器
    */

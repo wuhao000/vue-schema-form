@@ -1,5 +1,5 @@
 import {TYPES} from '@/schema-form/utils';
-import {FormDescriptor} from '@/types/bean';
+import {FormDescriptor, SchemaFormField} from '@/types/bean';
 
 const options = [{
   label: '选项1',
@@ -39,7 +39,7 @@ export const getValue = () => {
   };
 };
 
-const fields = {
+const fields: { [key: string]: SchemaFormField } = {
   string: {
     title: '单行文本',
     type: 'string',
