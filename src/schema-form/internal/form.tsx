@@ -7,7 +7,5 @@ import {Inject} from 'vue-property-decorator';
 })
 export default class InternalForm extends mixins(BaseForm) {
 
-  @Inject()
-  public store;
 
 }

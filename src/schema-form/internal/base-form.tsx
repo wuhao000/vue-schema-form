@@ -41,8 +41,6 @@ export default class BaseForm extends Vue {
   public title: VNode | string;
   @Prop({type: Number})
   public arrayIndex: number;
-  @Prop(Array)
-  public pathPrefix: string[];
   @Prop()
   public effects: Effects;
   public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
@@ -66,16 +64,6 @@ export default class BaseForm extends Vue {
     } else if (!eq(currentValue, value)) {
       this.buildExtraProperties();
     }
-  }
-
-  @Watch('platform')
-  public platformChanged() {
-    this.$forceUpdate();
-  }
-
-  @Watch('definition.mode')
-  public modeChanged() {
-    this.$forceUpdate();
   }
 
   @Watch('value', {immediate: true, deep: true})
@@ -317,93 +305,6 @@ export default class BaseForm extends Vue {
     return groups;
   }
 
-  public calcShowState(definition: SchemaFormField) {
-    if (!definition.depends) {
-      return true;
-    } else {
-      if (typeof definition.depends === 'function') {
-        return definition.depends(this.currentValue);
-      } else {
-        return !definition.depends
-            .map(condition => this.matchCondition(condition))
-            .some(it => !it);
-      }
-    }
-  }
-
-  private matchCondition(condition: ShowFieldCondition): boolean {
-    if (!this.currentValue) {
-      return false;
-    } else {
-      const currentValue = this.currentValue[condition.property];
-      const compareValue = condition.value;
-      if (currentValue === null || currentValue === undefined) {
-        switch (condition.operator) {
-          case 'in':
-            return compareValue.includes(currentValue);
-          case 'notIn':
-            return !compareValue.includes(currentValue);
-        }
-        return false;
-      } else {
-        switch (condition.operator) {
-          case '=':
-            return compareValue.toString() === currentValue.toString();
-          case '<':
-            return parseFloat(currentValue) < parseFloat(compareValue);
-          case '>':
-            return parseFloat(currentValue) > parseFloat(compareValue);
-          case '>=':
-            return parseFloat(currentValue) >= parseFloat(compareValue);
-          case '<=':
-            return parseFloat(currentValue) <= parseFloat(compareValue);
-          case 'in':
-            return compareValue.includes(currentValue);
-          case 'notIn':
-            return !compareValue.includes(currentValue);
-        }
-      }
-    }
-    return true;
-  }
-
-  private renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number) {
-    const {platform} = this;
-    let value = null;
-    if (field.property.includes('.')) {
-      value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
-    } else {
-      value = currentValue;
-    }
-    if (field.type === TYPES.object) {
-      if (!field.props) {
-        field.props = {props: this.props};
-      } else {
-        field.props.props = this.props;
-      }
-      field.props.effects = this.effects;
-    }
-    const iField = this.createField(field);
-    // @ts-ignore
-    return <FormField
-        value={getFieldValue(value, iField)}
-        onInput={(v) => {
-          setFieldValue(value, iField, v);
-        }}
-        field={iField}
-        path={this.buildFieldPath(field)}
-        display={this.mode === 'display'}
-        disabled={this.isDisabled}
-        content={this.$slots[field.slot]}
-        definition={field}
-        key={'field-' + field.property + '-' + index}
-        onChange={(value) => {
-          this.onFieldChange(iField, value);
-        }}
-        formValue={currentValue}
-        platform={platform}/>;
-  }
-
   private renderFields() {
     if (this.definition.array) {
       return this.currentValue.map(currentValue => {
@@ -477,32 +378,6 @@ export default class BaseForm extends Vue {
       return group;
     }
     return <RowComponent gutter={props && props.gutter || 0}>{group}</RowComponent>;
-  }
-
-
-  public createField(definition: SchemaFormField): IField {
-    return {
-      array: definition.array,
-      type: definition.type,
-      processor: definition.processor,
-      display: this.mode === 'display',
-      editable: !this.isDisabled && !this.isReadonly,
-      name: definition.property,
-      path: this.buildArrayPath(definition),
-      plainPath: this.buildFieldPath(definition).join('.'),
-      destructPath: parseDestructPath(definition.property),
-      props: definition.props,
-      visible: this.calcShowState(definition),
-      required: definition.required,
-      effectErrors: [],
-      errors: [],
-      hiddenFromParent: false,
-      initialValue: null,
-      initialize: () => {
-      },
-      invalid: false,
-      value: null
-    };
   }
 
   public hasListener(event: string): boolean {
@@ -580,19 +455,6 @@ export default class BaseForm extends Vue {
     }
   }
 
-  private buildFieldPath(field: SchemaFormField): string[] {
-    if (this.pathPrefix) {
-      return this.pathPrefix.concat(field.property);
-    } else {
-      return [field.property];
-    }
-  }
-
-  private onFieldChange(iField: IField<any>, v: any) {
-    if (this.effects && this.effects.onFieldChange) {
-      this.effects.onFieldChange(iField, v, this.context);
-    }
-  }
 
   get isDisabled() {
     return this['store'].disabled;

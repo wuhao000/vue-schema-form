@@ -1,6 +1,6 @@
 import BaseForm from '@/schema-form/internal/base-form';
 import {ASchemaForm, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils';
-import {IField} from '@/uform/types';
+import {FormProps} from '@/types/bean';
 import Component, {mixins} from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
 
@@ -27,9 +27,13 @@ export default class SchemaForm extends mixins(BaseForm) {
   @Provide()
   public store = {
     fields: {},
-    disabled: false,
-    loading: false,
-    readonly: false
+    disabled: this.disabled,
+    mode: this.mode,
+    loading: this.loading,
+    readonly: this.readonly,
+    platform: this.platform,
+    props: this.props,
+    effects: this.effects
   };
 
   @Watch('readonly', {immediate: true})
@@ -40,6 +44,22 @@ export default class SchemaForm extends mixins(BaseForm) {
   @Watch('disabled', {immediate: true})
   public disabledChanged(disabled: boolean) {
     this.store.disabled = disabled;
+  }
+
+  @Watch('platform')
+  public platformChanged(platform: 'mobile' | 'desktop') {
+    this.store.platform = platform;
+    this.$forceUpdate();
+  }
+
+  @Watch('props', {immediate: true, deep: true})
+  public propsChanged(props: FormProps) {
+    this.store.props = props;
+  }
+
+  @Watch('mode')
+  public modeChanged(mode: 'edit' | 'display') {
+    this.store.mode = mode;
   }
 
   @Watch('loading', {immediate: true})
