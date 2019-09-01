@@ -1,5 +1,6 @@
+import {getFormItemComponent} from '@/schema-form/internal/utils';
 import BaseLayout from '@/schema-form/layout/base-layout';
-import Vue, {VNode} from 'vue';
+import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
@@ -28,6 +29,8 @@ export default class GridLayout extends BaseLayout {
 
   @Prop({type: Array, required: true})
   public layout: Array<number | number[]>;
+  @Prop()
+  public title: any;
 
   public render() {
     const {layout, fields} = this;
@@ -45,6 +48,14 @@ export default class GridLayout extends BaseLayout {
         }
       }
     });
+    const FormItemComponent = getFormItemComponent(this.store.platform);
+    if (this.title) {
+      return <FormItemComponent title={this.title}
+                                props={this.$attrs}
+                                label={this.title}>
+        <ae-row>{layoutFields}</ae-row>
+      </FormItemComponent>;
+    }
     return <ae-row>{layoutFields}</ae-row>;
   }
 }

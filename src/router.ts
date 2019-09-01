@@ -1,4 +1,5 @@
 import DemoIndex from '@/views/demo/index.vue';
+import DemoNav from '@/views/demo/nav.vue';
 import VueRouter, {RouteConfig} from 'vue-router';
 
 export const demoRoutes: RouteConfig[] = [
@@ -35,9 +36,17 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/antd/edit.vue'),
     meta: {tag: 'Ant Design Vue', name: '编辑'}
   }, {
-    path: 'desktop/layout',
-    component: () => import('@/views/demo/antd/layout.vue'),
-    meta: {tag: 'Ant Design Vue', name: '布局'}
+    path: 'layout/simple',
+    component: () => import('@/views/demo/layout/simple.vue'),
+    meta: {tag: '布局', name: '简单布局'}
+  }, {
+    path: 'layout/inline',
+    component: () => import('@/views/demo/layout/inline.vue'),
+    meta: {tag: '布局', name: '线性布局'}
+  }, {
+    path: 'layout/nested',
+    component: () => import('@/views/demo/layout/nested.vue'),
+    meta: {tag: '布局', name: 'Nested'}
   }, {
     path: 'desktop/validate',
     component: () => import('@/views/demo/antd/validate.vue'),
@@ -63,11 +72,16 @@ export const demoRoutes: RouteConfig[] = [
 export default new VueRouter({
   routes: [{
     path: '/doc',
-    component: () => import('@/views/readme.vue')
+    components: {
+      default: () => import('@/views/readme.vue')
+    }
   }, {
     path: '/demo',
     name: 'demo',
-    component: DemoIndex,
+    components: {
+      default: DemoIndex,
+      nav: DemoNav
+    },
     children: demoRoutes
   }]
 });

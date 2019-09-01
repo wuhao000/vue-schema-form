@@ -1,21 +1,12 @@
 <template>
   <ae-layout theme="light">
-    <ae-layout-header></ae-layout-header>
+    <ae-layout-header style="background: white;">
+      <banner/>
+    </ae-layout-header>
     <ae-layout>
       <ae-layout-sider style="margin: 10px;overflow:auto;"
                        width="200px">
-        <a-menu>
-          <a-menu-item>安装</a-menu-item>
-          <a-menu-item @click="to('/doc')">使用</a-menu-item>
-          <a-menu-item-group v-for="(items, key) in groups"
-                             :key="key"
-                             :title="key">
-            <a-menu-item v-for="item in items"
-                         :key="item.path"
-                         @click="to(item.path)">{{item.meta && item.meta.name}}
-            </a-menu-item>
-          </a-menu-item-group>
-        </a-menu>
+        <router-view name="nav"/>
       </ae-layout-sider>
       <ae-layout-content style="margin: 10px 10px 10px 0;">
         <router-view/>
@@ -25,42 +16,19 @@
   </ae-layout>
 </template>
 <script lang="ts">
-  import {demoRoutes} from '@/router';
+  import Banner from '@/views/banner.vue';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
-  const options = [{
-    label: '选项1',
-    value: 1
-  }, {
-    label: '选项2',
-    value: 2
-  }, {
-    label: '选项3',
-    value: 3
-  }];
   @Component({
     name: 'App',
+    components: {Banner}
   })
   export default class App extends Vue {
-    private groups: object = {};
 
-    public created() {
-      const groups = {};
-      demoRoutes.forEach(route => {
-        const key = route.meta && route.meta.tag || '其他';
-        groups[key] = groups[key] || [];
-        groups[key].push(route);
-      });
-      this.groups = groups;
-    }
-
-    public to(path: string) {
-      return this.$router.push('/demo/' + path);
-    }
   }
 </script>
-<style>
+<style lang="less">
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -68,5 +36,11 @@
     color: #2c3e50;
     width: 800px;
     margin: 60px auto 0;
+  }
+  .wrapper {
+    padding: 15px;
+  }
+  .bg-white {
+    background: white;
   }
 </style>

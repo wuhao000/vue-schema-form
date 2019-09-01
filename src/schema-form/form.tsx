@@ -1,5 +1,5 @@
 import InternalForm from '@/schema-form/internal/form';
-import {hasListener} from '@/schema-form/internal/utils';
+import {hasListener, SchemaFormStore} from '@/schema-form/internal/utils';
 import {ASchemaForm, getButtonComponent, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils';
 import {FormDescriptor, FormProps, Platform} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
@@ -47,7 +47,7 @@ export default class SchemaForm extends Vue {
   public context: EffectsContext;
 
   @Provide()
-  public store = {
+  public store: SchemaFormStore = {
     fields: {},
     disabled: this.disabled,
     mode: this.mode,
@@ -56,8 +56,14 @@ export default class SchemaForm extends Vue {
     platform: this.platform,
     props: this.props,
     effects: this.effects,
-    inline: this.inline
+    inline: this.inline,
+    slots: this.$slots
   };
+
+  @Watch('$slots')
+  public slotsChanged(slots: any) {
+    this.store.slots = slots;
+  }
 
   @Watch('readonly', {immediate: true})
   public readonlyChanged(readonly: boolean) {
@@ -189,7 +195,7 @@ export default class SchemaForm extends Vue {
                                     onClick={() => {
                                       this.onOk();
                                     }}>
-            {props && props.okText || '保存'}
+            {props && props.okText || '提交'}
           </m-button> : null}
           {hasCancelHandler ? <m-white-space/> : null}
           {hasCancelHandler ? <m-button
@@ -229,7 +235,7 @@ export default class SchemaForm extends Vue {
                                            onClick={() => {
                                              this.onOk();
                                            }}>
-            {props && props.okText || '保存'}
+            {props && props.okText || '提交'}
           </ButtonComponent> : null}
           {hasResetHandler ? <ButtonComponent type="danger"
                                               class="reset-btn"
@@ -251,7 +257,7 @@ export default class SchemaForm extends Vue {
       const errors = valid.filter((it: any) => it && it !== true).flat();
       if (errors.length) {
         console.warn('有错误', errors);
-        this.$message.error(errors[0].message);
+        (this as any).$message.error(errors[0].message);
       } else {
         this.$emit('ok', this.value);
       }

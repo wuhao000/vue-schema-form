@@ -1,5 +1,5 @@
 import Emitter from '@/mixins/emitter';
-import {getRealFields, renderField, SchemaFormStore} from '@/schema-form/internal/utils';
+import {getFormItemComponent, getRealFields, renderField, SchemaFormStore} from '@/schema-form/internal/utils';
 import {Platform, SchemaFormField} from '@/types/bean';
 import {SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
@@ -8,7 +8,7 @@ import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from './array-wrapper';
-import {addRule, DESKTOP, getAlertComponent, getColComponent, getConfirmFunction, getFormComponent, getOptions, TYPES} from './utils';
+import {addRule, DESKTOP, getAlertComponent, getColComponent, getConfirmFunction, getOptions, TYPES} from './utils';
 
 @Component({
   name: 'FormField'
@@ -42,7 +42,7 @@ export default class FormField extends mixins(Emitter) {
   public store: SchemaFormStore;
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {
-    return renderField.call(this, this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
+    return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
   }
 
   get display() {
@@ -64,6 +64,9 @@ export default class FormField extends mixins(Emitter) {
       props.platform = this.platform;
       props.mode = this.display ? 'display' : 'edit';
       props.pathPrefix = this.path;
+    }
+    if (this.definition.placeholder) {
+      props.placeholder = this.definition.placeholder;
     }
     if (this.display) {
       delete props.required;
@@ -89,7 +92,6 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public created() {
-    this.dispatch('ASchemaForm', 'SchemaForm.addField', [this]);
     this.field.validate = this.validate;
   }
 
@@ -99,7 +101,6 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public beforeDestroy() {
-    this.dispatch('ASchemaForm', 'SchemaForm.removeField', [this]);
     this.dispatch('ASchemaForm', 'SchemaForm.removeSchemaField', [this.field]);
   }
 
@@ -165,18 +166,26 @@ export default class FormField extends mixins(Emitter) {
         }
       </ArrayWrapper>;
     }
+    props.disabled = this.disabled;
+    props.value = this.currentValue;
+    props.title = props.title || (this.platform === 'mobile' ? this.field.title : null);
+    if (this.definition.type === TYPES.object
+        && this.definition.props) {
+      if (!this.definition.props.props) {
+        this.definition.props.props = {};
+      }
+      Object.keys(this.definition.props).forEach(key => {
+        if (key !== 'props') {
+          this.definition.props.props[key] = this.definition.props[key];
+        }
+      });
+    }
     // @ts-ignore
     return <InputFieldComponent
+        props={props}
         attrs={props}
         ref="input"
-        disabled={this.disabled}
-        value={currentValue}
-        title={this.platform === 'mobile' ? this.field.title : null}
         onInput={this.onInput}/>;
-  }
-
-  get formItemComponent() {
-    return getFormComponent(this.platform) + '-item';
   }
 
   public render() {
@@ -186,15 +195,16 @@ export default class FormField extends mixins(Emitter) {
     }
     const component = this.renderInputComponent();
     let item = null;
-    const FormItemComponent = this.formItemComponent;
+    const FormItemComponent = getFormItemComponent(this.platform);
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
-      const nowrap = field.type === TYPES.object
+      const formItemProps = this.getFormItemProps();
+      const noWrap = field.type === TYPES.object
           || (this.component.layout && this.component.layoutOptions
               && this.component.layoutOptions.wrapContainer === false)
-          || !this.wrap;
-      const formItem = nowrap ? component :
-          <FormItemComponent attrs={this.getFormItemProps()}>
+          || !this.wrap || !formItemProps.title;
+      const formItem = noWrap ? component :
+          <FormItemComponent attrs={formItemProps}>
             {component}
             {this.renderNotice()}
           </FormItemComponent>;
@@ -258,7 +268,7 @@ export default class FormField extends mixins(Emitter) {
 
   public getFormItemProps() {
     const {definition} = this;
-    const component = this.formItemComponent;
+    const component = getFormItemComponent(this.platform);
     const props: any = {
       required: this.display ? null : definition.required,
       title: definition.title,

@@ -1,9 +1,9 @@
 import FormField from '@/schema-form/field';
-import {getComponent, getDisplayComponent, TYPES} from '@/schema-form/utils';
+import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils';
 import {getStructValue} from '@/schema-form/utils/destruct';
 import {setFieldValue} from '@/schema-form/utils/field';
-import {FormFields, FormProps, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {EffectsContext, SchemaFormComponent} from '@/types/form';
+import {FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
+import {Effects, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import {parseDestructPath} from '@/uform/utils';
 import get from 'lodash.get';
@@ -11,8 +11,7 @@ import Vue, {VNode} from 'vue';
 
 export interface SchemaFormStore {
   fields: { [key: string]: IField };
-  fieldNodes: VNode[];
-  effects: EffectsContext;
+  effects: Effects;
   props: FormProps;
   disabled: boolean;
   platform: 'mobile' | 'desktop';
@@ -20,6 +19,7 @@ export interface SchemaFormStore {
   readonly: boolean;
   loading: boolean;
   inline: boolean;
+  slots: { [key: string]: VNode[] | undefined };
 }
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -104,7 +104,6 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   return true;
 }
 
-
 export function buildFieldPath(pathPrefix: string[], field: SchemaFormField): string[] {
   if (pathPrefix) {
     return pathPrefix.concat(field.property);
@@ -113,10 +112,10 @@ export function buildFieldPath(pathPrefix: string[], field: SchemaFormField): st
   }
 }
 
-export function renderField(this: any, pathPrefix: string[], store: SchemaFormStore, field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean, h) {
+export function renderField(pathPrefix: string[], store: SchemaFormStore, field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean, h) {
   const {platform} = store;
   let value = null;
-  if (field.property.includes('.')) {
+  if (field.property && field.property.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
   } else {
     value = currentValue;
@@ -141,9 +140,9 @@ export function renderField(this: any, pathPrefix: string[], store: SchemaFormSt
       wrap={wrap}
       field={iField}
       path={buildFieldPath(pathPrefix, field)}
-      display={this.display}
+      display={store.mode === 'display'}
       disabled={store.disabled}
-      content={this.$slots[field.slot]}
+      content={store.slots[field.slot]}
       definition={field}
       key={'field-' + field.property + '-' + index}
       formValue={currentValue}
@@ -210,4 +209,9 @@ export const getFieldValue = (value: any, field: IField<any>, component: SchemaF
 
 export function hasListener(vue: Vue, event: string): boolean {
   return !!vue.$listeners[event];
+}
+
+
+export function getFormItemComponent(platform: Platform) {
+  return getFormComponent(platform) + '-item';
 }

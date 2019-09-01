@@ -1,4 +1,5 @@
 import InternalForm from '@/schema-form/internal/form';
+import Card from '@/schema-form/layout/card';
 import {Platform, SchemaFormField} from '@/types/bean';
 import {LayoutOptions, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
@@ -22,6 +23,7 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  cascader = 'cascader',
   transfer = 'transfer',
   rate = 'rate',
   upload = 'upload',
@@ -221,6 +223,9 @@ export function registerAntd() {
   register(AntdUpload, DESKTOP, TYPES.upload, null, def => {
     return {multiple: def.array};
   });
+  register('d-cascader', DESKTOP, TYPES.cascader, false, def => {
+    return {options: def.enum};
+  });
   register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true);
   register('d-radio-group', DESKTOP, TYPES.expandSelect, false);
   register('d-color-picker', DESKTOP, 'color');
@@ -292,6 +297,15 @@ export function registerAntdMobile() {
 
 registerLayout({
   component: GridLayout, platforms: [DESKTOP, MOBILE], types: 'grid',
+  layoutOptions: {
+    wrapItems: true,
+    wrapContainer: false
+  }
+});
+registerLayout({
+  component: Card,
+  platforms: [DESKTOP],
+  types: ['card'],
   layoutOptions: {
     wrapItems: true,
     wrapContainer: false
