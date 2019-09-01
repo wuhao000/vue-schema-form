@@ -27,6 +27,7 @@
     "no-default-export": false,
     "no-empty-interface": false,
     "interface-over-type-literal": false,
+    "semicolon": true,
     "arrow-parens": false,
     "array-type": false,
     "object-literal-sort-keys": false,

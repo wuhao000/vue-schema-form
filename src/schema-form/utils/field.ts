@@ -8,11 +8,3 @@ export const setFieldValue = (parentValue: object, field: IField, v: any) => {
     setStructValue(parentValue, field.destructPath.destruct || field.name, v);
   }
 };
-
-export const getFieldValue = (value: any, field: IField<any>) => {
-  if (field.processor) {
-    return field.processor.getValue(value, field);
-  } else {
-    return getStructValue(value, field.destructPath.destruct || field.name);
-  }
-};

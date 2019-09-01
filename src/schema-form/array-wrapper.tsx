@@ -23,7 +23,7 @@ export default class ArrayWrapper extends Vue {
 
 
   public renderAddButton() {
-    if (this.$attrs.mode === 'display') {
+    if (this.store.mode === 'display') {
       return null;
     }
     const ColComponent = getColComponent();
@@ -50,7 +50,7 @@ export default class ArrayWrapper extends Vue {
     this.$emit('add');
   }
 
-  public render(this: any) {
+  public render() {
     const RowComponent = getRowComponent();
     const content = [
       this.$slots.default,

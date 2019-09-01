@@ -12,7 +12,8 @@ export default class Base extends Vue {
   public options = {
     disabled: false,
     loading: false,
-    readonly: false
+    readonly: false,
+    displayMode: false
   };
 
   public optionFormDefinition = {
@@ -22,6 +23,8 @@ export default class Base extends Vue {
       title: '加载中', type: 'boolean', property: 'loading'
     }, {
       title: '只读', type: 'boolean', property: 'readonly'
+    }, {
+      title: '详情模式', type: 'boolean', property: 'displayMode'
     }]
   };
 
@@ -31,9 +34,7 @@ export default class Base extends Vue {
 
   public onOk() {
     // @ts-ignore
-    this.$message.success(
-      <pre>{JSON.stringify(this.value.start)}</pre>
-    );
+    this.$message.success('ok clicked');
   }
 
   public onReset() {

@@ -1,7 +1,9 @@
 import InternalForm from '@/schema-form/internal/form';
 import {Platform, SchemaFormField} from '@/types/bean';
+import {LayoutOptions, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
+import AntdUpload from './antd/upload.vue';
 import PlainDisplayField from './display/plain-display-field';
 import SelectDisplayField from './display/select-display-field';
 import TimeDisplayField from './display/time-display-field';
@@ -9,6 +11,8 @@ import ElExtCheckbox from './element/checkbox-group';
 import ElExtRadio from './element/radio-group';
 import ElExtSelect from './element/select';
 import Empty from './empty';
+import GridLayout from './layout/grid';
+import TextBox from './layout/text-box';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -18,6 +22,9 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  transfer = 'transfer',
+  rate = 'rate',
+  upload = 'upload',
   daterange = 'daterange',
   url = 'url',
   string = 'string',
@@ -28,9 +35,11 @@ export const enum TYPES {
   select = 'select',
   date = 'date',
   integer = 'integer',
+  number = 'number',
   double = 'double',
   boolean = 'boolean',
   expandSelect = 'expand-select',
+  range = 'range',
   empty = 'empty',
   text = 'text',
   object = 'object'
@@ -57,88 +66,127 @@ let buttonComponent = 'd-button';
 let alertComponent = 'a-alert';
 let confirmFunction = '$dconfirm';
 
-export interface SchemaFormComponent {
-  platform: Platform;
-  type: string;
-  component: string | object;
-  forArray: boolean | null;
-  getProps: (definition: SchemaFormField) => object;
-}
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
 const DisplayComponentDefinitions: SchemaFormComponent[] = [];
 
 export const registerDisplay = (component: string | object,
-                                platform: Platform | Platform[],
-                                type: string | string[],
+                                platforms: Platform | Platform[],
+                                types: string | string[],
                                 forArray: boolean = null,
-                                getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
-  addComponent(component, platform, type, forArray, getProps, true);
-};
-export const register = (component: string | object,
-                         platform: Platform | Platform[],
-                         types: string | string[],
-                         forArray: boolean = null,
-                         getProps: ((definition: SchemaFormField, platform: Platform) => object) = () => ({})) => {
-  addComponent(component, platform, types, forArray, getProps, false);
+                                getProps: ((definition: IField, platform: Platform) => object) = () => ({}),
+                                layout: boolean = false) => {
+  addComponent({
+    component, platforms, types, forArray, getProps, forDisplay: true, layout
+  });
 };
 
-const addComponent = (component: string | object,
-                      platforms: Platform | Platform[],
-                      types: string | string[],
-                      forArray: boolean | null = null,
-                      getProps: (definition: SchemaFormField, platform: Platform) => object = () => ({}),
-                      forDisplay: boolean) => {
-  if (Array.isArray(types)) {
-    types.forEach(type => {
-      addComponent(component, platforms, type, forArray, getProps, forDisplay);
+export const registerLayout = (options: {
+  component: string | object,
+  platforms: Platform | Platform[],
+  types: string | string[],
+  getProps?: ((definition: IField, platform: Platform) => object),
+  layoutOptions: LayoutOptions
+}) => {
+  addComponent({
+    component: options.component, platforms: options.platforms,
+    types: options.types, forArray: null, getProps: options.getProps,
+    forDisplay: null, layout: true,
+    layoutOptions: options.layoutOptions
+  });
+};
+export const register = (component: string | object,
+                         platforms: Platform | Platform[],
+                         types: string | string[],
+                         forArray: boolean = null,
+                         getProps: ((definition: IField, platform: Platform) => object) = () => ({})) => {
+  addComponent({
+    component, platforms, types, forArray, getProps, forDisplay: false, layout: false
+  });
+};
+
+const addComponent = (options: {
+  component: string | object,
+  platforms: Platform | Platform[],
+  types: string | string[],
+  forArray: boolean,
+  getProps: (definition: IField, platform: Platform) => object,
+  forDisplay: boolean,
+  layout: boolean,
+  layoutOptions?: LayoutOptions
+}) => {
+  if (Array.isArray(options.types)) {
+    options.types.forEach(type => {
+      addComponent({
+        component: options.component, platforms: options.platforms,
+        types: type, forArray: options.forArray, getProps: options.getProps,
+        forDisplay: options.forDisplay,
+        layout: options.layout,
+        layoutOptions: options.layoutOptions
+      });
     });
-  } else if (Array.isArray(platforms)) {
-    platforms.forEach(platform => {
-      addComponent(component, platform, types, forArray, getProps, forDisplay);
+  } else if (Array.isArray(options.platforms)) {
+    options.platforms.forEach(platform => {
+      addComponent({
+        component: options.component,
+        platforms: platform,
+        types: options.types,
+        forArray: options.forArray, getProps: options.getProps,
+        forDisplay: options.forDisplay, layout: options.layout,
+        layoutOptions: options.layoutOptions
+      });
     });
   } else {
+    const forArray = options.forArray !== undefined ? options.forArray : null;
+    const getProps = options.getProps || ((...args: any) => ({}));
     const def = {
-      component,
-      platform: platforms,
-      type: types,
+      component: options.component,
+      platform: options.platforms,
+      type: options.types,
       forArray,
-      getProps: (definition: SchemaFormField) => {
-        const props: any = getProps(definition, platforms) || {};
-        if (definition.title && platforms === MOBILE) {
+      layout: options.layout,
+      getProps: (definition: IField) => {
+        const props: any = getProps(definition, options.platforms as any) || {};
+        if (definition.title && options.platforms === MOBILE) {
           props.labelNumber = definition.title.length > 7 ? 7 : definition.title.length;
         }
         if (definition.props) {
           Object.assign(props, definition.props);
         }
         return props;
-      }
+      },
+      layoutOptions: options.layoutOptions
     };
-    const mode = forDisplay ? 'display' : 'edit';
-    const typeDef = store[mode][platforms];
-    if (!typeDef[types]) {
-      typeDef[types] = {};
+    const mode = options.forDisplay ? 'display' : 'edit';
+    const typeDef = store[mode][options.platforms];
+    if (!typeDef[options.types]) {
+      typeDef[options.types] = {};
     }
     if (forArray === true) {
-      typeDef[types][1] = def;
+      typeDef[options.types][1] = def;
     } else if (forArray === false) {
-      typeDef[types][2] = def;
+      typeDef[options.types][2] = def;
     } else {
-      typeDef[types][0] = def;
+      typeDef[options.types][0] = def;
     }
-    if (forDisplay) {
+    if (options.forDisplay) {
       DisplayComponentDefinitions.push(def);
     } else {
       SchemaFormComponentDefinitions.push(def);
+    }
+    if (options.layout && !options.forDisplay) {
+      addComponent(Object.assign({}, options, {
+        forDisplay: true
+      }));
     }
   }
 };
 
 Vue.component('empty', Empty);
 
-registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], ['datetime', 'date', 'time']);
-registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], ['string', 'text', 'url', 'integer', 'double'], false);
-registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], ['select', 'expand-select'], null);
+registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], [TYPES.datetime, TYPES.date, TYPES.year, TYPES.month, TYPES.daterange, TYPES.time]);
+registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], [TYPES.string, TYPES.text, TYPES.url, TYPES.integer, TYPES.double, TYPES.number], false);
+registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], [TYPES.select, TYPES.expandSelect], null);
 register(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {
     platform,
@@ -163,16 +211,39 @@ export function registerAntd() {
   register('d-range-picker', DESKTOP, [TYPES.daterange], false);
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
-  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
+  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
   register('d-switch', DESKTOP, TYPES.boolean);
   register('d-select', DESKTOP, TYPES.select, null, definition => {
     return {dropdownMatchSelectWidth: false, multiple: definition.array};
   });
+  register(AntdUpload, DESKTOP, TYPES.upload, null, def => {
+    return {multiple: def.array};
+  });
   register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true);
   register('d-radio-group', DESKTOP, TYPES.expandSelect, false);
   register('d-color-picker', DESKTOP, 'color');
+  register('d-rate', DESKTOP, TYPES.rate);
+  register('d-transfer', DESKTOP, TYPES.transfer, false, def => {
+    const data = (def.props && def.props.dataSource) || def.enum || [];
+    const dataSource = data.map((item: any) => {
+      if (typeof item === 'string') {
+        return {key: item, title: item};
+      } else {
+        return {
+          key: (item.key || item.value).toString(),
+          title: item.title || item.label,
+          description: item.description || item.label,
+          disabled: item.disabled || false
+        };
+      }
+    });
+    return {dataSource};
+  });
+  register('d-slider', DESKTOP, TYPES.range, false, () => {
+    return {range: true};
+  });
 }
 
 export function registerElement() {
@@ -190,8 +261,9 @@ export function registerElement() {
   register('el-input', DESKTOP, [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
-  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: SchemaFormField) => ({type: definition.type.toLowerCase()}));
-  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer], false);
+  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false,
+      (definition: IField) => ({type: definition.type.toLowerCase()}));
+  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
   register('el-switch', DESKTOP, [TYPES.boolean], false);
   register('el-ext-select', DESKTOP, [TYPES.select], null, definition => {
     return {multiple: definition.array};
@@ -204,11 +276,12 @@ export function registerAntdMobile() {
   console.info('注册Ant Design Mobile表单组件');
 
   register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
-  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.time], false, (definition: SchemaFormField) => ({mode: definition.type.toLowerCase()}));
-  register('m-input', MOBILE, [TYPES.integer, TYPES.double], false,
-    (definition: SchemaFormField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
+      (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  register('m-input', MOBILE, [TYPES.integer, TYPES.double, TYPES.number], false,
+      (definition: IField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   register('m-textarea', MOBILE, [TYPES.text], false);
   register('m-switch-item', MOBILE, [TYPES.boolean], false);
   register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
@@ -217,6 +290,19 @@ export function registerAntdMobile() {
   register('m-radio-list', MOBILE, [TYPES.expandSelect], false);
 }
 
+registerLayout({
+  component: GridLayout, platforms: [DESKTOP, MOBILE], types: 'grid',
+  layoutOptions: {
+    wrapItems: true,
+    wrapContainer: false
+  }
+});
+registerLayout({
+  component: TextBox,
+  platforms: [DESKTOP, MOBILE],
+  types: 'text-box',
+  layoutOptions: {wrapItems: false, wrapContainer: true}
+});
 const EmptyDefinition = {
   component: 'empty',
   getProps: (_) => ({})
@@ -246,7 +332,10 @@ export const getDisplayComponent = (platform: Platform, definition: SchemaFormFi
   return searchStore(Mode.display, platform, definition);
 };
 
-export const getOptions = (definition: SchemaFormField) => {
+export const getOptions = (definition: IField) => {
+  if (definition.enum) {
+    return definition.enum;
+  }
   if (definition.props && definition.props.options) {
     if (typeof definition.props.options === 'function') {
       return definition.props.options() || [];
@@ -262,7 +351,9 @@ export const getDefaultValue = (field: IField) => {
   if (typeof field.destructPath.destruct !== 'string') {
     return null;
   }
-  if (field.type === TYPES.object) {
+  if (field.type === TYPES.range) {
+    return [];
+  } else if (field.type === TYPES.object) {
     if (field.array) {
       return [{}];
     } else {
@@ -309,10 +400,12 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
   let validateType = 'string';
   if (field.array) {
     validateType = 'array';
+  } else if (type === 'number') {
+    validateType = 'number';
   } else if (type === TYPES.integer) {
-    validateType = 'integer';
+    validateType = 'number';
   } else if (type === TYPES.double) {
-    validateType = 'string';
+    validateType = 'number';
   } else if (type === TYPES.object) {
     validateType = 'object';
   } else if (type === TYPES.date || type === TYPES.datetime || type === TYPES.year || type === TYPES.month) {

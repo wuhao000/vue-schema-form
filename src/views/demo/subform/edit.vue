@@ -1,5 +1,6 @@
 <template>
   <ae-layout class="demo-wrapper">
+    {{value2}}
     <ae-layout-content>
       <a-schema-form class="demo-form"
                      :definition="definition"
@@ -29,16 +30,6 @@
 
     public created() {
       SchemaForm.registerAntd();
-      setTimeout(() => {
-        // this.value2.values.input = 'defffffffs';
-        // this.value2.values.input2 = 'defffffffs';
-        this.value2 = {
-          values: {
-            input: 'def',
-            input2: 'fsgff'
-          }
-        };
-      }, 1000);
     }
 
   }

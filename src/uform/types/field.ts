@@ -1,17 +1,21 @@
+import {FormFields, SchemaFormField} from '@/types/bean';
 import {IFormPathMatcher} from './form';
 import {Path} from './path';
 import {IRuleDescription} from './rule';
 import {ISchema} from './schema';
 
 export interface IField<V = any> {
+  validate?: () => (boolean | Promise<unknown>);
   type?: string;
   array?: boolean;
+  title?: string;
   changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   destructor?: () => void;
   processor?: {
     getValue: (parentValue: object, field: IField) => any;
     setValue: (parentValue: object, field: IField, fieldValue: any) => any;
   };
+  enum?: any[];
   dirty?: boolean;
   dirtyType?: string;
   display?: boolean;
@@ -30,12 +34,15 @@ export interface IField<V = any> {
   onChange?: (fn: () => void) => void;
   path?: string[];
   plainPath?: string;
-  destructPath?: {path: string, destruct: any};
+  destructPath?: {
+    path: string,
+    destruct: any};
   pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   pristine?: boolean;
-  props?: ISchema;
+  props?: any;
   publishState?: () => IFieldState;
   required?: boolean;
+  fields?: FormFields;
   rules?: IRuleDescription[];
   shownFromParent?: boolean;
   syncContextValue?: () => void;

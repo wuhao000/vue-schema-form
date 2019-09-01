@@ -1,7 +1,7 @@
 {
-  "name": "vue-schema-form",
-  "version": "0.1.0",
-  "private": true,
+  "name": "v-schema-form",
+  "version": "0.1.1",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,7 +9,7 @@
     "lib": "vue-cli-service build --target lib --name SchemaForm --dest lib src/index.ts"
   },
   "dependencies": {
-    "aegis-ui-desktop": "^1.0.0",
+    "aegis-ui-desktop": "^1.0.4",
     "ant-design-vue": "^1.3.10",
     "antd-mobile": "^2.2.14",
     "classnames": "^2.2.6",

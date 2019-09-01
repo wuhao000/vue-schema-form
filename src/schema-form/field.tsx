@@ -1,11 +1,14 @@
 import Emitter from '@/mixins/emitter';
+import {getRealFields, renderField, SchemaFormStore} from '@/schema-form/internal/utils';
 import {Platform, SchemaFormField} from '@/types/bean';
+import {SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import AsyncValidator from 'async-validator';
+import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
+import {Inject, Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from './array-wrapper';
-import {addRule, DESKTOP, getAlertComponent, getColComponent, getComponent, getConfirmFunction, getDisplayComponent, getFormComponent, getOptions, SchemaFormComponent, TYPES} from './utils';
+import {addRule, DESKTOP, getAlertComponent, getColComponent, getConfirmFunction, getFormComponent, getOptions, TYPES} from './utils';
 
 @Component({
   name: 'FormField'
@@ -16,10 +19,10 @@ export default class FormField extends mixins(Emitter) {
   public definition: SchemaFormField;
   @Prop([Object, Array])
   public formValue: { [key: string]: any } | [];
-  @Prop({type: Boolean, default: false})
-  public display: boolean;
   @Prop({type: String, default: 'mobile'})
   public platform: Platform;
+  @Prop({type: Boolean, default: true})
+  public wrap: boolean;
   @Prop()
   public value: any;
   public currentValue: any = null;
@@ -31,28 +34,29 @@ export default class FormField extends mixins(Emitter) {
   public path: string[];
   @Prop({required: true})
   public field: IField;
+  @Prop({type: Object, required: true})
+  public component: SchemaFormComponent;
+  @Prop(Array)
+  public pathPrefix: string[];
+  @Inject()
+  public store: SchemaFormStore;
 
-  get componentType(): SchemaFormComponent {
-    let component: SchemaFormComponent = null;
-    if (this.display) {
-      component = getDisplayComponent(this.platform, this.definition);
-    } else {
-      component = getComponent(this.platform, this.definition);
-    }
-    if (component.component === 'empty') {
-      console.warn(`类型${this.definition.type}${this.definition.array ? '（数组）' : ''}没有对应的${this.display ? '展示' : '编辑'}组件`);
-    }
-    return component;
+  public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {
+    return renderField.call(this, this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
+  }
+
+  get display() {
+    return this.store.mode === 'display';
   }
 
   get options() {
-    return getOptions(this.definition);
+    return getOptions(this.field);
   }
 
   get props() {
-    const {definition} = this;
-    const props: any = Object.assign({}, this.componentType.getProps(definition));
-    const type = definition.type;
+    const {field} = this;
+    const props: any = Object.assign({}, this.component.getProps(field));
+    const type = field.type;
     if (type === TYPES.select || type === TYPES.expandSelect) {
       props.options = this.options;
     }
@@ -61,23 +65,19 @@ export default class FormField extends mixins(Emitter) {
       props.mode = this.display ? 'display' : 'edit';
       props.pathPrefix = this.path;
     }
-    if (definition.placeholder) {
-      props.placeholder = definition.placeholder;
-    }
     if (this.display) {
       delete props.required;
     }
     return props;
   }
 
-  get visible() {
-    return this.field.visible;
-  }
-
   @Watch('currentValue')
   public currentValueChanged(currentValue: any) {
     this.$emit('input', currentValue);
     this.$emit('change', currentValue);
+    if (this.field.onChange) {
+      this.field.onChange(currentValue);
+    }
     this.$forceUpdate();
   }
 
@@ -90,6 +90,7 @@ export default class FormField extends mixins(Emitter) {
 
   public created() {
     this.dispatch('ASchemaForm', 'SchemaForm.addField', [this]);
+    this.field.validate = this.validate;
   }
 
   @Watch('field', {immediate: true})
@@ -104,7 +105,7 @@ export default class FormField extends mixins(Emitter) {
 
   public renderInputComponent() {
     const {props, currentValue, definition} = this;
-    const inputFieldDef = this.componentType;
+    const inputFieldDef = this.component;
     const InputFieldComponent = inputFieldDef.component;
     if (this.content) {
       return this.content;
@@ -116,11 +117,18 @@ export default class FormField extends mixins(Emitter) {
         return this.definition.displayValue;
       }
     }
-    if (this.definition.array && inputFieldDef.forArray === false) {
+    if (inputFieldDef.layout) {
+      props.layout = this.definition.layout;
+      const noWrap = inputFieldDef.layoutOptions && inputFieldDef.layoutOptions.wrapItems === false;
+      props.fields = getRealFields(this.definition.fields).map((field, index) => {
+        return this.renderField(field, this.currentValue, index, !noWrap);
+      });
+    }
+    if (this.field.array && inputFieldDef.forArray === false) {
       // @ts-ignore
       return <ArrayWrapper
           disabled={this.disabled}
-          subForm={this.definition.type === TYPES.object}
+          subForm={this.field.type === TYPES.object}
           addBtnText={props.addBtnText}
           ref="array"
           platform={this.platform}
@@ -134,6 +142,10 @@ export default class FormField extends mixins(Emitter) {
             const itemProps = Object.assign({}, props, {
               pathPrefix: this.path.concat(index)
             });
+            if (this.field.type === TYPES.object) {
+              itemProps.definition = Object.assign({}, itemProps.definition);
+              delete itemProps.definition.array;
+            }
             // @ts-ignore
             return <InputFieldComponent
                 attrs={itemProps}
@@ -145,7 +157,7 @@ export default class FormField extends mixins(Emitter) {
                   this.currentValue.splice(index, 1);
                 }}
                 value={v}
-                title={this.platform === 'mobile' ? definition.title : null}
+                title={this.platform === 'mobile' ? this.field.title : null}
                 onInput={(val) => {
                   this.onArrayItemInput(val, index);
                 }}/>;
@@ -159,7 +171,7 @@ export default class FormField extends mixins(Emitter) {
         ref="input"
         disabled={this.disabled}
         value={currentValue}
-        title={this.platform === 'mobile' ? definition.title : null}
+        title={this.platform === 'mobile' ? this.field.title : null}
         onInput={this.onInput}/>;
   }
 
@@ -168,10 +180,7 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public render() {
-    if (!this.visible) {
-      return null;
-    }
-    const {props, definition, platform} = this;
+    const {props, field, definition, platform} = this;
     if (this.display) {
       props.definition = this.definition;
     }
@@ -180,7 +189,11 @@ export default class FormField extends mixins(Emitter) {
     const FormItemComponent = this.formItemComponent;
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
-      const formItem = this.definition.type === TYPES.object ? component :
+      const nowrap = field.type === TYPES.object
+          || (this.component.layout && this.component.layoutOptions
+              && this.component.layoutOptions.wrapContainer === false)
+          || !this.wrap;
+      const formItem = nowrap ? component :
           <FormItemComponent attrs={this.getFormItemProps()}>
             {component}
             {this.renderNotice()}
@@ -203,6 +216,11 @@ export default class FormField extends mixins(Emitter) {
         item = component;
       }
     }
+    const style: any = {};
+    if (!field.visible) {
+      style.display = 'none';
+    }
+    (item as VNode).data.staticStyle = style;
     return item;
   }
 
@@ -259,6 +277,10 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public validate() {
+    if (this.component.layout) {
+      return true;
+    }
+    const {field} = this;
     if (this.definition.type === TYPES.object
         && this.$refs.array) {
       const array = this.$refs.array as any;
@@ -267,35 +289,37 @@ export default class FormField extends mixins(Emitter) {
         Promise.all(validateFields.map(it => {
           return it.validate();
         })).then((values) => {
-          if (values.some(it => !it)) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        }).catch(() => {
-          resolve(false);
+          resolve(values.filter(it => !!it).flat());
         });
       });
     }
     const rules = this.getRules();
     if (rules.length) {
       const validator = new AsyncValidator({
-        [this.field.plainPath]: rules
+        [field.plainPath]: rules
       });
+      let value = this.currentValue;
+      if ([TYPES.integer, TYPES.double, TYPES.number].includes(this.field.type as any)) {
+        value = parseFloat(value);
+      }
       const model = {
-        [this.field.plainPath]: this.currentValue
+        [field.plainPath]: value
       };
       return new Promise((resolve) => {
-        validator.validate(model, {firstFields: true}, (errors, invalidFields) => {
+        validator.validate(model, {firstFields: true}, (errors) => {
           if (errors) {
-            this.field.valid = false;
-            this.field.errors = errors.map(error => error.message);
+            field.valid = false;
+            field.errors = errors.map(error => error.message);
           } else {
-            this.field.valid = true;
-            this.field.errors = [];
+            field.valid = true;
+            field.errors = [];
           }
           this.$forceUpdate();
-          resolve(this.field.valid);
+          if (errors) {
+            resolve(errors.map(it => ({message: it.message, path: this.field.plainPath})));
+          } else {
+            resolve(null);
+          }
         });
       });
     }

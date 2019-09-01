@@ -21,6 +21,19 @@ class DisplayField extends Vue {
     let format = 'YYYY-MM-DD HH:mm:ss';
     if (this.definition.type === 'date') {
       format = 'YYYY-MM-DD';
+    } else if (this.definition.type === 'month') {
+      format = 'YYYY-MM';
+    } else if (this.definition.type === 'year') {
+      format = 'YYYY';
+    } else if (this.definition.type === 'daterange') {
+      format = 'YYYY-MM-DD';
+    }
+    if (this.definition.type === 'daterange' && value) {
+      return <span>
+        <span vTime={value[0]} format={format}/>
+        <span> - </span>
+        <span vTime={value[1]} format={format}/>
+      </span>;
     }
     return <span vTime={value} format={format}/>;
   }

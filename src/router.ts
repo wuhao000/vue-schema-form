@@ -11,6 +11,10 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/element/edit.vue'),
     meta: {tag: 'Element UI', name: '编辑'}
   }, {
+    path: 'element/effects',
+    component: () => import('@/views/demo/element/effects.vue'),
+    meta: {tag: 'Element UI', name: '副作用函数'}
+  }, {
     path: 'desktop/subform/display',
     component: () => import('@/views/demo/subform/display.vue'),
     meta: {tag: '子表单', name: '详情'}
@@ -19,6 +23,10 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/subform/edit.vue'),
     meta: {tag: '子表单', name: '编辑'}
   }, {
+    path: 'desktop/simple',
+    component: () => import('@/views/demo/antd/simple.vue'),
+    meta: {tag: 'Ant Design Vue', name: '简单场景'}
+  }, {
     path: 'desktop/display',
     component: () => import('@/views/demo/antd/display.vue'),
     meta: {tag: 'Ant Design Vue', name: '详情'}
@@ -26,6 +34,10 @@ export const demoRoutes: RouteConfig[] = [
     path: 'desktop/edit',
     component: () => import('@/views/demo/antd/edit.vue'),
     meta: {tag: 'Ant Design Vue', name: '编辑'}
+  }, {
+    path: 'desktop/layout',
+    component: () => import('@/views/demo/antd/layout.vue'),
+    meta: {tag: 'Ant Design Vue', name: '布局'}
   }, {
     path: 'desktop/validate',
     component: () => import('@/views/demo/antd/validate.vue'),

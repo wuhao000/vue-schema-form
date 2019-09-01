@@ -1,7 +1,7 @@
 import {TYPES} from '@/schema-form/utils';
-import {FormDescriptor} from '@/types/bean';
+import {FormDescriptor, SchemaFormField} from '@/types/bean';
 
-const options = [{
+export const options = [{
   label: '选项1',
   value: 1
 }, {
@@ -21,25 +21,30 @@ export const getValue = () => {
   return {
     string: '111',
     text: 'abc',
-    integer: 122,
+    integer: '122',
     double: '0.2',
-    url: 'http://www.aegis-info.com',
+    url: 'http://www',
     datetime: new Date(),
     date: new Date(),
+    start: new Date(),
+    end: new Date(),
+    year: new Date(),
+    month: new Date(),
     time: window.moment(),
     select: 1,
     multiSelect: [1, 3],
     expandSelect: 2,
     expandMultiSelect: [2, 3],
-    month: null,
-    year: null,
-    values: {
+    subForm: {
+      input: 'abs'
+    },
+    subFormArray: [{
       input: 'sssssssss'
-    }
+    }]
   };
 };
 
-const fields = {
+const fields: { [key: string]: SchemaFormField } = {
   string: {
     title: '单行文本',
     type: 'string',
@@ -96,11 +101,6 @@ const fields = {
     title: '日期时间',
     required: true,
     type: 'datetime'
-  },
-  year: {
-    title: '年份',
-    required: true,
-    type: 'year'
   },
   month: {
     title: '月份',
