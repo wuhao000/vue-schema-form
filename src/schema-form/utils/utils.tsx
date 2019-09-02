@@ -4,16 +4,17 @@ import {Platform, SchemaFormField} from '@/types/bean';
 import {LayoutOptions, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
-import AntdUpload from './antd/upload.vue';
-import PlainDisplayField from './display/plain-display-field';
-import SelectDisplayField from './display/select-display-field';
-import TimeDisplayField from './display/time-display-field';
-import ElExtCheckbox from './element/checkbox-group';
-import ElExtRadio from './element/radio-group';
-import ElExtSelect from './element/select';
-import Empty from './empty';
-import GridLayout from './layout/grid';
-import TextBox from './layout/text-box';
+import AntdUpload from '../antd/upload.vue';
+import PlainDisplayField from '../display/plain-display-field';
+import SelectDisplayField from '../display/select-display-field';
+import TimeDisplayField from '../display/time-display-field';
+import ElExtCheckbox from '../element/checkbox-group';
+import ElExtRadio from '../element/radio-group';
+import ElExtSelect from '../element/select';
+import ElementUpload from '../element/upload.vue';
+import Empty from '../empty';
+import GridLayout from '../layout/grid';
+import TextBox from '../layout/text-box';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -61,13 +62,68 @@ const store: { [key: string]: { [key: string]: any } } = {
 export const DESKTOP = 'desktop';
 export const MOBILE = 'mobile';
 
-let formComponent = 'd-form';
-let rowComponent = 'd-row';
-let colComponent = 'd-col';
-let buttonComponent = 'd-button';
-let alertComponent = 'a-alert';
-let confirmFunction = '$dconfirm';
+const ComponentMap = {
+  button: {
+    element: 'el-button',
+    antd: 'd-button'
+  },
+  row: {
+    element: 'el-row',
+    antd: 'd-row'
+  },
+  col: {
+    element: 'el-col',
+    antd: 'd-col'
+  },
+  form: {
+    element: 'el-form',
+    antd: 'd-form'
+  },
+  formItem: {
+    element: 'el-form-item',
+    antd: 'd-form-item'
+  },
+  alert: {
+    element: 'el-alert',
+    antd: 'a-alert'
+  },
+  layout: {
+    element: 'el-container',
+    antd: 'd-layout'
+  },
+  header: {
+    element: 'el-header',
+    antd: 'd-layout-header'
+  },
+  footer: {
+    element: 'el-footer',
+    antd: 'd-layout-footer'
+  },
+  sider: {
+    element: 'el-aside',
+    antd: 'd-layout-sider'
+  },
+  content: {
+    element: 'el-main',
+    antd: 'd-layout-content'
+  }
+};
 
+
+export const LibComponents = {
+  button: null,
+  row: null,
+  col: null,
+  form: null,
+  formItem: null,
+  alert: null,
+  layout: null,
+  confirm: null,
+  header: null,
+  footer: null,
+  sider: null,
+  content: null
+};
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
 const DisplayComponentDefinitions: SchemaFormComponent[] = [];
@@ -140,7 +196,7 @@ const addComponent = (options: {
     });
   } else {
     const forArray = options.forArray !== undefined ? options.forArray : null;
-    const getProps = options.getProps || ((...args: any) => ({}));
+    const getProps = options.getProps || (() => ({}));
     const def = {
       component: options.component,
       platform: options.platforms,
@@ -164,7 +220,7 @@ const addComponent = (options: {
     if (!typeDef[options.types]) {
       typeDef[options.types] = {};
     }
-    if (forArray === true) {
+    if (forArray) {
       typeDef[options.types][1] = def;
     } else if (forArray === false) {
       typeDef[options.types][2] = def;
@@ -188,7 +244,9 @@ Vue.component('empty', Empty);
 
 registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], [TYPES.datetime, TYPES.date, TYPES.year, TYPES.month, TYPES.daterange, TYPES.time]);
 registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], [TYPES.string, TYPES.text, TYPES.url, TYPES.integer, TYPES.double, TYPES.number], false);
-registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], [TYPES.select, TYPES.expandSelect], null);
+registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], [TYPES.select, TYPES.expandSelect], null, field => {
+  return {options: getOptions(field)};
+});
 register(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {
     platform,
@@ -203,13 +261,11 @@ registerDisplay(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definitio
 });
 
 export function registerAntd() {
-  console.info('注册Ant Design Vue表单组件');
-  formComponent = 'd-form';
-  rowComponent = 'd-row';
-  colComponent = 'd-col';
-  buttonComponent = 'd-button';
-  alertComponent = 'a-alert';
-  confirmFunction = '$dconfirm';
+  console.debug('注册Ant Design Vue表单组件');
+  Object.keys(ComponentMap).forEach(key => {
+    LibComponents[key] = ComponentMap[key].antd;
+  });
+  LibComponents.confirm = aegis.AeModal.confirm;
   register('d-range-picker', DESKTOP, [TYPES.daterange], false);
   register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
   register('d-textarea', DESKTOP, [TYPES.text], false);
@@ -217,8 +273,8 @@ export function registerAntd() {
   register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
   register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
   register('d-switch', DESKTOP, TYPES.boolean);
-  register('d-select', DESKTOP, TYPES.select, null, definition => {
-    return {dropdownMatchSelectWidth: false, multiple: definition.array};
+  register('d-select', DESKTOP, TYPES.select, null, field => {
+    return {dropdownMatchSelectWidth: false, multiple: field.array, options: getOptions(field)};
   });
   register(AntdUpload, DESKTOP, TYPES.upload, null, def => {
     return {multiple: def.array};
@@ -226,8 +282,12 @@ export function registerAntd() {
   register('d-cascader', DESKTOP, TYPES.cascader, false, def => {
     return {options: def.enum};
   });
-  register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true);
-  register('d-radio-group', DESKTOP, TYPES.expandSelect, false);
+  register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true, field => {
+    return {options: getOptions(field)};
+  });
+  register('d-radio-group', DESKTOP, TYPES.expandSelect, false, field => {
+    return {options: getOptions(field)};
+  });
   register('d-color-picker', DESKTOP, 'color');
   register('d-rate', DESKTOP, TYPES.rate);
   register('d-transfer', DESKTOP, TYPES.transfer, false, def => {
@@ -251,48 +311,119 @@ export function registerAntd() {
   });
 }
 
+const registerDesktop = (component: string | object,
+                         types: string | string[],
+                         forArray: boolean = null,
+                         getProps: ((definition: IField, platform: Platform) => object) = null) => {
+  register(component, DESKTOP, types, forArray, getProps);
+};
+
+const registerMobile = (component: string | object,
+                        types: string | string[],
+                        forArray: boolean = null,
+                        getProps: ((definition: IField, platform: Platform) => object) = null) => {
+  register(component, MOBILE, types, forArray, getProps);
+};
+
+const registerResponsiveComponent = (component: string | object,
+                                     types: string | string[],
+                                     forArray: boolean = null,
+                                     getProps: ((definition: IField, platform: Platform) => object) = null) => {
+  register(component, [MOBILE, DESKTOP], types, forArray, getProps);
+};
+
 export function registerElement() {
-  console.info('注册ElementUI表单组件');
-  formComponent = 'el-form';
-  rowComponent = 'el-row';
-  colComponent = 'el-col';
-  buttonComponent = 'el-button';
-  alertComponent = 'el-alert';
-  confirmFunction = '$confirm';
+  console.debug('注册ElementUI表单组件');
+  Object.keys(ComponentMap).forEach(key => {
+    LibComponents[key] = ComponentMap[key].element;
+  });
+  LibComponents.confirm = ELEMENT.MessageBox.confirm;
   Vue.component('el-ext-select', ElExtSelect);
   Vue.component('el-ext-checkbox', ElExtCheckbox);
   Vue.component('el-ext-radio', ElExtRadio);
-  register('el-input', DESKTOP, [TYPES.string, TYPES.url], false);
-  register('el-input', DESKTOP, [TYPES.text], false, () => {
+  registerDesktop('el-transfer', TYPES.transfer, false, field => {
+    const data = (field.enum || []).map(item => ({
+      key: item.value,
+      label: item.label,
+      disabled: item.disabled
+    }));
+    return {data};
+  });
+  registerDesktop(ElementUpload, TYPES.upload, null, (field) => {
+    return {multiple: field.array};
+  });
+  registerDesktop('el-input', [TYPES.string, TYPES.url], false);
+  registerDesktop('el-input', [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
-  register('el-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false,
-      (definition: IField) => ({type: definition.type.toLowerCase()}));
-  register('el-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
-  register('el-switch', DESKTOP, [TYPES.boolean], false);
-  register('el-ext-select', DESKTOP, [TYPES.select], null, definition => {
-    return {multiple: definition.array};
+  registerDesktop('el-time-picker', TYPES.time, false);
+  registerDesktop('el-rate', TYPES.rate, false);
+  registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
+    (definition: IField) => ({type: definition.type.toLowerCase()}));
+  registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
+  registerDesktop('el-switch', [TYPES.boolean], false);
+  registerDesktop('el-ext-select', [TYPES.select], null, definition => {
+    return {multiple: definition.array, options: getOptions(definition)};
   });
-  register('el-ext-radio', DESKTOP, [TYPES.expandSelect], false);
-  register('el-ext-checkbox', DESKTOP, [TYPES.expandSelect], true);
+  registerDesktop('el-slider', TYPES.range, false, (field) => {
+    const props: any = {range: true};
+    if (field.props && field.props.marks) {
+      if (Array.isArray(field.props.marks)) {
+        props.marks = field.props.marks.map(it => {
+          if (typeof it === 'number') {
+            return it.toString();
+          } else {
+            return it;
+          }
+        });
+      } else if (typeof field.props.marks === 'object') {
+        const marks: any = {};
+        Object.keys(field.props.marks).forEach(key => {
+          const value = field.props.marks[key];
+          if (typeof value === 'number') {
+            marks[key] = value.toString();
+          } else {
+            marks[key] = value;
+          }
+        });
+        props.marks = marks;
+      }
+    }
+    return props;
+  });
+  registerDesktop('el-ext-radio', [TYPES.expandSelect], false, field => {
+    return {options: getOptions(field)};
+  });
+  registerDesktop('el-ext-checkbox', [TYPES.expandSelect], true, field => {
+    return {options: getOptions(field)};
+  });
 }
 
 export function registerAntdMobile() {
-  console.info('注册Ant Design Mobile表单组件');
+  console.debug('注册Ant Design Mobile表单组件');
 
-  register('m-input', MOBILE, [TYPES.string, TYPES.url], false);
-  register('m-date-picker-item', MOBILE, [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-      (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  register('m-input', MOBILE, [TYPES.integer, TYPES.double, TYPES.number], false,
-      (definition: IField) => {
-        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-      });
-  register('m-textarea', MOBILE, [TYPES.text], false);
-  register('m-switch-item', MOBILE, [TYPES.boolean], false);
-  register('m-checkbox-popup-list', MOBILE, [TYPES.select], true);
-  register('m-radio-popup-list', MOBILE, [TYPES.select], false);
-  register('m-checkbox-list', MOBILE, [TYPES.expandSelect], true);
-  register('m-radio-list', MOBILE, [TYPES.expandSelect], false);
+  registerMobile('m-input', [TYPES.string, TYPES.url], false);
+  registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
+    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerMobile('m-input', [TYPES.integer, TYPES.double, TYPES.number], false,
+    (definition: IField) => {
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+    });
+  registerMobile('m-textarea', [TYPES.text], false);
+  registerMobile('m-switch-item', [TYPES.boolean], false);
+  registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {
+    return {options: getOptions(field)};
+  });
+  registerMobile('m-radio-popup-list', [TYPES.select], false, field => {
+    return {options: getOptions(field)};
+  });
+  registerMobile('m-checkbox-list', [TYPES.expandSelect], true, field => {
+    return {options: getOptions(field)};
+  });
+  registerMobile('m-radio-list', [TYPES.expandSelect], false, field => {
+    return {options: getOptions(field)};
+  });
+  registerMobile('m-calendar-item', TYPES.daterange, false);
 }
 
 registerLayout({
@@ -317,6 +448,7 @@ registerLayout({
   types: 'text-box',
   layoutOptions: {wrapItems: false, wrapContainer: true}
 });
+
 const EmptyDefinition = {
   component: 'empty',
   getProps: (_) => ({})
@@ -325,14 +457,15 @@ const EmptyDefinition = {
 function searchStore(mode: Mode, platform: Platform, definition: SchemaFormField): SchemaFormComponent {
   const typeDef = store[mode][platform][definition.type];
   if (!typeDef) {
+    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
     return EmptyDefinition;
   }
   if (definition.array) {
-    let res = EmptyDefinition;
-    if (typeDef[2]) {
-      res = typeDef[2];
+    const res = typeDef[1] || typeDef[0] || typeDef[2] || EmptyDefinition;
+    if (res.component === 'empty') {
+      console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
     }
-    return typeDef[1] || typeDef[0] || res;
+    return res;
   } else {
     return typeDef[2] || typeDef[0];
   }
@@ -346,15 +479,15 @@ export const getDisplayComponent = (platform: Platform, definition: SchemaFormFi
   return searchStore(Mode.display, platform, definition);
 };
 
-export const getOptions = (definition: IField) => {
-  if (definition.enum) {
-    return definition.enum;
+export const getOptions = (field: IField) => {
+  if (field.enum) {
+    return field.enum;
   }
-  if (definition.props && definition.props.options) {
-    if (typeof definition.props.options === 'function') {
-      return definition.props.options() || [];
-    } else if (typeof definition.props.options === 'object') {
-      return definition.props.options || [];
+  if (field.props && field.props.options) {
+    if (typeof field.props.options === 'function') {
+      return field.props.options() || [];
+    } else if (typeof field.props.options === 'object') {
+      return field.props.options || [];
     }
   } else {
     return [];
@@ -364,9 +497,10 @@ export const getOptions = (definition: IField) => {
 export const getDefaultValue = (field: IField) => {
   if (typeof field.destructPath.destruct !== 'string') {
     return null;
-  }
-  if (field.type === TYPES.range) {
+  } else if (field.type === TYPES.transfer) {
     return [];
+  } else if (field.type === TYPES.range) {
+    return [0, 0];
   } else if (field.type === TYPES.object) {
     if (field.array) {
       return [{}];
@@ -380,23 +514,23 @@ export const getDefaultValue = (field: IField) => {
 
 
 export const getFormComponent = (platform: Platform) => {
-  return platform === DESKTOP ? formComponent : 'm-list';
+  return platform === DESKTOP ? LibComponents.form : 'm-list';
 };
 
 export const getRowComponent = () => {
-  return rowComponent;
+  return LibComponents.row;
 };
 
 export const getColComponent = () => {
-  return colComponent;
+  return LibComponents.col;
 };
 
 export const getButtonComponent = () => {
-  return buttonComponent;
+  return LibComponents.button;
 };
 
 export const getAlertComponent = () => {
-  return alertComponent;
+  return LibComponents.alert;
 };
 
 export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {
@@ -409,7 +543,7 @@ export const getOptionProperty = function getOptionProperty(option: any, propert
   }
 };
 
-export function addRule(rules: any, field: SchemaFormField, rule: any) {
+export function addRule(rules: any, field: IField, rule: any) {
   const type = field.type as any;
   let validateType = 'string';
   if (field.array) {
@@ -437,5 +571,5 @@ export function addRule(rules: any, field: SchemaFormField, rule: any) {
 }
 
 export const getConfirmFunction = (platform: Platform) => {
-  return platform === 'mobile' ? '$mconfirm' : confirmFunction;
+  return platform === 'mobile' ? antdm.modal.confirm : LibComponents.confirm;
 };

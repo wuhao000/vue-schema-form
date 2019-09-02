@@ -6,4 +6,10 @@ declare global {
     _: typeof _;
     moment: any;
   }
+
+  export const aegis: any;
+
+  export const antdm: any;
+
+  export const ELEMENT: any;
 }

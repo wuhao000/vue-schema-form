@@ -1,4 +1,5 @@
 import {FormFields, SchemaFormField} from '@/types/bean';
+import {SchemaFormComponent} from '@/types/form';
 import {IFormPathMatcher} from './form';
 import {Path} from './path';
 import {IRuleDescription} from './rule';
@@ -7,6 +8,7 @@ import {ISchema} from './schema';
 export interface IField<V = any> {
   validate?: () => (boolean | Promise<unknown>);
   type?: string;
+  component: SchemaFormComponent;
   array?: boolean;
   title?: string;
   changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;

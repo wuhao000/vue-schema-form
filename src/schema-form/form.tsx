@@ -1,9 +1,19 @@
 import InternalForm from '@/schema-form/internal/form';
 import {hasListener, SchemaFormStore} from '@/schema-form/internal/utils';
-import {ASchemaForm, getButtonComponent, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils';
+import {splitPath} from '@/schema-form/utils/path';
+import {
+  ASchemaForm,
+  LibComponents,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement
+} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IField} from '@/uform/types';
+import className from 'classname';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
@@ -27,6 +37,8 @@ export default class SchemaForm extends Vue {
   public readonly: boolean;
   @Prop({type: Boolean, default: false})
   public loading: boolean;
+  @Prop({type: Array})
+  public actions: Array<string | { name: string; text: string; props?: object; action?: () => {} }>;
   @Prop({type: String, default: 'desktop'})
   public platform: Platform;
   @Prop({type: String, default: 'edit'})
@@ -43,6 +55,8 @@ export default class SchemaForm extends Vue {
   public title: VNode | string;
   @Prop({type: Boolean, default: false})
   public inline: boolean;
+  @Prop({type: Boolean, default: false})
+  public sticky: boolean;
 
   public context: EffectsContext;
 
@@ -105,15 +119,19 @@ export default class SchemaForm extends Vue {
   }
 
   public createContext(): EffectsContext {
-    return (paths: string | string[]) => {
+    const context: EffectsContext = (paths: string | string[]) => {
       let fields: IField[] = [];
       if (typeof paths === 'string') {
+        const splits = splitPath(paths);
         fields.push(this['store'].fields[paths]);
       } else if (Array.isArray(paths)) {
         fields = paths.map(path => this['store'].fields[path]);
       }
       fields = fields.filter(it => !!it);
       return {
+        fields: () => {
+          return fields;
+        },
         hide: () => {
           fields.forEach(field => {
             field.visible = false;
@@ -148,6 +166,10 @@ export default class SchemaForm extends Vue {
         }
       } as EffectsHandlers;
     };
+    context.getValue = () => {
+      return this.value;
+    };
+    return context;
   }
 
   public created() {
@@ -165,89 +187,87 @@ export default class SchemaForm extends Vue {
   }
 
   public render() {
-    return <InternalForm
+    let content: any = [
+      this.$slots.header,
+      <InternalForm
         title={this.title}
         value={this.value}
         slots={this.$slots}
         scopedSlots={this.$scopedSlots}
         definition={this.definition}>
-      {this.renderButtons()}
-    </InternalForm>;
+      </InternalForm>
+    ];
+    let footer: any = [
+      this.renderButtons(),
+      this.$slots.footer
+    ];
+    if (this.sticky) {
+      content = <LibComponents.content>
+        {content}
+      </LibComponents.content>;
+      footer = <LibComponents.footer>
+        {footer}
+      </LibComponents.footer>;
+    }
+    const classes = className('schema-form', {
+      'schema-form-sticky': this.sticky
+    });
+    return <div class={classes}>
+      {content}
+      {footer}
+    </div>;
   }
 
   public renderButtons() {
     const {props} = this.store;
-    const ButtonComponent = getButtonComponent();
+    const {actions} = this;
     if (props && this.store.mode === 'edit') {
       if (this.$slots.btns) {
         return this.$slots.btns;
       }
-      const hasOkHandler = hasListener(this, 'ok');
-      const hasCancelHandler = hasListener(this, 'cancel');
-      const hasResetHandler = hasListener(this, 'reset');
-      if (this.store.platform === 'mobile') {
-        return <div class="action-btns">
-          {hasOkHandler ? <m-white-space/> : null}
-          {hasOkHandler ? <m-button type="primary"
-                                    disabled={this.disabled}
-                                    loading={this.loading}
-                                    attrs={props && props.okProps}
-                                    onClick={() => {
-                                      this.onOk();
-                                    }}>
-            {props && props.okText || '提交'}
-          </m-button> : null}
-          {hasCancelHandler ? <m-white-space/> : null}
-          {hasCancelHandler ? <m-button
-              disabled={this.disabled || this.loading}
-              onClick={() => {
-                this.$emit('cancel');
-              }}
-              attrs={props && props.cancelProps}>
-            {props && props.cancelText || '取消'}
-          </m-button> : null}
-          {hasResetHandler ? <m-white-space/> : null}
-          {hasResetHandler ? <m-button
-              disabled={this.disabled || this.loading}
-              type="error"
-              onClick={() => {
-                this.$emit('reset');
-              }}
-              attrs={props && props.resetProps}>
-            {props && props.resetText || '重置'}
-          </m-button> : null}
-        </div>;
+      const buttons = [];
+      if (actions) {
+        actions.forEach(action => {
+          if (typeof action === 'string') {
+            switch (action) {
+              case 'submit':
+                buttons.push(this.createSubmitButton());
+                break;
+              case 'cancel':
+                buttons.push(this.createCancelButton());
+                break;
+              case 'reset':
+                buttons.push(this.createResetButton());
+                break;
+            }
+          } else if (typeof action === 'object') {
+            switch (action.name) {
+              case 'submit':
+                buttons.push(this.createSubmitButton(action.text, action.props, action.action));
+                break;
+              case 'cancel':
+                buttons.push(this.createCancelButton(action.text, action.props, action.action));
+                break;
+              case 'reset':
+                buttons.push(this.createResetButton(action.text, action.props, action.action));
+                break;
+              default:
+                const props: any = action.props || {};
+                props.disabled = this.disabled || this.loading;
+                buttons.push(this.createButton(action.text, action.action,
+                  action.props, null));
+                break;
+            }
+          }
+        });
       } else {
-        return <div class="action-btns">
-          {hasCancelHandler ? <ButtonComponent disabled={this.disabled || this.loading}
-                                               onClick={() => {
-                                                 this.$emit('cancel');
-                                               }}
-                                               class="cancel-btn"
-                                               attrs={props && props.cancelProps}>
-            {props && props.cancelText || '取消'}
-          </ButtonComponent> : null}
-          {hasOkHandler ? <ButtonComponent type="primary"
-                                           disabled={this.disabled}
-                                           loading={this.loading}
-                                           class="confirm-btn"
-                                           attrs={props && props.okProps}
-                                           onClick={() => {
-                                             this.onOk();
-                                           }}>
-            {props && props.okText || '提交'}
-          </ButtonComponent> : null}
-          {hasResetHandler ? <ButtonComponent type="danger"
-                                              class="reset-btn"
-                                              disabled={this.disabled || this.loading}
-                                              attrs={props && props.resetProps}
-                                              onClick={() => {
-                                                this.$emit('reset');
-                                              }}>
-            {props && props.resetText || '重置'}
-          </ButtonComponent> : null}
-        </div>;
+        buttons.push(this.createCancelButton());
+        buttons.push(this.createSubmitButton());
+        buttons.push(this.createResetButton());
       }
+      return <div class="action-btns">
+        {buttons}
+      </div>;
     }
   }
 
@@ -257,7 +277,13 @@ export default class SchemaForm extends Vue {
       const errors = valid.filter((it: any) => it && it !== true).flat();
       if (errors.length) {
         console.warn('有错误', errors);
-        (this as any).$message.error(errors[0].message);
+        if (this.platform === 'desktop') {
+          if ((this as any).$message) {
+            (this as any).$message.error(errors[0].message);
+          }
+        } else {
+          (this as any).$toast.fail(errors[0].message);
+        }
       } else {
         this.$emit('ok', this.value);
       }
@@ -270,5 +296,75 @@ export default class SchemaForm extends Vue {
       return Promise.all(fields.map(it => (it as any).validate()));
     }
     return [];
+  }
+
+  private createSubmitButton(text: string = null, btnProps: object = null, action: () => any = null) {
+    const hasOkHandler = hasListener(this, 'ok');
+    if (!hasOkHandler) {
+      return null;
+    }
+    const {props} = this;
+    const buttonProps = btnProps || (props && props.okProps) || {};
+    if (!buttonProps.type) {
+      buttonProps.type = 'primary';
+    }
+    buttonProps.disabled = this.disabled;
+    return this.createButton(
+      text || props && props.okText || '提交',
+      action || this.onOk, buttonProps, 'confirm-btn'
+    );
+  }
+
+  private createButton(text, action, attrs, classes) {
+    const {platform} = this;
+    const ButtonComponent = platform === 'mobile' ? 'm-button' : LibComponents.button;
+    const Button = <ButtonComponent class={classes}
+                                    attrs={attrs}
+                                    onClick={() => {
+                                      action(this.context);
+                                    }}>
+      {text}
+    </ButtonComponent>;
+    if (platform === 'mobile') {
+      return [<m-white-space/>, Button];
+    }
+    return Button;
+  }
+
+  private createCancelButton(text: string = null, btnProps: object = null, action: () => any = null) {
+    const hasCancelHandler = hasListener(this, 'cancel');
+    if (!hasCancelHandler) {
+      return null;
+    }
+    const {props} = this;
+    const buttonProps = btnProps || (props && props.cancelProps) || {};
+    buttonProps.disabled = this.disabled || this.loading;
+    return this.createButton(
+      text || props && props.cancelText || '取消',
+      action || this.onCancel, buttonProps,
+      'cancel-btn'
+    );
+  }
+
+  private createResetButton(text: string = null, btnProps: object = null, action: () => any = null) {
+    const hasResetHandler = hasListener(this, 'reset');
+    if (!hasResetHandler) {
+      return null;
+    }
+    const {props} = this;
+    const buttonProps = btnProps || (props && props.cancelProps) || {};
+    buttonProps.disabled = this.disabled || this.loading;
+    return this.createButton(
+      text || props && props.cancelText || '重置',
+      action || this.onReset, buttonProps, 'reset-btn'
+    );
+  }
+
+  public onReset() {
+    this.$emit('reset');
+  }
+
+  public onCancel() {
+    this.$emit('cancel');
   }
 }

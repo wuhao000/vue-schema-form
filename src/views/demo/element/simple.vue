@@ -14,8 +14,8 @@
   export default class DesktopEdit extends Vue {
 
     public register() {
-
-      SchemaForm.registerAntd();
+      SchemaForm.registerElement();
     }
+
   }
 </script>

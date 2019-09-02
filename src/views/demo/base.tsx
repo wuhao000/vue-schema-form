@@ -1,20 +1,31 @@
+import {EffectsContext} from '@/types/form';
 import {getFormDefinition, getProps, getValue} from '@/views/demo/utils';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import {Prop} from 'vue-property-decorator';
 
 @Component({
   name: 'Base'
 })
 export default class Base extends Vue {
+  @Prop(Function)
+  public init: () => any;
   public props = getProps();
   public value: any = getValue();
   public options = {
     disabled: false,
     loading: false,
     readonly: false,
-    displayMode: false
+    displayMode: false,
+    sticky: false
   };
+
+  public created() {
+    if (this.init) {
+      this.init();
+    }
+  }
 
   public optionFormDefinition = {
     fields: [{
@@ -25,8 +36,17 @@ export default class Base extends Vue {
       title: '只读', type: 'boolean', property: 'readonly'
     }, {
       title: '详情模式', type: 'boolean', property: 'displayMode'
+    }, {
+      title: '固定模式', type: 'boolean', property: 'sticky'
     }]
   };
+
+  public customAction($: EffectsContext) {
+    const value = $.getValue();
+    console.log($('subFormArray.*.input').fields());
+    // @ts-ignore
+    this.$message.info('自定义动作, 当前值：' + value);
+  }
 
   get definition() {
     return getFormDefinition();

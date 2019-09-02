@@ -1,4 +1,4 @@
-import {TYPES} from '@/schema-form/utils';
+import {TYPES} from '@/schema-form/utils/utils';
 import {FormDescriptor, SchemaFormField} from '@/types/bean';
 
 export const options = [{

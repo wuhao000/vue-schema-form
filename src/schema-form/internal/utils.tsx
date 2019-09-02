@@ -1,5 +1,5 @@
 import FormField from '@/schema-form/field';
-import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils';
+import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils/utils';
 import {getStructValue} from '@/schema-form/utils/destruct';
 import {setFieldValue} from '@/schema-form/utils/field';
 import {FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
@@ -34,8 +34,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   }
 }
@@ -43,18 +43,18 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => ({
-          property: key,
-          ...fields[key]
-        }));
+      .filter(key => fields[key])
+      .map(key => ({
+        property: key,
+        ...fields[key]
+      }));
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
 }
 
 
-export function getComponentType(store: SchemaFormStore, definition: SchemaFormField, field: IField): SchemaFormComponent {
+export function getComponentType(store: SchemaFormStore, definition: SchemaFormField): SchemaFormComponent {
   let component: SchemaFormComponent = null;
   if (store.mode === 'display') {
     component = getDisplayComponent(store.platform, definition);
@@ -62,7 +62,7 @@ export function getComponentType(store: SchemaFormStore, definition: SchemaFormF
     component = getComponent(store.platform, definition);
   }
   if (component.component === 'empty') {
-    console.warn(`类型${field.type}${field.array ? '（数组）' : ''}没有对应的${store.mode === 'display' ? '展示' : '编辑'}组件`);
+    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${store.mode === 'display' ? '展示' : '编辑'}组件`);
   }
   return component;
 }
@@ -112,7 +112,8 @@ export function buildFieldPath(pathPrefix: string[], field: SchemaFormField): st
   }
 }
 
-export function renderField(pathPrefix: string[], store: SchemaFormStore, field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean, h) {
+export function renderField(pathPrefix: string[], store: SchemaFormStore, field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
+                            index: number, wrap: boolean, h) {
   const {platform} = store;
   let value = null;
   if (field.property && field.property.includes('.')) {
@@ -129,24 +130,23 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore, field:
     field.props.effects = store.effects;
   }
   const iField = createField(currentValue, store, pathPrefix, field);
-  const component = getComponentType(store, field, iField);
+  const component = getComponentType(store, field);
   // @ts-ignore
   return <FormField
-      component={component}
-      value={getFieldValue(value, iField, component)}
-      onInput={(v) => {
-        setFieldValue(value, iField, v);
-      }}
-      wrap={wrap}
-      field={iField}
-      path={buildFieldPath(pathPrefix, field)}
-      display={store.mode === 'display'}
-      disabled={store.disabled}
-      content={store.slots[field.slot]}
-      definition={field}
-      key={'field-' + field.property + '-' + index}
-      formValue={currentValue}
-      platform={platform}/>;
+    value={getFieldValue(value, iField, component)}
+    onInput={(v) => {
+      setFieldValue(value, iField, v);
+    }}
+    wrap={wrap}
+    field={iField}
+    path={buildFieldPath(pathPrefix, field)}
+    display={store.mode === 'display'}
+    disabled={store.disabled}
+    content={store.slots[field.slot]}
+    definition={field}
+    key={'field-' + field.property + '-' + index}
+    formValue={currentValue}
+    platform={platform}/>;
 }
 
 
@@ -172,6 +172,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       title: definition.title,
       array: definition.array,
       type: definition.type,
+      component: getComponentType(store, definition),
       enum: definition.enum,
       processor: definition.processor,
       display: store.mode === 'display',

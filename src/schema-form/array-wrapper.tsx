@@ -1,4 +1,4 @@
-import {getButtonComponent, getColComponent, getRowComponent} from '@/schema-form/utils';
+import {getButtonComponent, getColComponent, getRowComponent} from '@/schema-form/utils/utils';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';

@@ -4,6 +4,10 @@ import VueRouter, {RouteConfig} from 'vue-router';
 
 export const demoRoutes: RouteConfig[] = [
   {
+    path: 'element/simple',
+    component: () => import('@/views/demo/element/simple.vue'),
+    meta: {tag: 'Element UI', name: '简单场景'}
+  }, {
     path: 'element/display',
     component: () => import('@/views/demo/element/display.vue'),
     meta: {tag: 'Element UI', name: '详情'}
@@ -15,14 +19,6 @@ export const demoRoutes: RouteConfig[] = [
     path: 'element/effects',
     component: () => import('@/views/demo/element/effects.vue'),
     meta: {tag: 'Element UI', name: '副作用函数'}
-  }, {
-    path: 'desktop/subform/display',
-    component: () => import('@/views/demo/subform/display.vue'),
-    meta: {tag: '子表单', name: '详情'}
-  }, {
-    path: 'desktop/subform/edit',
-    component: () => import('@/views/demo/subform/edit.vue'),
-    meta: {tag: '子表单', name: '编辑'}
   }, {
     path: 'desktop/simple',
     component: () => import('@/views/demo/antd/simple.vue'),
@@ -47,6 +43,14 @@ export const demoRoutes: RouteConfig[] = [
     path: 'layout/nested',
     component: () => import('@/views/demo/layout/nested.vue'),
     meta: {tag: '布局', name: 'Nested'}
+  }, {
+    path: 'desktop/subform/display',
+    component: () => import('@/views/demo/subform/display.vue'),
+    meta: {tag: '子表单', name: '详情'}
+  }, {
+    path: 'desktop/subform/edit',
+    component: () => import('@/views/demo/subform/edit.vue'),
+    meta: {tag: '子表单', name: '编辑'}
   }, {
     path: 'desktop/validate',
     component: () => import('@/views/demo/antd/validate.vue'),

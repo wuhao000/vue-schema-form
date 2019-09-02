@@ -1,6 +1,13 @@
 import FieldBasedComponent from '@/schema-form/internal/field-based-component';
 import {createField, getComponentType, getRealFields, matchCondition} from '@/schema-form/internal/utils';
-import {DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE} from '@/schema-form/utils';
+import {
+  DESKTOP,
+  getButtonComponent,
+  getDefaultValue,
+  getFormComponent,
+  getRowComponent,
+  MOBILE
+} from '@/schema-form/utils/utils';
 import {SchemaFormField} from '@/types/bean';
 import difference from 'lodash.difference';
 import eq from 'lodash.eq';
@@ -11,7 +18,7 @@ import {Prop, Watch} from 'vue-property-decorator';
 @Component({
   name: 'InternalForm'
 })
-export default class InternalForm extends mixins(FieldBasedComponent) {
+class InternalForm extends mixins(FieldBasedComponent) {
   @Prop([Object, String])
   public title: any;
   @Prop([Number])
@@ -63,7 +70,7 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+        .concat(difference(value as any[], currentValue as any[])).length > 0) {
         this.buildExtraProperties();
       }
     } else if (!eq(currentValue, value)) {
@@ -80,7 +87,7 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-            .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
           this.buildExtraProperties();
         }
@@ -122,8 +129,8 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
         copy = copy[name];
       } else {
         copy[name] = getDefaultValue(createField(
-            this.currentValue, this.store,
-            this.pathPrefix, fieldDef));
+          this.currentValue, this.store,
+          this.pathPrefix, fieldDef));
       }
     });
   }
@@ -133,7 +140,7 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
     let currentValue = this.currentValue;
     getRealFields(this.definition.fields).forEach(fieldDef => {
       const field = createField(this.currentValue, this.store, this.pathPrefix, fieldDef);
-      const component = getComponentType(this.store, fieldDef, field);
+      const component = getComponentType(this.store, fieldDef);
       if (!component.layout) {
         if (typeof field.destructPath.destruct === 'string') {
           const property = fieldDef.property;
@@ -209,8 +216,8 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
         return definition.depends(this.currentValue);
       } else {
         return !definition.depends
-            .map(condition => matchCondition(this.currentValue, condition))
-            .some(it => !it);
+          .map(condition => matchCondition(this.currentValue, condition))
+          .some(it => !it);
       }
     }
   }
@@ -223,12 +230,11 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
     return <FormComponent attrs={formProps}
                           ref="form"
                           on={this.$listeners}>
-      {this.$slots.prepend}
+      {this.definition.array ? this.renderTitle() : null}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {props && props.inline ? groups.reduce((a, b) => a.concat(b))
-          : groups.map((group) => this.wrapGroup(group))}
+        : groups.map((group) => this.wrapGroup(group))}
       {this.renderDeleteSubFormButton()}
-      {this.$slots.append}
     </FormComponent>;
   }
 
@@ -236,15 +242,15 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.store.mode === 'edit') {
       return <ButtonComponent
-          attrs={{
-            block: true,
-            icon: 'plus',
-            disabled: this.isDisabled
-          }}
-          class="m-b"
-          onClick={() => {
-            this.addSubItem();
-          }}>新增一条</ButtonComponent>;
+        attrs={{
+          block: true,
+          icon: 'plus',
+          disabled: this.isDisabled
+        }}
+        class="m-b"
+        onClick={() => {
+          this.addSubItem();
+        }}>新增一条</ButtonComponent>;
     }
   }
 
@@ -255,12 +261,12 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
   public renderDeleteSubFormButton(this: any) {
     const ButtonComponent = getButtonComponent();
     return Number.isInteger(this.arrayIndex) && this.store.mode !== 'display' && this.isDesktop ?
-        <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
-          <ButtonComponent disabled={this.isDisabled} onClick={() => {
-            this.$emit('removeArrayItem');
-          }} text icon="delete" type="danger">删除该条
-          </ButtonComponent>
-        </div> : null;
+      <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
+        <ButtonComponent disabled={this.isDisabled} onClick={() => {
+          this.$emit('removeArrayItem');
+        }} text icon="delete" type="danger">删除该条
+        </ButtonComponent>
+      </div> : null;
   }
 
   public wrapGroup(this: any, group: any) {
@@ -300,13 +306,11 @@ export default class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   public render(this: any) {
-    return <div class="schema-form">
-      {this.$slots.header}
-      {this.definition.array ? this.renderTitle() : null}
+    return <div>
       {this.renderSingleFields(this.currentValue)}
       {this.renderAddFormButton()}
-      {this.$slots.default}
-      {this.$slots.footer}
     </div>;
   }
 }
+
+export default InternalForm as any;

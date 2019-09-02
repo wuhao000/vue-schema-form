@@ -1,5 +1,6 @@
-import {getOptions} from '@/schema-form/utils';
+import {getOptions} from '@/schema-form/utils/utils';
 import {SchemaFormField} from '@/types/bean';
+import {IField} from '@/uform/types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
@@ -7,19 +8,19 @@ import {Prop} from 'vue-property-decorator';
 @Component({
   name: 'SelectDisplayField'
 })
-class DisplayField extends Vue {
+class SelectDisplayField extends Vue {
 
   @Prop()
   public value: any;
   @Prop(Object)
-  public definition: SchemaFormField;
+  public field: IField;
 
   public render() {
-    const {definition, value} = this;
-    const options = getOptions(definition);
+    const {field, value} = this;
+    const options = getOptions(field);
     if (value) {
       let selected = [];
-      if (this.definition.array) {
+      if (field.array) {
         selected = options.filter(it => value.includes(it[this.valueProperty]));
       } else {
         selected = options.filter(it => value === it[this.valueProperty]);
@@ -31,12 +32,12 @@ class DisplayField extends Vue {
   }
 
   get valueProperty() {
-    return this.definition.props.valueProperty || 'value';
+    return this.field.props.valueProperty || 'value';
   }
 
   get LabelProperty() {
-    return this.definition.props.labelProperty || 'label';
+    return this.field.props.labelProperty || 'label';
   }
 }
 
-export default DisplayField as any;
+export default SelectDisplayField as any;

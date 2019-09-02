@@ -1,12 +1,17 @@
 import {Platform} from '@/types/bean';
 import {IField} from '@/uform/types';
 
-export type EffectsContext = (
-    path: string | string[]
+export type EffectsFunction = (
+  path: string | string[]
 ) => EffectsHandlers;
+
+export interface EffectsContext extends EffectsFunction {
+  getValue?: () => any;
+}
 
 export interface EffectsHandlers {
   hide: () => any;
+  fields: () => IField[];
   onFieldChange: (value: any) => any;
   setEnum: (options: any) => any;
   setFieldProps: (props: object) => void;

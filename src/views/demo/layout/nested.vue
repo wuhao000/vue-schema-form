@@ -7,25 +7,22 @@
                      :props="props"
                      @ok="()=>{}"
                      @reset="()=>{}"></a-schema-form>
-      <d-button @click="showData">查看数据</d-button>
-      <ae-modal v-model="dialogVisible">
-        <pre>
-        </pre>
-      </ae-modal>
+      <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
+  import ShowValue from '@/views/demo/layout/show-value';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
   @Component({
-    name: 'LayoutNested'
+    name: 'LayoutNested',
+    components: {ShowValue}
   })
   export default class LayoutNested extends Vue {
 
-    public dialogVisible = false;
     public props = {
       labelCol: 8,
       wrapperCol: 6
@@ -78,23 +75,23 @@
                     title: '字段3'
                   },
                   fields: {
-                    ddd: {
+                    field3Num: {
                       type: 'number'
                     },
-                    eee: {
+                    field3Date: {
                       'type': 'date'
                     }
                   }
                 },
                 gridLayout2: {
                   type: 'grid',
-                  layout: [6, 11],
+                  layout: [6, 16],
                   props: {
                     gutter: 10,
                     title: '对象字段'
                   },
                   fields: {
-                    ddd1: {
+                    objNum: {
                       type: 'number'
                     },
                     '[startDate,endDate]': {
@@ -107,24 +104,24 @@
                   title: '文本串联',
                   layout: '订%s元/票 退%s元/票 改%s元/票',
                   fields: {
-                    aa1: {
-                      'type': 'number',
-                      'default': 10,
-                      'required': true
+                    text1: {
+                      type: 'number',
+                      default: 10,
+                      required: true
                     },
-                    aa2: {
-                      'type': 'number',
-                      'default': 20,
-                      'required': true
+                    text2: {
+                      type: 'number',
+                      default: 20,
+                      required: true
                     },
-                    aa3: {
-                      'type': 'number',
-                      'default': 30,
-                      'required': true
+                    text3: {
+                      type: 'number',
+                      default: 30,
+                      required: true
                     }
                   }
                 },
-                aas: {
+                field4: {
                   type: 'string',
                   title: '字段4'
                 },
@@ -134,11 +131,11 @@
                     title: '区块'
                   },
                   fields: {
-                    ddd2: {
+                    field5: {
                       type: 'string',
                       title: '字段5'
                     },
-                    eee2: {
+                    field6: {
                       type: 'string',
                       title: '字段6'
                     }
@@ -162,3 +159,10 @@
 
   }
 </script>
+<style lang="less">
+  .demo-form {
+    .ant-card {
+      margin-bottom: 24px;
+    }
+  }
+</style>
