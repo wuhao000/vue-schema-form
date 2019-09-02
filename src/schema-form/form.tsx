@@ -40,8 +40,8 @@ export default class SchemaForm extends Vue {
   public definition: FormDescriptor;
   @Prop({type: Object, default: () => ({})})
   public props: FormProps;
-  @Prop(Object)
-  public value: object;
+  @Prop([Object, Array])
+  public value: object | any[];
   @Prop([String, Object])
   public title: VNode | string;
   @Prop({type: Boolean, default: false})

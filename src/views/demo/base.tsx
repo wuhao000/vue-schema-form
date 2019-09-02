@@ -41,12 +41,6 @@ export default class Base extends Vue {
     }]
   };
 
-  public customAction($: EffectsContext) {
-    const value = $.getValue();
-    console.log($('subFormArray.?').toggle());
-    // @ts-ignore
-    this.$message.info('自定义动作, 当前值：' + value);
-  }
 
   get definition() {
     return getFormDefinition();

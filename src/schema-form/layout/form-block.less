@@ -1,0 +1,77 @@
+.array-form-block {
+  border-color: rgb(238, 238, 238);
+  border-image: initial;
+  border-style: solid;
+  border-width: 1px;
+  min-width: 400px;
+
+  .array-item {
+    border-bottom: 1px solid rgb(238, 238, 238);
+    padding: 30px 20px 0;
+    position: relative;
+
+    .array-index {
+      display: block;
+      left: 0;
+      position: absolute;
+      top: 0;
+
+      &:after {
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-right: 20px solid rgb(136, 136, 136);
+        border-top: 20px solid transparent;
+        content: "";
+        display: block;
+        left: -20px;
+        position: absolute;
+        top: -20px;
+        transform: rotate(45deg);
+        z-index: 0;
+      }
+
+      span {
+        color: rgb(255, 255, 255);
+        font-size: 12px;
+        left: 3px;
+        line-height: initial;
+        position: absolute;
+        top: 3px;
+        z-index: 1;
+      }
+    }
+
+    .array-item-operator {
+      border-top: 1px solid rgb(238, 238, 238);
+      display: flex;
+      padding-top: 20px;
+
+      .circle-btn {
+        margin-right: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        border-width: initial;
+        border-style: none;
+        border-color: initial;
+        border-image: initial;
+      }
+    }
+    .array-item-addition {
+      line-height: normal !important;
+      padding: 10px 20px;
+      background: rgb(251, 251, 251);
+      & > .ant-btn-text {
+        display: inline-block;
+        height: 20px;
+        line-height: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+

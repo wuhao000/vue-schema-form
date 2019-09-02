@@ -21,6 +21,7 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
+  import {EffectsContext} from '@/types/form';
   import Base from '@/views/demo/base';
   import Component from 'vue-class-component';
 
@@ -33,9 +34,14 @@
 
     public actions = [
       'submit', 'reset', 'cancel', {
-        text: '自定义动作', action: this.customAction
+        text: '切换显示', action: this.customAction
       }
     ];
+
+    public customAction($: EffectsContext) {
+      const value = $.getValue();
+      console.log($('subFormArray.?').toggle());
+    }
 
     public created() {
       SchemaForm.registerAntd();

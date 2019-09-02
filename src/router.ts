@@ -32,6 +32,10 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/antd/edit.vue'),
     meta: {tag: 'Ant Design Vue', name: '编辑'}
   }, {
+    path: 'desktop/list',
+    component: () => import('@/views/demo/antd/list.vue'),
+    meta: {tag: 'Ant Design Vue', name: '列表'}
+  }, {
     path: 'layout/simple',
     component: () => import('@/views/demo/layout/simple.vue'),
     meta: {tag: '布局', name: '简单布局'}
@@ -44,13 +48,13 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/layout/nested.vue'),
     meta: {tag: '布局', name: 'Nested'}
   }, {
-    path: 'desktop/subform/display',
-    component: () => import('@/views/demo/subform/display.vue'),
-    meta: {tag: '子表单', name: '详情'}
-  }, {
     path: 'desktop/subform/edit',
     component: () => import('@/views/demo/subform/edit.vue'),
     meta: {tag: '子表单', name: '编辑'}
+  }, {
+    path: 'desktop/subform/display',
+    component: () => import('@/views/demo/subform/display.vue'),
+    meta: {tag: '子表单', name: '详情'}
   }, {
     path: 'desktop/validate',
     component: () => import('@/views/demo/antd/validate.vue'),

@@ -6,6 +6,8 @@ export type Platform = 'desktop' | 'mobile';
 
 
 export interface SchemaFormField {
+  arrayComponent?: any;
+  arrayProps?: object;
   layout?: any;
   /**
    * 字段值是否数组类型

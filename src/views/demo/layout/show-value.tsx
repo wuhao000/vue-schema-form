@@ -1,6 +1,6 @@
+import beautify from 'js-beautify';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import beautify from 'js-beautify';
 import {Prop} from 'vue-property-decorator';
 
 @Component({
@@ -19,10 +19,14 @@ export default class ShowValue extends Vue {
     return <div>
       <d-button onClick={this.showData}>查看数据</d-button>
       <ae-modal vModel={this.valueModalVisible}>
-        <pre>
-          {beautify(JSON.stringify(this.value))}
-        </pre>
+        {this.valueModalVisible ? <pre>
+          {this.getContent()}
+        </pre> : null}
       </ae-modal>
     </div>;
+  }
+
+  private getContent() {
+    return beautify(JSON.stringify(this.value));
   }
 }
