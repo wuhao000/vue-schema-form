@@ -2,7 +2,7 @@ import {Platform} from '@/types/bean';
 import {IField} from '@/uform/types';
 
 export type EffectsFunction = (
-  path: string | string[]
+    path: string | string[]
 ) => EffectsHandlers;
 
 export interface EffectsContext extends EffectsFunction {
@@ -10,13 +10,14 @@ export interface EffectsContext extends EffectsFunction {
 }
 
 export interface EffectsHandlers {
-  hide: () => any;
   fields: () => IField[];
+  hide: () => any;
   onFieldChange: (value: any) => any;
   setEnum: (options: any) => any;
   setFieldProps: (props: object) => void;
   show: () => any;
   subscribe: (event: string, handler: (...args: any) => any) => any;
+  toggle: () => any;
 }
 
 export type Effects = (context: EffectsContext) => any;
@@ -35,11 +36,11 @@ export interface SchemaFormComponent {
 
 export interface LayoutOptions {
   /**
-   * 布局内的表单项是否使用表单项容器包装
-   */
-  wrapItems: boolean | undefined;
-  /**
    * 布局控件是否使用表单项容器包装
    */
   wrapContainer: boolean | undefined;
+  /**
+   * 布局内的表单项是否使用表单项容器包装
+   */
+  wrapItems: boolean | undefined;
 }

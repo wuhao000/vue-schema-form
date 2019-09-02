@@ -1,18 +1,9 @@
 import InternalForm from '@/schema-form/internal/form';
 import {hasListener, SchemaFormStore} from '@/schema-form/internal/utils';
-import {splitPath} from '@/schema-form/utils/path';
-import {
-  ASchemaForm,
-  LibComponents,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement
-} from '@/schema-form/utils/utils';
+import {match} from '@/schema-form/utils/path';
+import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
-import {IField} from '@/uform/types';
 import className from 'classname';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
@@ -120,17 +111,21 @@ export default class SchemaForm extends Vue {
 
   public createContext(): EffectsContext {
     const context: EffectsContext = (paths: string | string[]) => {
-      let fields: IField[] = [];
+      let matchedPaths = [];
       if (typeof paths === 'string') {
-        const splits = splitPath(paths);
-        fields.push(this['store'].fields[paths]);
+        matchedPaths = match([paths], Object.keys(this.store.fields));
       } else if (Array.isArray(paths)) {
-        fields = paths.map(path => this['store'].fields[path]);
+        matchedPaths = match(paths, Object.keys(this.store.fields));
       }
-      fields = fields.filter(it => !!it);
+      const fields = matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
       return {
         fields: () => {
           return fields;
+        },
+        toggle: () => {
+          fields.forEach(field => {
+            field.visible = !field.visible;
+          });
         },
         hide: () => {
           fields.forEach(field => {
@@ -190,11 +185,11 @@ export default class SchemaForm extends Vue {
     let content: any = [
       this.$slots.header,
       <InternalForm
-        title={this.title}
-        value={this.value}
-        slots={this.$slots}
-        scopedSlots={this.$scopedSlots}
-        definition={this.definition}>
+          title={this.title}
+          value={this.value}
+          slots={this.$slots}
+          scopedSlots={this.$scopedSlots}
+          definition={this.definition}>
       </InternalForm>
     ];
     let footer: any = [
@@ -255,7 +250,7 @@ export default class SchemaForm extends Vue {
                 const props: any = action.props || {};
                 props.disabled = this.disabled || this.loading;
                 buttons.push(this.createButton(action.text, action.action,
-                  action.props, null));
+                    action.props, null));
                 break;
             }
           }
@@ -310,8 +305,8 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-      text || props && props.okText || '提交',
-      action || this.onOk, buttonProps, 'confirm-btn'
+        text || props && props.okText || '提交',
+        action || this.onOk, buttonProps, 'confirm-btn'
     );
   }
 
@@ -340,9 +335,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '取消',
-      action || this.onCancel, buttonProps,
-      'cancel-btn'
+        text || props && props.cancelText || '取消',
+        action || this.onCancel, buttonProps,
+        'cancel-btn'
     );
   }
 
@@ -355,8 +350,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '重置',
-      action || this.onReset, buttonProps, 'reset-btn'
+        text || props && props.cancelText || '重置',
+        action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 
