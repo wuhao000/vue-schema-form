@@ -10,6 +10,7 @@ import PlainDisplayField from '../display/plain-display-field';
 import SelectDisplayField from '../display/select-display-field';
 import TimeDisplayField from '../display/time-display-field';
 import ElExtCheckbox from '../element/checkbox-group';
+import ElExtIcon from '../element/el-ext-icon';
 import ElExtRadio from '../element/radio-group';
 import ElExtSelect from '../element/select';
 import ElementUpload from '../element/upload.vue';
@@ -17,6 +18,7 @@ import Empty from '../empty';
 import GridLayout from '../layout/grid';
 import TextBox from '../layout/text-box';
 
+Vue.component('ElExtIcon', ElExtIcon);
 export const ASchemaForm = 'ASchemaForm';
 
 export const enum Mode {
@@ -108,6 +110,10 @@ const ComponentMap = {
   content: {
     element: 'el-main',
     antd: 'd-layout-content'
+  },
+  icon: {
+    element: 'ElExtIcon',
+    antd: 'd-icon'
   }
 };
 
@@ -127,7 +133,8 @@ export const LibComponents = {
   header: null,
   footer: null,
   sider: null,
-  content: null
+  content: null,
+  icon: null
 };
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
@@ -367,7 +374,7 @@ export function registerElement() {
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-    (definition: IField) => ({type: definition.type.toLowerCase()}));
+      (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
@@ -412,11 +419,11 @@ export function registerAntdMobile() {
 
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+      (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerMobile('m-input', [TYPES.integer, TYPES.double, TYPES.number], false,
-    (definition: IField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: IField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   registerMobile('m-textarea', [TYPES.text], false);
   registerMobile('m-switch-item', [TYPES.boolean], false);
   registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {

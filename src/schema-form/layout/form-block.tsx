@@ -1,3 +1,4 @@
+import {LibComponents} from '@/schema-form/utils/utils';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
@@ -16,10 +17,17 @@ export default class FormBlock extends Vue {
   public maxItems: number;
 
   public render() {
+    const IconComponent = LibComponents.icon;
+    let downIcon = 'down';
+    let upIcon = 'up';
+    if (IconComponent === 'ElExtIcon') {
+      downIcon = 'arrow-down';
+      upIcon = 'arrow-up';
+    }
     return <div class="array-form-block">
       {
         this.$slots.default ? this.$slots.default.map((it, index) => {
-          return <div class="array-item">
+          return <div class="array-item" key={'item-' + index}>
             <div class="array-index">
               <span>{index + 1}</span>
             </div>
@@ -29,7 +37,7 @@ export default class FormBlock extends Vue {
                    onClick={() => {
                      this.$emit('remove', index);
                    }}>
-                <ae-icon type="delete"/>
+                <LibComponents.icon type="delete"/>
                 <span class="op-name">{this.removeText}</span>
               </div>
               {this.$slots.default.length > 1 ? [
@@ -37,13 +45,13 @@ export default class FormBlock extends Vue {
                                                                 onClick={() => {
                                                                   this.$emit('moveDown', index);
                                                                 }}>
-                  <ae-icon type="down"/>
+                  <IconComponent type={downIcon}/>
                   <span class="op-name"/>
                 </div> : null,
                 index !== 0 ? <div class="circle-btn" onClick={() => {
                   this.$emit('moveUp', index);
                 }}>
-                  <ae-icon type="up"/>
+                  <IconComponent type={upIcon}/>
                   <span class="op-name"/>
                 </div> : null
               ] : null}
@@ -56,7 +64,7 @@ export default class FormBlock extends Vue {
           }
         }}>
           <div class="array-empty">
-            <ae-icon type="plus"/>
+            <LibComponents.icon type="plus"/>
             <span>添加</span>
           </div>
         </d-empty>
@@ -65,7 +73,7 @@ export default class FormBlock extends Vue {
   }
 
   private renderAddBtn() {
-    if (this.maxItems && this.maxItems > this.$slots.default.length) {
+    if (this.maxItems && this.maxItems <= this.$slots.default.length) {
       return;
     }
     return <div class="array-item-addition">

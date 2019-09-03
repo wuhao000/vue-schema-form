@@ -86,7 +86,7 @@
     }];
 
     public created() {
-      SchemaForm.registerAntd();
+      SchemaForm.registerElement();
     }
 
     public onOk() {
