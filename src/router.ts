@@ -1,6 +1,7 @@
 import DemoIndex from '@/views/demo/index.vue';
 import DemoNav from '@/views/demo/nav.vue';
 import VueRouter, {RouteConfig} from 'vue-router';
+import DocNav from '@/views/doc/nav.vue';
 
 export const demoRoutes: RouteConfig[] = [
   {
@@ -56,6 +57,10 @@ export const demoRoutes: RouteConfig[] = [
     component: () => import('@/views/demo/subform/display.vue'),
     meta: {tag: '子表单', name: '详情'}
   }, {
+    path: 'desktop/subform/mobile',
+    component: () => import('@/views/demo/subform/mobile.vue'),
+    meta: {tag: '子表单', name: '移动端'}
+  }, {
     path: 'desktop/validate',
     component: () => import('@/views/demo/antd/validate.vue'),
     meta: {tag: 'Ant Design Vue', name: '表单校验'}
@@ -79,9 +84,10 @@ export const demoRoutes: RouteConfig[] = [
 ];
 export default new VueRouter({
   routes: [{
-    path: '/doc',
+    path: '/api',
     components: {
-      default: () => import('@/views/readme.vue')
+      default: () => import('@/views/readme.vue'),
+      nav: () => import('@/views/doc/nav.vue')
     }
   }, {
     path: '/demo',

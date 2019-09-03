@@ -1,18 +1,24 @@
-.action-btns {
-  text-align: center;
-  .ant-btn + .ant-btn, .el-button + .el-button {
-    margin-left: 20px;
-  }
-  .confirm-btn, .cancel-btn, .reset-btn {
-    width: 102px;
-  }
-}
-
-
 .schema-form {
   &&-sticky {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
+  &.schema-form-desktop {
+    .action-btns {
+      text-align: center;
+
+      .ant-btn + .ant-btn, .el-button + .el-button {
+        margin-left: 20px;
+      }
+
+      .confirm-btn, .cancel-btn, .reset-btn {
+        width: 102px;
+      }
+    }
+  }
+}
+
+.flip-list-move {
+  transition: transform 1s;
 }

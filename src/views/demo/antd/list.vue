@@ -12,7 +12,7 @@
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import FormBlock from '@/schema-form/layout/form-block';
-  import ShowValue from '@/views/demo/layout/show-value';
+  import ShowValue from '@/views/demo/show-value';
   import axios from 'axios';
   import Vue from 'vue';
   import Component from 'vue-class-component';

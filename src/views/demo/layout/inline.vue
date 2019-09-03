@@ -1,15 +1,14 @@
 <template>
   <ae-layout class="bg-white wrapper">
     <ae-layout-content>
-      <a-schema-form inline
-                     :value="value"
-                     :schema="schema"></a-schema-form>
+      <a-schema-form :schema="schema"
+                     :value="value"></a-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="ts">
-  import ShowValue from '@/views/demo/layout/show-value';
+  import ShowValue from '@/views/demo/show-value';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -18,8 +17,10 @@
     components: {ShowValue}
   })
   export default class LayoutInline extends Vue {
-    public value = {};
     public schema = {
+      props: {
+        inline: true
+      },
       fields: {
         aaa: {
           type: 'string',
@@ -35,5 +36,6 @@
         }
       }
     };
+    public value = {};
   }
 </script>

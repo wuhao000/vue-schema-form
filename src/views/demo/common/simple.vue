@@ -1,16 +1,15 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form inline
-                     v-model="options"
+      <a-schema-form v-model="options"
                      :schema="optionFormDefinition"></a-schema-form>
       <a-schema-form v-model="value"
                      class="demo-form"
-                     :schema="definition"
                      :disabled="options.disabled"
                      :loading="options.loading"
                      :props="props"
                      :readonly="options.readonly"
+                     :schema="definition"
                      @cancel="onCancel"
                      @ok="onOk"
                      @reset="onReset"></a-schema-form>
@@ -21,7 +20,7 @@
 <script lang="ts">
   import {FormDescriptor} from '@/types/bean';
   import Base from '@/views/demo/base';
-  import ShowValue from '@/views/demo/layout/show-value';
+  import ShowValue from '@/views/demo/show-value';
   import Component from 'vue-class-component';
 
   const def = {

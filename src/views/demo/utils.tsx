@@ -1,3 +1,4 @@
+import FormBlock from '@/schema-form/layout/form-block';
 import {TYPES} from '@/schema-form/utils/utils';
 import {FormDescriptor, SchemaFormField} from '@/types/bean';
 

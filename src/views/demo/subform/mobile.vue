@@ -2,6 +2,7 @@
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
       <a-schema-form class="demo-form"
+                     platform="mobile"
                      :schema="definition"
                      :props="props"
                      @ok="onOk"

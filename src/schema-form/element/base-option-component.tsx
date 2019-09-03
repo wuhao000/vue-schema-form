@@ -10,15 +10,19 @@ export default {
   render(this: any) {
     const InputComponent = this.component;
     const OptionComponent = this.optionComponent;
+    const props = Object.assign({}, this.$attrs);
+    if (!props.value) {
+      props.value = [];
+    }
     return <InputComponent
-      attrs={this.$attrs}
-      on={this.$listeners}>
+        props={props}
+        on={this.$listeners}>
       {
         this.options.map(option => {
           const props = {};
           props[this.labelProp] = getOptionProperty(option, this.labelProperty);
           props[this.valueProp] = getOptionProperty(option, this.valueProperty);
-          return <OptionComponent attrs={props}>
+          return <OptionComponent props={props}>
             {this.labelProp === 'text' ? props[this.labelProp] : null}
           </OptionComponent>;
         })

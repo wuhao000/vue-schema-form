@@ -7,17 +7,7 @@ import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from '../array-wrapper';
-import {
-  addRule,
-  DESKTOP,
-  getAlertComponent,
-  getColComponent,
-  getConfirmFunction,
-  getOptions,
-  MOBILE,
-  swap,
-  TYPES
-} from '../utils/utils';
+import {addRule, DESKTOP, getAlertComponent, getColComponent, getConfirmFunction, getOptions, MOBILE, swap, TYPES} from '../utils/utils';
 
 @Component({
   name: 'FormField'
@@ -143,31 +133,38 @@ export default class FormField extends mixins(Emitter) {
       const ArrayComponent = definition.arrayComponent || ArrayWrapper;
       // @ts-ignore
       return <ArrayComponent
-        props={Object.assign({}, this.props, definition.arrayProps)}
-        disabled={disabled}
-        subForm={field.type === TYPES.object}
-        addBtnText={props.addBtnText}
-        ref="array"
-        key={field.plainPath}
-        platform={platform}
-        addBtnProps={props.addBtnProps}
-        cellSpan={props.cellSpan}
-        onRemove={(index) => {
-          this.removeArrayItem(index);
-        }}
-        onMoveDown={(index) => {
-          if (index <= currentValue.length - 1) {
-            swap(currentValue, index, index + 1);
-          }
-        }}
-        onMoveUp={(index) => {
-          if (index > 0) {
-            swap(currentValue, index, index - 1);
-          }
-        }}
-        onAdd={() => {
-          this.addArrayItem();
-        }}>
+          props={Object.assign({}, this.props, definition.arrayProps)}
+          disabled={disabled}
+          subForm={field.type === TYPES.object}
+          addBtnText={props.addBtnText}
+          ref="array"
+          key={field.plainPath}
+          platform={platform}
+          addBtnProps={props.addBtnProps}
+          cellSpan={props.cellSpan}
+          onRemove={async (index) => {
+            try {
+              const confirmFunc = getConfirmFunction(platform);
+              console.log(confirmFunc);
+              await confirmFunc('确定删除该条吗？', '提示');
+              this.removeArrayItem(index);
+            } catch (e) {
+              console.error(e);
+            }
+          }}
+          onMoveDown={(index) => {
+            if (index <= currentValue.length - 1) {
+              swap(currentValue, index, index + 1);
+            }
+          }}
+          onMoveUp={(index) => {
+            if (index > 0) {
+              swap(currentValue, index, index - 1);
+            }
+          }}
+          onAdd={() => {
+            this.addArrayItem();
+          }}>
         {
           currentValue ? currentValue.map((v, index) => {
             const itemProps = Object.assign({}, props, {
@@ -180,23 +177,15 @@ export default class FormField extends mixins(Emitter) {
             }
             // @ts-ignore
             return <InputFieldComponent
-              attrs={itemProps}
-              arrayIndex={index}
-              disabled={disabled}
-              key={field.plainPath + '-' + index}
-              onRemoveArrayItem={async () => {
-                try {
-                  const confirmFunc = getConfirmFunction(platform);
-                  await confirmFunc('确定删除该条吗？', '提示');
-                  currentValue.splice(index, 1);
-                } catch (e) {
-                }
-              }}
-              value={v}
-              title={platform === 'mobile' ? field.title : null}
-              onInput={(val) => {
-                onArrayItemInput(val, index);
-              }}/>;
+                attrs={itemProps}
+                arrayIndex={index}
+                disabled={disabled}
+                key={field.plainPath + '-' + index}
+                value={v}
+                title={platform === 'mobile' ? field.title : null}
+                onInput={(val) => {
+                  onArrayItemInput(val, index);
+                }}/>;
           }) : null
         }
       </ArrayComponent>;
@@ -205,7 +194,7 @@ export default class FormField extends mixins(Emitter) {
     props.value = currentValue;
     props.title = props.title || (platform === 'mobile' ? field.title : null);
     if (definition.type === TYPES.object
-      && definition.props) {
+        && definition.props) {
       if (!definition.props.props) {
         definition.props.props = {};
       }
@@ -217,13 +206,13 @@ export default class FormField extends mixins(Emitter) {
     }
     // @ts-ignore
     return <InputFieldComponent
-      props={props}
-      value={currentValue}
-      attrs={props}
-      style={style}
-      key={field.plainPath}
-      ref="input"
-      onInput={onInput}/>;
+        props={props}
+        value={currentValue}
+        attrs={props}
+        style={style}
+        key={field.plainPath}
+        ref="input"
+        onInput={onInput}/>;
   }
 
   get type() {
@@ -244,10 +233,10 @@ export default class FormField extends mixins(Emitter) {
       const formItemProps = this.getFormItemProps();
       const noWrap = !formItemProps.title;
       const formItem = noWrap ? inputComponent :
-        <FormItemComponent attrs={formItemProps}>
-          {inputComponent}
-          {this.renderNotice()}
-        </FormItemComponent>;
+          <FormItemComponent attrs={formItemProps}>
+            {inputComponent}
+            {this.renderNotice()}
+          </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {
@@ -333,7 +322,7 @@ export default class FormField extends mixins(Emitter) {
     }
     const {field} = this;
     if (this.type === TYPES.object
-      && this.$refs.array) {
+        && this.$refs.array) {
       const array = this.$refs.array as any;
       const validateFields = array.$children.filter(it => it.validate);
       return new Promise((resolve) => {
@@ -382,6 +371,7 @@ export default class FormField extends mixins(Emitter) {
   }
 
   private addArrayItem() {
+    console.log(this.currentValue);
     if (this.currentValue) {
       if (this.type === TYPES.object) {
         this.currentValue.push({});

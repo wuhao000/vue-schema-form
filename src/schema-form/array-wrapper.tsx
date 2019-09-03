@@ -1,3 +1,4 @@
+import {SchemaFormStore} from '@/schema-form/internal/utils';
 import {getButtonComponent, getColComponent, getRowComponent} from '@/schema-form/utils/utils';
 
 import Vue from 'vue';
@@ -19,7 +20,7 @@ export default class ArrayWrapper extends Vue {
   @Prop({type: Boolean, default: false})
   public subForm: boolean;
   @Inject('store')
-  public store: any;
+  public store: SchemaFormStore;
 
 
   public renderAddButton() {
@@ -28,7 +29,7 @@ export default class ArrayWrapper extends Vue {
     }
     const ColComponent = getColComponent();
     let ButtonComponent = getButtonComponent();
-    if (this.$attrs.platform === 'mobile') {
+    if (this.store.platform === 'mobile') {
       ButtonComponent = 'm-button';
     }
     const buttonStyle: any = {};
@@ -46,24 +47,66 @@ export default class ArrayWrapper extends Vue {
     return <ColComponent span={this.cellSpan}>{button}</ColComponent>;
   }
 
-  public onAddClick(this: any) {
+  public onAddClick() {
     this.$emit('add');
   }
 
   public render() {
     const RowComponent = getRowComponent();
     const content = [
-      this.$slots.default,
+      this.renderFields(),
       this.renderAddButton()
     ];
+
     if (this.subForm) {
       return <div>{content}</div>;
     }
+
     if (this.$attrs.platform === 'mobile') {
-      return content;
+      return <transition-group name="flip-list" tag="div">{content}</transition-group>;
     } else {
       return <RowComponent gutter={this.$attrs.gutter || 20}
-                           type="flex">{content}</RowComponent>;
+                           type="flex">
+        <transition-group name="flip-list" tag="div">{content}</transition-group>
+      </RowComponent>;
     }
+  }
+
+  private renderFields() {
+    if (this.store.platform === 'mobile') {
+      return this.$slots.default.map((it, index) => {
+        return <div style={{position: 'relative'}}>
+          {
+            [<a style={{
+              color: '#e94721',
+              position: 'absolute',
+              right: 0,
+              top: '15px',
+              cursor: 'pointer'
+            }}
+                onclick={() => {
+                  this.$emit('remove', index);
+                }}>
+              <ae-icon type="delete"/>
+              删除
+            </a>, it]
+          }
+        </div>;
+      });
+    }
+    return this.$slots.default.map((it, index) => {
+      return [it, <div style={{textAlign: 'right'}}>
+        <a style={{
+          color: '#e94721',
+          cursor: 'pointer'
+        }}
+           onclick={() => {
+             this.$emit('remove', index);
+           }}>
+          <ae-icon type="delete"/>
+          删除
+        </a>
+      </div>];
+    });
   }
 }

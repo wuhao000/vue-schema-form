@@ -1,14 +1,6 @@
 import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isPathMatchPatterns, match, takePath} from '@/schema-form/utils/path';
-import {
-  ASchemaForm,
-  LibComponents,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement
-} from '@/schema-form/utils/utils';
+import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import className from 'classname';
@@ -30,6 +22,8 @@ export default class SchemaForm extends Vue {
   public static registerElement = registerElement;
   public static registerComponent = register;
   public static registerDisplayComponent = registerDisplay;
+  @Prop({type: String, default: 'schema-form'})
+  public prefixCls: string;
   @Prop({type: Boolean, default: false})
   public disabled: boolean;
   @Prop({type: Boolean, default: false})
@@ -217,14 +211,15 @@ export default class SchemaForm extends Vue {
   }
 
   public render() {
-    const rootFieldDef: SchemaFormField = Object.assign({}, this.schema, {
+    const {title, sticky, prefixCls, store, value, schema} = this;
+    const rootFieldDef: SchemaFormField = Object.assign({}, schema, {
       type: 'object',
-      title: this.title
+      title
     });
     let content: any = [
       this.$slots.header,
-      renderField(null, this.store,
-        rootFieldDef, this.value, 0, false, this.$createElement
+      renderField(null, store,
+          rootFieldDef, value, 0, false, this.$createElement
       )
     ];
     let footer: any = [
@@ -239,9 +234,9 @@ export default class SchemaForm extends Vue {
         {footer}
       </LibComponents.footer>;
     }
-    const classes = className('schema-form', {
-      'schema-form-sticky': this.sticky
-    });
+    const classes = className(prefixCls, {
+      [`${prefixCls}-sticky`]: sticky
+    }, `${prefixCls}-${this.platform}`);
     return <div class={classes}>
       {content}
       {footer}
@@ -352,10 +347,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-      text || props && props.okText || '提交',
-      action || (() => {
-        this.onOk(true);
-      }), buttonProps, 'confirm-btn'
+        text || props && props.okText || '提交',
+        action || (() => {
+          this.onOk(true);
+        }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -384,9 +379,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '取消',
-      action || this.onCancel, buttonProps,
-      'cancel-btn'
+        text || props && props.cancelText || '取消',
+        action || this.onCancel, buttonProps,
+        'cancel-btn'
     );
   }
 
@@ -399,8 +394,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '重置',
-      action || this.onReset, buttonProps, 'reset-btn'
+        text || props && props.cancelText || '重置',
+        action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

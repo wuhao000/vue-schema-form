@@ -13,7 +13,7 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
-  import ShowValue from './show-value';
+  import ShowValue from '@/views/demo/show-value';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

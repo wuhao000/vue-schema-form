@@ -28,6 +28,9 @@ export default class Base extends Vue {
   }
 
   public optionFormDefinition = {
+    props: {
+      inline: true
+    },
     fields: [{
       title: '禁用', type: 'boolean', property: 'disabled'
     }, {

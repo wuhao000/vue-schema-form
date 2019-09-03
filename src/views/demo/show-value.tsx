@@ -18,7 +18,11 @@ export default class ShowValue extends Vue {
   public render() {
     return <div>
       <d-button onClick={this.showData}>查看数据</d-button>
-      <ae-modal vModel={this.valueModalVisible}>
+      <ae-modal hideCancel
+                onOk={() => {
+                  this.valueModalVisible = false;
+                }}
+                vModel={this.valueModalVisible}>
         {this.valueModalVisible ? <pre>
           {this.getContent()}
         </pre> : null}
