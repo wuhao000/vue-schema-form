@@ -1,10 +1,18 @@
-import InternalForm from '@/schema-form/internal/form';
-import {hasListener, SchemaFormStore} from '@/schema-form/internal/utils';
-import {match} from '@/schema-form/utils/path';
-import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
-import {FormDescriptor, FormProps, Platform} from '@/types/bean';
+import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
+import {appendPath, isPathMatchPatterns, match, takePath} from '@/schema-form/utils/path';
+import {
+  ASchemaForm,
+  LibComponents,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement
+} from '@/schema-form/utils/utils';
+import {FormDescriptor, FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import className from 'classname';
+import {Subject} from 'rxjs';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
@@ -36,8 +44,8 @@ export default class SchemaForm extends Vue {
   public mode: 'edit' | 'display';
   @Prop(Function)
   public effects: Effects;
-  @Prop(Object)
-  public definition: FormDescriptor;
+  @Prop({type: Object, required: true})
+  public schema: FormDescriptor;
   @Prop({type: Object, default: () => ({})})
   public props: FormProps;
   @Prop([Object, Array])
@@ -48,8 +56,6 @@ export default class SchemaForm extends Vue {
   public inline: boolean;
   @Prop({type: Boolean, default: false})
   public sticky: boolean;
-
-  public context: EffectsContext;
 
   @Provide()
   public store: SchemaFormStore = {
@@ -62,7 +68,8 @@ export default class SchemaForm extends Vue {
     props: this.props,
     effects: this.effects,
     inline: this.inline,
-    slots: this.$slots
+    slots: this.$slots,
+    context: null
   };
 
   @Watch('$slots')
@@ -102,65 +109,93 @@ export default class SchemaForm extends Vue {
     this.store.loading = loading;
   }
 
-
   public mounted() {
     if (this.effects) {
-      this.effects(this.context);
+      this.effects(this.store.context);
     }
+  }
+
+  public matchFields(paths: string | string[]) {
+    let matchedPaths = [];
+    if (typeof paths === 'string') {
+      matchedPaths = match([paths], Object.keys(this.store.fields));
+    } else if (Array.isArray(paths)) {
+      matchedPaths = match(paths, Object.keys(this.store.fields));
+    }
+    return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
   }
 
   public createContext(): EffectsContext {
     const context: EffectsContext = (paths: string | string[]) => {
-      let matchedPaths = [];
-      if (typeof paths === 'string') {
-        matchedPaths = match([paths], Object.keys(this.store.fields));
-      } else if (Array.isArray(paths)) {
-        matchedPaths = match(paths, Object.keys(this.store.fields));
-      }
-      const fields = matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
       return {
         fields: () => {
-          return fields;
+          return this.matchFields(paths);
         },
         toggle: () => {
-          fields.forEach(field => {
+          this.matchFields(paths).forEach(field => {
             field.visible = !field.visible;
           });
         },
         hide: () => {
-          fields.forEach(field => {
+          this.matchFields(paths).forEach(field => {
             field.visible = false;
           });
         },
         show: () => {
-          fields.forEach(field => {
+          this.matchFields(paths).forEach(field => {
             field.visible = true;
           });
         },
         setEnum: (options: any) => {
-          fields.forEach(field => {
-            field.props = Object.assign(field.props, {options});
+          this.matchFields(paths).forEach(field => {
+            field.enum = options;
           });
         },
         setFieldProps: (props) => {
-          fields.forEach(field => {
-            field.props = Object.assign(field.props, props);
+          this.matchFields(paths).forEach(field => {
+            field.props = Object.assign({}, field.props, props);
           });
         },
         onFieldChange: (callback) => {
-          fields.forEach(field => {
-            field.onChange = callback;
-          });
+          context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
         },
         subscribe: (event: string, callback) => {
-          fields.forEach(field => {
-            if (event === 'fieldChange') {
-              field.onChange = callback;
-            }
-          });
+          context.subscribe(event, paths, callback);
+        },
+        takePath: (number: number): EffectsHandlers => {
+          return context(takePath(paths, number));
+        },
+        appendPath: (suffix: string): EffectsHandlers => {
+          return context(appendPath(paths, suffix));
         }
       } as EffectsHandlers;
     };
+    context.subscribe = (e, pathsOrHandler, handler) => {
+      if (!context.subscribes[e]) {
+        context.subscribes[e] = new Subject();
+      }
+      context.subscribes[e].subscribe({
+        next: (v) => {
+          if (typeof pathsOrHandler === 'function') {
+            handler(v);
+          } else if (isPathMatchPatterns(v.path, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
+            if (e === SchemaFormEvents.fieldChange) {
+              handler(v.value, v.path);
+            } else {
+              handler(v);
+            }
+          }
+        }
+      });
+    };
+    context.submit = (forceValidate: boolean, callback: (value) => any) => {
+      this.onOk(forceValidate, callback);
+    };
+    context.validate = async (handler) => {
+      const res = await this.validate();
+      handler(filterErros(res));
+    };
+    context.subscribes = {};
     context.getValue = () => {
       return this.value;
     };
@@ -168,7 +203,7 @@ export default class SchemaForm extends Vue {
   }
 
   public created() {
-    this.context = this.createContext();
+    this.store.context = this.createContext();
     this.$on('SchemaForm.addSchemaField', (field) => {
       if (field) {
         this.store.fields[field.plainPath] = field;
@@ -182,15 +217,15 @@ export default class SchemaForm extends Vue {
   }
 
   public render() {
+    const rootFieldDef: SchemaFormField = Object.assign({}, this.schema, {
+      type: 'object',
+      title: this.title
+    });
     let content: any = [
       this.$slots.header,
-      <InternalForm
-          title={this.title}
-          value={this.value}
-          slots={this.$slots}
-          scopedSlots={this.$scopedSlots}
-          definition={this.definition}>
-      </InternalForm>
+      renderField(null, this.store,
+        rootFieldDef, this.value, 0, false, this.$createElement
+      )
     ];
     let footer: any = [
       this.renderButtons(),
@@ -249,8 +284,7 @@ export default class SchemaForm extends Vue {
               default:
                 const props: any = action.props || {};
                 props.disabled = this.disabled || this.loading;
-                buttons.push(this.createButton(action.text, action.action,
-                    action.props, null));
+                buttons.push(this.createButton(action.text, action.action, props, null));
                 break;
             }
           }
@@ -266,21 +300,34 @@ export default class SchemaForm extends Vue {
     }
   }
 
-  public async onOk() {
+  public async onOk(forceValidate: boolean,
+                    callback?: (value) => any) {
     if (hasListener(this, 'ok')) {
-      const valid = await this.validate();
-      const errors = valid.filter((it: any) => it && it !== true).flat();
-      if (errors.length) {
-        console.warn('有错误', errors);
-        if (this.platform === 'desktop') {
-          if ((this as any).$message) {
-            (this as any).$message.error(errors[0].message);
+      if (forceValidate) {
+        const valid = await this.validate();
+        const errors = valid.filter((it: any) => it && it !== true).flat();
+        if (errors.length) {
+          console.warn('有错误', errors);
+          if (this.platform === 'desktop') {
+            if ((this as any).$message) {
+              (this as any).$message.error(errors[0].message);
+            }
+          } else {
+            (this as any).$toast.fail(errors[0].message);
           }
         } else {
-          (this as any).$toast.fail(errors[0].message);
+          if (callback) {
+            callback(this.value);
+          } else {
+            this.$emit('ok', this.value);
+          }
         }
       } else {
-        this.$emit('ok', this.value);
+        if (callback) {
+          callback(this.value);
+        } else {
+          this.$emit('ok', this.value);
+        }
       }
     }
   }
@@ -305,8 +352,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-        text || props && props.okText || '提交',
-        action || this.onOk, buttonProps, 'confirm-btn'
+      text || props && props.okText || '提交',
+      action || (() => {
+        this.onOk(true);
+      }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -314,9 +363,9 @@ export default class SchemaForm extends Vue {
     const {platform} = this;
     const ButtonComponent = platform === 'mobile' ? 'm-button' : LibComponents.button;
     const Button = <ButtonComponent class={classes}
-                                    attrs={attrs}
+                                    props={attrs}
                                     onClick={() => {
-                                      action(this.context);
+                                      action(this.store.context);
                                     }}>
       {text}
     </ButtonComponent>;
@@ -335,9 +384,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '取消',
-        action || this.onCancel, buttonProps,
-        'cancel-btn'
+      text || props && props.cancelText || '取消',
+      action || this.onCancel, buttonProps,
+      'cancel-btn'
     );
   }
 
@@ -350,8 +399,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '重置',
-        action || this.onReset, buttonProps, 'reset-btn'
+      text || props && props.cancelText || '重置',
+      action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

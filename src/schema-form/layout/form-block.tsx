@@ -1,11 +1,19 @@
-import Vue from 'vue';
+import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
+import {Prop} from 'vue-property-decorator';
 import './form-block.less';
 
 @Component({
   name: 'FormBlock'
 })
 export default class FormBlock extends Vue {
+
+  @Prop([String, Object])
+  public addText: string | VNode;
+  @Prop([String, Object])
+  public removeText: string | VNode;
+  @Prop(Number)
+  public maxItems: number;
 
   public render() {
     return <div class="array-form-block">
@@ -22,31 +30,52 @@ export default class FormBlock extends Vue {
                      this.$emit('remove', index);
                    }}>
                 <ae-icon type="delete"/>
-                <span class="op-name">这是定制的删除文案</span>
+                <span class="op-name">{this.removeText}</span>
               </div>
               {this.$slots.default.length > 1 ? [
-                <div class="circle-btn">
+                index !== this.$slots.default.length - 1 ? <div class="circle-btn"
+                                                                onClick={() => {
+                                                                  this.$emit('moveDown', index);
+                                                                }}>
                   <ae-icon type="down"/>
                   <span class="op-name"/>
-                </div>,
-                <div class="circle-btn">
+                </div> : null,
+                index !== 0 ? <div class="circle-btn" onClick={() => {
+                  this.$emit('moveUp', index);
+                }}>
                   <ae-icon type="up"/>
                   <span class="op-name"/>
-                </div>
+                </div> : null
               ] : null}
             </div>
-            <div class="array-item-addition">
-              <div class="ant-btn-text"
-                   onClick={() => {
-                     this.$emit('add');
-                   }}>
-                <ae-icon type="plus"/>
-                添加
-              </div>
-            </div>
+            {index === this.$slots.default.length - 1 ? this.renderAddBtn() : null}
           </div>;
-        }) : null
+        }) : <d-empty description="" nativeOn={{
+          click: () => {
+            this.$emit('add');
+          }
+        }}>
+          <div class="array-empty">
+            <ae-icon type="plus"/>
+            <span>添加</span>
+          </div>
+        </d-empty>
       }
+    </div>;
+  }
+
+  private renderAddBtn() {
+    if (this.maxItems && this.maxItems > this.$slots.default.length) {
+      return;
+    }
+    return <div class="array-item-addition">
+      <div class="ant-btn-text"
+           onclick={() => {
+             this.$emit('add');
+           }}>
+        <ae-icon type="plus"/>
+        {this.addText}
+      </div>
     </div>;
   }
 }

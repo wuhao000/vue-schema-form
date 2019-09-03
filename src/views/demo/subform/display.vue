@@ -3,7 +3,7 @@
     <ae-layout-content>
       <a-schema-form class="demo-form"
                      mode="display"
-                     :definition="definition"
+                     :schema="definition"
                      :props="props"
                      :value="value2"></a-schema-form>
     </ae-layout-content>

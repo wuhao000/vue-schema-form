@@ -4,6 +4,7 @@
   border-style: solid;
   border-width: 1px;
   min-width: 400px;
+  margin-bottom: 24px;
 
   .array-item {
     border-bottom: 1px solid rgb(238, 238, 238);
@@ -47,30 +48,45 @@
       padding-top: 20px;
 
       .circle-btn {
-        margin-right: 10px;
-        margin-bottom: 20px;
-        cursor: pointer;
-        display: flex;
         -webkit-box-align: center;
-        align-items: center;
         -webkit-box-pack: center;
-        justify-content: center;
-        border-width: initial;
-        border-style: none;
+        align-items: center;
         border-color: initial;
         border-image: initial;
+        border-style: none;
+        border-width: initial;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        margin-right: 10px;
       }
     }
+
     .array-item-addition {
-      line-height: normal !important;
-      padding: 10px 20px;
       background: rgb(251, 251, 251);
+      line-height: normal !important;
+      margin: 0 -20px;
+      padding: 10px 20px;
+
       & > .ant-btn-text {
+        cursor: pointer;
         display: inline-block;
         height: 20px;
         line-height: 20px;
-        cursor: pointer;
       }
+    }
+  }
+
+  .ant-empty {
+    cursor: pointer;
+  }
+
+  .array-empty {
+    margin-bottom: 20px;
+
+    & > i {
+      margin-right: 10px;
     }
   }
 }

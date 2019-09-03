@@ -1,5 +1,6 @@
 import {FormFields, SchemaFormField} from '@/types/bean';
 import {SchemaFormComponent} from '@/types/form';
+import {VNode} from 'vue';
 import {IFormPathMatcher} from './form';
 import {Path} from './path';
 import {IRuleDescription} from './rule';
@@ -10,14 +11,15 @@ export interface IField<V = any> {
   type?: string;
   component: SchemaFormComponent;
   array?: boolean;
-  title?: string;
+  title?: string | VNode;
+  enum: any[];
+  definition: SchemaFormField;
   changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   destructor?: () => void;
   processor?: {
     getValue: (parentValue: object, field: IField) => any;
     setValue: (parentValue: object, field: IField, fieldValue: any) => any;
   };
-  enum?: any[];
   dirty?: boolean;
   dirtyType?: string;
   display?: boolean;
@@ -38,7 +40,8 @@ export interface IField<V = any> {
   plainPath?: string;
   destructPath?: {
     path: string,
-    destruct: any};
+    destruct: any
+  };
   pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   pristine?: boolean;
   props?: any;

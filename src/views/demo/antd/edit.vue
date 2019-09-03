@@ -3,11 +3,11 @@
     <ae-layout-content>
       <a-schema-form inline
                      v-model="options"
-                     :definition="optionFormDefinition"></a-schema-form>
+                     :schema="optionFormDefinition"></a-schema-form>
       <a-schema-form v-model="value"
                      class="demo-form"
                      :actions="actions"
-                     :definition="definition"
+                     :schema="definition"
                      :disabled="options.disabled"
                      :loading="options.loading"
                      :props="props"

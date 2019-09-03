@@ -3,7 +3,7 @@
     <ae-layout-content>
       <a-schema-form inline
                      :value="value"
-                     :definition="schema"></a-schema-form>
+                     :schema="schema"></a-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>

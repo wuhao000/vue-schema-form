@@ -3,8 +3,9 @@
     <ae-layout-content class="demo-wrapper">
       <a-schema-form v-model="value"
                      class="demo-form"
-                     :definition="schema"
-                     :props="props"></a-schema-form>
+                     :schema="schema"
+                     :props="props"
+                     @ok="onOk"></a-schema-form>
     </ae-layout-content>
   </ae-layout>
 </template>
@@ -12,6 +13,7 @@
   import SchemaForm from '@/schema-form';
   import FormBlock from '@/schema-form/layout/form-block';
   import ShowValue from '@/views/demo/layout/show-value';
+  import axios from 'axios';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -26,18 +28,17 @@
       wrapperCol: 6
     };
     public schema = {
+      array: true,
+      arrayComponent: FormBlock,
+      arrayProps: {
+        addText: '这是定制的添加文案',
+        removeText: '这是定制的删除文案',
+        maxItems: 3
+      },
       fields: {
         basic: {
           type: 'object',
-          array: true,
-          arrayComponent: FormBlock,
-          arrayProps: {
-            renderAddxzition: '这是定制的添加文案',
-            renderRemove: '这是定制的删除文案',
-            maxItems: 3
-          },
           props: {
-            labelWidth: '120px',
             labelCol: 9,
             wrapperCol: 6
           },
@@ -78,13 +79,18 @@
       title: '数组'
     };
 
-    public value = [{}];
+    public value = [{
+      basic: {
+        aa: '1234'
+      }
+    }];
 
     public created() {
       SchemaForm.registerAntd();
     }
 
     public onOk() {
+      axios.post('http://aaa', this.value);
     }
   }
 </script>

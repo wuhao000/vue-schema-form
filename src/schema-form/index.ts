@@ -1,4 +1,4 @@
-import SchemaFormField from '@/schema-form/field';
+import SchemaFormField from '@/schema-form/internal/field';
 import SchemaForm from '@/schema-form/form';
 import '../styles/style.less';
 

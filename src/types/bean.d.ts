@@ -6,6 +6,8 @@ export type Platform = 'desktop' | 'mobile';
 
 
 export interface SchemaFormField {
+  layoutType?: string | object;
+  layoutProps?: object;
   arrayComponent?: any;
   arrayProps?: object;
   layout?: any;
@@ -66,17 +68,24 @@ export interface SchemaFormField {
    */
   props?: SchemaFormFieldProps;
   /**
+   * 表单项的属性
+   */
+  wrapperProps?: object;
+  /**
    * 表单项渲染使用插槽，当指定插槽时，字段的类型无效
    */
   slot?: string;
   /**
    * 表单项名称
    */
-  title?: string;
+  title?: string | VNode;
   /**
    * 表单项类型
    */
   type: string;
+  /**
+   * 是否可见
+   */
   visible?: boolean;
   /**
    * 自定数据转换器

@@ -1,5 +1,5 @@
 import FieldBasedComponent from '@/schema-form/internal/field-based-component';
-import {createField, getComponentType, getRealFields, matchCondition} from '@/schema-form/internal/utils';
+import {createField, getComponentType, getRealFields} from '@/schema-form/internal/utils';
 import {
   DESKTOP,
   getButtonComponent,
@@ -26,9 +26,17 @@ class InternalForm extends mixins(FieldBasedComponent) {
   @Prop([Array])
   public pathPrefix: any;
   @Prop({type: Object, required: true})
-  public definition: any;
+  public definition: SchemaFormField;
   @Prop({})
   public props: any;
+  @Prop(Array)
+  public schemaPath: string[];
+  @Prop({type: Boolean, default: false})
+  public inline: boolean;
+  @Prop([String, Object])
+  public layoutType: string | any;
+  @Prop(Object)
+  public layoutProps: object;
 
   get form(): any {
     return this.$refs.form;
@@ -59,7 +67,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   @Watch('currentValue')
-  public currentValueChanged(currentValue: any) {
+  public currentValueChanged(currentValue: any, old: any) {
     this.$emit('input', currentValue);
     this.$emit('change', currentValue);
   }
@@ -71,10 +79,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
         .concat(difference(value as any[], currentValue as any[])).length > 0) {
-        this.buildExtraProperties();
       }
-    } else if (!eq(currentValue, value)) {
-      this.buildExtraProperties();
     }
   }
 
@@ -89,15 +94,12 @@ class InternalForm extends mixins(FieldBasedComponent) {
         if (difference(currentValue as any[], value as any[])
           .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
-          this.buildExtraProperties();
         }
       } else if (!eq(currentValue, value)) {
         this.currentValue = value || {};
-        this.buildExtraProperties();
       }
     } else if (!value) {
       this.currentValue = {};
-      this.buildExtraProperties();
     }
   }
 
@@ -115,7 +117,6 @@ class InternalForm extends mixins(FieldBasedComponent) {
     } else {
       this.currentValue = this.definition.array ? [{}] : {};
     }
-    this.buildExtraProperties();
   }
 
   public setDefaultValue(this: any, property, tmpValue, fieldDef) {
@@ -131,47 +132,6 @@ class InternalForm extends mixins(FieldBasedComponent) {
         copy[name] = getDefaultValue(createField(
           this.currentValue, this.store,
           this.pathPrefix, fieldDef));
-      }
-    });
-  }
-
-  public buildExtraProperties(this: any) {
-    const {value} = this;
-    let currentValue = this.currentValue;
-    getRealFields(this.definition.fields).forEach(fieldDef => {
-      const field = createField(this.currentValue, this.store, this.pathPrefix, fieldDef);
-      const component = getComponentType(this.store, fieldDef);
-      if (!component.layout) {
-        if (typeof field.destructPath.destruct === 'string') {
-          const property = fieldDef.property;
-          if (this.definition.array) {
-            if (!currentValue || !Array.isArray(currentValue)) {
-              currentValue = [];
-            }
-            currentValue.forEach(tmpValue => {
-              if (property.includes('.')) {
-                this.setDefaultValue(property, tmpValue, fieldDef);
-              } else {
-                if (!tmpValue || tmpValue[property] === undefined) {
-                  this.$set(tmpValue, property, getDefaultValue(field));
-                } else if (value && value.length) {
-                  this.$set(tmpValue, property, value[0][fieldDef.property]);
-                }
-              }
-            });
-          } else {
-            const tmpValue = currentValue;
-            if (property.includes('.')) {
-              this.setDefaultValue(property, tmpValue, fieldDef);
-            } else {
-              if (!tmpValue || tmpValue[property] === undefined) {
-                this.$set(tmpValue, property, getDefaultValue(field));
-              } else if (value) {
-                this.$set(tmpValue, property, value[fieldDef.property]);
-              }
-            }
-          }
-        }
       }
     });
   }
@@ -208,34 +168,31 @@ class InternalForm extends mixins(FieldBasedComponent) {
     return groups;
   }
 
-  public calcShowState(this: any, definition: SchemaFormField) {
-    if (!definition.depends) {
-      return definition.visible || definition.visible === null || definition.visible === undefined;
-    } else {
-      if (typeof definition.depends === 'function') {
-        return definition.depends(this.currentValue);
-      } else {
-        return !definition.depends
-          .map(condition => matchCondition(this.currentValue, condition))
-          .some(it => !it);
-      }
-    }
-  }
-
   public renderSingleFields(this: any, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
-    const {props} = this.store;
     const FormComponent = getFormComponent(this.store.platform);
     const groups = this.getGroups(currentValue);
     const formProps = this.getFormProps();
-    return <FormComponent attrs={formProps}
-                          ref="form"
-                          on={this.$listeners}>
+    const form = <FormComponent attrs={formProps}
+                                ref="form"
+                                on={this.$listeners}>
       {this.definition.array ? this.renderTitle() : null}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
-      {props && props.inline ? groups.reduce((a, b) => a.concat(b))
+      {this.inline ? groups.reduce((a, b) => a.concat(b))
         : groups.map((group) => this.wrapGroup(group))}
-      {this.renderDeleteSubFormButton()}
     </FormComponent>;
+    if (this.layoutType) {
+      const LayoutComponentDef = getComponentType(this.store, {
+        type: this.layoutType,
+        props: this.layoutProps
+      });
+      // @ts-ignore
+      return <LayoutComponentDef.component props={
+        this.layoutProps
+      }>
+        {form}
+      </LayoutComponentDef.component>;
+    }
+    return form;
   }
 
   public renderAddFormButton(this: any) {
@@ -256,17 +213,6 @@ class InternalForm extends mixins(FieldBasedComponent) {
 
   public addSubItem(this: any) {
     this.currentValue.push({});
-  }
-
-  public renderDeleteSubFormButton(this: any) {
-    const ButtonComponent = getButtonComponent();
-    return Number.isInteger(this.arrayIndex) && this.store.mode !== 'display' && this.isDesktop ?
-      <div class="delete-item-butn-wrapper" style={{textAlign: 'right'}}>
-        <ButtonComponent disabled={this.isDisabled} onClick={() => {
-          this.$emit('removeArrayItem');
-        }} text icon="delete" type="danger">删除该条
-        </ButtonComponent>
-      </div> : null;
   }
 
   public wrapGroup(this: any, group: any) {
@@ -300,12 +246,12 @@ class InternalForm extends mixins(FieldBasedComponent) {
         formProps.title = title;
       }
     }
-    formProps.inline = this.store.inline;
+    formProps.inline = this.inline;
     formProps.disabled = this.isFormDisabled;
     return formProps;
   }
 
-  public render(this: any) {
+  public render() {
     return <div>
       {this.renderSingleFields(this.currentValue)}
       {this.renderAddFormButton()}

@@ -3,7 +3,7 @@
     <ae-layout-content>
       <a-schema-form v-model="value"
                      class="demo-form"
-                     :definition="definition"
+                     :schema="definition"
                      :props="props"></a-schema-form>
       <d-button @click="dialogVisible = true">查看数据</d-button>
     </ae-layout-content>

@@ -1,3 +1,4 @@
+import {PATH_SEPARATOR} from '@/schema-form/utils/path';
 import {ArrayPath, ISchema, isFn, Path} from '../types';
 import {getIn, setIn} from './accessor';
 import {each, toArr} from './array';
@@ -113,8 +114,8 @@ export const calculateSchemaInitialValues = (
     } else if ($path) {
       const isVirtualBoxInstance = isVirtualBoxSchema(subSchema);
       const name = isVirtualBoxInstance
-          ? $path.schemaPath.join('.')
-          : $path.path.join('.');
+          ? $path.schemaPath.join(PATH_SEPARATOR)
+          : $path.path.join(PATH_SEPARATOR);
       const path = isVirtualBoxInstance ? $path.schemaPath : $path.path;
       const schemaPath = $path.schemaPath;
       const initialValue = getIn(initialValues, name);

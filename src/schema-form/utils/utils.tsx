@@ -1,3 +1,4 @@
+import AntdButton from '@/schema-form/antd/button.vue';
 import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
 import {Platform, SchemaFormField} from '@/types/bean';
@@ -24,6 +25,7 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  button = 'button',
   cascader = 'cascader',
   transfer = 'transfer',
   rate = 'rate',
@@ -109,6 +111,9 @@ const ComponentMap = {
   }
 };
 
+export function swap(array, x, y) {
+  array.splice(x, 1, ...array.splice(y, 1, array[x]));
+}
 
 export const LibComponents = {
   button: null,
@@ -205,8 +210,8 @@ const addComponent = (options: {
       layout: options.layout,
       getProps: (definition: IField) => {
         const props: any = getProps(definition, options.platforms as any) || {};
-        if (definition.title && options.platforms === MOBILE) {
-          props.labelNumber = definition.title.length > 7 ? 7 : definition.title.length;
+        if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
+          props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;
         }
         if (definition.props) {
           Object.assign(props, definition.props);
@@ -266,31 +271,34 @@ export function registerAntd() {
     LibComponents[key] = ComponentMap[key].antd;
   });
   LibComponents.confirm = aegis.AeModal.confirm;
-  register('d-range-picker', DESKTOP, [TYPES.daterange], false);
-  register('d-input', DESKTOP, [TYPES.string, TYPES.url], false);
-  register('d-textarea', DESKTOP, [TYPES.text], false);
-  register('d-date-picker', DESKTOP, [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  register('d-time-picker', DESKTOP, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  register('d-input-number', DESKTOP, [TYPES.double, TYPES.integer, TYPES.number], false);
-  register('d-switch', DESKTOP, TYPES.boolean);
-  register('d-select', DESKTOP, TYPES.select, null, field => {
+  registerDesktop('d-range-picker', [TYPES.daterange], false);
+  registerDesktop('d-input', [TYPES.string, TYPES.url], false);
+  registerDesktop('d-textarea', [TYPES.text], false);
+  registerDesktop('d-date-picker', [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerDesktop('d-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
+  registerDesktop('d-switch', TYPES.boolean);
+  registerDesktop('d-select', TYPES.select, null, field => {
     return {dropdownMatchSelectWidth: false, multiple: field.array, options: getOptions(field)};
   });
-  register(AntdUpload, DESKTOP, TYPES.upload, null, def => {
+  registerDesktop(AntdButton, TYPES.button, null, field => {
+    return {title: field.title};
+  });
+  registerDesktop(AntdUpload, TYPES.upload, null, def => {
     return {multiple: def.array};
   });
-  register('d-cascader', DESKTOP, TYPES.cascader, false, def => {
+  registerDesktop('d-cascader', TYPES.cascader, false, def => {
     return {options: def.enum};
   });
-  register('d-checkbox-group', DESKTOP, TYPES.expandSelect, true, field => {
+  registerDesktop('d-checkbox-group', TYPES.expandSelect, true, field => {
     return {options: getOptions(field)};
   });
-  register('d-radio-group', DESKTOP, TYPES.expandSelect, false, field => {
+  registerDesktop('d-radio-group', TYPES.expandSelect, false, field => {
     return {options: getOptions(field)};
   });
-  register('d-color-picker', DESKTOP, 'color');
-  register('d-rate', DESKTOP, TYPES.rate);
-  register('d-transfer', DESKTOP, TYPES.transfer, false, def => {
+  registerDesktop('d-color-picker', 'color');
+  registerDesktop('d-rate', TYPES.rate);
+  registerDesktop('d-transfer', TYPES.transfer, false, def => {
     const data = (def.props && def.props.dataSource) || def.enum || [];
     const dataSource = data.map((item: any) => {
       if (typeof item === 'string') {

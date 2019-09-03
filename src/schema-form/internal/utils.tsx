@@ -1,9 +1,9 @@
-import FormField from '@/schema-form/field';
-import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils/utils';
+import FormField from '@/schema-form/internal/field';
 import {getStructValue} from '@/schema-form/utils/destruct';
 import {setFieldValue} from '@/schema-form/utils/field';
-import {FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {Effects, SchemaFormComponent} from '@/types/form';
+import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils/utils';
+import {FormDescriptor, FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
+import {Effects, EffectsContext, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import {parseDestructPath} from '@/uform/utils';
 import get from 'lodash.get';
@@ -20,6 +20,7 @@ export interface SchemaFormStore {
   loading: boolean;
   inline: boolean;
   slots: { [key: string]: VNode[] | undefined };
+  context: EffectsContext;
 }
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -104,15 +105,9 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   return true;
 }
 
-export function buildFieldPath(pathPrefix: string[], field: SchemaFormField): string[] {
-  if (pathPrefix) {
-    return pathPrefix.concat(field.property);
-  } else {
-    return [field.property];
-  }
-}
-
-export function renderField(pathPrefix: string[], store: SchemaFormStore, field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
+export function renderField(pathPrefix: string[], store: SchemaFormStore,
+                            field: SchemaFormField,
+                            currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h) {
   const {platform} = store;
   let value = null;
@@ -139,7 +134,7 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore, field:
     }}
     wrap={wrap}
     field={iField}
-    path={buildFieldPath(pathPrefix, field)}
+    path={buildArrayPath(pathPrefix, field)}
     display={store.mode === 'display'}
     disabled={store.disabled}
     content={store.slots[field.slot]}
@@ -154,32 +149,37 @@ export function buildArrayPath(pathPrefix: string[], field: SchemaFormField): st
   if (pathPrefix) {
     return pathPrefix.concat(field.property);
   } else {
-    return field.property.split('.');
+    if (field.property) {
+      return field.property.split('.');
+    }
+    return [];
   }
 }
 
 
 export function createField(currentValue: any, store: SchemaFormStore, pathPrefix: string[],
                             definition: SchemaFormField): IField {
-  const plainPath = buildFieldPath(pathPrefix, definition).join('.');
+  const plainPath = buildArrayPath(pathPrefix, definition).join('.');
   const existsField: IField = store.fields[plainPath];
   if (existsField) {
     existsField.display = store.mode === 'display';
     existsField.editable = !store.disabled && !store.readonly;
     return existsField;
   } else {
+    const plainPath = buildArrayPath(pathPrefix, definition).join('.');
     return Vue.observable({
+      definition,
+      enum: definition.enum,
       title: definition.title,
       array: definition.array,
       type: definition.type,
       component: getComponentType(store, definition),
-      enum: definition.enum,
       processor: definition.processor,
       display: store.mode === 'display',
       editable: !store.disabled && !store.readonly,
       name: definition.property,
       path: buildArrayPath(pathPrefix, definition),
-      plainPath: buildFieldPath(pathPrefix, definition).join('.'),
+      plainPath,
       destructPath: parseDestructPath(definition.property),
       props: Object.assign({}, definition.props),
       visible: calcShowState(currentValue, definition),
@@ -192,7 +192,16 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       initialize: () => {
       },
       invalid: false,
-      value: null
+      value: null,
+      onChange: (value) => {
+        const subject = store.context.subscribes[SchemaFormEvents.fieldChange];
+        if (subject) {
+          subject.next({
+            path: plainPath,
+            value
+          });
+        }
+      }
     });
   }
 }
@@ -216,3 +225,34 @@ export function hasListener(vue: Vue, event: string): boolean {
 export function getFormItemComponent(platform: Platform) {
   return getFormComponent(platform) + '-item';
 }
+
+
+export function searchSchema(path: string, def: FormDescriptor): SchemaFormField {
+  if (!path) {
+    return null;
+  }
+  const parts = path.split('.');
+  let df: FormDescriptor | SchemaFormField = def;
+  parts.forEach(part => {
+    if (df.fields) {
+      if (typeof df.fields === 'object') {
+        df = df.fields[part];
+      } else if (Array.isArray(df.fields)) {
+        df = (df.fields as any[]).find(it => it.property === part);
+      }
+    } else {
+      df = null;
+    }
+  });
+  return df as SchemaFormField;
+}
+
+
+export enum SchemaFormEvents {
+  fieldChange = 'fieldChange',
+}
+
+export const filterErros = (errors: any[]) => {
+  return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
+    .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
+};

@@ -5,7 +5,7 @@
       <a-schema-form v-model="value"
                      class="demo-form"
                      platform="mobile"
-                     :definition="definition"
+                     :schema="definition"
                      :props="props"
                      @cancel="onCancel"
                      @ok="onOk"

@@ -14,6 +14,8 @@ export function getStructValue(parentValue: object, struct: string | any[] | obj
       }
     });
     return value;
+  } else {
+    return parentValue;
   }
 }
 
@@ -25,7 +27,7 @@ export function setStructValue(parentValue: object, struct: string | any[] | obj
     struct.forEach((key, index) => {
       parentValue[key] = structValue[index];
     });
-  } else {
+  } else if (struct) {
     Object.keys(struct).forEach(key => {
       const destructValue = struct[key];
       if (typeof destructValue === 'string') {

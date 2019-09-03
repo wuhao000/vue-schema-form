@@ -4,7 +4,7 @@
       <a-schema-form class="demo-form"
                      mode="display"
                      platform="mobile"
-                     :definition="definition"
+                     :schema="definition"
                      :props="props"
                      :value="value"></a-schema-form>
     </ae-layout-content>

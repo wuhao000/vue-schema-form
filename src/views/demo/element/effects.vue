@@ -4,7 +4,7 @@
       <a-schema-form v-model="value"
                      class="demo-form"
                      ref="form"
-                     :definition="definition"
+                     :schema="definition"
                      :effects="formProps.effects"
                      :props="props"></a-schema-form>
       <d-button @click="setOptions">设置选项</d-button>
@@ -52,7 +52,7 @@
             $('text').hide();
             $('select2').show();
             $('select2').setEnum([{label: '特殊选项1', value: 5}]);
-          } else {
+          } else if (value === 2) {
             $('text').show();
             $('select2').hide();
           }

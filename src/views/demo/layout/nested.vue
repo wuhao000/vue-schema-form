@@ -3,7 +3,7 @@
     <ae-layout-content>
       <a-schema-form v-model="value"
                      class="demo-form"
-                     :definition="schema"
+                     :schema="schema"
                      :props="props"
                      @ok="()=>{}"
                      @reset="()=>{}"></a-schema-form>

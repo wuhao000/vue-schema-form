@@ -13,6 +13,7 @@ export default class Card extends mixins(BaseLayout) {
   public render() {
     return <a-card title={this.title}>
       {this.fields}
+      {this.$slots.default}
     </a-card>;
   }
 }

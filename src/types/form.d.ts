@@ -1,12 +1,16 @@
 import {Platform} from '@/types/bean';
-import {IField} from '@/uform/types';
+import {IField, ISubscribers} from '@/uform/types';
 
 export type EffectsFunction = (
-    path: string | string[]
+  path: string | string[]
 ) => EffectsHandlers;
 
 export interface EffectsContext extends EffectsFunction {
+  validate: (value: any) => any;
+  submit: (forceValidate: boolean, callback: (value: any) => any) => any;
+  subscribes: ISubscribers;
   getValue?: () => any;
+  subscribe?: (event: string, paths: string | string[] | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
 }
 
 export interface EffectsHandlers {
@@ -18,6 +22,10 @@ export interface EffectsHandlers {
   show: () => any;
   subscribe: (event: string, handler: (...args: any) => any) => any;
   toggle: () => any;
+
+  takePath(number: number): EffectsHandlers;
+
+  appendPath(path: string): EffectsHandlers;
 }
 
 export type Effects = (context: EffectsContext) => any;

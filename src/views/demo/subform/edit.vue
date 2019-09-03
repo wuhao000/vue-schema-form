@@ -3,7 +3,7 @@
     {{value2}}
     <ae-layout-content>
       <a-schema-form class="demo-form"
-                     :definition="definition"
+                     :schema="definition"
                      :props="props"
                      @ok="onOk"
                      @cancel="onCancel"

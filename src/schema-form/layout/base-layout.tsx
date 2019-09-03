@@ -7,7 +7,7 @@ import {Inject, Prop} from 'vue-property-decorator';
   name: 'BaseLayout'
 })
 export default class BaseLayout extends Vue {
-  @Prop({type: Array, required: true})
+  @Prop({type: Array})
   public fields: VNode[];
   @Prop()
   public layout: any;

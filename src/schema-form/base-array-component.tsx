@@ -81,7 +81,7 @@ export default class BaseArrayComponent extends Vue {
       this.current.map((v, index) => {
         const input = <InputComponent
           attrs={Object.assign({arrayIndex: index}, this.$attrs)}
-          onRemoveArrayItem={async (index) => {
+          onRemove={async (index) => {
             await this.$mconfirm('确定删除此项吗?', '提示');
             this.current.splice(index, 1);
           }}

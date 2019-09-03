@@ -5,7 +5,7 @@
         <ae-col :span="12">
           <a-schema-form v-model="value2"
                          class="demo-form"
-                         :definition="definition"
+                         :schema="definition"
                          :props="props"
                          @cancel="onCancel"
                          @ok="onOk"
@@ -14,7 +14,7 @@
         <ae-col :span="12">
           <a-schema-form class="demo-form"
                          mode="display"
-                         :definition="definition"
+                         :schema="definition"
                          :props="props"
                          :value="value2"
                          @cancel="onCancel"
