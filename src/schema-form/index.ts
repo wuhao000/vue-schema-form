@@ -5,8 +5,8 @@ import '../styles/style.less';
 SchemaForm.Field = SchemaFormField;
 
 SchemaForm.install = (Vue) => {
-  Vue.component('ASchemaForm', SchemaForm);
-  Vue.component('ASchemaFormField', SchemaForm.Field);
+  Vue.component('VSchemaForm', SchemaForm);
+  Vue.component('VSchemaFormField', SchemaForm.Field);
 };
 
 export default SchemaForm;

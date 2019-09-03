@@ -1,9 +1,9 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form v-model="options"
-                     :schema="optionFormDefinition"></a-schema-form>
-      <a-schema-form v-model="value"
+      <v-schema-form v-model="options"
+                     :schema="optionFormDefinition"></v-schema-form>
+      <v-schema-form v-model="value"
                      class="demo-form"
                      :disabled="options.disabled"
                      :loading="options.loading"
@@ -12,7 +12,7 @@
                      :schema="definition"
                      @cancel="onCancel"
                      @ok="onOk"
-                     @reset="onReset"></a-schema-form>
+                     @reset="onReset"></v-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>

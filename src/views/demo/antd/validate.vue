@@ -3,23 +3,23 @@
     <ae-layout-content>
       <ae-row>
         <ae-col :span="12">
-          <a-schema-form v-model="value2"
+          <v-schema-form v-model="value2"
                          class="demo-form"
                          :schema="definition"
                          :props="props"
                          @cancel="onCancel"
                          @ok="onOk"
-                         @reset="onReset"></a-schema-form>
+                         @reset="onReset"></v-schema-form>
         </ae-col>
         <ae-col :span="12">
-          <a-schema-form class="demo-form"
+          <v-schema-form class="demo-form"
                          mode="display"
                          :schema="definition"
                          :props="props"
                          :value="value2"
                          @cancel="onCancel"
                          @ok="onOk"
-                         @reset="onReset"></a-schema-form>
+                         @reset="onReset"></v-schema-form>
         </ae-col>
       </ae-row>
     </ae-layout-content>

@@ -1,13 +1,13 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <!--      <a-schema-form v-model="value"-->
+      <!--      <v-schema-form v-model="value"-->
       <!--                     class="demo-form"-->
       <!--                     :actions="actions"-->
       <!--                     :schema="definition"-->
       <!--                     :effects="effects"-->
-      <!--                     :props="props"></a-schema-form>-->
-      <a-schema-form v-model="value2"
+      <!--                     :props="props"></v-schema-form>-->
+      <v-schema-form v-model="value2"
                      style="width:800px"
                      title="Block1"
                      :actions="actions"

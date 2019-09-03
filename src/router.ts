@@ -1,7 +1,6 @@
 import DemoIndex from '@/views/demo/index.vue';
 import DemoNav from '@/views/demo/nav.vue';
 import VueRouter, {RouteConfig} from 'vue-router';
-import DocNav from '@/views/doc/nav.vue';
 
 export const demoRoutes: RouteConfig[] = [
   {
@@ -84,11 +83,15 @@ export const demoRoutes: RouteConfig[] = [
 ];
 export default new VueRouter({
   routes: [{
-    path: '/api',
+    path: '/doc',
     components: {
-      default: () => import('@/views/readme.vue'),
-      nav: () => import('@/views/doc/nav.vue')
-    }
+      default: DemoIndex,
+      nav: () => import('@/doc/nav.vue')
+    },
+    children: [{
+      path: 'readme',
+      component: () => import('@/doc/readme.vue')
+    }]
   }, {
     path: '/demo',
     name: 'demo',

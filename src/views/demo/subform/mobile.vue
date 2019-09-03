@@ -1,13 +1,13 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form class="demo-form"
+      <v-schema-form class="demo-form"
                      platform="mobile"
                      :schema="definition"
                      :props="props"
                      @ok="onOk"
                      @cancel="onCancel"
-                     :value="value2"></a-schema-form>
+                     :value="value2"></v-schema-form>
     </ae-layout-content>
   </ae-layout>
 </template>

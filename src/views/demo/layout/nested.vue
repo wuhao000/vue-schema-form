@@ -1,12 +1,12 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form v-model="value"
+      <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="schema"
                      :props="props"
                      @ok="()=>{}"
-                     @reset="()=>{}"></a-schema-form>
+                     @reset="()=>{}"></v-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>

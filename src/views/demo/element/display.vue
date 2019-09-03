@@ -1,11 +1,11 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form class="demo-form"
+      <v-schema-form class="demo-form"
                      mode="display"
                      :schema="definition"
                      :props="props"
-                     :value="value"></a-schema-form>
+                     :value="value"></v-schema-form>
     </ae-layout-content>
   </ae-layout>
 </template>

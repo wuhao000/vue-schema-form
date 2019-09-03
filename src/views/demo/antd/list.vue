@@ -1,11 +1,11 @@
 <template>
   <ae-layout>
     <ae-layout-content class="demo-wrapper">
-      <a-schema-form v-model="value"
+      <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="schema"
                      :props="props"
-                     @ok="onOk"></a-schema-form>
+                     @ok="onOk"></v-schema-form>
     </ae-layout-content>
   </ae-layout>
 </template>

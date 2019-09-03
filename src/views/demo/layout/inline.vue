@@ -1,8 +1,8 @@
 <template>
   <ae-layout class="bg-white wrapper">
     <ae-layout-content>
-      <a-schema-form :schema="schema"
-                     :value="value"></a-schema-form>
+      <v-schema-form :schema="schema"
+                     :value="value"></v-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>

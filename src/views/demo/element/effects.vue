@@ -1,12 +1,12 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form v-model="value"
+      <v-schema-form v-model="value"
                      class="demo-form"
                      ref="form"
                      :schema="definition"
                      :effects="formProps.effects"
-                     :props="props"></a-schema-form>
+                     :props="props"></v-schema-form>
       <d-button @click="setOptions">设置选项</d-button>
     </ae-layout-content>
   </ae-layout>

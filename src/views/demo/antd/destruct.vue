@@ -1,10 +1,10 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <a-schema-form v-model="value"
+      <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="definition"
-                     :props="props"></a-schema-form>
+                     :props="props"></v-schema-form>
       <d-button @click="dialogVisible = true">查看数据</d-button>
     </ae-layout-content>
     <d-cascader placeholder="请选择"

@@ -11,7 +11,7 @@
 
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import md from './doc/api.md';
+  import md from './readme.md';
 
   @Component({
     name: 'ViewsReadme'
