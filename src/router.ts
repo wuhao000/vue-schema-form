@@ -79,6 +79,10 @@ export const demoRoutes: RouteConfig[] = [
     path: 'mobile/edit',
     component: () => import('@/views/demo/mobile/edit.vue'),
     meta: {tag: '移动端示例', name: '编辑模式'}
+  }, {
+    path: 'mobile/effects',
+    component: () => import('@/views/demo/mobile/effects.vue'),
+    meta: {tag: '移动端示例', name: '副作用函数'}
   }
 ];
 export default new VueRouter({

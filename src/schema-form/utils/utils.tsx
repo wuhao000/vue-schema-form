@@ -2,7 +2,7 @@ import AntdButton from '@/schema-form/antd/button.vue';
 import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
 import {Platform, SchemaFormField} from '@/types/bean';
-import {LayoutOptions, SchemaFormComponent} from '@/types/form';
+import {ILibComponents, LayoutOptions, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
 import AntdUpload from '../antd/upload.vue';
@@ -114,6 +114,22 @@ const ComponentMap = {
   icon: {
     element: 'ElExtIcon',
     antd: 'd-icon'
+  },
+  popover: {
+    element: 'el-popover',
+    antd: 'a-popover'
+  },
+  icons: {
+    element: {
+      info: 'info',
+      up: 'arrow-up',
+      down: 'arrow-down'
+    },
+    antd: {
+      info: 'info-circle',
+      up: 'up',
+      down: 'down'
+    }
   }
 };
 
@@ -121,20 +137,22 @@ export function swap(array, x, y) {
   array.splice(x, 1, ...array.splice(y, 1, array[x]));
 }
 
-export const LibComponents = {
+export const LibComponents: ILibComponents = {
+  icons: null,
+  alert: null,
   button: null,
-  row: null,
   col: null,
+  confirm: null,
+  content: null,
+  footer: null,
   form: null,
   formItem: null,
-  alert: null,
-  layout: null,
-  confirm: null,
   header: null,
-  footer: null,
-  sider: null,
-  content: null,
-  icon: null
+  icon: null,
+  layout: null,
+  popover: null,
+  row: null,
+  sider: null
 };
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
@@ -374,7 +392,7 @@ export function registerElement() {
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-      (definition: IField) => ({type: definition.type.toLowerCase()}));
+    (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
@@ -419,11 +437,11 @@ export function registerAntdMobile() {
 
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-      (definition: IField) => ({mode: definition.type.toLowerCase()}));
+    (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerMobile('m-input', [TYPES.integer, TYPES.double, TYPES.number], false,
-      (definition: IField) => {
-        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-      });
+    (definition: IField) => {
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+    });
   registerMobile('m-textarea', [TYPES.text], false);
   registerMobile('m-switch-item', [TYPES.boolean], false);
   registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {

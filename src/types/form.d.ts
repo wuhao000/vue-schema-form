@@ -52,3 +52,27 @@ export interface LayoutOptions {
    */
   wrapItems: boolean | undefined;
 }
+
+export interface IIcons {
+  down: string;
+  up: string;
+  info: string;
+}
+
+export interface ILibComponents {
+  icons: IIcons;
+  alert: string;
+  button: string;
+  col: string;
+  confirm: string;
+  content: string;
+  footer: string;
+  form: string;
+  formItem: string;
+  header: string;
+  icon: string;
+  layout: string;
+  popover: string;
+  row: string;
+  sider: string;
+}

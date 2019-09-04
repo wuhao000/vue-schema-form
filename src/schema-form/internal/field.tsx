@@ -10,10 +10,10 @@ import ArrayWrapper from '../array-wrapper';
 import {
   addRule,
   DESKTOP,
-  getAlertComponent,
   getColComponent,
   getConfirmFunction,
   getOptions,
+  LibComponents,
   MOBILE,
   swap,
   TYPES
@@ -242,9 +242,9 @@ export default class FormField extends mixins(Emitter) {
       const formItemProps = this.getFormItemProps();
       const noWrap = !definition.title;
       const formItem = noWrap ? inputComponent :
-        <FormItemComponent props={formItemProps}>
+        <FormItemComponent props={Object.assign({}, formItemProps, {label: null})}>
+          <span slot="label">{formItemProps.label}</span>
           {inputComponent}
-          {this.renderNotice()}
         </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
@@ -291,13 +291,6 @@ export default class FormField extends mixins(Emitter) {
     this.currentValue = value;
   }
 
-  private renderNotice() {
-    const AlertComponent = getAlertComponent();
-    if (this.definition.notice) {
-      return <AlertComponent message={this.definition.notice}/>;
-    }
-  }
-
   get error() {
     return this.field.errors.join('、');
   }
@@ -310,6 +303,23 @@ export default class FormField extends mixins(Emitter) {
       title: definition.title,
       label: definition.title
     };
+    if (platform === DESKTOP) {
+      if (definition.notice) {
+        const popover = LibComponents.popover;
+        props.label = <LibComponents.popover
+          content={definition.notice}
+          trigger="hover">
+          <span slot={popover === 'el-popover' ? 'reference' : 'default'}>
+            {definition.title}
+            <LibComponents.icon style={{marginLeft: '5px', color: '#247dc5'}}
+                                type={LibComponents.icons.info}/>
+          </span>
+        </LibComponents.popover>;
+      } else {
+        props.label = definition.title;
+      }
+    }
+
     if (definition.wrapperProps) {
       Object.assign(props, definition.wrapperProps);
       if (definition.wrapperProps.noTitle) {

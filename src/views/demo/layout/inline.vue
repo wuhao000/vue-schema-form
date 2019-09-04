@@ -39,7 +39,8 @@
       fields: {
         aaa: {
           type: 'string',
-          title: '字段1'
+          title: '字段1',
+          notice: 'aaaaaaaa'
         },
         bbb: {
           type: 'number',
@@ -73,6 +74,7 @@
 
     public beforeCreate() {
       SchemaForm.registerAntd();
+      // SchemaForm.registerElement();
     }
 
     public changeMode() {

@@ -18,12 +18,6 @@ export default class FormBlock extends Vue {
 
   public render() {
     const IconComponent = LibComponents.icon;
-    let downIcon = 'down';
-    let upIcon = 'up';
-    if (IconComponent === 'ElExtIcon') {
-      downIcon = 'arrow-down';
-      upIcon = 'arrow-up';
-    }
     return <div class="array-form-block">
       {
         this.$slots.default ? this.$slots.default.map((it, index) => {
@@ -45,13 +39,13 @@ export default class FormBlock extends Vue {
                                                                 onClick={() => {
                                                                   this.$emit('moveDown', index);
                                                                 }}>
-                  <IconComponent type={downIcon}/>
+                  <IconComponent type={LibComponents.icons.down}/>
                   <span class="op-name"/>
                 </div> : null,
                 index !== 0 ? <div class="circle-btn" onClick={() => {
                   this.$emit('moveUp', index);
                 }}>
-                  <IconComponent type={upIcon}/>
+                  <IconComponent type={LibComponents.icons.up}/>
                   <span class="op-name"/>
                 </div> : null
               ] : null}
@@ -81,7 +75,7 @@ export default class FormBlock extends Vue {
            onclick={() => {
              this.$emit('add');
            }}>
-        <ae-icon type="plus"/>
+        <LibComponents.icon type="plus"/>
         {this.addText}
       </div>
     </div>;
