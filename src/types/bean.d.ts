@@ -70,7 +70,7 @@ export interface SchemaFormField {
   /**
    * 表单项的属性
    */
-  wrapperProps?: object;
+  wrapperProps?: any;
   /**
    * 表单项渲染使用插槽，当指定插槽时，字段的类型无效
    */
@@ -82,7 +82,7 @@ export interface SchemaFormField {
   /**
    * 表单项类型
    */
-  type: string;
+  type?: string;
   /**
    * 是否可见
    */

@@ -1,6 +1,7 @@
 import FormField from '@/schema-form/internal/field';
 import {getStructValue} from '@/schema-form/utils/destruct';
 import {setFieldValue} from '@/schema-form/utils/field';
+import {splitPath} from '@/schema-form/utils/path';
 import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
 import {Effects, EffectsContext, SchemaFormComponent} from '@/types/form';
@@ -24,6 +25,14 @@ export interface SchemaFormStore {
 }
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
+  const propertyPath = splitPath(property);
+  let tmp = currentValue;
+  propertyPath.forEach(path => {
+    if (!tmp[path]) {
+      tmp[path] = {};
+    }
+    tmp = tmp[path];
+  });
   return get(currentValue, property);
 }
 
@@ -109,7 +118,9 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore,
                             field: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h) {
-  const {platform} = store;
+  if (field.slot) {
+    return store.slots[field.slot];
+  }
   let value = null;
   if (field.property && field.property.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
@@ -126,22 +137,21 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore,
   }
   const iField = createField(currentValue, store, pathPrefix, field);
   const component = getComponentType(store, field);
+  const props = {
+    value: getFieldValue(value, iField, component),
+    wrap,
+    field: iField,
+    path: buildArrayPath(pathPrefix, field),
+    disabled: store.disabled,
+    definition: field,
+    formValue: currentValue
+  };
   // @ts-ignore
-  return <FormField
-    value={getFieldValue(value, iField, component)}
-    onInput={(v) => {
-      setFieldValue(value, iField, v);
-    }}
-    wrap={wrap}
-    field={iField}
-    path={buildArrayPath(pathPrefix, field)}
-    display={store.mode === 'display'}
-    disabled={store.disabled}
-    content={store.slots[field.slot]}
-    definition={field}
-    key={'field-' + field.property + '-' + index}
-    formValue={currentValue}
-    platform={platform}/>;
+  return <FormField props={props}
+                    onInput={(v) => {
+                      setFieldValue(value, iField, v);
+                    }}
+                    key={'field-' + field.property + '-' + index}/>;
 }
 
 

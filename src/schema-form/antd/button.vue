@@ -1,5 +1,6 @@
 <template>
   <d-button v-bind="this.$attrs"
+            html-type="button"
             @click="onClick">
     {{title}}
   </d-button>

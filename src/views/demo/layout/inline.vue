@@ -3,11 +3,20 @@
     <ae-layout-content>
       <v-schema-form :schema="schema"
                      :value="value"></v-schema-form>
+      <v-schema-form v-model="searchForm"
+                     class="m-b"
+                     :schema="searchFormDefinition">
+        <d-form-item slot="search">
+          <d-button>查询</d-button>
+        </d-form-item>
+      </v-schema-form>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="ts">
+  import SchemaForm from '@/schema-form';
+  import {SchemaFormField} from '@/types/bean';
   import ShowValue from '@/views/demo/show-value';
   import Vue from 'vue';
   import Component from 'vue-class-component';
@@ -17,6 +26,7 @@
     components: {ShowValue}
   })
   export default class LayoutInline extends Vue {
+
     public schema = {
       props: {
         inline: true
@@ -33,9 +43,31 @@
         ccc: {
           type: 'date',
           title: '字段3'
+        },
+        'ddd.ee': {
+          type: 'date',
+          title: '字段4'
         }
       }
     };
+    public searchForm = {};
+    public searchFormDefinition: SchemaFormField = {
+      type: 'object',
+      props: {
+        inline: true
+      },
+      fields: [{
+        title: '关键字',
+        type: 'string',
+        property: 'keyword'
+      }, {
+        slot: 'search'
+      }]
+    };
     public value = {};
+
+    public beforeCreate() {
+      SchemaForm.registerAntd();
+    }
   }
 </script>
