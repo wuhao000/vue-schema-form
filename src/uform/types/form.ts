@@ -123,8 +123,6 @@ export interface IFormPathMatcher {
 
 export type TextAlign = 'left' | 'right';
 export type Size = 'small' | 'medium' | 'large';
-export type Layout = 'horizontal' | 'vertical' | 'inline';
-export type TextEl = string | JSX.Element | null;
 export type LabelAlign = 'left' | 'top' | 'inset';
 
 type ColSpanType = number | string;

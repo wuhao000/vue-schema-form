@@ -1,0 +1,429 @@
+{
+  "fields": [
+    {
+      "property": "name",
+      "title": "姓名",
+      "type": "string",
+      "props": {
+        "textAlign": "right"
+      }
+    },
+    {
+      "property": "sex",
+      "type": "select",
+      "title": "性别",
+      "props": {
+        "type": "sex"
+      }
+    },
+    {
+      "property": "email",
+      "title": "邮箱",
+      "type": "string",
+      "props": {
+        "textAlign": "right"
+      }
+    },
+    {
+      "property": "positionIds",
+      "title": "职位",
+      "type": "select",
+      "array": true,
+      "props": {
+        "type": "post"
+      }
+    },
+    {
+      "property": "mobile",
+      "title": "手机号",
+      "type": "string",
+      "props": {
+        "textAlign": "right"
+      }
+    },
+    {
+      "property": "workingNumber",
+      "title": "工号",
+      "type": "string",
+      "props": {
+        "textAlign": "right"
+      }
+    },
+    {
+      "property": "workingPlace",
+      "title": "办公地点",
+      "type": "select",
+      "props": {
+        "type": "work.place"
+      }
+    },
+    {
+      "title": "工作信息",
+      "property": "workingInfo",
+      "type": "object",
+      "fields": [
+        {
+          "property": "joinTime",
+          "type": "date",
+          "title": "录用时间"
+        },
+        {
+          "property": "staffType",
+          "type": "select",
+          "title": "员工类型",
+          "props": {
+            "type": "staff.type"
+          }
+        },
+        {
+          "property": "staffStatus",
+          "type": "select",
+          "title": "员工状态",
+          "props": {
+            "type": "staff.state"
+          }
+        },
+        {
+          "property": "probation",
+          "type": "integer",
+          "title": "试用期",
+          "props": {
+            "extra": "个月"
+          }
+        },
+        {
+          "property": "regularTime",
+          "type": "date",
+          "title": "转正日期"
+        },
+        {
+          "property": "positionLevel",
+          "type": "select",
+          "title": "岗位职级",
+          "props": {
+            "type": "position.level"
+          }
+        }
+      ]
+    },
+    {
+      "title": "个人信息",
+      "property": "personalInfo",
+      "type": "object",
+      "fields": [
+        {
+          "property": "idCardName",
+          "type": "string",
+          "title": "身份证姓名",
+          "required": true,
+          "props": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "property": "idCardNumber",
+          "type": "string",
+          "placeholder": "请输入18位身份证号",
+          "required": true,
+          "title": "身份证号",
+          "props": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "property": "birthday",
+          "type": "date",
+          "required": true,
+          "title": "出生日期"
+        },
+        {
+          "property": "nation",
+          "type": "select",
+          "title": "民族",
+          "props": {
+            "type": "nation"
+          }
+        },
+        {
+          "property": "idCardAddress",
+          "type": "string",
+          "title": "身份证地址",
+          "props": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "property": "[validityPeriodFrom, validityPeriodTo]",
+          "type": "daterange",
+          "title": "身份证有效期"
+        },
+        {
+          "property": "household",
+          "type": "select",
+          "title": "户籍类型",
+          "props": {
+            "type": "household"
+          }
+        },
+        {
+          "property": "address",
+          "type": "string",
+          "title": "住址",
+          "props": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "property": "politicalType",
+          "type": "select",
+          "title": "政治面貌",
+          "props": {
+            "type": "political.type"
+          }
+        },
+        {
+          "property": "maritalType",
+          "type": "select",
+          "title": "婚姻状况",
+          "props": {
+            "type": "marital.type"
+          }
+        },
+        {
+          "property": "extras.firstWorkingDate",
+          "type": "date",
+          "title": "首次工作时间"
+        },
+        {
+          "property": "socialSecurityAccount",
+          "type": "string",
+          "title": "社保账号"
+        },
+        {
+          "property": "providentFundAccount",
+          "type": "string",
+          "title": "公积金账号"
+        }
+      ]
+    },
+    {
+      "title": "学历信息",
+      "property": "educationInfo",
+      "array": true,
+      "type": "object",
+      "fields": [
+        {
+          "title": "学历",
+          "property": "education",
+          "type": "select",
+          "props": {
+            "type": "education"
+          }
+        },
+        {
+          "title": "毕业学校",
+          "property": "graduationSchool",
+          "type": "string"
+        },
+        {
+          "title": "毕业时间",
+          "type": "date",
+          "property": "graduationTime"
+        },
+        {
+          "title": "所学专业",
+          "property": "major",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "title": "银行卡信息",
+      "property": "bankCardInfo",
+      "type": "object",
+      "fields": [
+        {
+          "title": "银行",
+          "property": "bank",
+          "type": "select",
+          "props": {
+            "type": "bank"
+          }
+        },
+        {
+          "title": "卡号",
+          "property": "cardNo",
+          "type": "string",
+          "props": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "title": "开户行",
+          "property": "openingBank",
+          "type": "string",
+          "props": {
+            "textAlign": "right"
+          }
+        }
+      ]
+    },
+    {
+      "title": "合同信息",
+      "property": "contractInfo",
+      "type": "object",
+      "fields": [
+        {
+          "title": "合同公司",
+          "type": "string",
+          "property": "signingCompany"
+        },
+        {
+          "title": "合同类型",
+          "type": "select",
+          "property": "type",
+          "props": {
+            "type": "staff.contract.type"
+          }
+        },
+        {
+          "title": "现合同起始日",
+          "type": "date",
+          "property": "beginTime"
+        },
+        {
+          "title": "现合同到期日",
+          "type": "date",
+          "property": "endTime"
+        },
+        {
+          "title": "合同期限",
+          "type": "select",
+          "property": "term",
+          "props": {
+            "type": "staff.contract.due"
+          }
+        },
+        {
+          "title": "续签次数",
+          "type": "integer",
+          "property": "renewalNum"
+        },
+        {
+          "type": "object",
+          "property": "extras",
+          "fields": [
+            {
+              "title": "首次合同起始日",
+              "type": "date",
+              "property": "firstStartTime"
+            },
+            {
+              "title": "首次合同到期日",
+              "type": "date",
+              "property": "firstEndTime"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "紧急联系人",
+      "property": "emergencyContactInfo",
+      "array": true,
+      "type": "object",
+      "fields": [
+        {
+          "property": "name",
+          "type": "string",
+          "title": "紧急联系人姓名"
+        },
+        {
+          "property": "relationship",
+          "type": "select",
+          "title": "联系人关系",
+          "props": {
+            "type": "staff.contact.relation.type"
+          }
+        },
+        {
+          "property": "mobile",
+          "type": "string",
+          "title": "联系人电话"
+        }
+      ]
+    },
+    {
+      "title": "家庭信息",
+      "property": "familyInfo",
+      "array": true,
+      "type": "object",
+      "fields": [
+        {
+          "property": "hasChild",
+          "title": "有无子女",
+          "type": "boolean"
+        },
+        {
+          "property": "name",
+          "title": "子女姓名",
+          "type": "string",
+          "visible": false
+        },
+        {
+          "property": "sex",
+          "title": "子女性别",
+          "type": "select",
+          "props": {
+            "type": "sex"
+          },
+          "visible": false
+        },
+        {
+          "property": "birthday",
+          "title": "子女出生日期",
+          "type": "date",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "title": "个人材料",
+      "property": "materialInfo",
+      "type": "object",
+      "fields": [
+        {
+          "property": "idCardObversePhoto",
+          "title": "身份证（人像面）",
+          "type": "picture"
+        },
+        {
+          "property": "idCardReversePhoto",
+          "title": "身份证（国徽面）",
+          "type": "picture"
+        },
+        {
+          "property": "graduationCertificate",
+          "title": "学历证书",
+          "type": "picture",
+          "props": {}
+        },
+        {
+          "property": "degreeCertificatePic",
+          "title": "学位证书",
+          "type": "picture"
+        },
+        {
+          "property": "leavingCertificatePic",
+          "title": "前公司离职证明",
+          "type": "picture"
+        },
+        {
+          "property": "personPhoto",
+          "title": "员工照片",
+          "type": "picture"
+        }
+      ]
+    }
+  ]
+}

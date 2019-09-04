@@ -1,14 +1,6 @@
 import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isPathMatchPatterns, match, takePath} from '@/schema-form/utils/path';
-import {
-  ASchemaForm,
-  LibComponents,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement
-} from '@/schema-form/utils/utils';
+import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import className from 'classname';
@@ -115,18 +107,13 @@ export default class SchemaForm extends Vue {
     }
   }
 
-  public matchFields(paths: string | string[]) {
-    let matchedPaths = [];
-    if (typeof paths === 'string') {
-      matchedPaths = match([paths], Object.keys(this.store.fields));
-    } else if (Array.isArray(paths)) {
-      matchedPaths = match(paths, Object.keys(this.store.fields));
-    }
+  public matchFields(paths: string[]) {
+    const matchedPaths = match(paths, Object.keys(this.store.fields));
     return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
   }
 
   public createContext(): EffectsContext {
-    const context: EffectsContext = (paths: string | string[]) => {
+    const context: EffectsContext = (...paths: string[]) => {
       return {
         fields: () => {
           return this.matchFields(paths);
@@ -163,10 +150,10 @@ export default class SchemaForm extends Vue {
           context.subscribe(event, paths, callback);
         },
         takePath: (number: number): EffectsHandlers => {
-          return context(takePath(paths, number));
+          return context(...takePath(paths, number));
         },
         appendPath: (suffix: string): EffectsHandlers => {
-          return context(appendPath(paths, suffix));
+          return context(...appendPath(paths, suffix));
         }
       } as EffectsHandlers;
     };
@@ -225,7 +212,7 @@ export default class SchemaForm extends Vue {
     let content: any = [
       this.$slots.header,
       renderField(null, store,
-        rootFieldDef, value, 0, false, this.$createElement
+          rootFieldDef, value, 0, false, this.$createElement
       )
     ];
     let footer: any = [
@@ -353,10 +340,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-      text || props && props.okText || '提交',
-      action || (() => {
-        this.onOk(true);
-      }), buttonProps, 'confirm-btn'
+        text || props && props.okText || '提交',
+        action || (() => {
+          this.onOk(true);
+        }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -385,9 +372,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '取消',
-      action || this.onCancel, buttonProps,
-      'cancel-btn'
+        text || props && props.cancelText || '取消',
+        action || this.onCancel, buttonProps,
+        'cancel-btn'
     );
   }
 
@@ -400,8 +387,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-      text || props && props.cancelText || '重置',
-      action || this.onReset, buttonProps, 'reset-btn'
+        text || props && props.cancelText || '重置',
+        action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

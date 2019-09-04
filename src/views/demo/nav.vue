@@ -1,8 +1,10 @@
 <template>
-  <a-menu mode="inline">
+  <a-menu mode="inline"
+          :openKeys="openKeys"
+          @openChange="onOpenChange">
     <a-sub-menu v-for="(items, key) in groups"
-                       :key="key"
-                       :title="key">
+                :key="key"
+                :title="key">
       <a-menu-item v-for="item in items"
                    :key="item.path"
                    @click="to(item.path)">{{item.meta && item.meta.name}}
@@ -20,6 +22,7 @@
   })
   export default class DemoNav extends Vue {
     private groups: object = {};
+    public openKeys = [];
 
     public created() {
       const groups = {};
@@ -29,6 +32,15 @@
         groups[key].push(route);
       });
       this.groups = groups;
+    }
+
+    public onOpenChange(openKeys) {
+      const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
+      if (Object.keys(this.groups).indexOf(latestOpenKey) === -1) {
+        this.openKeys = openKeys;
+      } else {
+        this.openKeys = latestOpenKey ? [latestOpenKey] : [];
+      }
     }
 
     public to(path: string) {

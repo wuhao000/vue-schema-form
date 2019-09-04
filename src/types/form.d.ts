@@ -2,7 +2,7 @@ import {Platform} from '@/types/bean';
 import {IField, ISubscribers} from '@/uform/types';
 
 export type EffectsFunction = (
-  path: string | string[]
+  ...path: string[]
 ) => EffectsHandlers;
 
 export interface EffectsContext extends EffectsFunction {

@@ -1,7 +1,8 @@
 <template>
   <ae-layout>
     <ae-layout-content>
-      <v-schema-form platform="mobile"
+      <v-schema-form v-model="value"
+                     platform="mobile"
                      style="width: 800px"
                      :effects="effects"
                      :schema="schema"/>
@@ -20,31 +21,63 @@
 
     public schema = {
       fields: {
-        a: {
-          type: 'text',
-          title: 'a'
-        },
-        b: {
-          type: 'select',
-          title: 'b'
-        },
-        c: {
-          type: 'select',
+        familyInfo: {
+          title: '家庭信息',
           array: true,
-          title: 'c'
+          type: 'object',
+          arrayProps: {
+            addBtnText: '添加家庭信息'
+          },
+          fields: [
+            {
+              property: 'hasChild',
+              title: '有无子女',
+              type: 'boolean'
+            },
+            {
+              property: 'name',
+              title: '子女姓名',
+              type: 'string',
+              visible: false
+            },
+            {
+              property: 'sex',
+              title: '子女性别',
+              'type': 'select',
+              'props': {
+                'type': 'sex'
+              },
+              'visible': false
+            },
+            {
+              'property': 'birthday',
+              'title': '子女出生日期',
+              'type': 'date',
+              'visible': false
+            }
+          ]
         }
       }
     };
+    public value = {};
+
+    public created() {
+      setTimeout(() => {
+        this.value = {
+          name: '张三'
+        };
+      }, 1000);
+    }
 
     public effects($: EffectsContext) {
-      setTimeout(() => {
-        $('c').setFieldProps({loading: true});
-        $('c').setEnum(['1', '2', '3']);
-        $('c').setFieldProps({loading: false});
-        $('b').setFieldProps({loading: true});
-        $('b').setEnum(['1', '2', '3']);
-        $('b').setFieldProps({loading: false});
-      }, 3000);
+      $('familyInfo.?.hasChild').onFieldChange((value, path) => {
+        if (value) {
+          $(path).takePath(2).appendPath('?').show();
+        } else {
+          $(path).takePath(2).appendPath('?').hide();
+          $(path).show();
+        }
+      });
     }
   }
 </script>

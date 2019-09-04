@@ -14,24 +14,16 @@ export function match(paths: string[], fieldPaths: string[]): string[] {
   return paths.map(it => matchSinglePath(it, fieldPaths)).flat();
 }
 
-export function appendPath(paths, suffix) {
+export function appendPath(paths: string[], suffix: string): string[] {
   if (paths) {
-    if (typeof paths === 'string') {
-      return paths + PATH_SEPARATOR + suffix;
-    } else {
-      return paths.map(path => appendPath(path, suffix));
-    }
+    return paths.map(path => path + PATH_SEPARATOR + suffix);
   } else {
-    return suffix;
+    return [suffix];
   }
 }
 
-export function takePath(paths: string | string[], to: number) {
-  if (typeof paths === 'string') {
-    return splitPath(paths).slice(0, to).join(PATH_SEPARATOR);
-  } else {
-    return paths.map(path => takePath(path, to));
-  }
+export function takePath(paths: string[], to: number): string[] {
+  return paths.map(path => splitPath(path).slice(0, to).join(PATH_SEPARATOR));
 }
 
 export function isPathMatchPatterns(origin: string, patterns: string[]): boolean {
