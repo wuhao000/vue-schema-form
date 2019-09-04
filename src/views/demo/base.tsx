@@ -18,7 +18,8 @@ export default class Base extends Vue {
     loading: false,
     readonly: false,
     displayMode: false,
-    sticky: false
+    sticky: false,
+    mobile: false
   };
 
   public created() {
@@ -41,6 +42,8 @@ export default class Base extends Vue {
       title: '详情模式', type: 'boolean', property: 'displayMode'
     }, {
       title: '固定模式', type: 'boolean', property: 'sticky'
+    }, {
+      title: '移动平台', type: 'boolean', property: 'mobile'
     }]
   };
 

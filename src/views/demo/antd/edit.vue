@@ -7,11 +7,13 @@
       <v-schema-form v-model="value"
                      class="demo-form"
                      :actions="actions"
-                     :schema="definition"
                      :disabled="options.disabled"
                      :loading="options.loading"
+                     :mode="options.displayMode ? 'display' : 'edit'"
+                     :platform="options.mobile ? 'mobile' : 'desktop'"
                      :props="props"
                      :readonly="options.readonly"
+                     :schema="definition"
                      :sticky="options.sticky"
                      @cancel="onCancel"
                      @ok="onOk"
@@ -38,13 +40,13 @@
       }
     ];
 
+    public created() {
+      SchemaForm.registerAntd();
+    }
+
     public customAction($: EffectsContext) {
       const value = $.getValue();
       console.log($('subFormArray.?').toggle());
-    }
-
-    public created() {
-      SchemaForm.registerAntd();
     }
 
   }

@@ -1,7 +1,8 @@
 <template>
   <ae-layout class="bg-white wrapper">
     <ae-layout-content>
-      <v-schema-form :schema="schema"
+      <v-schema-form :mode="mode"
+                     :schema="schema"
                      :value="value"></v-schema-form>
       <v-schema-form v-model="searchForm"
                      class="m-b"
@@ -10,6 +11,9 @@
           <d-button>查询</d-button>
         </d-form-item>
       </v-schema-form>
+      <d-button @click="changeMode">
+        {{mode === 'display' ? '编辑':'详情'}}
+      </d-button>
       <show-value :value="value"/>
     </ae-layout-content>
   </ae-layout>
@@ -27,6 +31,7 @@
   })
   export default class LayoutInline extends Vue {
 
+    private mode = 'edit';
     public schema = {
       props: {
         inline: true
@@ -68,6 +73,14 @@
 
     public beforeCreate() {
       SchemaForm.registerAntd();
+    }
+
+    public changeMode() {
+      if (this.mode === 'display') {
+        this.mode = 'edit';
+      } else {
+        this.mode = 'display';
+      }
     }
   }
 </script>

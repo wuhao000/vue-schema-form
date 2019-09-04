@@ -1,5 +1,5 @@
 import {SchemaFormStore} from '@/schema-form/internal/utils';
-import {getButtonComponent, getColComponent, getRowComponent} from '@/schema-form/utils/utils';
+import {getButtonComponent, getColComponent, getRowComponent, LibComponents} from '@/schema-form/utils/utils';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -75,38 +75,51 @@ export default class ArrayWrapper extends Vue {
   private renderFields() {
     if (this.store.platform === 'mobile') {
       return this.$slots.default.map((it, index) => {
-        return <div style={{position: 'relative'}}>
-          {
-            [<a style={{
-              color: '#e94721',
-              position: 'absolute',
-              right: 0,
-              top: '15px',
-              cursor: 'pointer'
-            }}
-                onclick={() => {
-                  this.$emit('remove', index);
-                }}>
-              <ae-icon type="delete"/>
-              删除
-            </a>, it]
-          }
-        </div>;
+        return <div style={{position: 'relative'}}>{
+          [this.renderDeleteBtn(index), it]
+        }</div>;
       });
     }
     return this.$slots.default.map((it, index) => {
-      return [it, <div style={{textAlign: 'right'}}>
-        <a style={{
+      return [it, this.renderDesktopDeleteBtn(index)];
+    });
+  }
+
+  private renderDeleteBtn(index: any) {
+    if (this.store.mode === 'display') {
+      return null;
+    }
+    return <a style={{
+      color: '#e94721',
+      position: 'absolute',
+      right: 0,
+      top: '15px',
+      cursor: 'pointer'
+    }}
+              onclick={() => {
+                this.$emit('remove', index);
+              }}>
+      <LibComponents.icon type="delete"/>
+      删除
+    </a>;
+  }
+
+  private renderDesktopDeleteBtn(index: any) {
+    if (this.store.mode === 'display') {
+      return null;
+    }
+    return <div style={{textAlign: 'right'}}>
+      <a
+        style={{
           color: '#e94721',
           cursor: 'pointer'
         }}
-           onclick={() => {
-             this.$emit('remove', index);
-           }}>
-          <ae-icon type="delete"/>
-          删除
-        </a>
-      </div>];
-    });
+        onclick={() => {
+          this.$emit('remove', index);
+        }}>
+        <LibComponents.icon type="delete"/>
+        删除
+      </a>
+    </div>;
   }
 }

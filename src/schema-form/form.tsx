@@ -1,6 +1,14 @@
 import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isPathMatchPatterns, match, takePath} from '@/schema-form/utils/path';
-import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
+import {
+  ASchemaForm,
+  LibComponents,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement
+} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import className from 'classname';
@@ -52,7 +60,7 @@ export default class SchemaForm extends Vue {
   public sticky: boolean;
 
   @Provide()
-  public store: SchemaFormStore = {
+  public store: SchemaFormStore = Vue.observable({
     fields: {},
     disabled: this.disabled,
     mode: this.mode,
@@ -64,7 +72,7 @@ export default class SchemaForm extends Vue {
     inline: this.inline,
     slots: this.$slots,
     context: null
-  };
+  });
 
   @Watch('$slots')
   public slotsChanged(slots: any) {
@@ -84,7 +92,6 @@ export default class SchemaForm extends Vue {
   @Watch('platform')
   public platformChanged(platform: 'mobile' | 'desktop') {
     this.store.platform = platform;
-    this.$forceUpdate();
   }
 
   @Watch('props', {immediate: true, deep: true})
@@ -95,7 +102,6 @@ export default class SchemaForm extends Vue {
   @Watch('mode')
   public modeChanged(mode: 'edit' | 'display') {
     this.store.mode = mode;
-    this.$forceUpdate();
   }
 
   @Watch('loading', {immediate: true})
@@ -219,7 +225,7 @@ export default class SchemaForm extends Vue {
     let content: any = [
       this.$slots.header,
       renderField(null, store,
-          rootFieldDef, value, 0, false, this.$createElement
+        rootFieldDef, value, 0, false, this.$createElement
       )
     ];
     let footer: any = [
@@ -347,10 +353,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-        text || props && props.okText || '提交',
-        action || (() => {
-          this.onOk(true);
-        }), buttonProps, 'confirm-btn'
+      text || props && props.okText || '提交',
+      action || (() => {
+        this.onOk(true);
+      }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -379,9 +385,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '取消',
-        action || this.onCancel, buttonProps,
-        'cancel-btn'
+      text || props && props.cancelText || '取消',
+      action || this.onCancel, buttonProps,
+      'cancel-btn'
     );
   }
 
@@ -394,8 +400,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '重置',
-        action || this.onReset, buttonProps, 'reset-btn'
+      text || props && props.cancelText || '重置',
+      action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

@@ -174,6 +174,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
   if (existsField) {
     existsField.display = store.mode === 'display';
     existsField.editable = !store.disabled && !store.readonly;
+    existsField.component = getComponentType(store, definition);
     return existsField;
   } else {
     const plainPath = buildArrayPath(pathPrefix, definition).join('.');

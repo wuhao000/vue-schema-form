@@ -152,7 +152,6 @@ export default class FormField extends mixins(Emitter) {
         onRemove={async (index) => {
           try {
             const confirmFunc = getConfirmFunction(platform);
-            console.log(confirmFunc);
             await confirmFunc('确定删除该条吗？', '提示');
             this.removeArrayItem(index);
           } catch (e) {
@@ -385,7 +384,6 @@ export default class FormField extends mixins(Emitter) {
   }
 
   private addArrayItem() {
-    console.log(this.currentValue);
     if (this.currentValue) {
       if (this.type === TYPES.object) {
         this.currentValue.push({});

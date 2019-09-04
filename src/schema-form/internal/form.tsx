@@ -1,6 +1,13 @@
 import FieldBasedComponent from '@/schema-form/internal/field-based-component';
 import {createField, getComponentType, getRealFields} from '@/schema-form/internal/utils';
-import {DESKTOP, getButtonComponent, getDefaultValue, getFormComponent, getRowComponent, MOBILE} from '@/schema-form/utils/utils';
+import {
+  DESKTOP,
+  getButtonComponent,
+  getDefaultValue,
+  getFormComponent,
+  getRowComponent,
+  MOBILE
+} from '@/schema-form/utils/utils';
 import {SchemaFormField} from '@/types/bean';
 import difference from 'lodash.difference';
 import eq from 'lodash.eq';
@@ -71,7 +78,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
     const value = this.value;
     if (this.definition.array) {
       if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
+        .concat(difference(value as any[], currentValue as any[])).length > 0) {
       }
     }
   }
@@ -85,7 +92,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
       const currentValue = this.currentValue;
       if (this.definition.array) {
         if (difference(currentValue as any[], value as any[])
-            .concat(difference(value as any[], currentValue as any[])).length > 0) {
+          .concat(difference(value as any[], currentValue as any[])).length > 0) {
           this.currentValue = value || [];
         }
       } else if (!eq(currentValue, value)) {
@@ -123,8 +130,8 @@ class InternalForm extends mixins(FieldBasedComponent) {
         copy = copy[name];
       } else {
         copy[name] = getDefaultValue(createField(
-            this.currentValue, this.store,
-            this.pathPrefix, fieldDef));
+          this.currentValue, this.store,
+          this.pathPrefix, fieldDef));
       }
     });
   }
@@ -171,7 +178,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
       {this.definition.array ? this.renderTitle() : null}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}
       {this.inline ? groups.reduce((a, b) => a.concat(b))
-          : groups.map((group) => this.wrapGroup(group))}
+        : groups.map((group) => this.wrapGroup(group))}
     </FormComponent>;
     if (this.layoutType) {
       const LayoutComponentDef = getComponentType(this.store, {
@@ -192,15 +199,15 @@ class InternalForm extends mixins(FieldBasedComponent) {
     const ButtonComponent = getButtonComponent();
     if (this.definition.array && this.store.mode === 'edit') {
       return <ButtonComponent
-          attrs={{
-            block: true,
-            icon: 'plus',
-            disabled: this.isDisabled
-          }}
-          class="m-b"
-          onClick={() => {
-            this.addSubItem();
-          }}>新增一条</ButtonComponent>;
+        attrs={{
+          block: true,
+          icon: 'plus',
+          disabled: this.isDisabled
+        }}
+        class="m-b"
+        onClick={() => {
+          this.addSubItem();
+        }}>新增一条</ButtonComponent>;
     }
   }
 
