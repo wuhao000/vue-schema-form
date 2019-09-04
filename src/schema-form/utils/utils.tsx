@@ -1,6 +1,7 @@
 import AntdButton from '@/schema-form/antd/button.vue';
 import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
+import MobileImagePicker from '@/schema-form/mobile/image-picker';
 import {Platform, SchemaFormField} from '@/types/bean';
 import {ILibComponents, LayoutOptions, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
@@ -27,6 +28,7 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  picture = 'picture',
   button = 'button',
   cascader = 'cascader',
   transfer = 'transfer',
@@ -295,7 +297,7 @@ export function registerAntd() {
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].antd;
   });
-  LibComponents.confirm = aegis.AeModal.confirm;
+  LibComponents.confirm = window.aegis.AeModal.confirm;
   registerDesktop('d-range-picker', [TYPES.daterange], false);
   registerDesktop('d-input', [TYPES.string, TYPES.url], false);
   registerDesktop('d-textarea', [TYPES.text], false);
@@ -443,6 +445,9 @@ export function registerAntdMobile() {
       return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
     });
   registerMobile('m-textarea', [TYPES.text], false);
+  registerMobile(MobileImagePicker, TYPES.picture, null, (def) => {
+    return {multiple: def.array};
+  });
   registerMobile('m-switch-item', [TYPES.boolean], false);
   registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {
     return {options: getOptions(field)};

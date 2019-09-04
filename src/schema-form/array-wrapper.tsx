@@ -36,11 +36,12 @@ export default class ArrayWrapper extends Vue {
     if (this.addBtnProps && this.addBtnProps.block) {
       buttonStyle.width = '100%';
     }
+    const props: any = Object.assign({}, this.addBtnProps);
+    props.disabled = this.store && (this.store.disabled || this.store.loading);
+    props.icon = 'plus';
     const button = <ButtonComponent onClick={this.onAddClick}
-                                    disabled={this.store && (this.store.disabled || this.store.loading)}
                                     style={buttonStyle}
-                                    icon="plus"
-                                    attrs={Object.assign({}, this.addBtnProps)}>{this.addBtnText || '添加'}</ButtonComponent>;
+                                    props={props}>{this.addBtnText || '添加'}</ButtonComponent>;
     if (this.subForm) {
       return <div style={{margin: '10px 15px'}}>{button}</div>;
     }
@@ -108,7 +109,8 @@ export default class ArrayWrapper extends Vue {
     if (this.store.mode === 'display') {
       return null;
     }
-    return <div style={{textAlign: 'right'}}>
+    return <div style={{textAlign: 'right'}}
+                class="d-image-picker">
       <a
         style={{
           color: '#e94721',

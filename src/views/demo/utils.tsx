@@ -1,4 +1,3 @@
-import FormBlock from '@/schema-form/layout/form-block';
 import {TYPES} from '@/schema-form/utils/utils';
 import {FormDescriptor, SchemaFormField} from '@/types/bean';
 
@@ -113,6 +112,10 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     type: 'select',
     props: {options, clearable: true}
+  },
+  image: {
+    title: '图片',
+    type: 'picture'
   },
   expandSelect: {
     title: '展开单选',

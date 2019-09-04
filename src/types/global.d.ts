@@ -5,9 +5,8 @@ declare global {
     Vue: any;
     _: typeof _;
     moment: any;
+    aegis: any;
   }
-
-  export const aegis: any;
 
   export const antdm: any;
 
