@@ -2,6 +2,7 @@ import Emitter from '@/mixins/emitter';
 import {getFormItemComponent, getRealFields, renderField, SchemaFormStore} from '@/schema-form/internal/utils';
 import {SchemaFormField} from '@/types/bean';
 import {IField} from '@/uform/types';
+import {isEqual} from '@/uform/utils';
 import AsyncValidator from 'async-validator';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
@@ -32,7 +33,7 @@ export default class FormField extends mixins(Emitter) {
   public wrap: boolean;
   @Prop()
   public value: any;
-  public currentValue: any = null;
+  public currentValue: any = this.value !== undefined ? this.value : null;
   @Prop()
   public content: any;
   @Prop({type: Boolean, default: false})
@@ -86,17 +87,18 @@ export default class FormField extends mixins(Emitter) {
   }
 
   @Watch('currentValue')
-  public currentValueChanged(currentValue: any) {
-    const {field} = this;
-    this.$emit('input', currentValue);
-    this.$emit('change', currentValue);
-    field.onChange(currentValue);
-    this.$forceUpdate();
+  public currentValueChanged(currentValue: any, old: any) {
+    if (!isEqual(currentValue, old)) {
+      const {field} = this;
+      this.$emit('input', currentValue);
+      this.$emit('change', currentValue);
+      field.onChange(currentValue);
+    }
   }
 
   @Watch('value', {immediate: true})
   public valueChanged(value: any) {
-    if (this.currentValue !== value) {
+    if (!isEqual(this.currentValue, value)) {
       this.currentValue = value;
     }
   }
@@ -243,7 +245,8 @@ export default class FormField extends mixins(Emitter) {
       const noWrap = !definition.title;
       const formItem = noWrap ? inputComponent :
         <FormItemComponent props={Object.assign({}, formItemProps, {label: null})}>
-          <span slot="label">{formItemProps.label}</span>
+          {definition.wrapperProps && definition.wrapperProps.noTitle ? null :
+            <span slot="label">{formItemProps.label}</span>}
           {inputComponent}
         </FormItemComponent>;
       if (definition.span) {
@@ -288,7 +291,9 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public onInput(value) {
-    this.currentValue = value;
+    if (!isEqual(this.currentValue, value)) {
+      this.currentValue = value;
+    }
   }
 
   get error() {
@@ -377,7 +382,6 @@ export default class FormField extends mixins(Emitter) {
             field.valid = true;
             field.errors = [];
           }
-          this.$forceUpdate();
           if (errors) {
             resolve(errors.map(it => ({message: it.message, path: this.field.plainPath})));
           } else {

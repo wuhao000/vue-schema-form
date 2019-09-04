@@ -11,6 +11,11 @@
           <d-button>查询</d-button>
         </d-form-item>
       </v-schema-form>
+      <v-schema-form v-model="value2"
+                     :effects="effects2"
+                     :schema="schema2">
+
+      </v-schema-form>
       <d-button @click="changeMode">
         {{mode === 'display' ? '编辑':'详情'}}
       </d-button>
@@ -56,6 +61,40 @@
         }
       }
     };
+    public schema2 = {
+      props: {inline: true},
+      fields: {
+        month: {
+          type: 'month',
+          title: '时间选择',
+          processor: {
+            getValue: (v) => {
+              if (v && v.year && v.month) {
+                return new Date(v.year, v.month - 1);
+              }
+            },
+            setValue: (parentValue, field, fieldValue: Date) => {
+              if (fieldValue) {
+                parentValue.year = fieldValue.getFullYear();
+                parentValue.month = fieldValue.getMonth() + 1;
+              }
+            }
+          }
+        },
+        export: {
+          type: 'button',
+          title: '导出数据',
+          wrapperProps: {
+            noTitle: true
+          },
+          props: {
+            icon: 'export',
+            action: ($) => {
+            }
+          }
+        }
+      }
+    };
     public searchForm = {};
     public searchFormDefinition: SchemaFormField = {
       type: 'object',
@@ -71,6 +110,10 @@
       }]
     };
     public value = {};
+    public value2 = {
+      year: 2019,
+      month: 9
+    };
 
     public beforeCreate() {
       SchemaForm.registerAntd();
@@ -83,6 +126,12 @@
       } else {
         this.mode = 'display';
       }
+    }
+
+    public effects2($) {
+      $('month').onFieldChange((v) => {
+        console.log('month changed: ' + v);
+      });
     }
   }
 </script>

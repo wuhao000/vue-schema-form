@@ -63,24 +63,24 @@ export default class ArrayWrapper extends Vue {
     }
 
     if (this.$attrs.platform === 'mobile') {
-      return <transition-group name="flip-list" tag="div">{content}</transition-group>;
+      return content;
     } else {
       return <RowComponent gutter={this.$attrs.gutter || 20}
                            type="flex">
-        <transition-group name="flip-list" tag="div">{content}</transition-group>
+        {content}
       </RowComponent>;
     }
   }
 
   private renderFields() {
     if (this.store.platform === 'mobile') {
-      return this.$slots.default.map((it, index) => {
+      return this.$slots.default && this.$slots.default.map((it, index) => {
         return <div style={{position: 'relative'}}>{
           [this.renderDeleteBtn(index), it]
         }</div>;
       });
     }
-    return this.$slots.default.map((it, index) => {
+    return this.$slots.default && this.$slots.default.map((it, index) => {
       return [it, this.renderDesktopDeleteBtn(index)];
     });
   }
