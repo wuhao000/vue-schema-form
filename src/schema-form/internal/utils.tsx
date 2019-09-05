@@ -64,7 +64,8 @@ export function getRealFields(fields: FormFields) {
 }
 
 
-export function getComponentType(store: SchemaFormStore, definition: SchemaFormField): SchemaFormComponent {
+export function getComponentType(store: SchemaFormStore,
+                                 definition: SchemaFormField): SchemaFormComponent {
   let component: SchemaFormComponent = null;
   if (store.mode === 'display') {
     component = getDisplayComponent(store.platform, definition);
@@ -203,16 +204,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       initialize: () => {
       },
       invalid: false,
-      value: null,
-      onChange: (value) => {
-        const subject = store.context.subscribes[SchemaFormEvents.fieldChange];
-        if (subject) {
-          subject.next({
-            path: plainPath,
-            value
-          });
-        }
-      }
+      value: null
     });
   }
 }
@@ -261,6 +253,7 @@ export function searchSchema(path: string, def: FormDescriptor): SchemaFormField
 
 export enum SchemaFormEvents {
   fieldChange = 'fieldChange',
+  fieldCreate = 'fieldCreate',
 }
 
 export const filterErros = (errors: any[]) => {

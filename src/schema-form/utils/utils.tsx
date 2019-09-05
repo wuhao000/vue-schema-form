@@ -3,7 +3,7 @@ import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
 import MobileImagePicker from '@/schema-form/mobile/image-picker';
 import {Platform, SchemaFormField} from '@/types/bean';
-import {ILibComponents, LayoutOptions, SchemaFormComponent} from '@/types/form';
+import {ILibComponents, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
 import AntdUpload from '../antd/upload.vue';
@@ -16,6 +16,7 @@ import ElExtRadio from '../element/radio-group';
 import ElExtSelect from '../element/select';
 import ElementUpload from '../element/upload.vue';
 import Empty from '../empty';
+import FormBlock from '../layout/form-block';
 import GridLayout from '../layout/grid';
 import TextBox from '../layout/text-box';
 
@@ -171,20 +172,31 @@ export const registerDisplay = (component: string | object,
   });
 };
 
+/**
+ *
+ * @param options
+ */
 export const registerLayout = (options: {
   component: string | object,
   platforms: Platform | Platform[],
   types: string | string[],
-  getProps?: ((definition: IField, platform: Platform) => object),
-  layoutOptions: LayoutOptions
+  getProps?: ((definition: IField, platform: Platform) => object)
 }) => {
   addComponent({
     component: options.component, platforms: options.platforms,
     types: options.types, forArray: null, getProps: options.getProps,
-    forDisplay: null, layout: true,
-    layoutOptions: options.layoutOptions
+    forDisplay: null, layout: true
   });
 };
+
+/**
+ * 注册表单组件
+ * @param {string | object} component 组件对象或组件名称
+ * @param {Platform | Platform[]} platforms 支持的平台 desktop,mobile
+ * @param {string | string[]} types 组件的类型
+ * @param {boolean | null} forArray 是否为数组类型的数据组件（可选）,为null表示同时支持数组和非数组的数据格式
+ * @param {(definition: IField, platform: Platform) => object} getProps 组件属性转换器（可选）
+ */
 export const register = (component: string | object,
                          platforms: Platform | Platform[],
                          types: string | string[],
@@ -202,8 +214,7 @@ const addComponent = (options: {
   forArray: boolean,
   getProps: (definition: IField, platform: Platform) => object,
   forDisplay: boolean,
-  layout: boolean,
-  layoutOptions?: LayoutOptions
+  layout: boolean
 }) => {
   if (Array.isArray(options.types)) {
     options.types.forEach(type => {
@@ -211,8 +222,7 @@ const addComponent = (options: {
         component: options.component, platforms: options.platforms,
         types: type, forArray: options.forArray, getProps: options.getProps,
         forDisplay: options.forDisplay,
-        layout: options.layout,
-        layoutOptions: options.layoutOptions
+        layout: options.layout
       });
     });
   } else if (Array.isArray(options.platforms)) {
@@ -222,8 +232,7 @@ const addComponent = (options: {
         platforms: platform,
         types: options.types,
         forArray: options.forArray, getProps: options.getProps,
-        forDisplay: options.forDisplay, layout: options.layout,
-        layoutOptions: options.layoutOptions
+        forDisplay: options.forDisplay, layout: options.layout
       });
     });
   } else {
@@ -244,8 +253,7 @@ const addComponent = (options: {
           Object.assign(props, definition.props);
         }
         return props;
-      },
-      layoutOptions: options.layoutOptions
+      }
     };
     const mode = options.forDisplay ? 'display' : 'edit';
     const typeDef = store[mode][options.platforms];
@@ -465,26 +473,20 @@ export function registerAntdMobile() {
 }
 
 registerLayout({
-  component: GridLayout, platforms: [DESKTOP, MOBILE], types: 'grid',
-  layoutOptions: {
-    wrapItems: true,
-    wrapContainer: false
-  }
+  component: GridLayout, platforms: [DESKTOP, MOBILE], types: 'grid'
+});
+registerLayout({
+  component: FormBlock, platforms: DESKTOP, types: 'block'
 });
 registerLayout({
   component: Card,
   platforms: [DESKTOP],
-  types: ['card'],
-  layoutOptions: {
-    wrapItems: true,
-    wrapContainer: false
-  }
+  types: ['card']
 });
 registerLayout({
   component: TextBox,
   platforms: [DESKTOP, MOBILE],
-  types: 'text-box',
-  layoutOptions: {wrapItems: false, wrapContainer: true}
+  types: 'text-box'
 });
 
 const EmptyDefinition = {

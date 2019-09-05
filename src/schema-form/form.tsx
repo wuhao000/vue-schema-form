@@ -1,6 +1,16 @@
+import FormField from '@/schema-form/internal/field';
 import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
-import {appendPath, isPathMatchPatterns, match, takePath} from '@/schema-form/utils/path';
-import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement} from '@/schema-form/utils/utils';
+import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
+import {
+  ASchemaForm,
+  LibComponents,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement,
+  registerLayout
+} from '@/schema-form/utils/utils';
 import {FormDescriptor, FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import className from 'classname';
@@ -21,6 +31,7 @@ export default class SchemaForm extends Vue {
   public static registerAntdMobile = registerAntdMobile;
   public static registerElement = registerElement;
   public static registerComponent = register;
+  public static registerLayout = registerLayout;
   public static registerDisplayComponent = registerDisplay;
   @Prop({type: String, default: 'schema-form'})
   public prefixCls: string;
@@ -39,7 +50,7 @@ export default class SchemaForm extends Vue {
   @Prop(Function)
   public effects: Effects;
   @Prop({type: Object, required: true})
-  public schema: FormDescriptor;
+  public schema: SchemaFormField;
   @Prop({type: Object, default: () => ({})})
   public props: FormProps;
   @Prop([Object, Array])
@@ -115,45 +126,78 @@ export default class SchemaForm extends Vue {
   public createContext(): EffectsContext {
     const context: EffectsContext = (...paths: string[]) => {
       return {
+        paths: () => {
+          return context(...paths).fields().map(it => it.plainPath);
+        },
         fields: () => {
           return this.matchFields(paths);
         },
-        toggle: () => {
+        toggle: (): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
             field.visible = !field.visible;
           });
+          return context(...paths);
         },
-        hide: () => {
+        value: (value: any) => {
+          const res = this.matchFields(paths).map(it => it.value(value));
+          if (paths.some(it => isFuzzyPath(it))) {
+            throw new Error('不支持模糊匹配获取表单项的值');
+          } else {
+            if (paths.length === 1 && !isFuzzyPath(paths[0])) {
+              return res[0];
+            } else if (value !== undefined) {
+              return res;
+            }
+          }
+        },
+        hide: (): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
             field.visible = false;
           });
+          return context(...paths);
         },
-        show: () => {
+        show: (): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
             field.visible = true;
           });
+          return context(...paths);
         },
-        setEnum: (options: any) => {
+        setEnum: (options: any): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
             field.enum = options;
           });
+          return context(...paths);
         },
-        setFieldProps: (props) => {
+        setFieldProps: (props): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
             field.props = Object.assign({}, field.props, props);
           });
+          return context(...paths);
         },
-        onFieldChange: (callback) => {
+        onFieldCreate: (callback): EffectsHandlers => {
+          context.subscribe(SchemaFormEvents.fieldCreate, paths, callback);
+          return context(...paths);
+        },
+        onFieldCreateOrChange: (callback): EffectsHandlers => {
+          return context(...paths).onFieldCreate(callback)
+            .onFieldChange(callback);
+        },
+        onFieldChange: (callback): EffectsHandlers => {
           context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
+          return context(...paths);
         },
-        subscribe: (event: string, callback) => {
+        subscribe: (event: string, callback): EffectsHandlers => {
           context.subscribe(event, paths, callback);
+          return context(...paths);
         },
         takePath: (number: number): EffectsHandlers => {
           return context(...takePath(paths, number));
         },
         appendPath: (suffix: string): EffectsHandlers => {
           return context(...appendPath(paths, suffix));
+        },
+        replaceLastPath: (last: string): EffectsHandlers => {
+          return context(...replaceLastPath(paths, last));
         }
       } as EffectsHandlers;
     };
@@ -163,15 +207,17 @@ export default class SchemaForm extends Vue {
       }
       context.subscribes[e].subscribe({
         next: (v) => {
-          if (typeof pathsOrHandler === 'function') {
-            handler(v);
-          } else if (isPathMatchPatterns(v.path, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
-            if (e === SchemaFormEvents.fieldChange) {
-              handler(v.value, v.path);
-            } else {
+          this.$nextTick(() => {
+            if (typeof pathsOrHandler === 'function') {
               handler(v);
+            } else if (isPathMatchPatterns(v.path, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
+              if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
+                handler(v.value, v.path);
+              } else {
+                handler(v);
+              }
             }
-          }
+          });
         }
       });
     };
@@ -185,6 +231,14 @@ export default class SchemaForm extends Vue {
     context.subscribes = {};
     context.getValue = () => {
       return this.value;
+    };
+    context.trigger = (event: string, value: any) => {
+      this.$nextTick(() => {
+        const subject = this.store.context.subscribes[event];
+        if (subject) {
+          subject.next(value);
+        }
+      });
     };
     return context;
   }
@@ -207,12 +261,13 @@ export default class SchemaForm extends Vue {
     const {title, sticky, prefixCls, store, value, schema} = this;
     const rootFieldDef: SchemaFormField = Object.assign({}, schema, {
       type: 'object',
-      title
+      title,
+      props: this.schema.props,
     });
     let content: any = [
       this.$slots.header,
       renderField(null, store,
-          rootFieldDef, value, 0, false, this.$createElement
+        rootFieldDef, value, 0, false, this.$createElement
       )
     ];
     let footer: any = [
@@ -340,10 +395,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-        text || props && props.okText || '提交',
-        action || (() => {
-          this.onOk(true);
-        }), buttonProps, 'confirm-btn'
+      text || props && props.okText || '提交',
+      action || (() => {
+        this.onOk(true);
+      }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -372,9 +427,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '取消',
-        action || this.onCancel, buttonProps,
-        'cancel-btn'
+      text || props && props.cancelText || '取消',
+      action || this.onCancel, buttonProps,
+      'cancel-btn'
     );
   }
 
@@ -387,8 +442,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '重置',
-        action || this.onReset, buttonProps, 'reset-btn'
+      text || props && props.cancelText || '重置',
+      action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

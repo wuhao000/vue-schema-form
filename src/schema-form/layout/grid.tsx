@@ -3,7 +3,7 @@ import BaseLayout from '@/schema-form/layout/base-layout';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
-import { LibComponents } from '../utils/utils';
+import {LibComponents} from '../utils/utils';
 
 function toGroups(fields: VNode[], layout: Array<number | number[]>) {
   const groups = [];
@@ -34,16 +34,22 @@ export default class GridLayout extends BaseLayout {
   public title: any;
   @Prop(Number)
   public gutter: number;
+  @Prop({type: Boolean, default: true})
+  public wrapSingle: boolean;
 
   public render() {
-    const {layout, fields} = this;
+    const {layout, fields, wrapSingle, gutter} = this;
     const groups = toGroups(fields, layout);
     const layoutFields = layout.map((span, index) => {
       if (groups[index]) {
         if (typeof span === 'number') {
-          return <LibComponents.col span={span}>{groups[index]}</LibComponents.col>;
+          const col = <LibComponents.col span={span}>{groups[index]}</LibComponents.col>;
+          if (wrapSingle) {
+            return <LibComponents.row gutter={gutter}>{col}</LibComponents.row>;
+          }
+          return col;
         } else if (Array.isArray(span)) {
-          return <LibComponents.row gutter={this.gutter}>
+          return <LibComponents.row gutter={gutter}>
             {span.map((subspan, subindex) => {
               return <LibComponents.col span={subspan}>{groups[index][subindex]}</LibComponents.col>;
             })}

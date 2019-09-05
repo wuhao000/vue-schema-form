@@ -9,21 +9,28 @@ export interface EffectsContext extends EffectsFunction {
   validate: (value: any) => any;
   submit: (forceValidate: boolean, callback: (value: any) => any) => any;
   subscribes: ISubscribers;
+  trigger: (event: string, value: any) => void;
   getValue?: () => any;
   subscribe?: (event: string, paths: string | string[] | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
 }
 
 export interface EffectsHandlers {
   fields: () => IField[];
-  hide: () => any;
-  onFieldChange: (value: any) => any;
-  setEnum: (options: any) => any;
-  setFieldProps: (props: object) => void;
-  show: () => any;
-  subscribe: (event: string, handler: (...args: any) => any) => any;
-  toggle: () => any;
+  paths: () => string[];
+  hide: () => EffectsHandlers;
+  onFieldCreateOrChange: (cb: (value: any, path?: string) => any) => EffectsHandlers;
+  onFieldChange: (cb: (value: any, path?: string) => any) => EffectsHandlers;
+  onFieldCreate: (cb: (value: any, path?: string) => any) => EffectsHandlers;
+  setEnum: (options: any) => EffectsHandlers;
+  setFieldProps: (props: object) => EffectsHandlers;
+  show: () => EffectsHandlers;
+  subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
+  toggle: () => EffectsHandlers;
+  value: (value: any) => any;
 
   takePath(number: number): EffectsHandlers;
+
+  replaceLastPath(path: string): EffectsHandlers;
 
   appendPath(path: string): EffectsHandlers;
 }
@@ -36,22 +43,10 @@ export interface SchemaFormComponent {
   forArray: boolean | null;
   getProps: (field: IField) => object;
   layout: boolean;
-  layoutOptions?: LayoutOptions;
   platform: Platform;
   type: string;
 }
 
-
-export interface LayoutOptions {
-  /**
-   * 布局控件是否使用表单项容器包装
-   */
-  wrapContainer: boolean | undefined;
-  /**
-   * 布局内的表单项是否使用表单项容器包装
-   */
-  wrapItems: boolean | undefined;
-}
 
 export interface IIcons {
   down: string;

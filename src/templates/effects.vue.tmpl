@@ -1,0 +1,25 @@
+<template>
+  <ae-layout class="bg-white" style="padding-bottom: 20px;">
+    <ae-layout-content>
+      <ae-layout-content class="demo-wrapper">
+        <code v-html="md"
+              class="markdown-body"></code>
+      </ae-layout-content>
+      {{{demoTmpl}}}
+    </ae-layout-content>
+  </ae-layout>
+</template>
+<script lang="ts">
+  import CodeWrapper from '@/components/code-wrapper.vue';
+  {{{demoImports}}}
+  import md from '{{{mdPath}}}';
+  {{{codeImports}}}
+
+  export default {
+    name: 'DocEffects',
+    components: {CodeWrapper{{{demoImportNames}}}},
+    data() {
+      return {md{{{codeFieldNames}}}};
+    }
+  };
+</script>

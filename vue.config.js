@@ -8,6 +8,7 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const webpack = require('webpack');
 const resolve = dir => {
   return path.join(__dirname, dir);
 };
@@ -24,10 +25,14 @@ module.exports = {
   },
   runtimeCompiler: false,
   configureWebpack: (config) => {
-    config.devServer = {
-      port: 8025
-    };
-    config.output.libraryExport = 'default';
+    if (config.devServer) {
+      config.devServer.port = 8021;
+    } else {
+      config.devServer = {
+        port: 8021
+      };
+    }
+    config.resolve.alias['@ant-design/icons/lib/dist'] = path.resolve(__dirname, './src/icons.ts');
     config.module.rules.push({
       test: /\.md$/,
       use: [
@@ -40,6 +45,14 @@ module.exports = {
         }
       ]
     });
+    config.module.rules.push({
+      test: /\.txt$/,
+      use: [
+        { loader: 'raw-loader' },
+        { loader: 'decoded-text-loader' }
+      ]
+    });
+    config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
     config.plugins.push(
         new CompressionWebpackPlugin({
           test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
@@ -50,7 +63,11 @@ module.exports = {
     );
     config.externals = {
       'vue': 'Vue',
-      'moment': 'moment'
+      'moment': 'moment',
+      'highlight': 'hljs',
+      'codemirror': 'CodeMirror',
+      'vue-router': 'VueRouter',
+      'core-js': 'CoreJS'
     };
     if (analyze) {
       config.plugins.push(new BundleAnalyzerPlugin({

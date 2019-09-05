@@ -64,20 +64,29 @@
     public created() {
       setTimeout(() => {
         this.value = {
-          name: '张三'
+          name: '张三',
+          familyInfo: [{
+            hasChild: true
+          }, {
+            hasChild: false
+          }]
         };
       }, 1000);
     }
 
     public effects($: EffectsContext) {
-      $('familyInfo.?.hasChild').onFieldChange((value, path) => {
+      const cb = (value) => {
         if (value) {
-          $(path).takePath(2).appendPath('?').show();
+          $('familyInfo.*').show();
+          $('familyInfo.?.hasChild').hide();
         } else {
-          $(path).takePath(2).appendPath('?').hide();
-          $(path).show();
+          $('familyInfo.*').hide();
         }
-      });
+        $('familyInfo.0.hasChild').show();
+      };
+      $('familyInfo.0.hasChild')
+        .onFieldCreate(cb)
+        .onFieldChange(cb);
     }
   }
 </script>

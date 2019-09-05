@@ -70,7 +70,7 @@
             }
           },
           "wrapperProps": {
-            "extra": "是否显示GG"
+            "extra": "是否隐藏GG"
           },
           "enum": [
             "是",
@@ -86,7 +86,7 @@
             }
           },
           "wrapperProps": {
-            "extra": "是否显示EE"
+            "extra": "是否隐藏EE"
           },
           "default": "是",
           "enum": [
