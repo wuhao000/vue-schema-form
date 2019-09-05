@@ -12,7 +12,11 @@ export default {
     const OptionComponent = this.optionComponent;
     const props = Object.assign({}, this.$attrs);
     if (!props.value) {
-      props.value = [];
+      if (props.multiple) {
+        props.value = [];
+      } else {
+        props.value = null;
+      }
     }
     return <InputComponent
         props={props}

@@ -6,7 +6,11 @@ import docRoutes from './doc';
 
 
 export default new VueRouter({
+  mode: 'history',
   routes: [{
+    path: '/',
+    redirect: '/doc/readme'
+  }, {
     path: '/doc',
     components: {
       default: DemoIndex,

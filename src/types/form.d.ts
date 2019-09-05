@@ -21,6 +21,8 @@ export interface EffectsHandlers {
   onFieldCreateOrChange: (cb: (value: any, path?: string) => any) => EffectsHandlers;
   onFieldChange: (cb: (value: any, path?: string) => any) => EffectsHandlers;
   onFieldCreate: (cb: (value: any, path?: string) => any) => EffectsHandlers;
+  onFieldBlur: (cb: (path: string) => any) => EffectsHandlers;
+  onFieldFocus: (cb: (path?: string) => any) => EffectsHandlers;
   setEnum: (options: any) => EffectsHandlers;
   setFieldProps: (props: object) => EffectsHandlers;
   show: () => EffectsHandlers;

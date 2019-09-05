@@ -38,7 +38,7 @@ export interface IFormOptions<V = any> {
   editable: boolean | ((name: string) => boolean);
   effects: IEffects;
   initialValues?: V;
-  onFieldChange: (payload: IFieldPayload) => void;
+  onFieldChange: (payload: (v) => void) => void;
   onFormChange: (payload: IFormPayload) => void;
   onFormWillInit?: (form: any) => void;
   onReset: (payload: IFormPayload) => void;

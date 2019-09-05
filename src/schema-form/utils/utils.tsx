@@ -1,4 +1,5 @@
 import AntdButton from '@/schema-form/antd/button.vue';
+import ElButton from '@/schema-form/element/button.vue';
 import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
 import MobileImagePicker from '@/schema-form/mobile/image-picker';
@@ -19,6 +20,7 @@ import Empty from '../empty';
 import FormBlock from '../layout/form-block';
 import GridLayout from '../layout/grid';
 import TextBox from '../layout/text-box';
+import MButton from '../mobile/button.vue';
 
 Vue.component('ElExtIcon', ElExtIcon);
 export const ASchemaForm = 'ASchemaForm';
@@ -396,6 +398,9 @@ export function registerElement() {
     }));
     return {data};
   });
+  registerDesktop(ElButton, TYPES.button, null, field => {
+    return {title: field.title};
+  });
   registerDesktop(ElementUpload, TYPES.upload, null, (field) => {
     return {multiple: field.array};
   });
@@ -460,7 +465,7 @@ export function registerAntdMobile() {
   registerMobile(MobileImagePicker, TYPES.picture, null, (def) => {
     return {multiple: def.array};
   });
-  registerMobile('m-button', TYPES.button);
+  registerMobile(MButton, TYPES.button);
   registerMobile('m-switch-item', [TYPES.boolean], false);
   registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {
     return {options: getOptions(field)};

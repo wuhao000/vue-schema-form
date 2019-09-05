@@ -252,6 +252,8 @@ export function searchSchema(path: string, def: FormDescriptor): SchemaFormField
 
 
 export enum SchemaFormEvents {
+  fieldFocus = 'fieldFocus',
+  fieldBlur = 'fieldBlur',
   fieldChange = 'fieldChange',
   fieldCreate = 'fieldCreate',
 }

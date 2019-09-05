@@ -1,9 +1,10 @@
 <template>
   <ae-layout>
     <ae-layout-content>
-      <v-schema-form platform="mobile"
+      <v-schema-form v-model="value2"
+                     :effects="effects2"
                      :schema="schema2"
-                     :value="value2"></v-schema-form>
+                     @ok="submit"></v-schema-form>
       <v-schema-form v-model="value"
                      platform="mobile"
                      style="width: 800px"
@@ -13,6 +14,7 @@
   </ae-layout>
 </template>
 <script lang="ts">
+  import SchemaForm from '@/schema-form';
   import {EffectsContext} from '@/types/form';
   import Vue from 'vue';
   import Component from 'vue-class-component';
@@ -63,21 +65,45 @@
       }
     };
     public schema2 = {
+      props: {
+        labelWidth: '90px'
+      },
       fields: {
-        s1: {type: 'string'},
-        s2: {type: 'string'},
+        s1: {
+          type: 'string',
+          title: 's1',
+          notice: 'this is s1',
+          wrapperProps: {extra: 'abc'}
+        },
+        s2: {
+          type: 'string',
+          required: true,
+          title: 's2'
+        },
+        s4: {
+          type: 'select',
+          array: false,
+          title: 's4',
+          enum: [{label: '1', value: 1}, {label: '2', value: 2}]
+        },
         s3: {
-          type: 'button', title: 'btn', action: () => {
-            console.log('123');
+          type: 'button',
+          title: '赋值',
+          wrapperProps: {noTitle: true},
+          props: {
+            action: this.onClick
           }
         }
       }
     };
     public str = null;
     public value = {};
-    public value2 = {};
+    public value2: any = {s1: '444444', s4: null};
 
     public created() {
+      SchemaForm.registerAntdMobile();
+      // SchemaForm.registerAntd();
+      SchemaForm.registerElement();
       setTimeout(() => {
         this.value = {
           name: '张三',
@@ -101,8 +127,27 @@
         $('familyInfo.0.hasChild').show();
       };
       $('familyInfo.0.hasChild')
-        .onFieldCreate(cb)
-        .onFieldChange(cb);
+          .onFieldCreate(cb)
+          .onFieldChange(cb);
+    }
+
+    public effects2($) {
+      $('s1', 's2')
+          .onFieldBlur((p) => {
+            console.log('blur:' + p);
+          })
+          .onFieldFocus((p) => {
+            console.log('focus:' + p);
+          })
+          .onFieldChange((v) => {
+          });
+    }
+
+    public onClick() {
+      this.value2 = {s1: '11', s2: '22', s4: 1};
+    }
+
+    public submit() {
     }
   }
 </script>
