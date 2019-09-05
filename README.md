@@ -1,29 +1,46 @@
-# vue-schema-form
 
-## Project setup
-```
-npm install
-```
+访问[网站](http://vueschemaform.aegis-info.com/#/doc/readme)获取文档和示例
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# VSchemaForm 是什么
 
-### Run your tests
-```
-npm run test
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 背景
+
+表单问题，不管是在 jQuery 时代，还是 Vue/React 时代，
+都永远是前端工程师们的痛，但是这又是没办法的事情，业务需求多种多样，
+对于中后台业务而言，表单页面和报表页面基本上是中后台业务的核心展现形式，
+但是，如何帮助开发者更高效的开发表单，目前传统的表单开发方式：
+
+* 手动管理表单状态
+* 手动收集表单数据
+* 手动管理表单校验状态
+
+存在哪些问题？
+
+* 表单状态管理变得越来越难以维护，需要引入状态管理库
+* 传统表单开发的数据结构往往都是扁平结构，没法很好的处理嵌套复杂数据的情况，
+如果要处理，工作量会非常大
+* 当业务有动态输出表单的需求的时候，不得不自己开发一个基于某种数据协议的动态输出表单的组件
+* 当业务需要在可视化界面配置产出表单时，需要自己开发一个基于json的动态输出表单组件
+
+
+## 方案
+
+基于以上问题的探索，以及受到UForm的启发，研发了VSchemaForm的Vue表单解决方案：
+
+1. 使用json描述表单内容
+1. 支持多平台（移动端和桌面端）
+1. 支持多个组件库（Element UI、Ant Design Vue、Antd Mobile Vue）
+1. 支持嵌套表单
+1. 支持任意数据的数组解构
+1. 支持复杂布局
+1. 支持副作用函数，统一处理表单内各项的数据联动
+1. 支持解构数据，减少自定义的数据转换
+1. 支持表单校验
+
+
+
+
+

@@ -1,6 +1,9 @@
 import {RouteConfig} from 'vue-router';
 
 export default [{
+  path: 'api',
+  component: () => import('../../generated/doc/api.vue')
+}, {
   path: 'readme',
   component: () => import('../../generated/doc/readme.vue')
 }, {
