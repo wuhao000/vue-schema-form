@@ -1,6 +1,9 @@
 <template>
   <ae-layout>
     <ae-layout-content>
+      <v-schema-form platform="mobile"
+                     :schema="schema2"
+                     :value="value2"></v-schema-form>
       <v-schema-form v-model="value"
                      platform="mobile"
                      style="width: 800px"
@@ -59,7 +62,20 @@
         }
       }
     };
+    public schema2 = {
+      fields: {
+        s1: {type: 'string'},
+        s2: {type: 'string'},
+        s3: {
+          type: 'button', title: 'btn', action: () => {
+            console.log('123');
+          }
+        }
+      }
+    };
+    public str = null;
     public value = {};
+    public value2 = {};
 
     public created() {
       setTimeout(() => {

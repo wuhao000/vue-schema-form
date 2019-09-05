@@ -68,10 +68,12 @@ const store: { [key: string]: { [key: string]: any } } = {
 export const DESKTOP = 'desktop';
 export const MOBILE = 'mobile';
 
+
 const ComponentMap = {
   button: {
     element: 'el-button',
-    antd: 'd-button'
+    antd: 'd-button',
+    antdm: 'm-button'
   },
   row: {
     element: 'el-row',
@@ -83,11 +85,13 @@ const ComponentMap = {
   },
   form: {
     element: 'el-form',
-    antd: 'd-form'
+    antd: 'd-form',
+    antdm: 'm-list'
   },
   formItem: {
     element: 'el-form-item',
-    antd: 'd-form-item'
+    antd: 'd-form-item',
+    antdm: 'm-list-item'
   },
   alert: {
     element: 'el-alert',
@@ -114,7 +118,7 @@ const ComponentMap = {
     antd: 'd-layout-content'
   },
   icon: {
-    element: 'ElExtIcon',
+    element: 'el-ext-icon',
     antd: 'd-icon'
   },
   popover: {
@@ -394,7 +398,7 @@ export function registerElement() {
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-    (definition: IField) => ({type: definition.type.toLowerCase()}));
+      (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
@@ -439,15 +443,16 @@ export function registerAntdMobile() {
 
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+      (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerMobile('m-input', [TYPES.integer, TYPES.double, TYPES.number], false,
-    (definition: IField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: IField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   registerMobile('m-textarea', [TYPES.text], false);
   registerMobile(MobileImagePicker, TYPES.picture, null, (def) => {
     return {multiple: def.array};
   });
+  registerMobile('m-button', TYPES.button);
   registerMobile('m-switch-item', [TYPES.boolean], false);
   registerMobile('m-checkbox-popup-list', [TYPES.select], true, field => {
     return {options: getOptions(field)};

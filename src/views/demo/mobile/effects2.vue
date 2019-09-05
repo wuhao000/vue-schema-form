@@ -1,7 +1,6 @@
 <template>
   <ae-layout>
     <ae-layout-content>
-      {{value}}
       <v-schema-form v-model="value"
                      platform="mobile"
                      style="width: 800px"
@@ -42,18 +41,6 @@
     }
 
     public effects($: EffectsContext) {
-      $('family.?.hasChild').onFieldChange((v, path) => {
-        if (v) {
-          $(path).show();
-        } else {
-          $('family.?.name', 'family.?.birthday').hide();
-        }
-      });
-      setTimeout(() => {
-        $('c').setFieldProps({loading: true});
-        $('c').setEnum(['1', '2', '3']);
-        $('c').setFieldProps({loading: false});
-      }, 3000);
     }
   }
 </script>
