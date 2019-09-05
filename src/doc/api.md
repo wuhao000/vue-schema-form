@@ -1,46 +1,27 @@
-## 属性 （props）
+## V Schema Form 属性
 
-属性 | 名称 | 类型 | 默认值 | 说明
----|---|---|---|--- 
-definition|表单内容定义|详见 <code><a href="#form-def">表单内容定义</a></code>| 
-mode | 模式 | string, display 或 edit | edit | display: 详情模式，edit: 编辑模式
-platform|平台| string, mobile 或 desktop | desktop | desktop: 桌面端, mobile: 移动端
-value | 绑定的值对象 | object | | 支持v-model
-props | 表单的属性 | object | {} | 与使用的组件库相关，使用ant-design-vue，则为a-form的属性，使用element-ui则为el-form的属性
-rules | 校验规则 | object |  | 同Element UI的表单校验规则，当声明校验规则时，不再使用表单字段声明中的校验属性
-
-## 事件 （listeners）
-
-事件名称 | 事件说明
----|---
-ok | 点击保存按钮时触发事件，保存按钮只在声明了ok事件监听时渲染
-cancel | 点击取消按钮时触发事件，取消按钮只在声明了cancel事件监听时渲染
-reset | 点击重置按钮时触发事件，重置按钮只在声明了reset事件监听时渲染
-change | 当value发生变化时触发
-
- 
+属性|名称|类型|默认值|说明
+---|---|---|---|---
+disabled|禁用| boolean|false|禁用表单内所有输入组件以及按钮
+readonly|只读| boolean|false|暂未实现
+loading|加载中状态|boolean|false|表单内所有输入组件禁用，提交按钮为加载中状态
+actions|表单的操作定义|Array<Action>|
+platform|平台|desktop<br/>mobile|desktop|
+mode|模式（编辑或详情）|edit<br/>display|edit|
+effects|副作用函数|Effects|()=>{}|
+schema|表单布局对象|SchemaFormField||
+value|输入的值|object或object[]|支持v-model
+title|表单标题|VNode<br/>string|支持slot
+inline|是否线性布局|boolean|false|
+sticky|是否固定底部按钮|boolean|
 
 ## 插槽 （slots）
  
 插槽名称| 插槽说明
 ---|---
-header | 渲染在表单外之前的内容
-footer | 渲染在表单外之后的内容
-prepend | 渲染在表单内部最前面的内容
-append | 渲染在表单内容最后面的内容
-btns | 渲染底部按钮，代替默认的保存、取消、重置按钮
-
-
-
-<div id="form-def">
-
-## 表单内容定义
-
-属性|名称|类型|说明
----|---|---|---
-fields|表单字段|array|详见<code><a href="#field-def">表单字段定义</a></code>
-
-</div>
+title | 表单标题
+header | 渲染在表单标题之后和内容之前
+footer | 渲染在表单内容之后
 
 <div id="field-def">
 
@@ -54,22 +35,38 @@ type|字段类型|string
 array|字段值是否数组类型|boolean|false
 required|字段是否必填|boolean|false
 placeholder|表单项值为空时的占位信息|string
+layoutType|布局类型|string或object| |
+layoutProps|布局组件的选项|object| |
+arrayComponent|数组组件（可选，当array=true时有效）|string或object||
+arrayProps|数组组件的属性|object||
+layout|布局描述（当layoutType不为空时有效）|object||
+enum|枚举选项，选项类型的字段有效（select,expand-select,cascader,transfer）|any[]||
+depends|依赖显示的条件，支持条件选项或函数，当函数返回false时不显示该字段,使用副作用函数设置可见性后失效| ShowFieldCondition[] 或 ((value: any) => boolean)||
+notice|提示信息| string||
+fields|当字段类型为object或为布局类型时，子表单的字段列表|FormFields||
+displayValue|当表单模式为详情模式时显示的内容|string 或 VNode 或 ((value: any) => any)|
+rules|表单项校验规则（async-validator）|any[]||
+min|数值输入组件的最小值|number||
+max|数值输入组件的最大值| number||
+placeholder|输入内容为空时的占位文字|string||;
+span|栅格布局下的栅格数(设置后该表单项以栅格组件包装，如果相邻的字段也设置了该属性，则会纳入同一行)|number||
+props|表单输入组件的自定义属性|SchemaFormFieldProps;
+wrapperProps|表单项包装组件的属性|object||
+slot|表单项渲染使用插槽，当指定插槽时所有的属性将无效，直接使用插槽内容渲染|string||
+visible|是否可见|boolean||
+processor|自定数据转换器|ValueProcessor||
 
 </div>
 
-## 内置的字段类型
 
-字段类型|字段说明|Element组件|Ant Design Vue(必须同时使用aegis-ui-desktop)组件|Ant Design Mobile组件
----|---|---|---|---
-string|单行文本|el-input|d-input|m-input
-text|多行文本|el-input|d-textarea|m-textarea
-select|单选或多选|el-select|d-select|非数组使用m-popup-radio-list,数组使用m-popup-checkbox-list
-expand-select|展开选项的单选或多选|非数组使用el-radio-group,数组使用el-checkbox-group|非数组使用d-radio-group,数组使用d-checkbox-group|非数组使用m-radio-list,数组使用m-checkbox-list
-integer|整数|el-input-number|d-input-number|m-input
-double|小数|el-input-numberr|d-input-number|m-input
-boolean|布尔|el-switch|d-switch|m-switch-item
-date|日期|el-date-picker|d-date-picker|m-date-picker
-datetime|日期时间|el-date-picker|d-date-picker|m-date-picker
-object|子表单|el-form|d-form|m-list
 
+### Action 说明
+
+类型 string { name: string; text: string; props?: object; action?: ($) => {} }
+
+当类型为string时，支持的值有ok，cancel，reset，分别表示提交、取消、重置操作，
+当类型为object时，表示定义一个操作按钮，
+text为按钮的文本，
+props为按钮属性，
+action为按钮点击回调,回调函数使用EffectsContext对象作为参数
 

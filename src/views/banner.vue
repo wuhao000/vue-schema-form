@@ -8,7 +8,7 @@
     </a>
     <a-menu class="top-nav"
             mode="horizontal">
-      <a-menu-item @click="$router.push('/doc/readme')">API文档</a-menu-item>
+      <a-menu-item @click="$router.push('/doc/readme')">文档</a-menu-item>
       <a-menu-item @click="$router.push('/demo')">场景示例</a-menu-item>
       <a-menu-item @click="toGithub">GitHub
         <svg fill="none"

@@ -13,7 +13,7 @@
   </a-menu>
 </template>
 <script lang="ts">
-  import {demoRoutes} from '@/router';
+  import demoRoutes from '@/router/demo';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

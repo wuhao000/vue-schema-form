@@ -14,6 +14,14 @@ export function match(paths: string[], fieldPaths: string[]): string[] {
   return paths.map(it => matchSinglePath(it, fieldPaths)).flat();
 }
 
+export function replaceLastPath(paths: string[], last: string) {
+  return paths.map(it => {
+    const splits = splitPath(it);
+    splits[splits.length - 1] = last;
+    return splits.join(PATH_SEPARATOR);
+  });
+}
+
 export function appendPath(paths: string[], suffix: string): string[] {
   if (paths) {
     return paths.map(path => path + PATH_SEPARATOR + suffix);
@@ -30,8 +38,12 @@ export function isPathMatchPatterns(origin: string, patterns: string[]): boolean
   return patterns.some(it => isPathMatchPattern(origin, it));
 }
 
+export function isFuzzyPath(path: string) {
+  return path.includes('*') || path.includes('?');
+}
+
 function isPathMatchPattern(origin: string, pattern: string) {
-  if (pattern.includes('*') || pattern.includes('?')) {
+  if (isFuzzyPath(pattern)) {
     return matchPath(splitPath(pattern), splitPath(origin));
   } else {
     return origin === pattern;
@@ -39,7 +51,7 @@ function isPathMatchPattern(origin: string, pattern: string) {
 }
 
 export function matchSinglePath(path: string, fieldPaths: string[]): string[] {
-  if (path.includes('?') || path.includes('*')) {
+  if (isFuzzyPath(path)) {
     const sp = splitPath(path);
     return fieldPaths.filter(it => matchPath(sp, splitPath(it)));
   } else {
@@ -49,10 +61,10 @@ export function matchSinglePath(path: string, fieldPaths: string[]): string[] {
 
 function matchPath(origin: string[], path: string[]): boolean {
   if (origin.length) {
-    if (origin[0] === path[0] || origin[0] === '?') {
+    if (origin[0] === path[0] || (origin[0] === '?' && path[0] !== undefined)) {
       return matchPath(origin.slice(1), path.slice(1));
     } else {
-      return origin.length === 1 && origin[0] === '*';
+      return origin.length === 1 && (origin[0] === '*' && path.length > 0);
     }
   } else if (origin.length === 0 && path.length === 0) {
     return true;

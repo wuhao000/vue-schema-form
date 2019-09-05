@@ -225,7 +225,11 @@ class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   public getFormProps(this: any) {
-    const formProps = Object.assign({}, this.store.props, this.props);
+    const formProps = Object.assign({
+      labelWidth: this.$attrs.labelWidth,
+      labelCol: this.$attrs.labelCol,
+      wrapperCol: this.$attrs.wrapperCol
+    }, this.store.props, this.props);
     if (this.isMobile) {
       formProps.title = this.$slots.title || this.title;
     }

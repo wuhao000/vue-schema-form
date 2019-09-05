@@ -1,12 +1,12 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <!--      <v-schema-form v-model="value"-->
-      <!--                     class="demo-form"-->
-      <!--                     :actions="actions"-->
-      <!--                     :schema="definition"-->
-      <!--                     :effects="effects"-->
-      <!--                     :props="props"></v-schema-form>-->
+      <v-schema-form v-model="value"
+                     class="demo-form"
+                     :actions="actions"
+                     :effects="effects"
+                     :props="props"
+                     :schema="definition"></v-schema-form>
       <v-schema-form v-model="value2"
                      style="width:800px"
                      title="Block1"
@@ -99,14 +99,14 @@
     }
 
     public effects($: EffectsContext) {
-      $('f1.aa').onFieldChange((value) => {
+      $('f1.aa').onFieldCreateOrChange((value) => {
         if (value) {
           $('f1.bb').hide();
         } else {
           $('f1.bb').show();
         }
       });
-      $('f1.cc').onFieldChange((value) => {
+      $('f1.cc').onFieldCreateOrChange((value) => {
         if (value) {
           $('$card2').hide();
         } else {
@@ -117,7 +117,7 @@
     }
 
     public effects2($: EffectsContext) {
-      $('?.basic.bb').onFieldChange((value, path) => {
+      const cb1 = (value, path) => {
         const updatePath = path.substr(0, path.indexOf('.')) + '.basic.cc';
         if (value === 'a') {
           $(updatePath).setFieldProps({loading: true});
@@ -132,15 +132,17 @@
             $(updatePath).setFieldProps({loading: false});
           }, 1000);
         }
-      });
-      $('?.dd.?.ee').onFieldChange((value, path) => {
+      };
+      $('?.basic.bb').onFieldCreateOrChange(cb1);
+      const cb2 = (value, path) => {
         if (value === '是') {
           $(path).takePath(1).appendPath('basic.gg').hide();
         } else if (value === '否') {
           $(path).takePath(1).appendPath('basic.gg').show();
         }
-      });
-      $('?.dd.?.ff').onFieldChange((value, path) => {
+      };
+      $('?.dd.?.ee').onFieldCreateOrChange(cb2);
+      $('?.dd.?.ff').onFieldCreateOrChange((value, path) => {
         if (value === '是') {
           $(path).takePath(3).appendPath('ee').hide();
         } else if (value === '否') {

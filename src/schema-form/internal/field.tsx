@@ -1,5 +1,12 @@
 import Emitter from '@/mixins/emitter';
-import {getFormItemComponent, getRealFields, renderField, SchemaFormStore} from '@/schema-form/internal/utils';
+import {
+  getComponentType,
+  getFormItemComponent,
+  getRealFields,
+  renderField,
+  SchemaFormEvents,
+  SchemaFormStore
+} from '@/schema-form/internal/utils';
 import {SchemaFormField} from '@/types/bean';
 import {IField} from '@/uform/types';
 import {isEqual} from '@/uform/utils';
@@ -8,7 +15,17 @@ import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
 import ArrayWrapper from '../array-wrapper';
-import {addRule, DESKTOP, getColComponent, getConfirmFunction, getOptions, LibComponents, MOBILE, swap, TYPES} from '../utils/utils';
+import {
+  addRule,
+  DESKTOP,
+  getColComponent,
+  getConfirmFunction,
+  getOptions,
+  LibComponents,
+  MOBILE,
+  swap,
+  TYPES
+} from '../utils/utils';
 
 @Component({
   name: 'FormField'
@@ -82,7 +99,10 @@ export default class FormField extends mixins(Emitter) {
       const {field} = this;
       this.$emit('input', currentValue);
       this.$emit('change', currentValue);
-      field.onChange(currentValue);
+      this.store.context.trigger(SchemaFormEvents.fieldChange, {
+        path: this.field.plainPath,
+        value: currentValue
+      });
     }
   }
 
@@ -95,6 +115,17 @@ export default class FormField extends mixins(Emitter) {
 
   public created() {
     this.field.validate = this.validate;
+    this.field.value = (value: any) => {
+      if (value !== undefined) {
+        this.currentValue = value;
+      } else {
+        return this.currentValue;
+      }
+    };
+    this.store.context.trigger(SchemaFormEvents.fieldCreate, {
+      path: this.field.plainPath,
+      value: this.currentValue
+    });
   }
 
   @Watch('field', {immediate: true})
@@ -123,46 +154,57 @@ export default class FormField extends mixins(Emitter) {
     const style: any = {};
     if (inputFieldDef.layout) {
       props.layout = definition.layout;
-      const noWrap = inputFieldDef.layoutOptions && inputFieldDef.layoutOptions.wrapItems === false;
+      const noWrap = !this.definition.title;
       props.fields = getRealFields(definition.fields).map((field, index) => {
         return this.renderField(field, currentValue, index, !noWrap);
       });
     }
     if (field.array && inputFieldDef.forArray === false) {
-      const ArrayComponent = definition.arrayComponent || ArrayWrapper;
+      let ArrayComponent: any = ArrayWrapper;
+      if (typeof definition.arrayComponent === 'string') {
+        const componentDef = getComponentType(this.store, {
+          type: definition.arrayComponent,
+          props: definition.arrayProps
+        });
+        if (componentDef.component !== 'empty') {
+          ArrayComponent = componentDef.component;
+        }
+      } else if (typeof ArrayComponent === 'object') {
+        ArrayComponent = definition.arrayComponent;
+      }
       // @ts-ignore
       return <ArrayComponent
-          props={Object.assign({}, this.props, definition.arrayProps)}
-          disabled={disabled}
-          subForm={field.type === TYPES.object}
-          addBtnText={props.addBtnText}
-          ref="array"
-          key={field.plainPath}
-          platform={platform}
-          addBtnProps={props.addBtnProps}
-          cellSpan={props.cellSpan}
-          onRemove={async (index) => {
-            try {
-              const confirmFunc = getConfirmFunction(platform);
-              await confirmFunc('确定删除该条吗？', '提示');
-              this.removeArrayItem(index);
-            } catch (e) {
-              console.error(e);
-            }
-          }}
-          onMoveDown={(index) => {
-            if (index <= currentValue.length - 1) {
-              swap(currentValue, index, index + 1);
-            }
-          }}
-          onMoveUp={(index) => {
-            if (index > 0) {
-              swap(currentValue, index, index - 1);
-            }
-          }}
-          onAdd={() => {
-            this.addArrayItem();
-          }}>
+        props={Object.assign({}, this.props, definition.arrayProps)}
+        disabled={disabled}
+        subForm={field.type === TYPES.object}
+        addBtnText={props.addBtnText}
+        ref="array"
+        key={field.plainPath}
+        platform={platform}
+        addBtnProps={props.addBtnProps}
+        cellSpan={props.cellSpan}
+        onRemove={async (index) => {
+          try {
+            const confirmFunc = getConfirmFunction(platform);
+            await confirmFunc('确定删除该条吗？', '提示');
+            this.removeArrayItem(index);
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        onMoveDown={(index) => {
+          if (index <= currentValue.length - 1) {
+            swap(currentValue, index, index + 1);
+          }
+        }}
+        onMoveUp={(index) => {
+          if (index > 0) {
+            swap(currentValue, index, index - 1);
+          }
+        }}
+        onAdd={() => {
+          this.addArrayItem();
+        }}>
         {
           currentValue ? currentValue.map((v, index) => {
             const itemProps = Object.assign({}, props, {
@@ -175,15 +217,15 @@ export default class FormField extends mixins(Emitter) {
             }
             // @ts-ignore
             return <InputFieldComponent
-                attrs={itemProps}
-                arrayIndex={index}
-                disabled={disabled}
-                key={field.plainPath + '-' + index}
-                value={v}
-                title={platform === 'mobile' ? field.title : null}
-                onInput={(val) => {
-                  onArrayItemInput(val, index);
-                }}/>;
+              attrs={itemProps}
+              arrayIndex={index}
+              disabled={disabled}
+              key={field.plainPath + '-' + index}
+              value={v}
+              title={platform === 'mobile' ? field.title : null}
+              onInput={(val) => {
+                onArrayItemInput(val, index);
+              }}/>;
           }) : null
         }
       </ArrayComponent>;
@@ -192,7 +234,7 @@ export default class FormField extends mixins(Emitter) {
     props.value = currentValue;
     props.title = props.title || (platform === 'mobile' ? field.title : null);
     if (definition.type === TYPES.object
-        && definition.props) {
+      && definition.props) {
       if (!definition.props.props) {
         definition.props.props = {};
       }
@@ -204,13 +246,13 @@ export default class FormField extends mixins(Emitter) {
     }
     // @ts-ignore
     return <InputFieldComponent
-        props={props}
-        value={currentValue}
-        attrs={props}
-        style={style}
-        key={field.plainPath}
-        ref="input"
-        onInput={onInput}/>;
+      props={props}
+      value={currentValue}
+      attrs={props}
+      style={style}
+      key={field.plainPath}
+      ref="input"
+      onInput={onInput}/>;
   }
 
   get type() {
@@ -234,11 +276,11 @@ export default class FormField extends mixins(Emitter) {
       const formItemProps = this.getFormItemProps();
       const noWrap = !definition.title;
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent props={Object.assign({}, formItemProps, {label: null})}>
-            {definition.wrapperProps && definition.wrapperProps.noTitle ? null :
-                <span slot="label">{formItemProps.label}</span>}
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent attrs={Object.assign({}, formItemProps, {label: null})}>
+          {definition.wrapperProps && definition.wrapperProps.noTitle ? null :
+            <span slot="label">{formItemProps.label}</span>}
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {
@@ -302,8 +344,8 @@ export default class FormField extends mixins(Emitter) {
       if (definition.notice) {
         const popover = LibComponents.popover;
         props.label = <LibComponents.popover
-            content={definition.notice}
-            trigger="hover">
+          content={definition.notice}
+          trigger="hover">
           <span slot={popover === 'el-popover' ? 'reference' : 'default'}>
             {definition.title}
             <LibComponents.icon style={{marginLeft: '5px', color: '#247dc5'}}
@@ -340,7 +382,7 @@ export default class FormField extends mixins(Emitter) {
     }
     const {field} = this;
     if (this.type === TYPES.object
-        && this.$refs.array) {
+      && this.$refs.array) {
       const array = this.$refs.array as any;
       const validateFields = array.$children.filter(it => it.validate);
       return new Promise((resolve) => {
