@@ -28,6 +28,7 @@
       wrapperCol: 6
     };
     public schema = {
+      type: 'object',
       array: true,
       arrayComponent: FormBlock,
       arrayProps: {
@@ -39,8 +40,7 @@
         basic: {
           type: 'object',
           props: {
-            labelCol: 9,
-            wrapperCol: 6
+            labelWidth: '120px'
           },
           fields: {
             aa: {
@@ -59,7 +59,7 @@
               fields: {
                 grid: {
                   type: 'grid',
-                  layout: [8, 8],
+                  layout: [[8, 8]],
                   title: '字段3',
                   props: {gutter: 10},
                   fields: {

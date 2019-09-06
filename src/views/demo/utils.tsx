@@ -14,7 +14,9 @@ export const options = [{
 
 export const getProps = () => {
   return {
-    'labelSuffix': ':', 'gutter': 40, labelWidth: '120px'
+    labelSuffix: ':',
+    gutter: 40,
+    labelWidth: '120px'
   };
 };
 export const getValue = () => {
