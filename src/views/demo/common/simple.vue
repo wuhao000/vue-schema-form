@@ -1,12 +1,16 @@
 <template>
   <ae-layout class="demo-wrapper">
+    <el-checkbox v-model="checked"/>
     <ae-layout-content>
       <v-schema-form v-model="options"
+                     :platform="platform"
                      :schema="optionFormDefinition"></v-schema-form>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :disabled="options.disabled"
                      :loading="options.loading"
+                     :mode="options.displayMode ? 'display' : 'edit'"
+                     :platform="platform"
                      :props="props"
                      :readonly="options.readonly"
                      :schema="definition"
@@ -25,18 +29,18 @@
 
   const def = {
     radio: {
-      'type': 'expand-select',
-      'enum': [
+      type: 'expand-select',
+      enum: [
         '1',
         '2',
         '3',
         '4'
       ],
-      'title': 'Radio'
+      title: 'Radio'
     },
     select: {
-      'type': 'select',
-      'enum': [
+      type: 'select',
+      enum: [
         '1',
         '2',
         '3',
@@ -63,11 +67,15 @@
     },
     number: {
       type: 'number',
-      title: '数字选择'
+      title: '数字'
+    },
+    integer: {
+      type: 'integer',
+      title: '整数'
     },
     boolean: {
-      'type': 'boolean',
-      'title': '开关选择'
+      type: 'boolean',
+      title: '开关选择'
     },
     date: {
       'type': 'date',
@@ -152,7 +160,9 @@
   })
   export default class SimpleEditDemo extends Base {
 
+    public checked = false;
     public value = {
+      radio: '1',
       upload1: imgUrl,
       upload2: imgUrl,
       upload3: imgUrl,

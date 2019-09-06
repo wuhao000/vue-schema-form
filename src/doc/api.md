@@ -3,7 +3,6 @@
 属性|名称|类型|默认值|说明
 ---|---|---|---|---
 disabled|禁用| boolean|false|禁用表单内所有输入组件以及按钮
-readonly|只读| boolean|false|暂未实现
 loading|加载中状态|boolean|false|表单内所有输入组件禁用，提交按钮为加载中状态
 actions|表单的操作定义|Array<Action>|
 platform|平台|desktop<br/>mobile|desktop|

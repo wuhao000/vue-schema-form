@@ -1,5 +1,5 @@
 import {TYPES} from '@/schema-form/utils/utils';
-import {FormDescriptor, SchemaFormField} from '@/types/bean';
+import {SchemaFormField} from '@/types/bean';
 
 export const options = [{
   label: '选项1',
@@ -21,8 +21,8 @@ export const getValue = () => {
   return {
     string: '111',
     text: 'abc',
-    integer: '122',
-    double: '0.2',
+    integer: 122,
+    double: 0.2,
     url: 'http://www',
     datetime: new Date(),
     date: new Date(),
@@ -168,8 +168,12 @@ const fields: { [key: string]: SchemaFormField } = {
   }
 };
 
-export const getFormDefinition = (): FormDescriptor => {
+export const getFormDefinition = (): SchemaFormField => {
   return {
+    props: {
+      section: true,
+      spaceBetweenSection: 16
+    },
     fields
   };
 };

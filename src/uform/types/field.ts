@@ -52,7 +52,7 @@ export interface IField<V = any> {
   shownFromParent?: boolean;
   syncContextValue?: () => void;
   updateState?: (fn: (state: IFieldState) => void) => void;
-  valid?: boolean;
+  valid: boolean;
   value?: V;
   visible?: boolean;
 }

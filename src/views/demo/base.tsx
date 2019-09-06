@@ -1,4 +1,4 @@
-import {EffectsContext} from '@/types/form';
+import {getPlatform} from '@/utils/util';
 import {getFormDefinition, getProps, getValue} from '@/views/demo/utils';
 
 import Vue from 'vue';
@@ -9,6 +9,7 @@ import {Prop} from 'vue-property-decorator';
   name: 'Base'
 })
 export default class Base extends Vue {
+
   @Prop(Function)
   public init: () => any;
   public props = getProps();
@@ -22,28 +23,42 @@ export default class Base extends Vue {
     mobile: false
   };
 
+  get platform() {
+    return getPlatform();
+  }
+
   public created() {
     if (this.init) {
       this.init();
     }
+    window.ondevicelight = () => {
+      console.log(1);
+    };
+    window.ondevicemotion = () => {
+      console.log(2);
+    };
+    window.ondeviceorientation = () => {
+      console.log(3);
+    };
+    window.onresize = () => {
+      console.log(window.outerHeight + '/' + window.outerWidth);
+    };
   }
 
   public optionFormDefinition = {
+    title: '选项',
     props: {
-      inline: true
+      inline: true,
+      title: '选项'
     },
     fields: [{
       title: '禁用', type: 'boolean', property: 'disabled'
     }, {
       title: '加载中', type: 'boolean', property: 'loading'
     }, {
-      title: '只读', type: 'boolean', property: 'readonly'
-    }, {
       title: '详情模式', type: 'boolean', property: 'displayMode'
     }, {
       title: '固定模式', type: 'boolean', property: 'sticky'
-    }, {
-      title: '移动平台', type: 'boolean', property: 'mobile'
     }]
   };
 

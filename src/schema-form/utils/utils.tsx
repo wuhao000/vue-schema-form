@@ -21,6 +21,7 @@ import FormBlock from '../layout/form-block';
 import GridLayout from '../layout/grid';
 import TextBox from '../layout/text-box';
 import MButton from '../mobile/button.vue';
+import StepperItem from '../mobile/stepper-item.vue';
 
 Vue.component('ElExtIcon', ElExtIcon);
 export const ASchemaForm = 'ASchemaForm';
@@ -31,6 +32,7 @@ export const enum Mode {
 }
 
 export const enum TYPES {
+  checkbox = 'checkbox',
   picture = 'picture',
   button = 'button',
   cascader = 'cascader',
@@ -73,6 +75,11 @@ export const MOBILE = 'mobile';
 
 
 const ComponentMap = {
+  checkbox: {
+    element: 'el-checkbox',
+    antd: 'd-checkbox',
+    antdm: 'm-checkbox-item'
+  },
   button: {
     element: 'el-button',
     antd: 'd-button',
@@ -318,6 +325,7 @@ export function registerAntd() {
   registerDesktop('d-date-picker', [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerDesktop('d-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
+  registerDesktop('d-checkbox', TYPES.checkbox, false);
   registerDesktop('d-switch', TYPES.boolean);
   registerDesktop('d-select', TYPES.select, null, field => {
     return {dropdownMatchSelectWidth: false, multiple: field.array, options: getOptions(field)};
@@ -332,7 +340,7 @@ export function registerAntd() {
     return {options: def.enum};
   });
   registerDesktop('d-checkbox-group', TYPES.expandSelect, true, field => {
-    return {options: getOptions(field)};
+    return {options: getOptions(field), multiple: true};
   });
   registerDesktop('d-radio-group', TYPES.expandSelect, false, field => {
     return {options: getOptions(field)};
@@ -411,12 +419,13 @@ export function registerElement() {
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-      (definition: IField) => ({type: definition.type.toLowerCase()}));
+    (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
     return {multiple: definition.array, options: getOptions(definition)};
   });
+  registerDesktop('el-checkbox', TYPES.checkbox, false);
   registerDesktop('el-slider', TYPES.range, false, (field) => {
     const props: any = {range: true};
     if (field.props && field.props.marks) {
@@ -447,7 +456,7 @@ export function registerElement() {
     return {options: getOptions(field)};
   });
   registerDesktop('el-ext-checkbox', [TYPES.expandSelect], true, field => {
-    return {options: getOptions(field)};
+    return {options: getOptions(field), multiple: true};
   });
 }
 
@@ -456,11 +465,14 @@ export function registerAntdMobile() {
 
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-      (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  registerMobile('m-input', [TYPES.integer, TYPES.double, TYPES.number], false,
-      (definition: IField) => {
-        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-      });
+    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerMobile('m-input', [TYPES.double, TYPES.number], false,
+    (definition: IField) => {
+      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+    });
+  registerMobile(StepperItem, [TYPES.integer], false, field => {
+    return {title: field.title};
+  });
   registerMobile('m-textarea', [TYPES.text], false);
   registerMobile(MobileImagePicker, TYPES.picture, null, (def) => {
     return {multiple: def.array};
@@ -504,16 +516,19 @@ const EmptyDefinition = {
   getProps: (_) => ({})
 } as SchemaFormComponent;
 
-function searchStore(mode: Mode, platform: Platform, definition: SchemaFormField): SchemaFormComponent {
-  const typeDef = store[mode][platform][definition.type];
+function searchStore(mode: Mode,
+                     platform: Platform,
+                     definition: SchemaFormField): SchemaFormComponent {
+  const type = definition.xType || definition.type;
+  const typeDef = store[mode][platform][type];
   if (!typeDef) {
-    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+    console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
     return EmptyDefinition;
   }
   if (definition.array) {
     const res = typeDef[1] || typeDef[0] || typeDef[2] || EmptyDefinition;
     if (res.component === 'empty') {
-      console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+      console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
     }
     return res;
   } else {
@@ -545,12 +560,15 @@ export const getOptions = (field: IField) => {
 };
 
 export const getDefaultValue = (field: IField) => {
-  if (typeof field.destructPath.destruct !== 'string') {
-    return null;
-  } else if (field.type === TYPES.transfer) {
+  if (field.component.getDefaultValue !== undefined) {
+    return field.component.getDefaultValue(field);
+  }
+  if (field.type === TYPES.transfer) {
     return [];
   } else if (field.type === TYPES.range) {
     return [0, 0];
+  } else if (typeof field.destructPath.destruct !== 'string') {
+    return null;
   } else if (field.type === TYPES.object) {
     if (field.array) {
       return [{}];

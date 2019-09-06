@@ -47,6 +47,7 @@ export interface SchemaFormComponent {
   layout: boolean;
   platform: Platform;
   type: string;
+  getDefaultValue?: (field: IField) => any;
 }
 
 

@@ -1,5 +1,4 @@
 import {getOptions} from '@/schema-form/utils/utils';
-import {SchemaFormField} from '@/types/bean';
 import {IField} from '@/uform/types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -21,11 +20,11 @@ class SelectDisplayField extends Vue {
     if (value) {
       let selected = [];
       if (field.array) {
-        selected = options.filter(it => value.includes(it[this.valueProperty]));
+        selected = options.filter(it => value.includes(it[this.valueProperty]) || value.includes(it));
       } else {
-        selected = options.filter(it => value === it[this.valueProperty]);
+        selected = options.filter(it => value === it[this.valueProperty] || value === it);
       }
-      return <span>{selected.map(it => it[this.LabelProperty]).join('、')}</span>;
+      return <span>{selected.map(it => typeof it === 'object' ? it[this.LabelProperty] : it).join('、')}</span>;
     } else {
       return <span/>;
     }

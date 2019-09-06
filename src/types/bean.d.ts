@@ -84,6 +84,10 @@ export interface SchemaFormField {
    */
   type?: string;
   /**
+   * 指定额外的组件类型
+   */
+  xType?: string;
+  /**
    * 是否可见
    */
   visible?: boolean;

@@ -195,6 +195,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       destructPath: parseDestructPath(definition.property),
       props: Object.assign({}, definition.props),
       visible: calcShowState(currentValue, definition),
+      valid: true,
       required: definition.required,
       fields: definition.fields,
       effectErrors: [],

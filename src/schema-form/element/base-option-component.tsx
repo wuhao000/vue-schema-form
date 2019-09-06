@@ -19,8 +19,8 @@ export default {
       }
     }
     return <InputComponent
-        props={props}
-        on={this.$listeners}>
+      props={props}
+      on={this.$listeners}>
       {
         this.options.map(option => {
           const props = {};

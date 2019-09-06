@@ -20,5 +20,6 @@
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Base {
+    public v = 1;
   }
 </script>
