@@ -1,8 +1,8 @@
-import {IFieldState} from './field';
+import {IField, IFieldState} from './field';
 
 export interface IValidateResponse {
   errors: string[];
-  field: IFieldState;
+  field: IField;
   invalid: boolean;
   name: string;
   valid: boolean;

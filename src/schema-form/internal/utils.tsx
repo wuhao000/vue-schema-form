@@ -266,6 +266,7 @@ export enum SchemaFormEvents {
   fieldBlur = 'fieldBlur',
   fieldChange = 'fieldChange',
   fieldCreate = 'fieldCreate',
+  validate = 'validate'
 }
 
 export const filterErros = (errors: any[]) => {

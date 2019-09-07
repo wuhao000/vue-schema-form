@@ -6,6 +6,7 @@
           <v-schema-form v-model="value2"
                          class="demo-form"
                          :actions="actions"
+                         :effects="effects"
                          :props="props"
                          :schema="definition"
                          @cancel="onCancel"
@@ -33,7 +34,10 @@
       text: '校验',
       action: async ($: EffectsContext) => {
         const res = await $.validate();
-        console.log(res);
+        if (res.length) {
+          // @ts-ignore
+          this.$message.error(res[0].errors.join('、'));
+        }
       }
     }];
 
@@ -45,5 +49,14 @@
       SchemaForm.registerAntd();
     }
 
+    public effects($: EffectsContext) {
+      $.onValidate((errors) => {
+        if (errors.length) {
+          // @ts-ignore
+          this.$message.error('表单内容有错误，请检查');
+          errors[0].field.focus();
+        }
+      });
+    }
   }
 </script>

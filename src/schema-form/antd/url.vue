@@ -17,8 +17,9 @@
 </template>
 <script lang="ts">
   import BaseUrl from '../common/url';
+
   export default {
     name: 'DUrlInput',
     mixins: [BaseUrl]
-  }
+  };
 </script>

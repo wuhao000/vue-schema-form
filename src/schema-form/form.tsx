@@ -1,6 +1,6 @@
 import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
-import {ASchemaForm, DESKTOP, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, registerLayout} from '@/schema-form/utils/utils';
+import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, registerLayout} from '@/schema-form/utils/utils';
 import {FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Actions, Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IValidateResponse} from '@/uform/types';
@@ -209,7 +209,7 @@ export default class SchemaForm extends Vue {
         next: (v) => {
           this.$nextTick(() => {
             if (typeof pathsOrHandler === 'function') {
-              handler(v);
+              pathsOrHandler(v);
             } else if (isPathMatchPatterns(v.path, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
                 handler(v.value, v.path);
@@ -233,6 +233,9 @@ export default class SchemaForm extends Vue {
       } else {
         return errors;
       }
+    };
+    context.onValidate = (handler) => {
+      context.subscribe(SchemaFormEvents.validate, handler);
     };
     context.subscribes = {};
     context.getValue = () => {
@@ -356,13 +359,7 @@ export default class SchemaForm extends Vue {
         const errors = await this.validate();
         if (errors.length) {
           console.warn('有错误', errors);
-          if (this.platform === DESKTOP) {
-            if ((this as any).$message) {
-              (this as any).$message.error(errors[0].errors.join('、'));
-            }
-          } else {
-            (this as any).$toast.fail(errors[0].errors.join('、'));
-          }
+          this.store.context.trigger(SchemaFormEvents.validate, errors);
         } else {
           if (callback) {
             callback(this.value);

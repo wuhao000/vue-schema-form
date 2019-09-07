@@ -103,6 +103,7 @@ export default class FormField extends mixins(Emitter) {
     }
     field.validate = this.validate;
     field.value = this.currentValue;
+    field.focus = this.focus;
     field.setGetValue = (value: any) => {
       if (value !== undefined) {
         this.currentValue = value;
@@ -114,6 +115,17 @@ export default class FormField extends mixins(Emitter) {
       path: field.plainPath,
       value: currentValue
     });
+  }
+
+  get input(): any {
+    return this.$refs.input;
+  }
+
+  public focus() {
+    if ((this.$el as HTMLElement).focus) {
+      (this.$el as HTMLElement).focus({preventScroll: false});
+      this.$el.scrollIntoView({behavior: 'smooth'});
+    }
   }
 
   @Watch('field', {immediate: true})

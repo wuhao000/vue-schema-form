@@ -56,6 +56,7 @@ export interface IField<V = any> {
   validate?: () => (boolean | Promise<unknown>);
   value: V;
   visible?: boolean;
+  focus?: () => any;
 }
 
 export interface IFieldOptions {

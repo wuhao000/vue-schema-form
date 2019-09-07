@@ -1,5 +1,5 @@
 import {Platform} from '@/types/bean';
-import {IField, ISubscribers} from '@/uform/types';
+import {IField, ISubscribers, IValidateResponse} from '@/uform/types';
 
 export type EffectsFunction = (
     ...path: string[]
@@ -7,11 +7,12 @@ export type EffectsFunction = (
 
 export interface EffectsContext extends EffectsFunction {
   getValue?: () => any;
+  onValidate: (handler: (response: IValidateResponse[]) => any) => void;
   submit: (forceValidate: boolean, callback: (value: any) => any) => any;
   subscribe?: (event: string, paths: string | string[] | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
   subscribes: ISubscribers;
-  trigger: (event: string, value: any) => void;
-  validate: (callback?: (errors, context: EffectsContext) => any) => any;
+  trigger: (event: string, value?: any) => void;
+  validate: (callback?: (errors: IValidateResponse[], context: EffectsContext) => any) => Promise<IValidateResponse[]>;
 }
 
 export interface EffectsHandlers {
