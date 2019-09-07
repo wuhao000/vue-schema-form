@@ -143,7 +143,7 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore,
     wrap,
     field: iField,
     path: buildArrayPath(pathPrefix, field),
-    disabled: store.disabled,
+    disabled:  iField.disabled || store.disabled,
     definition: field,
     formValue: currentValue
   };
@@ -180,6 +180,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
     const plainPath = buildArrayPath(pathPrefix, definition).join('.');
     return Vue.observable({
       definition,
+      disabled: false,
       enum: definition.enum,
       title: definition.title,
       array: definition.array,

@@ -7,6 +7,7 @@ import {IRuleDescription} from './rule';
 import {ISchema} from './schema';
 
 export interface IField<V = any> {
+  disabled: boolean;
   array?: boolean;
   changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   component: SchemaFormComponent;

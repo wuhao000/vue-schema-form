@@ -33,6 +33,10 @@ export interface EffectsHandlers {
 
   appendPath(path: string): EffectsHandlers;
 
+  disable(): void;
+
+  enable(): void;
+
   replaceLastPath(path: string): EffectsHandlers;
 
   takePath(number: number): EffectsHandlers;

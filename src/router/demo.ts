@@ -18,6 +18,10 @@ export default [
     component: () => import('@/views/demo/element/effects.vue'),
     meta: {tag: 'Element UI', name: '副作用函数'}
   }, {
+    path: 'element/methods',
+    component: () => import('@/views/demo/element/methods.vue'),
+    meta: {tag: 'Element UI', name: '表单项操作'}
+  }, {
     path: 'desktop/simple',
     component: () => import('@/views/demo/antd/simple.vue'),
     meta: {tag: 'Ant Design Vue', name: '简单场景'}

@@ -197,6 +197,18 @@ export default class SchemaForm extends Vue {
         appendPath: (suffix: string): EffectsHandlers => {
           return context(...appendPath(paths, suffix));
         },
+        disable: () => {
+          this.matchFields(paths).forEach(field => {
+            field.disabled = true;
+          });
+          return context(...paths);
+        },
+        enable: () => {
+          this.matchFields(paths).forEach(field => {
+            field.disabled = false;
+          });
+          return context(...paths);
+        },
         replaceLastPath: (last: string): EffectsHandlers => {
           return context(...replaceLastPath(paths, last));
         }
