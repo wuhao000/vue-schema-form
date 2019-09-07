@@ -37,8 +37,10 @@ export default class SchemaForm extends Vue {
   public actions: Actions;
   @Prop({type: String, default: 'desktop'})
   public platform: Platform;
-  @Prop({type: String, default: 'edit'})
+  @Prop({type: String})
   public mode: 'edit' | 'display';
+  @Prop({type: Boolean, default: true})
+  public editable: boolean;
   @Prop(Function)
   public effects: Effects;
   @Prop({type: Object, required: true})
@@ -53,12 +55,10 @@ export default class SchemaForm extends Vue {
   public inline: boolean;
   @Prop({type: Boolean, default: false})
   public sticky: boolean;
-
   @Provide()
   public store: SchemaFormStore = Vue.observable({
     fields: {},
     disabled: this.disabled,
-    mode: this.mode,
     loading: this.loading,
     readonly: this.readonly,
     platform: this.platform,
@@ -66,6 +66,7 @@ export default class SchemaForm extends Vue {
     effects: this.effects,
     inline: this.inline,
     slots: this.$slots,
+    editable: this.editable,
     context: null
   });
 
@@ -96,7 +97,7 @@ export default class SchemaForm extends Vue {
 
   @Watch('mode')
   public modeChanged(mode: 'edit' | 'display') {
-    this.store.mode = mode;
+    this.store.editable = mode === 'edit';
   }
 
   @Watch('loading', {immediate: true})
@@ -254,6 +255,13 @@ export default class SchemaForm extends Vue {
 
   public created() {
     this.store.context = this.createContext();
+    this.store.editable = this.mode !== undefined ? this.mode === 'edit' : this.editable;
+    if (this.mode !== undefined) {
+      console.warn('mode属性已经废弃，请使用editable属性代替');
+    }
+    this.$watch(() => this.editable, (editable: boolean) => {
+      this.store.editable = editable;
+    });
     this.$on('SchemaForm.addSchemaField', (field) => {
       if (field) {
         this.store.fields[field.plainPath] = field;
@@ -303,7 +311,7 @@ export default class SchemaForm extends Vue {
   public renderButtons() {
     const {props} = this.store;
     const {actions} = this;
-    if (props && this.store.mode === 'edit') {
+    if (props && this.store.editable) {
       if (this.$slots.btns) {
         return this.$slots.btns;
       }

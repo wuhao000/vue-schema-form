@@ -6,7 +6,7 @@ disabled|禁用| boolean|false|禁用表单内所有输入组件以及按钮
 loading|加载中状态|boolean|false|表单内所有输入组件禁用，提交按钮为加载中状态
 actions|表单的操作定义|Array<Action>|
 platform|平台|desktop<br/>mobile|desktop|
-mode|模式（编辑或详情）|edit<br/>display|edit|
+editable|是否编辑模式|boolean|true|false时为详情模式
 effects|副作用函数|Effects|()=>{}|
 schema|表单布局对象|SchemaFormField||
 value|输入的值|object或object[]|支持v-model

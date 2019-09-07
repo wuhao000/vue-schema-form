@@ -24,7 +24,7 @@ export default class ArrayWrapper extends Vue {
 
 
   public renderAddButton() {
-    if (this.store.mode === 'display') {
+    if (!this.store.editable) {
       return null;
     }
     const ColComponent = getColComponent();
@@ -87,7 +87,7 @@ export default class ArrayWrapper extends Vue {
   }
 
   private renderDeleteBtn(index: any) {
-    if (this.store.mode === 'display') {
+    if (!this.store.editable) {
       return null;
     }
     return <a style={{
@@ -106,7 +106,7 @@ export default class ArrayWrapper extends Vue {
   }
 
   private renderDesktopDeleteBtn(index: any) {
-    if (this.store.mode === 'display') {
+    if (!this.store.editable) {
       return null;
     }
     return <div style={{textAlign: 'right'}}

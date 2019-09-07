@@ -16,11 +16,11 @@ export interface SchemaFormStore {
   props: FormProps;
   disabled: boolean;
   platform: 'mobile' | 'desktop';
-  mode: 'edit' | 'display';
   readonly: boolean;
   loading: boolean;
   inline: boolean;
   slots: { [key: string]: VNode[] | undefined };
+  editable: boolean;
   context: EffectsContext;
 }
 
@@ -67,13 +67,13 @@ export function getRealFields(fields: FormFields) {
 export function getComponentType(store: SchemaFormStore,
                                  definition: SchemaFormField): SchemaFormComponent {
   let component: SchemaFormComponent = null;
-  if (store.mode === 'display') {
+  if (!store.editable) {
     component = getDisplayComponent(store.platform, definition);
   } else {
     component = getComponent(store.platform, definition);
   }
   if (component.component === 'empty') {
-    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${store.mode === 'display' ? '展示' : '编辑'}组件`);
+    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${store.editable ? '编辑' : '详情'}组件`);
   }
   return component;
 }

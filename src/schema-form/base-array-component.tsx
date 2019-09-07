@@ -43,7 +43,7 @@ export default class BaseArrayComponent extends Vue {
   }
 
   public renderAddButton(this: any) {
-    if (this.store.mode === 'display') {
+    if (!this.store.editable) {
       return null;
     }
     const ColComponent = getColComponent();

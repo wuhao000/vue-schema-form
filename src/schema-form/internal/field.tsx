@@ -43,10 +43,6 @@ export default class FormField extends mixins(Emitter) {
     return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
   }
 
-  get display() {
-    return this.store.mode === 'display';
-  }
-
   get options() {
     return getOptions(this.field);
   }
@@ -56,12 +52,12 @@ export default class FormField extends mixins(Emitter) {
   }
 
   get props() {
-    const {field, definition, component, display, path, schemaPath, store: {platform}} = this;
+    const {field, definition, component, path, schemaPath, store: {platform}} = this;
     const props: any = Object.assign({}, component.getProps(field));
     const type = field.type;
     if (type === TYPES.object) {
       props.platform = platform;
-      props.mode = display ? 'display' : 'edit';
+      props.editable = this.store.editable;
       props.pathPrefix = path;
       props.schemaPath = schemaPath;
       props.layoutType = definition.layoutType;
@@ -70,7 +66,7 @@ export default class FormField extends mixins(Emitter) {
     if (definition.placeholder) {
       props.placeholder = definition.placeholder;
     }
-    if (display) {
+    if (!this.store.editable) {
       delete props.required;
     }
     return props;
@@ -144,7 +140,7 @@ export default class FormField extends mixins(Emitter) {
     if (content) {
       return content;
     }
-    if (this.display && definition.displayValue) {
+    if (!this.store.editable && definition.displayValue) {
       if (typeof definition.displayValue === 'function') {
         return definition.displayValue(currentValue);
       } else {
@@ -275,11 +271,11 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public render() {
-    const {props, display, field, type, definition, store: {platform}} = this;
+    const {props, field, type, definition, store: {platform, editable}} = this;
     if (definition.slot) {
       return this.store.slots[definition.slot];
     }
-    if (display) {
+    if (!editable) {
       props.definition = definition;
       props.field = field;
     }
@@ -302,7 +298,7 @@ export default class FormField extends mixins(Emitter) {
         item = formItem;
       }
     } else if (platform === MOBILE) {
-      if (display) {
+      if (!editable) {
         if (type === TYPES.object) {
           item = inputComponent;
         } else {
@@ -348,10 +344,10 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public getFormItemProps() {
-    const {definition, field, display, store: {platform}} = this;
+    const {definition, field, store: {platform, editable}} = this;
     const component = getFormItemComponent(platform);
     const props: any = {
-      required: display ? null : definition.required,
+      required: editable ? definition.required : null,
       title: definition.title,
       label: definition.title
     };

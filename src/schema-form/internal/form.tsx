@@ -195,9 +195,9 @@ class InternalForm extends mixins(FieldBasedComponent) {
     return form;
   }
 
-  public renderAddFormButton(this: any) {
+  public renderAddFormButton() {
     const ButtonComponent = getButtonComponent();
-    if (this.definition.array && this.store.mode === 'edit') {
+    if (this.definition.array && this.store.editable) {
       return <ButtonComponent
         attrs={{
           block: true,

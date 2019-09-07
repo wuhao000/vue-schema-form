@@ -8,7 +8,7 @@
                      class="demo-form"
                      :disabled="options.disabled"
                      :loading="options.loading"
-                     :mode="options.displayMode ? 'display' : 'edit'"
+                     :editable="!options.displayMode"
                      :platform="platform"
                      :props="props"
                      :readonly="options.readonly"

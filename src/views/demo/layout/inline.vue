@@ -1,7 +1,7 @@
 <template>
   <ae-layout class="bg-white wrapper">
     <ae-layout-content>
-      <v-schema-form :mode="mode"
+      <v-schema-form :editable="editable"
                      :schema="schema"
                      :value="value"></v-schema-form>
       <v-schema-form v-model="searchForm"
@@ -17,7 +17,7 @@
 
       </v-schema-form>
       <d-button @click="changeMode">
-        {{mode === 'display' ? '编辑':'详情'}}
+        {{editable ? '详情' : '编辑'}}
       </d-button>
       <show-value :value="value"/>
     </ae-layout-content>
@@ -36,7 +36,7 @@
   })
   export default class LayoutInline extends Vue {
 
-    private mode = 'edit';
+    private editable = true;
     public schema = {
       props: {
         inline: true
@@ -121,11 +121,7 @@
     }
 
     public changeMode() {
-      if (this.mode === 'display') {
-        this.mode = 'edit';
-      } else {
-        this.mode = 'display';
-      }
+      this.editable = !this.editable;
     }
 
     public effects2($) {

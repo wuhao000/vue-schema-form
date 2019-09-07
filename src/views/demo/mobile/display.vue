@@ -2,7 +2,7 @@
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
       <v-schema-form class="demo-form"
-                     mode="display"
+                     :editable="false"
                      platform="mobile"
                      :schema="definition"
                      :props="props"

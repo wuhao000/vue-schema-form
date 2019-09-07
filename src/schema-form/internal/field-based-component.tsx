@@ -21,8 +21,4 @@ export default class FieldBasedComponent extends Vue {
     return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
   }
 
-  get display() {
-    return this.store.mode === 'display';
-  }
-
 }

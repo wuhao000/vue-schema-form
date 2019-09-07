@@ -9,7 +9,7 @@
                      :actions="actions"
                      :disabled="options.disabled"
                      :loading="options.loading"
-                     :mode="options.displayMode ? 'display' : 'edit'"
+                     :editable="!options.displayMode"
                      :platform="options.mobile ? 'mobile' : 'desktop'"
                      :props="props"
                      :readonly="options.readonly"
