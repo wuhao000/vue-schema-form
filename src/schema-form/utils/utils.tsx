@@ -1,5 +1,7 @@
 import AntdButton from '@/schema-form/antd/button.vue';
+import AntdUrlInput from '@/schema-form/antd/url.vue';
 import ElButton from '@/schema-form/element/button.vue';
+import ElUrlInput from '@/schema-form/element/url.vue';
 import InternalForm from '@/schema-form/internal/form';
 import Card from '@/schema-form/layout/card';
 import MobileImagePicker from '@/schema-form/mobile/image-picker';
@@ -320,7 +322,8 @@ export function registerAntd() {
   });
   LibComponents.confirm = window.aegis.AeModal.confirm;
   registerDesktop('d-range-picker', [TYPES.daterange], false);
-  registerDesktop('d-input', [TYPES.string, TYPES.url], false);
+  registerDesktop('d-input', [TYPES.string], false);
+  registerDesktop(AntdUrlInput, TYPES.url, false);
   registerDesktop('d-textarea', [TYPES.text], false);
   registerDesktop('d-date-picker', [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
@@ -412,14 +415,15 @@ export function registerElement() {
   registerDesktop(ElementUpload, TYPES.upload, null, (field) => {
     return {multiple: field.array};
   });
-  registerDesktop('el-input', [TYPES.string, TYPES.url], false);
+  registerDesktop('el-input', TYPES.string, false);
+  registerDesktop(ElUrlInput, TYPES.url, false);
   registerDesktop('el-input', [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-    (definition: IField) => ({type: definition.type.toLowerCase()}));
+      (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
@@ -465,11 +469,11 @@ export function registerAntdMobile() {
 
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+      (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerMobile('m-input', [TYPES.double, TYPES.number], false,
-    (definition: IField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: IField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   registerMobile(StepperItem, [TYPES.integer], false, field => {
     return {title: field.title};
   });

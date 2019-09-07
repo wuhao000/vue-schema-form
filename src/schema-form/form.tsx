@@ -1,8 +1,10 @@
-import {filterErros, hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
+import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
-import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, registerLayout} from '@/schema-form/utils/utils';
+import {ASchemaForm, DESKTOP, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, registerLayout} from '@/schema-form/utils/utils';
 import {FormProps, Platform, SchemaFormField} from '@/types/bean';
-import {Effects, EffectsContext, EffectsHandlers} from '@/types/form';
+import {Actions, Effects, EffectsContext, EffectsHandlers} from '@/types/form';
+import {IValidateResponse} from '@/uform/types';
+import runValidation from '@/uform/validator';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import Vue, {VNode} from 'vue';
@@ -32,7 +34,7 @@ export default class SchemaForm extends Vue {
   @Prop({type: Boolean, default: false})
   public loading: boolean;
   @Prop({type: Array})
-  public actions: Array<string | { name: string; text: string; props?: object; action?: () => {} }>;
+  public actions: Actions;
   @Prop({type: String, default: 'desktop'})
   public platform: Platform;
   @Prop({type: String, default: 'edit'})
@@ -129,7 +131,7 @@ export default class SchemaForm extends Vue {
           return context(...paths);
         },
         value: (value: any) => {
-          const res = this.matchFields(paths).map(it => it.value(value));
+          const res = this.matchFields(paths).map(it => it.setGetValue(value));
           if (paths.some(it => isFuzzyPath(it))) {
             throw new Error('不支持模糊匹配获取表单项的值');
           } else {
@@ -225,8 +227,12 @@ export default class SchemaForm extends Vue {
       this.onOk(forceValidate, callback);
     };
     context.validate = async (handler) => {
-      const res = await this.validate();
-      handler(filterErros(res));
+      const errors = await runValidation(this.value, this.store.fields, true);
+      if (handler) {
+        handler(errors, context);
+      } else {
+        return errors;
+      }
     };
     context.subscribes = {};
     context.getValue = () => {
@@ -347,16 +353,15 @@ export default class SchemaForm extends Vue {
                     callback?: (value) => any) {
     if (hasListener(this, 'ok')) {
       if (forceValidate) {
-        const valid = await this.validate();
-        const errors = valid.filter((it: any) => it && it !== true).flat();
+        const errors = await this.validate();
         if (errors.length) {
           console.warn('有错误', errors);
-          if (this.platform === 'desktop') {
+          if (this.platform === DESKTOP) {
             if ((this as any).$message) {
-              (this as any).$message.error(errors[0].message);
+              (this as any).$message.error(errors[0].errors.join('、'));
             }
           } else {
-            (this as any).$toast.fail(errors[0].message);
+            (this as any).$toast.fail(errors[0].errors.join('、'));
           }
         } else {
           if (callback) {
@@ -375,12 +380,8 @@ export default class SchemaForm extends Vue {
     }
   }
 
-  public validate(): Promise<object[]> | [] {
-    const fields = Object.keys(this.store.fields).map(key => this.store.fields[key]);
-    if (fields.length) {
-      return Promise.all(fields.map(it => (it as any).validate()));
-    }
-    return [];
+  public validate(): Promise<IValidateResponse[]> | [] {
+    return runValidation(this.value, this.store.fields, true);
   }
 
   private createSubmitButton(text: string = null, btnProps: object = null, action: () => any = null) {

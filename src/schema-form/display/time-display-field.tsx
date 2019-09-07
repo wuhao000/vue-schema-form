@@ -15,9 +15,6 @@ class DisplayField extends Vue {
 
   public render() {
     const {value} = this;
-    if (this.definition.type === 'time') {
-      return <span>{this.value}</span>;
-    }
     let format = 'YYYY-MM-DD HH:mm:ss';
     if (this.definition.type === 'date') {
       format = 'YYYY-MM-DD';
@@ -27,6 +24,8 @@ class DisplayField extends Vue {
       format = 'YYYY';
     } else if (this.definition.type === 'daterange') {
       format = 'YYYY-MM-DD';
+    } else if (this.definition.type === 'time') {
+      format = 'HH:mm:ss';
     }
     if (this.definition.type === 'daterange' && value) {
       return <span>

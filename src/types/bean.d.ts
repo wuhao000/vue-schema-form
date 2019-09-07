@@ -1,4 +1,4 @@
-import {IField} from '@/uform/types';
+import {IField, IRuleDescription, Rule} from '@/uform/types';
 import {ValidateRules} from 'async-validator';
 import {VNode} from 'vue';
 
@@ -42,7 +42,7 @@ export interface SchemaFormField {
   /**
    * 表单项校验规则（async-validator）
    */
-  rules?: any[];
+  rules?: Rule;
   /**
    * 字段是否为必填
    */
@@ -83,6 +83,10 @@ export interface SchemaFormField {
    * 表单项类型
    */
   type?: string;
+  /**
+   * 默认值
+   */
+  default?: any;
   /**
    * 指定额外的组件类型
    */

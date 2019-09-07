@@ -1,12 +1,14 @@
-import { format, isEmpty } from '../utils';
-import { getMessage } from '../message';
-import { IRuleDescription } from '@/uform/types';
+import {IRuleDescription} from '@/uform/types';
+import {getMessage} from '../message';
+import {format, isEmpty} from '../utils';
 
-const isValidateEmpty = (value: any) => {
-  if (typeof value === 'object') {
+export const isValidateEmpty = (value: any) => {
+  if (typeof value === 'object' && !(value instanceof Date)) {
     for (const key in value) {
       if (value.hasOwnProperty(key)) {
-        if (!isValidateEmpty(value[key])) { return false; }
+        if (!isValidateEmpty(value[key])) {
+          return false;
+        }
       }
     }
     return true;
@@ -16,14 +18,14 @@ const isValidateEmpty = (value: any) => {
 };
 
 export default (
-  value: any,
-  rule: IRuleDescription,
-  values: any,
-  name: string
+    value: any,
+    rule: IRuleDescription,
+    values: any,
+    name: string
 ) => {
   if (rule.required) {
     return isValidateEmpty(value)
-      ? format(rule.message || getMessage('required'), name)
-      : '';
+        ? format(rule.message || getMessage('required'), name)
+        : '';
   }
 };

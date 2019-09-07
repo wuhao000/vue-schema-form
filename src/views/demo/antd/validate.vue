@@ -5,18 +5,9 @@
         <ae-col :span="12">
           <v-schema-form v-model="value2"
                          class="demo-form"
-                         :schema="definition"
+                         :actions="actions"
                          :props="props"
-                         @cancel="onCancel"
-                         @ok="onOk"
-                         @reset="onReset"></v-schema-form>
-        </ae-col>
-        <ae-col :span="12">
-          <v-schema-form class="demo-form"
-                         mode="display"
                          :schema="definition"
-                         :props="props"
-                         :value="value2"
                          @cancel="onCancel"
                          @ok="onOk"
                          @reset="onReset"></v-schema-form>
@@ -27,15 +18,24 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
+  import {EffectsContext} from '@/types/form';
   import Base from '@/views/demo/base';
   import Component from 'vue-class-component';
-  import {Watch} from 'vue-property-decorator';
 
   SchemaForm.registerAntd();
   @Component({
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Base {
+
+    public actions = ['submit', 'cancel', 'reset', {
+      name: 'validate',
+      text: '校验',
+      action: async ($: EffectsContext) => {
+        const res = await $.validate();
+        console.log(res);
+      }
+    }];
 
     public value2 = {
       string: '1111111'

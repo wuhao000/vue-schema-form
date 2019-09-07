@@ -1,6 +1,6 @@
 {
   "array": true,
-  "arrayComponent": "FormBlock",
+  "arrayComponent": "block",
   "fields": {
     "basic": {
       "type": "object",
@@ -53,7 +53,11 @@
     "dd": {
       "type": "object",
       "array": true,
-      "arrayComponent": "FormBlock",
+      "arrayComponent": "block",
+      "arrayProps": {
+        "addText": "添加一项",
+        "removeText": "删除"
+      },
       "layoutType": "card",
       "layoutProps": {
         "title": "嵌套Array"

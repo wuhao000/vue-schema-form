@@ -78,6 +78,7 @@ export default class FormField extends mixins(Emitter) {
 
   @Watch('currentValue')
   public currentValueChanged(currentValue: any, old: any) {
+    this.field.value = this.currentValue;
     if (!isEqual(currentValue, old)) {
       this.$emit('input', currentValue);
       this.$emit('change', currentValue);
@@ -96,21 +97,22 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public created() {
-    if (this.currentValue === undefined || this.currentValue === null) {
-      this.currentValue = getDefaultValue(this.field);
+    const {field, currentValue, store} = this;
+    if (currentValue === undefined || currentValue === null) {
+      this.currentValue = getDefaultValue(field);
     }
-    this.field.validate = this.validate;
-    this.field.value = (value: any) => {
+    field.validate = this.validate;
+    field.value = this.currentValue;
+    field.setGetValue = (value: any) => {
       if (value !== undefined) {
         this.currentValue = value;
       } else {
-        return this.currentValue;
+        return currentValue;
       }
     };
-
-    this.store.context.trigger(SchemaFormEvents.fieldCreate, {
-      path: this.field.plainPath,
-      value: this.currentValue
+    store.context.trigger(SchemaFormEvents.fieldCreate, {
+      path: field.plainPath,
+      value: currentValue
     });
   }
 
@@ -158,8 +160,6 @@ export default class FormField extends mixins(Emitter) {
       } else if (['function', 'object'].includes(typeof definition.arrayComponent)) {
         ArrayComponent = definition.arrayComponent;
       }
-      console.log(typeof definition.arrayComponent);
-      console.log(ArrayComponent.name);
       // @ts-ignore
       return <ArrayComponent
           props={Object.assign({}, this.props, definition.arrayProps)}

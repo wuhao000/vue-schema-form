@@ -15,7 +15,6 @@ Vue.directive('hljs', el => {
 });
 
 SchemaForm.registerAntdMobile();
-
 new Vue({
   store,
   router,

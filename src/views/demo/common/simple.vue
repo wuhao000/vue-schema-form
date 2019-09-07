@@ -1,6 +1,5 @@
 <template>
   <ae-layout class="demo-wrapper">
-    <el-checkbox v-model="checked"/>
     <ae-layout-content>
       <v-schema-form v-model="options"
                      :platform="platform"
@@ -22,12 +21,12 @@
   </ae-layout>
 </template>
 <script lang="ts">
-  import {FormDescriptor} from '@/types/bean';
+  import {FormDescriptor, SchemaFormField} from '@/types/bean';
   import Base from '@/views/demo/base';
   import ShowValue from '@/views/demo/show-value';
   import Component from 'vue-class-component';
 
-  const def = {
+  const def: { [key: string]: SchemaFormField } = {
     radio: {
       type: 'expand-select',
       enum: [
@@ -62,8 +61,8 @@
       required: true
     },
     textarea: {
-      'type': 'text',
-      'title': 'TextArea'
+      type: 'text',
+      title: 'TextArea'
     },
     number: {
       type: 'number',
@@ -75,7 +74,15 @@
     },
     boolean: {
       type: 'boolean',
-      title: '开关选择'
+      title: '开关',
+      displayValue: (value) => {
+        return value ? '开' : '关';
+      }
+    },
+    boolean2: {
+      type: 'boolean',
+      xType: 'checkbox',
+      title: '选择'
     },
     date: {
       'type': 'date',
@@ -125,7 +132,7 @@
       },
       title: '普通上传文件'
     },
-    'range': {
+    range: {
       type: 'range',
       props: {
         min: 0,

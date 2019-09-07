@@ -60,7 +60,7 @@ const fields: { [key: string]: SchemaFormField } = {
   },
   url: {
     title: '链接',
-    required: true,
+    rules: 'url',
     type: 'url'
   },
   integer: {

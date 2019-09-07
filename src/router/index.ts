@@ -24,6 +24,7 @@ export default new VueRouter({
       default: DemoIndex,
       nav: DemoNav
     },
+    redirect: '/demo/element/simple',
     children: demoRoutes
   }]
 });

@@ -88,7 +88,8 @@
         text: '校验',
         action: ($: EffectsContext) => {
           $.validate((errors) => {
-            console.log(errors);
+            // @ts-ignore
+            this.$message.error(errors);
           });
         }
       }];

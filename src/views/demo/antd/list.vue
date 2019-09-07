@@ -3,15 +3,14 @@
     <ae-layout-content class="demo-wrapper">
       <v-schema-form v-model="value"
                      class="demo-form"
-                     :schema="schema"
                      :props="props"
+                     :schema="schema"
                      @ok="onOk"></v-schema-form>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
-  import FormBlock from '@/schema-form/layout/form-block';
   import ShowValue from '@/views/demo/show-value';
   import axios from 'axios';
   import Vue from 'vue';
@@ -30,7 +29,7 @@
     public schema = {
       type: 'object',
       array: true,
-      arrayComponent: FormBlock,
+      arrayComponent: 'block',
       arrayProps: {
         addText: '这是定制的添加文案',
         removeText: '这是定制的删除文案',

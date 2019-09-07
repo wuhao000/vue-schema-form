@@ -6,7 +6,7 @@ import {getComponent, getDisplayComponent, getFormComponent, TYPES} from '@/sche
 import {FormDescriptor, FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
 import {Effects, EffectsContext, SchemaFormComponent} from '@/types/form';
 import {IField} from '@/uform/types';
-import {parseDestructPath} from '@/uform/utils';
+import {clone, parseDestructPath, toArr} from '@/uform/utils';
 import get from 'lodash.get';
 import Vue, {VNode} from 'vue';
 
@@ -44,8 +44,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-        .map(condition => matchCondition(currentValue, condition))
-        .some(it => !it);
+          .map(condition => matchCondition(currentValue, condition))
+          .some(it => !it);
     }
   }
 }
@@ -53,11 +53,11 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-      .filter(key => fields[key])
-      .map(key => ({
-        property: key,
-        ...fields[key]
-      }));
+        .filter(key => fields[key])
+        .map(key => ({
+          property: key,
+          ...fields[key]
+        }));
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -173,7 +173,6 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
   const plainPath = buildArrayPath(pathPrefix, definition).join('.');
   const existsField: IField = store.fields[plainPath];
   if (existsField) {
-    existsField.display = store.mode === 'display';
     existsField.editable = !store.disabled && !store.readonly;
     existsField.component = getComponentType(store, definition);
     return existsField;
@@ -187,7 +186,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       type: definition.type,
       component: getComponentType(store, definition),
       processor: definition.processor,
-      display: store.mode === 'display',
+      display: true,
       editable: !store.disabled && !store.readonly,
       name: definition.property,
       path: buildArrayPath(pathPrefix, definition),
@@ -205,11 +204,21 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       initialize: () => {
       },
       invalid: false,
-      value: null
+      value: currentValue,
+      setGetValue: null,
+      rules: getRulesFromProps(definition)
     });
   }
 }
 
+const getRulesFromProps = (props: SchemaFormField) => {
+  const rules = toArr(props.rules);
+  if (props.required && !rules.some(rule => rule.required)) {
+    rules.push({required: true});
+  }
+  return clone(rules);
+
+};
 export const getFieldValue = (value: any, field: IField<any>, component: SchemaFormComponent) => {
   if (component.layout) {
     return value;
@@ -261,5 +270,5 @@ export enum SchemaFormEvents {
 
 export const filterErros = (errors: any[]) => {
   return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
-    .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
+      .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
 };

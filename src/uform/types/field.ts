@@ -7,25 +7,23 @@ import {IRuleDescription} from './rule';
 import {ISchema} from './schema';
 
 export interface IField<V = any> {
-  validate?: () => (boolean | Promise<unknown>);
-  type?: string;
-  component: SchemaFormComponent;
   array?: boolean;
-  title?: string | VNode;
-  enum: any[];
-  definition: SchemaFormField;
   changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
-  destructor?: () => void;
-  processor?: {
-    getValue: (parentValue: object, field: IField) => any;
-    setValue: (parentValue: object, field: IField, fieldValue: any) => any;
+  component: SchemaFormComponent;
+  definition: SchemaFormField;
+  destructPath?: {
+    path: string,
+    destruct: any
   };
+  destructor?: () => void;
   dirty?: boolean;
   dirtyType?: string;
   display?: boolean;
   editable?: boolean;
   effectErrors?: string[];
+  enum: any[];
   errors?: string[];
+  fields?: FormFields;
   hiddenFromParent?: boolean;
   initialValue?: V;
   initialize?: (options: IFieldOptions) => void;
@@ -37,23 +35,26 @@ export interface IField<V = any> {
   notify?: (forceUpdate?: boolean) => void;
   onChange?: (fn: () => void) => void;
   path?: string[];
-  plainPath?: string;
-  destructPath?: {
-    path: string,
-    destruct: any
-  };
   pathEqual?: (path: Path | IFormPathMatcher) => boolean;
+  plainPath?: string;
   pristine?: boolean;
+  processor?: {
+    getValue: (parentValue: object, field: IField) => any;
+    setValue: (parentValue: object, field: IField, fieldValue: any) => any;
+  };
   props?: any;
   publishState?: () => IFieldState;
   required?: boolean;
-  fields?: FormFields;
   rules?: IRuleDescription[];
+  setGetValue?: (value?: any) => any;
   shownFromParent?: boolean;
   syncContextValue?: () => void;
+  title?: string | VNode;
+  type?: string;
   updateState?: (fn: (state: IFieldState) => void) => void;
   valid: boolean;
-  value?: V;
+  validate?: () => (boolean | Promise<unknown>);
+  value: V;
   visible?: boolean;
 }
 
