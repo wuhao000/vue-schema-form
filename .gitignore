@@ -13,4 +13,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-obs.json/
+obs.json
