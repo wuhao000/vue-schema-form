@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name SchemaForm --dest lib src/index.ts",
-    "docs": "tsc -p build && node build/docs.js"
+    "docs": "tsc -p build && node build/docs.js",
+    "cdn": "tsc -p build && npm run lib && node build/cdn.js"
   },
   "dependencies": {
     "aegis-ui-desktop": "^1.0.4",
@@ -42,6 +43,7 @@
     "compression-webpack-plugin": "^3.0.0",
     "decoded-text-loader": "^1.0.0",
     "element-ui": "^2.12.0",
+    "esdk-obs-nodejs": "^3.1.3",
     "highlight.js": "^9.15.10",
     "hljs": "^6.2.3",
     "html-loader": "^0.5.5",
