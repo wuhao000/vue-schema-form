@@ -1,0 +1,49 @@
+{
+  "element": {
+    "name": "Element UI",
+    "demos": {
+      "simple": "简单场景",
+      "edit": "编辑",
+      "display": "详情",
+      "effects": "副作用函数",
+      "methods": "表单项操作",
+      "default": "默认值"
+    }
+  },
+  "antd": {
+    "name": "Ant Design Vue",
+    "demos": {
+      "destruct": "解构",
+      "display": "详情",
+      "edit": "编辑",
+      "effects": "副作用函数",
+      "list": "列表",
+      "simple": "简单场景",
+      "validate": "校验"
+    }
+  },
+  "mobile": {
+    "name": "Antd Mobile Vue",
+    "demos": {
+      "display": "详情",
+      "edit": "编辑",
+      "effects": "副作用函数"
+    }
+  },
+  "layout": {
+    "name": "布局",
+    "demos": {
+      "simple": "简单布局",
+      "inline": "线性布局",
+      "nested": "组合布局"
+    }
+  },
+  "subform": {
+    "name": "子表单",
+    "demos": {
+      "display": "详情",
+      "edit": "编辑",
+      "mobile": "移动端"
+    }
+  }
+}

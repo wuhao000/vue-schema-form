@@ -29,7 +29,7 @@ export interface EffectsHandlers {
   show: () => EffectsHandlers;
   subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
   toggle: () => EffectsHandlers;
-  value: (value: any) => any;
+  value: (value?: any) => any;
 
   appendPath(path: string): EffectsHandlers;
 

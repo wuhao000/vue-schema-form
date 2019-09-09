@@ -44,8 +44,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   }
 }
@@ -53,11 +53,11 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => ({
-          property: key,
-          ...fields[key]
-        }));
+      .filter(key => fields[key])
+      .map(key => ({
+        property: key,
+        ...fields[key]
+      }));
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -67,7 +67,7 @@ export function getRealFields(fields: FormFields) {
 export function getComponentType(store: SchemaFormStore,
                                  definition: SchemaFormField): SchemaFormComponent {
   let component: SchemaFormComponent = null;
-  if (!store.editable) {
+  if (!store.editable || definition.editable === false) {
     component = getDisplayComponent(store.platform, definition);
   } else {
     component = getComponent(store.platform, definition);
@@ -143,7 +143,7 @@ export function renderField(pathPrefix: string[], store: SchemaFormStore,
     wrap,
     field: iField,
     path: buildArrayPath(pathPrefix, field),
-    disabled:  iField.disabled || store.disabled,
+    disabled: iField.disabled || store.disabled,
     definition: field,
     formValue: currentValue
   };
@@ -173,7 +173,6 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
   const plainPath = buildArrayPath(pathPrefix, definition).join('.');
   const existsField: IField = store.fields[plainPath];
   if (existsField) {
-    existsField.editable = !store.disabled && !store.readonly;
     existsField.component = getComponentType(store, definition);
     return existsField;
   } else {
@@ -188,7 +187,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       component: getComponentType(store, definition),
       processor: definition.processor,
       display: true,
-      editable: !store.disabled && !store.readonly,
+      editable: definition.editable === undefined ? true : definition.editable,
       name: definition.property,
       path: buildArrayPath(pathPrefix, definition),
       plainPath,
@@ -272,5 +271,5 @@ export enum SchemaFormEvents {
 
 export const filterErros = (errors: any[]) => {
   return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
-      .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
+    .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
 };

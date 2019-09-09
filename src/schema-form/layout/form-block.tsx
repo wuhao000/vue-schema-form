@@ -9,9 +9,9 @@ import './form-block.less';
 })
 export default class FormBlock extends Vue {
 
-  @Prop([String, Object])
+  @Prop({type: [String, Object], default: '添加'})
   public addText: string | VNode;
-  @Prop([String, Object])
+  @Prop({type: [String, Object], default: '删除'})
   public removeText: string | VNode;
   @Prop(Number)
   public maxItems: number;

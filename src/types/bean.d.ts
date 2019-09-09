@@ -6,6 +6,7 @@ export type Platform = 'desktop' | 'mobile';
 
 
 export interface SchemaFormField {
+  editable?: boolean;
   layoutType?: string | object;
   layoutProps?: object;
   arrayComponent?: any;
@@ -38,7 +39,7 @@ export interface SchemaFormField {
   /**
    * 当表单模式为详情模式时显示的内容
    */
-  displayValue?: string | VNode | ((value: any) => any);
+  displayValue?: any | VNode | ((value: any) => any);
   /**
    * 表单项校验规则（async-validator）
    */

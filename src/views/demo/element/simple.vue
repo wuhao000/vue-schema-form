@@ -1,5 +1,7 @@
 <template>
-  <simple-edit-demo :init="register"/>
+  <simple-edit-demo
+      platform="desktop"
+      :init="register"/>
 </template>
 <script lang="ts">
   import SchemaForm from '@/index';

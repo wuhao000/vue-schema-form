@@ -1,6 +1,15 @@
 import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
-import {ASchemaForm, LibComponents, register, registerAntd, registerAntdMobile, registerDisplay, registerElement, registerLayout} from '@/schema-form/utils/utils';
+import {
+  ASchemaForm,
+  LibComponents,
+  register,
+  registerAntd,
+  registerAntdMobile,
+  registerDisplay,
+  registerElement,
+  registerLayout
+} from '@/schema-form/utils/utils';
 import {FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Actions, Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IValidateResponse} from '@/uform/types';
@@ -133,12 +142,11 @@ export default class SchemaForm extends Vue {
         },
         value: (value: any) => {
           const res = this.matchFields(paths).map(it => it.setGetValue(value));
-          if (paths.some(it => isFuzzyPath(it))) {
-            throw new Error('不支持模糊匹配获取表单项的值');
-          } else {
+
+          if (value === undefined) {
             if (paths.length === 1 && !isFuzzyPath(paths[0])) {
               return res[0];
-            } else if (value !== undefined) {
+            } else {
               return res;
             }
           }
@@ -181,7 +189,7 @@ export default class SchemaForm extends Vue {
         },
         onFieldCreateOrChange: (callback): EffectsHandlers => {
           return context(...paths).onFieldCreate(callback)
-              .onFieldChange(callback);
+            .onFieldChange(callback);
         },
         onFieldChange: (callback): EffectsHandlers => {
           context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
@@ -296,7 +304,7 @@ export default class SchemaForm extends Vue {
     let content: any = [
       this.$slots.header,
       renderField(null, store,
-          rootFieldDef, value, 0, false, this.$createElement
+        rootFieldDef, value, 0, false, this.$createElement
       )
     ];
     let footer: any = [
@@ -413,10 +421,10 @@ export default class SchemaForm extends Vue {
     }
     buttonProps.disabled = this.disabled;
     return this.createButton(
-        text || props && props.okText || '提交',
-        action || (() => {
-          this.onOk(true);
-        }), buttonProps, 'confirm-btn'
+      text || props && props.okText || '提交',
+      action || (() => {
+        this.onOk(true);
+      }), buttonProps, 'confirm-btn'
     );
   }
 
@@ -445,9 +453,9 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '取消',
-        action || this.onCancel, buttonProps,
-        'cancel-btn'
+      text || props && props.cancelText || '取消',
+      action || this.onCancel, buttonProps,
+      'cancel-btn'
     );
   }
 
@@ -460,8 +468,8 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '重置',
-        action || this.onReset, buttonProps, 'reset-btn'
+      text || props && props.cancelText || '重置',
+      action || this.onReset, buttonProps, 'reset-btn'
     );
   }
 

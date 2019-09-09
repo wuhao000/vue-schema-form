@@ -300,7 +300,7 @@ Vue.component('empty', Empty);
 registerDisplay(TimeDisplayField, [DESKTOP, MOBILE], [TYPES.datetime, TYPES.date, TYPES.year, TYPES.month, TYPES.daterange, TYPES.time]);
 registerDisplay(PlainDisplayField, [DESKTOP, MOBILE], [TYPES.string, TYPES.text, TYPES.url, TYPES.integer, TYPES.double, TYPES.number], false);
 registerDisplay(SelectDisplayField, [DESKTOP, MOBILE], [TYPES.select, TYPES.expandSelect], null, field => {
-  return {options: getOptions(field)};
+  return {options: getOptions(field), field};
 });
 register(InternalForm, [DESKTOP, MOBILE], TYPES.object, false, (definition, platform) => {
   return {

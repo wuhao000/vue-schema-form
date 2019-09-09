@@ -10,6 +10,8 @@ import {Prop} from 'vue-property-decorator';
 })
 export default class Base extends Vue {
 
+  @Prop({type: String, default: 'desktop'})
+  public platform: string;
   @Prop(Function)
   public init: () => any;
   public props = getProps();
@@ -22,10 +24,6 @@ export default class Base extends Vue {
     sticky: false,
     mobile: false
   };
-
-  get platform() {
-    return getPlatform();
-  }
 
   public created() {
     if (this.init) {
