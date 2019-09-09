@@ -10,6 +10,8 @@ declare global {
 
   export const antdm: any;
 
+  export const vant: any;
+
   export const ELEMENT: any;
 
   export const hljs: any;

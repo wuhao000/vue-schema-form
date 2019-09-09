@@ -27,7 +27,8 @@
     "demos": {
       "display": "详情",
       "edit": "编辑",
-      "effects": "副作用函数"
+      "effects": "副作用函数",
+      "destruct": "解构"
     }
   },
   "layout": {

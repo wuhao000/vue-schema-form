@@ -1,4 +1,4 @@
-import {IField, IRuleDescription, Rule} from '@/uform/types';
+import {IField, Rule} from '@/uform/types';
 import {ValidateRules} from 'async-validator';
 import {VNode} from 'vue';
 
@@ -27,7 +27,11 @@ export interface SchemaFormField {
   /**
    * 提示信息
    */
-  notice?: string;
+  tip?: string | VNode;
+  /**
+   * 描述信息
+   */
+  description?: string | VNode;
   /**
    * 当字段类型为object时，子表单的字段列表
    */

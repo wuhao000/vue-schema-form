@@ -314,6 +314,9 @@ export default class FormField extends mixins(Emitter) {
           {definition.wrapperProps && definition.wrapperProps.noTitle ? null :
             <span slot="label">{formItemProps.label}</span>}
           {inputComponent}
+          {
+            definition.description ? <div>{definition.description}</div> : null
+          }
         </FormItemComponent>;
       if (definition.span) {
         item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
@@ -375,10 +378,10 @@ export default class FormField extends mixins(Emitter) {
       label: definition.title
     };
     if (platform === DESKTOP) {
-      if (definition.notice) {
+      if (definition.tip) {
         const popover = LibComponents.popover;
         props.label = <LibComponents.popover
-          content={definition.notice}
+          content={definition.tip}
           trigger="hover">
           <span slot={popover === 'el-popover' ? 'reference' : 'default'}>
             {definition.title}

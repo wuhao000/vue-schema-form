@@ -7,9 +7,17 @@
       </div>
     </a>
     <a-menu class="top-nav"
-            mode="horizontal">
-      <a-menu-item @click="$router.push('/doc/readme')">文档</a-menu-item>
-      <a-menu-item @click="$router.push('/demo')">场景示例</a-menu-item>
+            mode="horizontal"
+            :active-key="activeKey">
+      <a-menu-item key="doc"
+                   @click="$router.push('/doc/readme')">文档
+      </a-menu-item>
+      <a-menu-item key="demo"
+                   @click="$router.push('/demo')">场景示例
+      </a-menu-item>
+      <a-menu-item key="changelog"
+                   @click="$router.push('/doc/changelog')">更新记录
+      </a-menu-item>
       <a-menu-item @click="toGithub">GitHub
         <svg fill="none"
              height="1em"
@@ -40,6 +48,16 @@
     name: 'banner'
   })
   export default class Banner extends Vue {
+
+    get activeKey() {
+      if (this.$route.path === '/doc/changelog') {
+        return 'changelog';
+      }
+      if (this.$route.path) {
+        return this.$route.path.split('/').filter(it => it.length > 0)[0];
+      }
+      return 'doc';
+    }
 
     public toGithub() {
       window.open('https://github.com/wuhao000/vue-schema-form');

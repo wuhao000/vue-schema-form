@@ -53,6 +53,10 @@ export default [{
   component: () => import('@/views/demo/antd/validate.vue'),
   meta: {tag: 'Ant Design Vue', name: '校验'}
 }, {
+  path: 'mobile/destruct',
+  component: () => import('@/views/demo/mobile/destruct.tsx'),
+  meta: {tag: 'Antd Mobile Vue', name: '解构'}
+}, {
   path: 'mobile/display',
   component: () => import('@/views/demo/mobile/display.vue'),
   meta: {tag: 'Antd Mobile Vue', name: '详情'}

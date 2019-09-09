@@ -6,7 +6,7 @@ import {Prop} from 'vue-property-decorator';
 @Component({
   name: 'ShowValue'
 })
-export default class ShowValue extends Vue {
+class ShowValue extends Vue {
   @Prop()
   public value: any;
   public valueModalVisible = false;
@@ -34,3 +34,5 @@ export default class ShowValue extends Vue {
     return beautify(JSON.stringify(this.value));
   }
 }
+
+export default ShowValue as any;

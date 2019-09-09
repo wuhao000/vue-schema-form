@@ -4,6 +4,9 @@ export default [{
   path: 'api',
   component: () => import('../../generated/doc/api.vue')
 }, {
+  path: 'changelog',
+  component: () => import('../../generated/doc/change-log.vue')
+}, {
   path: 'readme',
   component: () => import('../../generated/doc/readme.vue')
 }, {

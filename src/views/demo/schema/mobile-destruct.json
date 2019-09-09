@@ -1,0 +1,446 @@
+{
+  "props": {
+    "section": true,
+    "spaceBetweenSection": 16,
+    "labelWidth": "150px"
+  },
+  "fields": [
+    {
+      "property": "post.label",
+      "type": "string",
+      "default": "岗位选择",
+      "visible": false
+    },
+    {
+      "property": "post.fieldType",
+      "type": "string",
+      "default": "SelectField",
+      "visible": false
+    },
+    {
+      "property": "post.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "post",
+      "property": "post.value",
+      "title": "岗位选择",
+      "array": false,
+      "type": "select",
+      "placeholder": "",
+      "props": {
+        "type": "Post"
+      },
+      "required": true,
+      "default": ""
+    },
+    {
+      "property": "city.label",
+      "type": "string",
+      "default": "工作城市",
+      "visible": false
+    },
+    {
+      "property": "city.fieldType",
+      "type": "string",
+      "default": "AreaField",
+      "visible": false
+    },
+    {
+      "property": "city.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "city",
+      "property": "city.value",
+      "title": "工作城市",
+      "array": false,
+      "type": "area",
+      "placeholder": "请选择",
+      "props": {
+        "type": 2
+      },
+      "required": true,
+      "default": []
+    },
+    {
+      "property": "salaryType.label",
+      "type": "string",
+      "default": "薪资类型",
+      "visible": false
+    },
+    {
+      "property": "salaryType.fieldType",
+      "type": "string",
+      "default": "SelectField",
+      "visible": false
+    },
+    {
+      "property": "salaryType.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "salaryType",
+      "property": "salaryType.value",
+      "title": "薪资类型",
+      "array": false,
+      "type": "expand-select",
+      "placeholder": "请选择",
+      "props": {},
+      "required": true,
+      "default": "",
+      "enum": [
+        {
+          "value": "1",
+          "label": "面议"
+        },
+        {
+          "value": "2",
+          "label": "月薪"
+        },
+        {
+          "value": "3",
+          "label": "年薪"
+        }
+      ]
+    },
+    {
+      "property": "minSalary.label",
+      "type": "string",
+      "default": "最低薪资",
+      "visible": false
+    },
+    {
+      "property": "minSalary.fieldType",
+      "type": "string",
+      "default": "NumberField",
+      "visible": false
+    },
+    {
+      "property": "minSalary.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "minSalary",
+      "property": "minSalary.value",
+      "title": "最低薪资",
+      "array": false,
+      "type": "number",
+      "placeholder": "",
+      "props": {},
+      "required": false,
+      "default": 0
+    },
+    {
+      "property": "maxSalary.label",
+      "type": "string",
+      "default": "最高薪资",
+      "visible": false
+    },
+    {
+      "property": "maxSalary.fieldType",
+      "type": "string",
+      "default": "NumberField",
+      "visible": false
+    },
+    {
+      "property": "maxSalary.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "maxSalary",
+      "property": "maxSalary.value",
+      "title": "最高薪资",
+      "array": false,
+      "type": "number",
+      "placeholder": "",
+      "props": {},
+      "required": false,
+      "default": 0
+    },
+    {
+      "property": "workingYears.label",
+      "type": "string",
+      "default": "工作年限",
+      "visible": false
+    },
+    {
+      "property": "workingYears.fieldType",
+      "type": "string",
+      "default": "SelectField",
+      "visible": false
+    },
+    {
+      "property": "workingYears.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "workingYears",
+      "property": "workingYears.value",
+      "title": "工作年限",
+      "array": false,
+      "type": "expand-select",
+      "placeholder": "请选择",
+      "props": {},
+      "required": false,
+      "default": "",
+      "enum": [
+        {
+          "value": "0",
+          "label": "应届毕业生"
+        },
+        {
+          "value": "1",
+          "label": "1年以下"
+        },
+        {
+          "value": "3",
+          "label": "1-3年"
+        },
+        {
+          "value": "5",
+          "label": "3-5年"
+        },
+        {
+          "value": "10",
+          "label": "5-10年"
+        }
+      ]
+    },
+    {
+      "property": "education.label",
+      "type": "string",
+      "default": "学历要求",
+      "visible": false
+    },
+    {
+      "property": "education.fieldType",
+      "type": "string",
+      "default": "MultiSelectField",
+      "visible": false
+    },
+    {
+      "property": "education.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "education",
+      "property": "education.value",
+      "title": "学历要求",
+      "array": true,
+      "type": "select",
+      "placeholder": "请选择",
+      "props": {
+        "type": "education"
+      },
+      "required": false,
+      "default": []
+    },
+    {
+      "property": "workingType.label",
+      "type": "string",
+      "default": "工作类型",
+      "visible": false
+    },
+    {
+      "property": "workingType.fieldType",
+      "type": "string",
+      "default": "SelectField",
+      "visible": false
+    },
+    {
+      "property": "workingType.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "workingType",
+      "property": "workingType.value",
+      "title": "工作类型",
+      "array": false,
+      "type": "expand-select",
+      "placeholder": "请选择",
+      "props": {},
+      "required": false,
+      "default": "",
+      "enum": [
+        {
+          "value": "1",
+          "label": "全职"
+        },
+        {
+          "value": "2",
+          "label": "兼职"
+        },
+        {
+          "value": "3",
+          "label": "实习"
+        }
+      ]
+    },
+    {
+      "property": "department.label",
+      "type": "string",
+      "default": "招聘部门",
+      "visible": false
+    },
+    {
+      "property": "department.fieldType",
+      "type": "string",
+      "default": "DepartmentField",
+      "visible": false
+    },
+    {
+      "property": "department.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "department",
+      "property": "department.value",
+      "title": "招聘部门",
+      "array": false,
+      "type": "department",
+      "placeholder": "请选择",
+      "props": {},
+      "required": true,
+      "default": []
+    },
+    {
+      "property": "count.label",
+      "type": "string",
+      "default": "招聘人数",
+      "visible": false
+    },
+    {
+      "property": "count.fieldType",
+      "type": "string",
+      "default": "NumberField",
+      "visible": false
+    },
+    {
+      "property": "count.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "count",
+      "property": "count.value",
+      "title": "招聘人数",
+      "array": false,
+      "type": "number",
+      "placeholder": "",
+      "props": {},
+      "required": true,
+      "default": 0
+    },
+    {
+      "property": "requirements.label",
+      "type": "string",
+      "default": "招聘要求",
+      "visible": false
+    },
+    {
+      "property": "requirements.fieldType",
+      "type": "string",
+      "default": "TextareaField",
+      "visible": false
+    },
+    {
+      "property": "requirements.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "requirements",
+      "property": "requirements.value",
+      "title": "招聘要求",
+      "array": false,
+      "type": "text",
+      "placeholder": "请填写招聘要求",
+      "props": {
+        "rows": 5
+      },
+      "required": true,
+      "default": ""
+    },
+    {
+      "property": "reward.label",
+      "type": "string",
+      "default": "内推奖励",
+      "visible": false
+    },
+    {
+      "property": "reward.fieldType",
+      "type": "string",
+      "default": "TextField",
+      "visible": false
+    },
+    {
+      "property": "reward.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "reward",
+      "property": "reward.value",
+      "title": "内推奖励",
+      "array": false,
+      "type": "string",
+      "placeholder": "",
+      "props": {},
+      "required": false,
+      "default": ""
+    },
+    {
+      "property": "rewardDescription.label",
+      "type": "string",
+      "default": "奖励说明",
+      "visible": false
+    },
+    {
+      "property": "rewardDescription.fieldType",
+      "type": "string",
+      "default": "TextareaField",
+      "visible": false
+    },
+    {
+      "property": "rewardDescription.displayValue",
+      "type": "string",
+      "default": null,
+      "visible": false
+    },
+    {
+      "id": "rewardDescription",
+      "property": "rewardDescription.value",
+      "title": "奖励说明",
+      "array": false,
+      "type": "text",
+      "placeholder": "",
+      "props": {
+        "rows": 5
+      },
+      "required": false,
+      "default": ""
+    }
+  ]
+}
