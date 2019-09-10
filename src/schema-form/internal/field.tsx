@@ -293,8 +293,12 @@ export default class FormField extends mixins(Emitter) {
     return this.field.type;
   }
 
+  get editable() {
+    return this.store.editable && this.field.editable;
+  }
+
   public render() {
-    const {props, field, type, definition, store: {platform, editable}} = this;
+    const {props, field, type, definition, editable, store: {platform}} = this;
     if (definition.slot) {
       return this.store.slots[definition.slot];
     }

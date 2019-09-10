@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const esdk_obs_nodejs_1 = tslib_1.__importDefault(require("esdk-obs-nodejs"));
+const esdk_obs_nodejs_new_1 = tslib_1.__importDefault(require("esdk-obs-nodejs-new"));
 const fs_1 = tslib_1.__importDefault(require("fs"));
 const obsConfig = JSON.parse(fs_1.default.readFileSync('obs.json').toString());
-const obs = new esdk_obs_nodejs_1.default({
+const obs = new esdk_obs_nodejs_new_1.default({
     access_key_id: obsConfig.ak,
     secret_access_key: obsConfig.sk,
     server: obsConfig.url

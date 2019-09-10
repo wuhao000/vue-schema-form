@@ -14,9 +14,7 @@ class PlainDisplayField extends Vue {
 
   public render() {
     const {value} = this;
-    return <m-list-item title={this.title}
-                        text={true}
-                        extra={value}/>;
+    return <span>{value !== undefined && value !== null ? value.toString() : null}</span>;
   }
 
 }

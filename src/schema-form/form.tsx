@@ -1,15 +1,7 @@
 import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
 import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
-import {
-  ASchemaForm,
-  LibComponents,
-  register,
-  registerAntd,
-  registerAntdMobile,
-  registerDisplay,
-  registerElement,
-  registerLayout
-} from '@/schema-form/utils/utils';
+import {register, registerDisplay} from '@/schema-form/utils/register';
+import {ASchemaForm, LibComponents} from '@/schema-form/utils/utils';
 import {FormProps, Platform, SchemaFormField} from '@/types/bean';
 import {Actions, Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IValidateResponse} from '@/uform/types';
@@ -19,6 +11,10 @@ import {Subject} from 'rxjs';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
+import {registerAntd} from './antd/register';
+import {registerElement} from './element/register';
+import {registerLayout} from './layout/register';
+import {registerAntdMobile} from './mobile/register';
 
 
 @Component({

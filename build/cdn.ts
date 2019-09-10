@@ -1,4 +1,4 @@
-import ObsClient from 'esdk-obs-nodejs';
+import ObsClient from 'esdk-obs-nodejs-new';
 import fs from 'fs';
 
 const obsConfig = JSON.parse(fs.readFileSync('obs.json').toString());

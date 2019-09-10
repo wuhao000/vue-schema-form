@@ -1,8 +1,9 @@
+import {SchemaFormStore} from '@/schema-form/internal/utils';
 import '@/styles/image-picker.less';
 import '@/styles/mobile-image-picker.less';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
+import {Inject, Prop, Watch} from 'vue-property-decorator';
 import {isSame} from '../utils/array';
 
 @Component({
@@ -14,6 +15,8 @@ export default class MobileImagePicker extends Vue {
   public currentValue: Array<{ url: string }> = [];
   @Prop({type: Boolean, default: false})
   public multiple: boolean;
+  @Inject('store')
+  public store: SchemaFormStore;
 
   @Watch('value', {immediate: true})
   public valueChanged(value: string) {
@@ -49,7 +52,7 @@ export default class MobileImagePicker extends Vue {
       }
     } else {
       if (this.value) {
-        this.$emit(null);
+        this.$emit('input', null);
       }
     }
   }
