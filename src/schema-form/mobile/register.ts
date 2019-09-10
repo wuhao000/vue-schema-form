@@ -3,7 +3,7 @@ import {register} from '@/schema-form/utils/register';
 import {getOptions, MOBILE, TYPES} from '@/schema-form/utils/utils';
 import {Platform} from '@/types/bean';
 import {IField} from '@/uform/types';
-import MButton from '../mobile/button.vue';
+import MButton from './button';
 import StepperItem from '../mobile/stepper-item.vue';
 
 const registerMobile = (component: string | object,

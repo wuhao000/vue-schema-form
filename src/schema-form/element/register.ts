@@ -1,4 +1,4 @@
-import ElButton from '@/schema-form/element/button.vue';
+import ElButton from './button';
 import ElUrlInput from '@/schema-form/element/url.vue';
 import {registerDesktop} from '@/schema-form/utils/register';
 import {ComponentMap, getOptions, LibComponents, TYPES} from '@/schema-form/utils/utils';
@@ -8,7 +8,7 @@ import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';
 import ElExtRadio from '../element/radio-group';
 import ElExtSelect from '../element/select';
-import ElementUpload from '../element/upload.vue';
+import ElementUpload from './upload.vue';
 
 
 export function registerElement() {

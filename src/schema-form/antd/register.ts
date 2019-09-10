@@ -7,8 +7,8 @@ import {
   TYPES
 } from '@/schema-form/utils/utils';
 import {IField} from '@/uform/types';
-import AntdButton from '@/schema-form/antd/button.vue';
-import AntdUrlInput from '@/schema-form/antd/url.vue';
+import AntdButton from './button';
+import AntdUrlInput from '@/schema-form/antd/url';
 import AntdUpload from '../antd/upload.vue';
 
 export function registerAntd() {
