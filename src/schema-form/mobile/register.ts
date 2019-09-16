@@ -1,8 +1,7 @@
 import MobileImagePicker from '@/schema-form/mobile/image-picker';
 import {register} from '@/schema-form/utils/register';
 import {getOptions, MOBILE, TYPES} from '@/schema-form/utils/utils';
-import {Platform} from '@/types/bean';
-import {IField} from '@/uform/types';
+import {IField, Platform} from 'v-schema-form-types';
 import MButton from './button';
 import StepperItem from '../mobile/stepper-item.vue';
 

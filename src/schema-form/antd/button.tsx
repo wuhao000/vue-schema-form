@@ -1,4 +1,4 @@
-import {EffectsContext} from '@/types/form';
+import {EffectsContext} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';

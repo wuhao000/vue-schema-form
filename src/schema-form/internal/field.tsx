@@ -7,10 +7,9 @@ import {
   SchemaFormEvents,
   SchemaFormStore
 } from '@/schema-form/internal/utils';
-import {SchemaFormField} from '@/types/bean';
-import {IField} from '@/uform/types';
 import {isEqual} from '@/uform/utils';
 import AsyncValidator from 'async-validator';
+import {IField, SchemaFormField} from 'v-schema-form-types';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
@@ -84,7 +83,8 @@ export default class FormField extends mixins(Emitter) {
     if (definition.placeholder) {
       props.placeholder = definition.placeholder;
     }
-    if (!this.store.editable) {
+    props.required = field.required;
+    if (!this.store.editable || platform === DESKTOP) {
       delete props.required;
     }
     return props;
@@ -99,7 +99,8 @@ export default class FormField extends mixins(Emitter) {
         this.$emit('change', currentValue);
         this.store.context.trigger(SchemaFormEvents.fieldChange, {
           path: this.field.plainPath,
-          value: currentValue
+          value: currentValue,
+          field: this.field
         });
       }
     }
@@ -132,7 +133,8 @@ export default class FormField extends mixins(Emitter) {
     };
     store.context.trigger(SchemaFormEvents.fieldCreate, {
       path: field.plainPath,
-      value: currentValue
+      value: currentValue,
+      field: this.field
     });
   }
 
@@ -163,11 +165,17 @@ export default class FormField extends mixins(Emitter) {
     if (content) {
       return content;
     }
-    if ((!this.store.editable || !this.field.editable) && definition.displayValue) {
-      if (typeof definition.displayValue === 'function') {
-        return definition.displayValue(currentValue);
+    if ((!this.store.editable || !this.field.editable) && field.displayValue) {
+      let displayValue: any = '';
+      if (typeof field.displayValue === 'function') {
+        displayValue = field.displayValue(currentValue);
       } else {
-        return definition.displayValue;
+        displayValue = field.displayValue;
+      }
+      if (typeof displayValue === 'object') {
+        return displayValue;
+      } else {
+        return <span>{displayValue}</span>;
       }
     }
     const style: any = {};
@@ -261,7 +269,7 @@ export default class FormField extends mixins(Emitter) {
       }
       Object.keys(definition.props).forEach(key => {
         if (key !== 'props') {
-          definition.props.props[key] = definition.props[key];
+          definition.props!.props[key] = definition.props[key];
         }
       });
     }
@@ -425,7 +433,7 @@ export default class FormField extends mixins(Emitter) {
     if (this.type === TYPES.object
       && this.$refs.array) {
       const array = this.$refs.array as any;
-      const validateFields = array.$children.filter(it => it.validate);
+      const validateFields = array.$children.filter(it => (it as any).validate);
       return new Promise((resolve) => {
         Promise.all(validateFields.map(it => {
           return it.validate();

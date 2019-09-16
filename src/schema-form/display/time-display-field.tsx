@@ -1,4 +1,4 @@
-import {SchemaFormField} from '@/types/bean';
+import {SchemaFormField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';

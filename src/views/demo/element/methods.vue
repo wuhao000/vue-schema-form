@@ -13,9 +13,8 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
-  import {FormDescriptor} from '@/types/bean';
-  import {EffectsContext} from '@/types/form';
   import {getProps} from '@/views/demo/utils';
+  import {EffectsContext, FormDescriptor, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -39,7 +38,7 @@
     }];
 
 
-    public definition: FormDescriptor = {
+    public definition: SchemaFormField = {
       fields: {
         select: {
           title: '选择1',

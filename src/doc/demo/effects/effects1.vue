@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
-  import {EffectsContext} from '@/types/form';
+  import {EffectsContext} from 'v-schema-form-types';
 
   export default {
     name: 'DemoEffects1',

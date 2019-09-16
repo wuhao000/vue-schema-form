@@ -4,8 +4,7 @@ import GridLayout from '@/schema-form/layout/grid';
 import TextBox from '@/schema-form/layout/text-box';
 import {addComponent} from '@/schema-form/utils/register';
 import {DESKTOP, MOBILE} from '@/schema-form/utils/utils';
-import {Platform} from '@/types/bean';
-import {IField} from '@/uform/types';
+import {IField, Platform} from 'v-schema-form-types';
 
 /**
  *

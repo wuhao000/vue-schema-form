@@ -11,10 +11,9 @@
 
 <script lang="ts">
   import SchemaForm from '@/schema-form';
-  import {SchemaFormField} from '@/types/bean';
-  import {EffectsContext} from '@/types/form';
   import ShowValue from '@/views/demo/show-value';
   import sum from 'lodash.sum';
+  import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

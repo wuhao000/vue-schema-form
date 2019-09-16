@@ -1,5 +1,5 @@
-import {IField} from '@/uform/types';
 import flatten from 'lodash.flatten';
+import {IField} from 'v-schema-form-types';
 
 const CACHE = {};
 
@@ -17,10 +17,10 @@ export function match(paths: string[], fields: { [key: string]: IField }): strin
   return flatten(paths.map(it => matchSinglePath(it, fields)));
 }
 
-export function replaceLastPath(paths: string[], last: string) {
+export function replaceLastPath(paths: string[], last: string[]): string[] {
   return paths.map(it => {
     const splits = splitPath(it);
-    splits[splits.length - 1] = last;
+    splits.splice(splits.length - last.length, last.length, ...last);
     return splits.join(PATH_SEPARATOR);
   });
 }
@@ -37,19 +37,24 @@ export function takePath(paths: string[], to: number): string[] {
   return paths.map(path => splitPath(path).slice(0, to).join(PATH_SEPARATOR));
 }
 
-export function isPathMatchPatterns(origin: string, patterns: string[]): boolean {
-  return patterns.some(it => isPathMatchPattern(origin, it));
+export function isPathMatchPatterns(field: IField, patterns: string[]): boolean {
+  return patterns.some(it => isPathMatchPattern(field, it));
 }
 
 export function isFuzzyPath(path: string) {
   return path.includes('*') || path.includes('?');
 }
 
-function isPathMatchPattern(origin: string, pattern: string) {
+function isPathMatchPattern(origin: IField, pattern: string) {
   if (isFuzzyPath(pattern)) {
-    return matchPath(splitPath(pattern), splitPath(origin));
+    return matchPath(splitPath(pattern), splitPath(origin.plainPath));
   } else {
-    return origin === pattern;
+    if (pattern.startsWith('#')) {
+      const id = pattern.substr(1);
+      return origin.id === id;
+    } else {
+      return origin.plainPath === pattern;
+    }
   }
 }
 
@@ -63,14 +68,9 @@ export function matchSinglePath(path: string, fields: { [key: string]: IField })
   } else {
     if (path.startsWith('#')) {
       const id = path.substr(1);
-      const fieldPath = Object.keys(fields).find(p => fields[p].id === id);
-      if (fieldPath) {
-        return [fieldPath];
-      } else {
-        return [];
-      }
+      return Object.keys(fields).filter(p => fields[p].id === id);
     }
-    if (fields[path] !== undefined) {
+    if (!!fields[path]) {
       return [path];
     }
     return [];
@@ -79,7 +79,7 @@ export function matchSinglePath(path: string, fields: { [key: string]: IField })
 
 function matchPath(origin: string[], path: string[]): boolean {
   if (origin.length) {
-    if (origin[0] === path[0] || (origin[0] === '?' && path[0] !== undefined)) {
+    if (origin[0] === path[0] || (origin[0] === '?' && !!path[0])) {
       return matchPath(origin.slice(1), path.slice(1));
     } else {
       return origin.length === 1 && (origin[0] === '*' && path.length > 0);

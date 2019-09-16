@@ -4,25 +4,31 @@ import {setFieldValue} from '@/schema-form/utils/field';
 import {splitPath} from '@/schema-form/utils/path';
 import {getComponent, getDisplayComponent} from '@/schema-form/utils/register';
 import {getFormComponent, TYPES} from '@/schema-form/utils/utils';
-import {FormDescriptor, FormFields, FormProps, Platform, SchemaFormField, ShowFieldCondition} from '@/types/bean';
-import {Effects, EffectsContext, SchemaFormComponent} from '@/types/form';
-import {IField} from '@/uform/types';
 import {clone, parseDestructPath, toArr} from '@/uform/utils';
 import get from 'lodash.get';
+import {
+  Effects, EffectsContext,
+  FormFields, FormProps,
+  IField,
+  Platform,
+  SchemaFormComponent,
+  SchemaFormField,
+  ShowFieldCondition
+} from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 
 export interface SchemaFormStore {
   fields: { [key: string]: IField };
-  effects: Effects;
-  props: FormProps;
-  disabled: boolean;
-  platform: 'mobile' | 'desktop';
-  readonly: boolean;
-  loading: boolean;
-  inline: boolean;
-  slots: { [key: string]: VNode[] | undefined };
-  editable: boolean;
-  context: EffectsContext;
+  effects?: Effects;
+  props?: FormProps;
+  disabled?: boolean;
+  platform?: Platform;
+  readonly?: boolean;
+  loading?: boolean;
+  inline?: boolean;
+  slots?: { [key: string]: VNode[] | undefined };
+  editable?: boolean;
+  context?: EffectsContext | null;
 }
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -116,7 +122,7 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   return true;
 }
 
-export function renderField(pathPrefix: string[], store: SchemaFormStore,
+export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
                             field: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h) {
@@ -182,7 +188,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       id: definition.id,
       definition,
       disabled: false,
-      enum: definition.enum,
+      enum: definition.enum || null,
       title: definition.title,
       array: definition.array,
       type: definition.type,
@@ -197,6 +203,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       props: Object.assign({}, definition.props),
       visible: calcShowState(currentValue, definition),
       valid: true,
+      displayValue: definition.displayValue,
       required: definition.required,
       fields: definition.fields,
       effectErrors: [],
@@ -228,7 +235,7 @@ export const getFieldValue = (value: any, field: IField<any>, component: SchemaF
   if (field.processor) {
     return field.processor.getValue(value, field);
   } else {
-    return getStructValue(value, field.destructPath.destruct || field.name);
+    return getStructValue(value, field.destructPath!.destruct || field.name);
   }
 };
 
@@ -242,12 +249,12 @@ export function getFormItemComponent(platform: Platform) {
 }
 
 
-export function searchSchema(path: string, def: FormDescriptor): SchemaFormField {
+export function searchSchema(path: string, def: SchemaFormField): SchemaFormField {
   if (!path) {
     return null;
   }
   const parts = path.split('.');
-  let df: FormDescriptor | SchemaFormField = def;
+  let df: SchemaFormField = def;
   parts.forEach(part => {
     if (df.fields) {
       if (typeof df.fields === 'object') {
@@ -259,7 +266,7 @@ export function searchSchema(path: string, def: FormDescriptor): SchemaFormField
       df = null;
     }
   });
-  return df as SchemaFormField;
+  return df;
 }
 
 

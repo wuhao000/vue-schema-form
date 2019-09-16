@@ -1,16 +1,9 @@
-import {Subject} from 'rxjs/internal/Subject';
-import {VNode} from 'vue';
-import {IEffects} from './effects';
-import {IField, IFieldState} from './field';
+import {IField} from 'v-schema-form-types';
+import {IFieldState} from './field';
 import {Path} from './path';
 import {ISchema} from './schema';
 
 export interface IFormPayload {
-  formState: IFormState;
-}
-
-export interface IFieldPayload {
-  fieldState: IFieldState;
   formState: IFormState;
 }
 
@@ -27,27 +20,6 @@ export interface IFormState<V = any> {
   pristine: boolean; // 是否是原始态
   valid: boolean; // 是否合法
   values: V; // 表单数据
-}
-
-export interface ISubscribers {
-  [eventName: string]: Subject<any>;
-}
-
-export interface IFormOptions<V = any> {
-  defaultValue?: V;
-  editable: boolean | ((name: string) => boolean);
-  effects: IEffects;
-  initialValues?: V;
-  onFieldChange: (payload: (v) => void) => void;
-  onFormChange: (payload: IFormPayload) => void;
-  onFormWillInit?: (form: any) => void;
-  onReset: (payload: IFormPayload) => void;
-  onSubmit: (values: any) => Promise<any> | void;
-  onValidateFailed: (fieldErrors: IFieldError[]) => void;
-  schema: ISchema;
-  subscribes: ISubscribers;
-  traverse?: (schema: ISchema) => ISchema;
-  values?: V;
 }
 
 // 通过 createActions  创建出来的 actions 接口
@@ -81,37 +53,6 @@ export interface IFormActions {
   validate: () => Promise<IFormState>; // error will be IFormState['errors']
 }
 
-// 通过 createAsyncActions 创建出来的 actions 接口
-export interface IAsyncFormActions {
-  dispatch: <T = any>(type: string, payload: T) => Promise<void>;
-  getFieldState: {
-    (
-      name: Path | IFormPathMatcher,
-      callback: (fieldState: IFieldState) => void
-    ): Promise<void>
-    (name: Path | IFormPathMatcher): Promise<IFieldState>
-  };
-  getFormState: {
-    (): Promise<IFormState>
-    (callback: (formState: IFormState) => void): Promise<void>
-  };
-  getSchema: (path: Path) => Promise<ISchema>;
-  reset: (
-    forceClear?: boolean | {
-      forceClear?: boolean;
-      validate?: boolean
-    },
-    validate?: boolean
-  ) => Promise<void>;
-  setFieldState: (
-    name: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => void
-  ) => Promise<void>;
-  setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>;
-  submit: () => Promise<IFormState>;
-  validate: () => Promise<IFormState>; // reject err will be IFormState['errors']
-}
-
 export interface IFormPathMatcher {
   hasWildcard: boolean;
   pattern: string;
@@ -119,75 +60,4 @@ export interface IFormPathMatcher {
   (payload: IField | Path | {
     fieldState: IFieldState
   }): boolean;
-}
-
-export type TextAlign = 'left' | 'right';
-export type Size = 'small' | 'medium' | 'large';
-export type LabelAlign = 'left' | 'top' | 'inset';
-
-type ColSpanType = number | string;
-
-export interface ColSize {
-  offset?: ColSpanType;
-  order?: ColSpanType;
-  pull?: ColSpanType;
-  push?: ColSpanType;
-  span?: ColSpanType;
-}
-
-export interface ColProps {
-  lg?: ColSpanType | ColSize;
-  md?: ColSpanType | ColSize;
-  offset?: ColSpanType;
-  order?: ColSpanType;
-  prefixCls?: string;
-  pull?: ColSpanType;
-  push?: ColSpanType;
-  sm?: ColSpanType | ColSize;
-  span?: ColSpanType;
-  xl?: ColSpanType | ColSize;
-  xs?: ColSpanType | ColSize;
-  xxl?: ColSpanType | ColSize;
-}
-
-// export type ColProps = { span: number; offset?: number } | number
-
-export interface IFormItemGridProps {
-  cols?: any;
-  description?: string;
-  extra?: VNode | string;
-  help?: VNode | string;
-  name?: string;
-  title?: string;
-}
-
-interface IFormSharedProps {
-  autoAddColon?: boolean;
-  inline?: boolean;
-  labelAlign?: LabelAlign;
-  labelCol?: ColProps | number;
-  labelTextAlign?: TextAlign;
-  maxTipsNum?: number;
-  prefix?: string;
-  size?: Size;
-  wrapperCol?: ColProps | number;
-}
-
-export interface IFormProps extends IFormSharedProps {
-  component?: string;
-  layout?: string;
-  onValidateFailed?: () => void;
-}
-
-export interface IFormItemProps extends IFormSharedProps {
-  extra?: VNode | string;
-  help?: VNode | string;
-  id?: string;
-  isTableColItem?: boolean;
-  label?: VNode | string;
-  noMinHeight?: boolean;
-  required?: boolean;
-  schema?: ISchema;
-  type?: string;
-  validateState?: any;
 }

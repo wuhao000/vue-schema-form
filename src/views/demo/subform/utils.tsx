@@ -1,4 +1,4 @@
-import {FormDescriptor} from '@/types/bean';
+import {SchemaFormField} from 'v-schema-form-types';
 
 export const getSubFormValue = () => {
   return {
@@ -14,7 +14,7 @@ export const getSubFormValue = () => {
   };
 };
 
-export const getSubFormDefinition = (): FormDescriptor => {
+export const getSubFormDefinition = (): SchemaFormField => {
   return {
     fields: {
       valueArray: {

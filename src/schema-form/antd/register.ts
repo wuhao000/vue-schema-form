@@ -6,7 +6,7 @@ import {
   LibComponents,
   TYPES
 } from '@/schema-form/utils/utils';
-import {IField} from '@/uform/types';
+import {IField} from 'v-schema-form-types';
 import AntdButton from './button';
 import AntdUrlInput from '@/schema-form/antd/url';
 import AntdUpload from '../antd/upload.vue';

@@ -1,5 +1,5 @@
 import {renderField, SchemaFormStore} from '@/schema-form/internal/utils';
-import {SchemaFormField} from '@/types/bean';
+import {SchemaFormField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';

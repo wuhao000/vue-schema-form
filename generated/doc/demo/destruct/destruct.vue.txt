@@ -16,7 +16,6 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
-  import {FormDescriptor} from '@/types/bean';
   import {getProps} from '@/views/demo/utils';
   import Vue from 'vue';
   import Component from 'vue-class-component';

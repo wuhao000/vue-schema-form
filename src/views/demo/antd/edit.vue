@@ -23,8 +23,8 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
-  import {EffectsContext} from '@/types/form';
   import Base from '@/views/demo/base';
+  import {EffectsContext} from 'v-schema-form-types';
   import Component from 'vue-class-component';
 
   SchemaForm.registerAntd();

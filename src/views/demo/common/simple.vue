@@ -21,9 +21,9 @@
   </ae-layout>
 </template>
 <script lang="ts">
-  import {FormDescriptor, SchemaFormField} from '@/types/bean';
   import Base from '@/views/demo/base';
   import ShowValue from '@/views/demo/show-value';
+  import {FormDescriptor, SchemaFormField} from 'v-schema-form-types';
   import Component from 'vue-class-component';
 
   const def: { [key: string]: SchemaFormField } = {

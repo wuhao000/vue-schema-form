@@ -2,12 +2,19 @@ import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/sch
 import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
 import {register, registerDisplay} from '@/schema-form/utils/register';
 import {ASchemaForm, LibComponents} from '@/schema-form/utils/utils';
-import {FormProps, Platform, SchemaFormField} from '@/types/bean';
-import {Actions, Effects, EffectsContext, EffectsHandlers} from '@/types/form';
 import {IValidateResponse} from '@/uform/types';
 import runValidation from '@/uform/validator';
 import className from 'classname';
 import {Subject} from 'rxjs';
+import {
+  Actions,
+  Effects,
+  EffectsContext,
+  EffectsHandlers,
+  FormProps, IField,
+  Platform,
+  SchemaFormField
+} from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
@@ -21,7 +28,6 @@ import {registerAntdMobile} from './mobile/register';
   name: ASchemaForm
 })
 export default class SchemaForm extends Vue {
-
   public static Field: any;
   public static install: (Vue) => void;
   public static registerAntd = registerAntd;
@@ -43,7 +49,7 @@ export default class SchemaForm extends Vue {
   @Prop({type: String, default: 'desktop'})
   public platform: Platform;
   @Prop({type: String})
-  public mode: 'edit' | 'display';
+  public mode: 'edit' | 'display' | undefined;
   @Prop({type: Boolean, default: true})
   public editable: boolean;
   @Prop(Function)
@@ -112,11 +118,11 @@ export default class SchemaForm extends Vue {
 
   public mounted() {
     if (this.effects) {
-      this.effects(this.store.context);
+      this.effects(this.store.context!);
     }
   }
 
-  public matchFields(paths: string[]) {
+  public matchFields(paths: string[]): IField[] {
     const matchedPaths = match(paths, this.store.fields);
     return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
   }
@@ -138,7 +144,6 @@ export default class SchemaForm extends Vue {
         },
         value: (value: any) => {
           const res = this.matchFields(paths).map(it => it.setGetValue(value));
-
           if (value === undefined) {
             if (paths.length === 1 && !isFuzzyPath(paths[0])) {
               return res[0];
@@ -179,6 +184,12 @@ export default class SchemaForm extends Vue {
           context.subscribe(SchemaFormEvents.fieldBlur, paths, callback);
           return context(...paths);
         },
+        setDisplayValue: (value: any) => {
+          this.matchFields(paths).forEach(field => {
+            field.displayValue = value;
+          });
+          return context(...paths);
+        },
         onFieldFocus: (callback): EffectsHandlers => {
           context.subscribe(SchemaFormEvents.fieldFocus, paths, callback);
           return context(...paths);
@@ -213,7 +224,7 @@ export default class SchemaForm extends Vue {
           });
           return context(...paths);
         },
-        replaceLastPath: (last: string): EffectsHandlers => {
+        replaceLastPath: (...last: string[]): EffectsHandlers => {
           return context(...replaceLastPath(paths, last));
         }
       } as EffectsHandlers;
@@ -227,7 +238,7 @@ export default class SchemaForm extends Vue {
           this.$nextTick(() => {
             if (typeof pathsOrHandler === 'function') {
               pathsOrHandler(v);
-            } else if (isPathMatchPatterns(v.path, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
+            } else if (isPathMatchPatterns(v.field, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
                 handler(v.value, v.path);
               } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
@@ -260,7 +271,7 @@ export default class SchemaForm extends Vue {
     };
     context.trigger = (event: string, value: any) => {
       this.$nextTick(() => {
-        const subject = this.store.context.subscribes[event];
+        const subject = this.store.context!.subscribes[event];
         if (subject) {
           subject.next(value);
         }
@@ -405,7 +416,7 @@ export default class SchemaForm extends Vue {
     return runValidation(this.value, this.store.fields, true);
   }
 
-  private createSubmitButton(text: string = null, btnProps: object = null, action: () => any = null) {
+  private createSubmitButton(text: string = '', btnProps: object = null, action: () => any = null) {
     const hasOkHandler = hasListener(this, 'ok');
     if (!hasOkHandler) {
       return null;
@@ -441,7 +452,7 @@ export default class SchemaForm extends Vue {
     return Button;
   }
 
-  private createCancelButton(text: string = null, btnProps: object = null, action: () => any = null) {
+  private createCancelButton(text: string = '', btnProps: object = null, action: () => any = null) {
     const hasCancelHandler = hasListener(this, 'cancel');
     if (!hasCancelHandler) {
       return null;
@@ -456,7 +467,7 @@ export default class SchemaForm extends Vue {
     );
   }
 
-  private createResetButton(text: string = null, btnProps: object = null, action: () => any = null) {
+  private createResetButton(text: string = '', btnProps: object = null, action: () => any = null) {
     const hasResetHandler = hasListener(this, 'reset');
     if (!hasResetHandler) {
       return null;

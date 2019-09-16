@@ -1,8 +1,6 @@
 import Empty from '@/schema-form/empty';
 import {DESKTOP, MOBILE, Mode} from '@/schema-form/utils/utils';
-import {Platform, SchemaFormField} from '@/types/bean';
-import {SchemaFormComponent} from '@/types/form';
-import {IField} from '@/uform/types';
+import {IField, Platform, SchemaFormComponent, SchemaFormField} from 'v-schema-form-types';
 
 const EmptyDefinition = {
   component: Empty,
@@ -85,7 +83,7 @@ export const addComponent = (options: {
   } else {
     const forArray = options.forArray !== undefined ? options.forArray : null;
     const getProps = options.getProps || (() => ({}));
-    const def = {
+    const def: SchemaFormComponent = {
       component: options.component,
       platform: options.platforms,
       type: options.types,

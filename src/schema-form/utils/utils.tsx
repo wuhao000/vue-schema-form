@@ -1,6 +1,4 @@
-import {Platform} from '@/types/bean';
-import {ILibComponents} from '@/types/form';
-import {IField} from '@/uform/types';
+import {IField, ILibComponents, Platform} from 'v-schema-form-types';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -162,7 +160,7 @@ export const getDefaultValue = (field: IField) => {
     return [];
   } else if (field.type === TYPES.range) {
     return [0, 0];
-  } else if (typeof field.destructPath.destruct !== 'string') {
+  } else if (typeof field.destructPath!.destruct !== 'string') {
     return null;
   } else if (field.type === TYPES.object) {
     if (field.array) {

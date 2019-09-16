@@ -1,5 +1,5 @@
 import {getOptions} from '@/schema-form/utils/utils';
-import {IField} from '@/uform/types';
+import {IField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';

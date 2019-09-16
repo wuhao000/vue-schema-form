@@ -1,8 +1,8 @@
+import {IField} from 'v-schema-form-types';
 import ElButton from './button';
 import ElUrlInput from '@/schema-form/element/url.vue';
 import {registerDesktop} from '@/schema-form/utils/register';
 import {ComponentMap, getOptions, LibComponents, TYPES} from '@/schema-form/utils/utils';
-import {IField} from '@/uform/types';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';
@@ -64,7 +64,7 @@ export function registerElement() {
       } else if (typeof field.props.marks === 'object') {
         const marks: any = {};
         Object.keys(field.props.marks).forEach(key => {
-          const value = field.props.marks[key];
+          const value = (field.props as any).marks[key];
           if (typeof value === 'number') {
             marks[key] = value.toString();
           } else {

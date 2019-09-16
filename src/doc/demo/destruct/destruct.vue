@@ -16,8 +16,8 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
-  import {FormDescriptor} from '@/types/bean';
   import {getProps} from '@/views/demo/utils';
+  import {SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -61,7 +61,7 @@
     };
 
 
-    get definition(): FormDescriptor {
+    get definition(): SchemaFormField {
       return {
         fields: {
           '[start, end]': {

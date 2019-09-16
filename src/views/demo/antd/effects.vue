@@ -19,9 +19,8 @@
 <script lang="tsx">
   import SchemaForm from '@/index';
   import FormBlock from '@/schema-form/layout/form-block';
-  import {FormDescriptor} from '@/types/bean';
-  import {EffectsContext} from '@/types/form';
   import {getProps} from '@/views/demo/utils';
+  import {EffectsContext, FormDescriptor, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import effects1 from '../schema/effects1.json';
@@ -34,7 +33,7 @@
   })
   export default class DesktopEdit extends Vue {
 
-    public definition: FormDescriptor = effects1;
+    public definition: SchemaFormField = effects1;
     public props = getProps();
 
     public schema2 = effects2;
