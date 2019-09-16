@@ -179,6 +179,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
   } else {
     const plainPath = buildArrayPath(pathPrefix, definition).join('.');
     return Vue.observable({
+      id: definition.id,
       definition,
       disabled: false,
       enum: definition.enum,

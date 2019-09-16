@@ -117,7 +117,7 @@ export default class SchemaForm extends Vue {
   }
 
   public matchFields(paths: string[]) {
-    const matchedPaths = match(paths, Object.keys(this.store.fields));
+    const matchedPaths = match(paths, this.store.fields);
     return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
   }
 
@@ -416,6 +416,7 @@ export default class SchemaForm extends Vue {
       buttonProps.type = 'primary';
     }
     buttonProps.disabled = this.disabled;
+    buttonProps.loading = this.loading;
     return this.createButton(
       text || props && props.okText || '提交',
       action || (() => {

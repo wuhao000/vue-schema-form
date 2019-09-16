@@ -14,3 +14,7 @@ yarn-error.log*
 *.sln
 *.sw?
 obs.json
+src/**/*.js
+src/**/*.jsx
+src/**/*.js.map
+src/**/*.jsx.map

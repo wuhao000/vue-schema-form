@@ -6,6 +6,7 @@ export type Platform = 'desktop' | 'mobile';
 
 
 export interface SchemaFormField {
+  id?: string;
   editable?: boolean;
   layoutType?: string | object;
   layoutProps?: object;

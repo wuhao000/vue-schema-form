@@ -1,3 +1,6 @@
+import {IField} from '@/uform/types';
+import flatten from 'lodash.flatten';
+
 const CACHE = {};
 
 export const PATH_SEPARATOR = '.';
@@ -10,8 +13,8 @@ export const splitPath = (path: string): string[] => {
   }
 };
 
-export function match(paths: string[], fieldPaths: string[]): string[] {
-  return paths.map(it => matchSinglePath(it, fieldPaths)).flat();
+export function match(paths: string[], fields: { [key: string]: IField }): string[] {
+  return flatten(paths.map(it => matchSinglePath(it, fields)));
 }
 
 export function replaceLastPath(paths: string[], last: string) {
@@ -50,12 +53,27 @@ function isPathMatchPattern(origin: string, pattern: string) {
   }
 }
 
-export function matchSinglePath(path: string, fieldPaths: string[]): string[] {
+export function matchSinglePath(path: string, fields: { [key: string]: IField }): string[] {
   if (isFuzzyPath(path)) {
+    if (path.startsWith('#')) {
+      throw new Error('ID匹配不允许包含模糊匹配字符');
+    }
     const sp = splitPath(path);
-    return fieldPaths.filter(it => matchPath(sp, splitPath(it)));
+    return Object.keys(fields).filter(it => matchPath(sp, splitPath(it)));
   } else {
-    return [path];
+    if (path.startsWith('#')) {
+      const id = path.substr(1);
+      const fieldPath = Object.keys(fields).find(p => fields[p].id === id);
+      if (fieldPath) {
+        return [fieldPath];
+      } else {
+        return [];
+      }
+    }
+    if (fields[path] !== undefined) {
+      return [path];
+    }
+    return [];
   }
 }
 
