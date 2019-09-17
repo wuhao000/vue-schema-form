@@ -1,5 +1,5 @@
-import SchemaFormField from '@/schema-form/internal/field';
-import SchemaForm from '@/schema-form/form';
+import SchemaFormField from './internal/field';
+import SchemaForm from './form';
 import '../styles/style.less';
 
 SchemaForm.Field = SchemaFormField;

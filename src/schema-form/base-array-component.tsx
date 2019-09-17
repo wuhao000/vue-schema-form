@@ -1,5 +1,5 @@
-import {SchemaFormStore} from '@/schema-form/internal/utils';
-import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from '@/schema-form/utils/utils';
+import {SchemaFormStore} from './internal/utils';
+import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';

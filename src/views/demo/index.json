@@ -19,7 +19,8 @@
       "effects": "副作用函数",
       "list": "列表",
       "simple": "简单场景",
-      "validate": "校验"
+      "validate": "校验",
+      "dynamic": "动态"
     }
   },
   "mobile": {

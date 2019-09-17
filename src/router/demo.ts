@@ -33,6 +33,10 @@ export default [{
   component: () => import('@/views/demo/antd/display.vue'),
   meta: {tag: 'Ant Design Vue', name: '详情'}
 }, {
+  path: 'antd/dynamic',
+  component: () => import('@/views/demo/antd/dynamic.vue'),
+  meta: {tag: 'Ant Design Vue', name: '动态'}
+}, {
   path: 'antd/edit',
   component: () => import('@/views/demo/antd/edit.vue'),
   meta: {tag: 'Ant Design Vue', name: '编辑'}
@@ -92,8 +96,4 @@ export default [{
   path: 'subform/mobile',
   component: () => import('@/views/demo/subform/mobile.vue'),
   meta: {tag: '子表单', name: '移动端'}
-}, {
-  path: 'api/path',
-  component: () => import('@/views/demo/api/path.vue'),
-  meta: {tag: '接口示例', name: '表单项匹配'}
 }] as RouteConfig[];

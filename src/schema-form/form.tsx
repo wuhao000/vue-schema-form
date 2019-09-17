@@ -1,9 +1,9 @@
-import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from '@/schema-form/internal/utils';
-import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from '@/schema-form/utils/path';
-import {register, registerDisplay} from '@/schema-form/utils/register';
-import {ASchemaForm, LibComponents} from '@/schema-form/utils/utils';
-import {IValidateResponse} from '@/uform/types';
-import runValidation from '@/uform/validator';
+import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
+import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
+import {register, registerDisplay} from './utils/register';
+import {ASchemaForm, LibComponents} from './utils/utils';
+import {IValidateResponse} from '../uform/types';
+import runValidation from '../uform/validator';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import {

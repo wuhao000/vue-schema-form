@@ -1,6 +1,6 @@
 import { isRegExp, format, isFn, isEmpty } from '../utils';
 import { getMessage } from '../message';
-import { IRuleDescription } from '@/uform/types';
+import { IRuleDescription } from '../../types';
 
 export const patternValidate = (
   pattern: string | RegExp | ((...args: any[]) => boolean),

@@ -1,4 +1,4 @@
-import {setStructValue} from '@/schema-form/utils/destruct';
+import {setStructValue} from './destruct';
 import {IField} from 'v-schema-form-types';
 
 export const setFieldValue = (parentValue: object, field: IField, v: any) => {

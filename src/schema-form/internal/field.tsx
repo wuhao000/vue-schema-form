@@ -1,4 +1,4 @@
-import Emitter from '@/mixins/emitter';
+import Emitter from '../../mixins/emitter';
 import {
   getComponentType,
   getFormItemComponent,
@@ -6,8 +6,8 @@ import {
   renderField,
   SchemaFormEvents,
   SchemaFormStore
-} from '@/schema-form/internal/utils';
-import {isEqual} from '@/uform/utils';
+} from './utils';
+import {isEqual} from '../../uform/utils';
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField} from 'v-schema-form-types';
 import {VNode} from 'vue';

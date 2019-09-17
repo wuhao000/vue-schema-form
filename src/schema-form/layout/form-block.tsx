@@ -1,4 +1,4 @@
-import {LibComponents} from '@/schema-form/utils/utils';
+import {LibComponents} from '../utils/utils';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';

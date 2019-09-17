@@ -1,4 +1,4 @@
-import {PATH_SEPARATOR} from '@/schema-form/utils/path';
+import {PATH_SEPARATOR} from '../../schema-form/utils/path';
 import {ArrayPath, ISchema, isFn, Path} from '../types';
 import {getIn, setIn} from './accessor';
 import {each, toArr} from './array';

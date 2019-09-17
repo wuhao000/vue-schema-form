@@ -1,9 +1,9 @@
-import Card from '@/schema-form/layout/card';
-import FormBlock from '@/schema-form/layout/form-block';
-import GridLayout from '@/schema-form/layout/grid';
-import TextBox from '@/schema-form/layout/text-box';
-import {addComponent} from '@/schema-form/utils/register';
-import {DESKTOP, MOBILE} from '@/schema-form/utils/utils';
+import Card from './card';
+import FormBlock from './form-block';
+import GridLayout from './grid';
+import TextBox from './text-box';
+import {addComponent} from '../utils/register';
+import {DESKTOP, MOBILE} from '../utils/utils';
 import {IField, Platform} from 'v-schema-form-types';
 
 /**

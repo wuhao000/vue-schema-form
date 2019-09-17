@@ -1,4 +1,4 @@
-import { Path, IFormPathMatcher } from '@/uform/types';
+import { Path, IFormPathMatcher } from '../types';
 import {
   isArr,
   isStr,
@@ -7,9 +7,9 @@ import {
   clone,
   isFn,
   globalThisPolyfill
-} from '@/uform/utils';
+} from '../utils';
 
-export * from '@/uform/utils';
+export * from '../utils';
 
 const self = globalThisPolyfill;
 

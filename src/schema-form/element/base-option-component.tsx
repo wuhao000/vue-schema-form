@@ -1,4 +1,4 @@
-import {getOptionProperty} from '@/schema-form/utils/utils';
+import {getOptionProperty} from '../utils/utils';
 
 export default {
   name: 'BaseOptionComponent',

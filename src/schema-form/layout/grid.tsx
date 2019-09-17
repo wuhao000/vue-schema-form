@@ -1,5 +1,5 @@
-import {getFormItemComponent} from '@/schema-form/internal/utils';
-import BaseLayout from '@/schema-form/layout/base-layout';
+import {getFormItemComponent} from '../internal/utils';
+import BaseLayout from './base-layout';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';

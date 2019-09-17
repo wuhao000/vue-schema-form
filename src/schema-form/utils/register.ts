@@ -1,5 +1,5 @@
-import Empty from '@/schema-form/empty';
-import {DESKTOP, MOBILE, Mode} from '@/schema-form/utils/utils';
+import Empty from '../empty';
+import {DESKTOP, MOBILE, Mode} from './utils';
 import {IField, Platform, SchemaFormComponent, SchemaFormField} from 'v-schema-form-types';
 
 const EmptyDefinition = {

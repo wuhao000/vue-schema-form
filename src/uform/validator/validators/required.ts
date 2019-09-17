@@ -1,4 +1,4 @@
-import {IRuleDescription} from '@/uform/types';
+import {IRuleDescription} from '../../types';
 import {getMessage} from '../message';
 import {format, isEmpty} from '../utils';
 

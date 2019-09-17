@@ -1,10 +1,10 @@
-import FormField from '@/schema-form/internal/field';
-import {getStructValue} from '@/schema-form/utils/destruct';
-import {setFieldValue} from '@/schema-form/utils/field';
-import {splitPath} from '@/schema-form/utils/path';
-import {getComponent, getDisplayComponent} from '@/schema-form/utils/register';
-import {getFormComponent, TYPES} from '@/schema-form/utils/utils';
-import {clone, parseDestructPath, toArr} from '@/uform/utils';
+import FormField from './field';
+import {getStructValue} from '../utils/destruct';
+import {setFieldValue} from '../utils/field';
+import {splitPath} from '../utils/path';
+import {getComponent, getDisplayComponent} from '../utils/register';
+import {getFormComponent, TYPES} from '../utils/utils';
+import {clone, parseDestructPath, toArr} from '../../uform/utils';
 import get from 'lodash.get';
 import {
   Effects, EffectsContext,

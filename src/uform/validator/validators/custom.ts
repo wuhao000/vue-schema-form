@@ -1,5 +1,5 @@
 import { isFn } from '../utils';
-import { IRuleDescription } from '@/uform/types';
+import { IRuleDescription } from '../../types';
 export default (
   value: any,
   rule: IRuleDescription,

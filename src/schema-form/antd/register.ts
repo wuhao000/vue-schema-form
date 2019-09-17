@@ -1,14 +1,14 @@
-import {register, registerDesktop} from '@/schema-form/utils/register';
+import {register, registerDesktop} from '../utils/register';
 import {
   ComponentMap,
   DESKTOP,
   getOptions,
   LibComponents,
   TYPES
-} from '@/schema-form/utils/utils';
+} from '../utils/utils';
 import {IField} from 'v-schema-form-types';
 import AntdButton from './button';
-import AntdUrlInput from '@/schema-form/antd/url';
+import AntdUrlInput from './url';
 import AntdUpload from '../antd/upload.vue';
 
 export function registerAntd() {

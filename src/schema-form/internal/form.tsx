@@ -1,5 +1,5 @@
-import FieldBasedComponent from '@/schema-form/internal/field-based-component';
-import {createField, getComponentType, getRealFields} from '@/schema-form/internal/utils';
+import FieldBasedComponent from './field-based-component';
+import {createField, getComponentType, getRealFields} from './utils';
 import {
   DESKTOP,
   getButtonComponent,
@@ -7,7 +7,7 @@ import {
   getFormComponent,
   getRowComponent,
   MOBILE
-} from '@/schema-form/utils/utils';
+} from '../utils/utils';
 import difference from 'lodash.difference';
 import eq from 'lodash.eq';
 import {SchemaFormField} from 'v-schema-form-types';

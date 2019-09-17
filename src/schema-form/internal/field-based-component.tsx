@@ -1,4 +1,4 @@
-import {renderField, SchemaFormStore} from '@/schema-form/internal/utils';
+import {renderField, SchemaFormStore} from './utils';
 import {SchemaFormField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';

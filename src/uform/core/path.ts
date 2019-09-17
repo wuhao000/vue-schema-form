@@ -1,6 +1,6 @@
 import createMatcher from 'dot-match';
 import { resolveFieldPath, isStr, isFn, isArr, reduce } from './utils';
-import { IFormPathMatcher } from '@/uform/types';
+import { IFormPathMatcher } from '../types';
 type Filter = (payload: any) => boolean;
 
 const matchWithFilter = (result: boolean, filter: Filter, payload: any) => {

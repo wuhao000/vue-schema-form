@@ -1,4 +1,4 @@
-import { parseDestructPath } from '@/uform/utils';
+import { parseDestructPath } from '../../utils';
 import moment from 'moment';
 import Arg from './arg';
 

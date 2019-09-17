@@ -1,7 +1,7 @@
 import { format } from '../utils';
 import { getMessage } from '../message';
 import { patternValidate } from './pattern';
-import { IRuleDescription } from '@/uform/types';
+import { IRuleDescription } from '../../types';
 import RegExpPatterns from './regexp';
 
 const PatternKeys = Object.keys(RegExpPatterns);

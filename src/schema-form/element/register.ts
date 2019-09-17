@@ -1,8 +1,8 @@
 import {IField} from 'v-schema-form-types';
 import ElButton from './button';
-import ElUrlInput from '@/schema-form/element/url.vue';
-import {registerDesktop} from '@/schema-form/utils/register';
-import {ComponentMap, getOptions, LibComponents, TYPES} from '@/schema-form/utils/utils';
+import ElUrlInput from './url.vue';
+import {registerDesktop} from '../utils/register';
+import {ComponentMap, getOptions, LibComponents, TYPES} from '../utils/utils';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';

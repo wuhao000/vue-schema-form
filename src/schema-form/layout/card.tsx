@@ -1,4 +1,4 @@
-import BaseLayout from '@/schema-form/layout/base-layout';
+import BaseLayout from './base-layout';
 import Component, {mixins} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 

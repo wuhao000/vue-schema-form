@@ -1,4 +1,4 @@
-export * from '@/uform/utils';
+export * from '../utils';
 
 const formatRegExp = /%[sdj%]/g;
 

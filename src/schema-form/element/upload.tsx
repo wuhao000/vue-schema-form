@@ -1,4 +1,4 @@
-import BaseUpload from '@/schema-form/common/base-upload';
+import BaseUpload from '../common/base-upload';
 import Component from 'vue-class-component';
 
 @Component({

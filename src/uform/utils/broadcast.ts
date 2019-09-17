@@ -1,4 +1,4 @@
-import {isFn} from '@/uform/types';
+import {isFn} from '../types';
 import {each} from './array';
 
 type Subscriber<N> = (notification: N) => void;

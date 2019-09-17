@@ -1,4 +1,4 @@
-import {getOptions} from '@/schema-form/utils/utils';
+import {getOptions} from '../utils/utils';
 import {IField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';

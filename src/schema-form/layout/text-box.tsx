@@ -1,4 +1,4 @@
-import BaseLayout from '@/schema-form/layout/base-layout';
+import BaseLayout from './base-layout';
 import Component from 'vue-class-component';
 import './text-box.less';
 
