@@ -39,6 +39,7 @@ setEnum|为支持选项的表单项设置选项内容|options: 选项/array | Ef
 setFieldProps|为匹配的表单项设置属性|props: 属性对象/object/{属性名称: 属性值}/object | EffectsHandlers
 toggle|匹配到的表单项在显示与影藏之间切换|-|EffectsHandlers
 value|当不传参时表示获取匹配的表单项的值（只匹配一个表单项时直接返回该表单项的值，<br />匹配多个时返回多个表单项值组成的数组），当传递一个参数时，表示对匹配的表单项赋值|value: 要设置的值|当不传参时，匹配到的表单项的值
+subscribe|订阅事件|event: 事件名称（详细见<a href='#events'>事件</a>）,callback: 回调函数/(data) => any;
 
 ## EffectsContext 上挂载的方法
 
@@ -48,6 +49,14 @@ validate|触发表单校验|;
 submit|提交表单（主要在表单提交前触发校验，实际的提交请在自定义的回调中完成）|forceValidate: 是否强制校验|boolean <br/> callback: 回调函数，value参数为表单当前那的值|
 getValue|获取表单当前的值|-
 
+
+## 支持的事件
+事件名称|事件说明
+---|---
+fieldKeydown|keydown事件
+fieldKeyup|keyup事件
+fieldFocus|focus事件
+fieldBlur|blur事件
 
 ## 示例
 

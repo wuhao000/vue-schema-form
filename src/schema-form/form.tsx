@@ -1,3 +1,4 @@
+import {clone, isEqual} from '@/uform/utils';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import {
@@ -504,9 +505,9 @@ export default class SchemaForm extends Vue {
   }
 
   private setCurrentValue() {
-    if (!(this.currentValue && this.currentValue === this.value)) {
+    if (!(this.currentValue && isEqual(this.value, this.currentValue))) {
       if (this.value) {
-        this.currentValue = JSON.parse(JSON.stringify(this.value));
+        this.currentValue = clone(this.value);
       } else if (this.schema.array) {
         this.currentValue = [];
       } else {

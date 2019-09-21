@@ -1,18 +1,10 @@
-import Emitter from '../../mixins/emitter';
-import {
-  getComponentType,
-  getFormItemComponent,
-  getRealFields,
-  renderField,
-  SchemaFormEvents,
-  SchemaFormStore
-} from './utils';
-import {isEqual} from '../../uform/utils';
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField} from 'v-schema-form-types';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
+import Emitter from '../../mixins/emitter';
+import {clone, isEqual} from '../../uform/utils';
 import ArrayWrapper from '../array-wrapper';
 import {
   addRule,
@@ -26,6 +18,14 @@ import {
   swap,
   TYPES
 } from '../utils/utils';
+import {
+  getComponentType,
+  getFormItemComponent,
+  getRealFields,
+  renderField,
+  SchemaFormEvents,
+  SchemaFormStore
+} from './utils';
 
 @Component({
   name: 'FormField'
@@ -54,7 +54,7 @@ export default class FormField extends mixins(Emitter) {
   public pathPrefix: string[];
   @Inject()
   public store: SchemaFormStore;
-  public currentValue: any = this.value || null;
+  public currentValue: any = clone(this.value) || null;
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {
     return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement, this);
@@ -90,7 +90,7 @@ export default class FormField extends mixins(Emitter) {
     return props;
   }
 
-  @Watch('currentValue')
+  @Watch('currentValue', {deep: true})
   public currentValueChanged(currentValue: any, old: any) {
     this.field.value = this.currentValue;
     if (this.store.editable && this.field.editable) {
@@ -109,7 +109,7 @@ export default class FormField extends mixins(Emitter) {
   @Watch('value', {immediate: true})
   public valueChanged(value: any) {
     if (!isEqual(this.currentValue, value)) {
-      this.currentValue = value;
+      this.currentValue = clone(value);
     }
   }
 
@@ -126,7 +126,7 @@ export default class FormField extends mixins(Emitter) {
     }
     field.setGetValue = (value: any) => {
       if (value !== undefined) {
-        this.currentValue = value;
+        this.currentValue = clone(value);
       } else {
         return this.currentValue;
       }
@@ -279,22 +279,38 @@ export default class FormField extends mixins(Emitter) {
       value={currentValue}
       attrs={props}
       style={style}
-      onBlur={this.onBlur}
-      onFocus={this.onFocus}
+      on={{
+        blur: this.onBlur,
+        focus: this.onFocus,
+        keydown: this.onKeydown,
+        keyup: this.onKeyup,
+        input: onInput
+      }}
       key={field.plainPath}
-      ref="input"
-      onInput={onInput}/>;
+      ref="input"/>;
   }
 
-  public onBlur() {
+  public onBlur(event) {
     if (!this.field.valid) {
       this.validate();
     }
-    this.store.context.trigger(SchemaFormEvents.fieldBlur, {path: this.field.plainPath});
+    this.store.context.trigger(SchemaFormEvents.fieldBlur, this.getEventMetadata(event));
   }
 
-  public onFocus() {
-    this.store.context.trigger(SchemaFormEvents.fieldFocus, {path: this.field.plainPath});
+  public getEventMetadata(event) {
+    return {event, path: this.field.plainPath, field: this.field};
+  }
+
+  public onFocus(event) {
+    this.store.context.trigger(SchemaFormEvents.fieldFocus, this.getEventMetadata(event));
+  }
+
+  public onKeydown(event) {
+    this.store.context.trigger(SchemaFormEvents.fieldKeydown, this.getEventMetadata(event));
+  }
+
+  public onKeyup(event) {
+    this.store.context.trigger(SchemaFormEvents.fieldKeyup, this.getEventMetadata(event));
   }
 
   get type() {
@@ -373,7 +389,7 @@ export default class FormField extends mixins(Emitter) {
 
   public onInput(value) {
     if (!isEqual(this.currentValue, value)) {
-      this.currentValue = value;
+      this.currentValue = clone(value);
     }
   }
 

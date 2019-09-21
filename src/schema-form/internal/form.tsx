@@ -1,19 +1,12 @@
-import FieldBasedComponent from './field-based-component';
-import {createField, getComponentType, getRealFields} from './utils';
-import {
-  DESKTOP,
-  getButtonComponent,
-  getDefaultValue,
-  getFormComponent,
-  getRowComponent,
-  MOBILE
-} from '../utils/utils';
+import {clone, isEqual} from '@/uform/utils';
 import difference from 'lodash.difference';
-import eq from 'lodash.eq';
 import {SchemaFormField} from 'v-schema-form-types';
 import Component, {mixins} from 'vue-class-component';
 
 import {Prop, Watch} from 'vue-property-decorator';
+import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
+import FieldBasedComponent from './field-based-component';
+import {getComponentType, getRealFields} from './utils';
 
 @Component({
   name: 'InternalForm'
@@ -55,19 +48,19 @@ class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   get isDisabled() {
-    return this['store'].disabled;
+    return this.store.disabled;
   }
 
   get isLoading() {
-    return this['store'].loading;
+    return this.store.loading;
   }
 
   get isReadonly() {
-    return this['store'].readonly;
+    return this.store.readonly;
   }
 
-  @Watch('currentValue')
-  public currentValueChanged(currentValue: any, old: any) {
+  @Watch('currentValue', {deep: true})
+  public currentValueChanged(currentValue: any) {
     this.$emit('input', currentValue);
     this.$emit('change', currentValue);
   }
@@ -88,15 +81,11 @@ class InternalForm extends mixins(FieldBasedComponent) {
     deep: true
   })
   public valueChanged(this: any, value: any[] | any) {
-    if (value !== this.currentValue) {
-      const currentValue = this.currentValue;
+    if (!isEqual(value, this.currentValue)) {
       if (this.definition.array) {
-        if (difference(currentValue as any[], value as any[])
-          .concat(difference(value as any[], currentValue as any[])).length > 0) {
-          this.currentValue = value || [];
-        }
-      } else if (!eq(currentValue, value)) {
-        this.currentValue = value || {};
+        this.currentValue = clone(value) || [];
+      } else {
+        this.currentValue = clone(value) || {};
       }
     } else if (!value) {
       this.currentValue = {};
@@ -107,33 +96,16 @@ class InternalForm extends mixins(FieldBasedComponent) {
     if (this.value) {
       if (this.definition.array) {
         if (this.value.length) {
-          this.currentValue = this.value;
+          this.currentValue = clone(this.value);
         } else {
           this.currentValue = [{}];
         }
       } else {
-        this.currentValue = this.value;
+        this.currentValue = clone(this.value);
       }
     } else {
       this.currentValue = this.definition.array ? [{}] : {};
     }
-  }
-
-  public setDefaultValue(this: any, property, tmpValue, fieldDef) {
-    let copy = tmpValue;
-    const splits = property.split('.');
-    splits.forEach((name, index) => {
-      if (index < splits.length - 1) {
-        if (!copy[name]) {
-          this.$set(copy, name, {});
-        }
-        copy = copy[name];
-      } else {
-        copy[name] = getDefaultValue(createField(
-          this.currentValue, this.store,
-          this.pathPrefix, fieldDef));
-      }
-    });
   }
 
   public renderTitle(this: any) {
@@ -174,6 +146,11 @@ class InternalForm extends mixins(FieldBasedComponent) {
     const formProps = this.getFormProps();
     const form = <FormComponent attrs={formProps}
                                 ref="form"
+                                nativeOn={{
+                                  submit: (e) => {
+                                    e.preventDefault();
+                                  }
+                                }}
                                 on={this.$listeners}>
       {this.definition.array ? this.renderTitle() : null}
       {!this.definition.array && this.isDesktop ? this.renderTitle() : null}

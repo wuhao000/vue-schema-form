@@ -1,14 +1,9 @@
-import FormField from './field';
-import {getStructValue} from '../utils/destruct';
-import {setFieldValue} from '../utils/field';
-import {splitPath} from '../utils/path';
-import {getComponent, getDisplayComponent} from '../utils/register';
-import {getFormComponent, TYPES} from '../utils/utils';
-import {clone, parseDestructPath, toArr} from '../../uform/utils';
 import get from 'lodash.get';
 import {
-  Effects, EffectsContext,
-  FormFields, FormProps,
+  Effects,
+  EffectsContext,
+  FormFields,
+  FormProps,
   IField,
   Platform,
   SchemaFormComponent,
@@ -16,6 +11,13 @@ import {
   ShowFieldCondition
 } from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
+import {clone, parseDestructPath, toArr} from '../../uform/utils';
+import {getStructValue} from '../utils/destruct';
+import {setFieldValue} from '../utils/field';
+import {splitPath} from '../utils/path';
+import {getComponent, getDisplayComponent} from '../utils/register';
+import {getFormComponent, TYPES} from '../utils/utils';
+import FormField from './field';
 
 export interface SchemaFormStore {
   fields: { [key: string]: IField };
@@ -271,6 +273,8 @@ export function searchSchema(path: string, def: SchemaFormField): SchemaFormFiel
 
 
 export enum SchemaFormEvents {
+  fieldKeyup = 'fieldKeyup',
+  fieldKeydown = 'fieldKeydown',
   fieldFocus = 'fieldFocus',
   fieldBlur = 'fieldBlur',
   fieldChange = 'fieldChange',
