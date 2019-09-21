@@ -20,20 +20,33 @@ export function getStructValue(parentValue: object, struct: string | any[] | obj
 }
 
 
-export function setStructValue(parentValue: object, struct: string | any[] | object, structValue: any) {
+export function setStructValue(parentValue: object, struct: string | any[] | object,
+                               structValue: any, vue) {
   if (typeof struct === 'string') {
-    parentValue[struct] = structValue;
+    if (parentValue[struct] === undefined) {
+      vue.$set(parentValue, struct, structValue);
+    } else {
+      parentValue[struct] = structValue;
+    }
   } else if (Array.isArray(struct)) {
     struct.forEach((key, index) => {
-      parentValue[key] = structValue[index];
+      if (parentValue[key] === undefined) {
+        vue.$set(parentValue, key, structValue[index]);
+      } else {
+        parentValue[key] = structValue[index];
+      }
     });
   } else if (struct) {
     Object.keys(struct).forEach(key => {
       const destructValue = struct[key];
       if (typeof destructValue === 'string') {
-        parentValue[destructValue] = structValue[key];
+        if (parentValue[destructValue] === undefined) {
+          vue.$set(parentValue, destructValue, structValue[key]);
+        } else {
+          parentValue[destructValue] = structValue[key];
+        }
       } else {
-        setStructValue(parentValue, destructValue, structValue[key]);
+        setStructValue(parentValue, destructValue, structValue[key], vue);
       }
     });
   }

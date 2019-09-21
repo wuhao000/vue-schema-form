@@ -1,10 +1,12 @@
 <template>
   <ae-layout>
     <ae-layout-content>
+      <d-button @click="loadData">加载</d-button>
       <v-schema-form v-model="model"
                      :effects="effects"
                      :props="formProps"
-                     :schema="formDefinition">
+                     :schema="formDefinition"
+                     @ok="submit">
       </v-schema-form>
       <show-value :value="model"/>
     </ae-layout-content>
@@ -70,13 +72,12 @@
       fields: [{
         type: 'string',
         property: 'name',
-        title: '名称',
-        props: {required: true}
+        title: '名称'
       }, {
         type: 'string',
         property: 'code',
         title: '编码',
-        props: {required: true, disabled: !!(this.model && this.model.id), span: 12}
+        props: {disabled: !!(this.model && this.model.id), span: 12}
       }, {
         type: 'integer',
         property: 'order',
@@ -118,10 +119,6 @@
     public async idChanged(id: string) {
       if (id) {
         setTimeout(() => {
-          this.model = {
-            id: '2',
-            extras: {}
-          };
         }, 1000);
       }
     }
@@ -131,12 +128,7 @@
       if (value && !this.id) {
         this.model = this.getDefaultBean();
       } else {
-        setTimeout(() => {
-          this.model = {
-            id: '2',
-            extras: {}
-          };
-        }, 1000);
+
       }
     }
 
@@ -149,7 +141,6 @@
           'type': 'User',
           'array': true,
           'tag': 'Post',
-          'required': true,
           'id': 20,
           'orderNo': 0
         }, {
@@ -158,7 +149,6 @@
           'type': 'User',
           'array': true,
           'tag': 'Post',
-          'required': true,
           'id': 21,
           'orderNo': 0
         }, {
@@ -167,7 +157,6 @@
           'type': 'text',
           'array': false,
           'tag': 'post',
-          'required': false,
           'id': 32,
           'orderNo': 0
         }];
@@ -175,7 +164,7 @@
           it['span'] = 12;
         });
         (this.formDefinition.fields as SchemaFormField[]).push(...transform(definitions));
-      }, 0);
+      }, 30);
     }
 
     public effects($: EffectsContext) {
@@ -207,6 +196,47 @@
       this.$emit(event, event === 'success' ? model : null);
     }
 
+    public loadData() {
+      this.model = {
+        'id': 'd3cfdf4426eb4fb59bc1db906365e0f2',
+        'name': '前端开发工程师',
+        'type': 'post',
+        'code': '002',
+        'order': 0,
+        'color': '',
+        'extras': {
+          'usersToInterview': [],
+          'userToChooseResume': [{
+            'id': '15850591372',
+            'name': '马长松',
+            'email': 'machangsong@aegis-data.cn',
+            'avatar': 'http://wework.qpic.cn/wwhead/duc2TvpEgSSWiaVLaJnssaQrgstcF6Eztqh3sJicsZk2rVDbMEuTMiaRX0eW8X5HicBuZ3nR9a3iaTVo/0',
+            'gender': 1,
+            'mobile': '15850591372',
+            'orders': [0],
+            'position': '副组长/Java全栈工程师',
+            'namePinYin': 'machangsong',
+            'departments': [5519],
+            'leaderInDep': [true],
+            'allDepartments': [5515, 5519]
+          }, {
+            'id': 'ChangJun',
+            'name': '常竣',
+            'email': 'changjun@aegis-data.cn',
+            'avatar': 'http://wework.qpic.cn/wwhead/duc2TvpEgSSWiaVLaJnssadfcY5VdFs3dwgRmgzsEXKicJLB09mO3WibKPPwMcVyeia6e214bicV8rws/0',
+            'gender': 1,
+            'mobile': '17714331167',
+            'orders': [0],
+            'position': '前端组副组长/前端开发工程师',
+            'namePinYin': 'changjun',
+            'departments': [5563],
+            'leaderInDep': [false],
+            'allDepartments': [5526, 5522, 5563]
+          }]
+        }
+      };
+    }
+
     public onCancel() {
       this.hideAndSendEvent('cancel');
     }
@@ -214,5 +244,10 @@
     public async saveData() {
     }
 
+    public submit(v) {
+      console.log(this.model.extras.requirements);
+      console.log(this.model === v);
+      console.log(v.extras.requirements);
+    }
   }
 </script>

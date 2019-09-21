@@ -57,7 +57,7 @@ export default class FormField extends mixins(Emitter) {
   public currentValue: any = this.value || null;
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {
-    return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
+    return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement, this);
   }
 
   get options() {

@@ -1,9 +1,3 @@
-import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
-import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
-import {register, registerDisplay} from './utils/register';
-import {ASchemaForm, LibComponents} from './utils/utils';
-import {IValidateResponse} from '../uform/types';
-import runValidation from '../uform/validator';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import {
@@ -11,17 +5,24 @@ import {
   Effects,
   EffectsContext,
   EffectsHandlers,
-  FormProps, IField,
+  FormProps,
+  IField,
   Platform,
   SchemaFormField
 } from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
+import {IValidateResponse} from '../uform/types';
+import runValidation from '../uform/validator';
 import {registerAntd} from './antd/register';
 import {registerElement} from './element/register';
+import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
 import {registerLayout} from './layout/register';
 import {registerAntdMobile} from './mobile/register';
+import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
+import {register, registerDisplay} from './utils/register';
+import {ASchemaForm, LibComponents} from './utils/utils';
 
 
 @Component({
@@ -80,6 +81,7 @@ export default class SchemaForm extends Vue {
     editable: this.editable,
     context: null
   });
+  public currentValue: any = null;
 
   @Watch('$slots')
   public slotsChanged(slots: any) {
@@ -255,7 +257,7 @@ export default class SchemaForm extends Vue {
       this.onOk(forceValidate, callback);
     };
     context.validate = async (handler) => {
-      const errors = await runValidation(this.value, this.store.fields, true);
+      const errors = await runValidation(this.currentValue, this.store.fields, true);
       if (handler) {
         handler(errors, context);
       } else {
@@ -267,7 +269,7 @@ export default class SchemaForm extends Vue {
     };
     context.subscribes = {};
     context.getValue = () => {
-      return this.value;
+      return this.currentValue;
     };
     context.trigger = (event: string, value: any) => {
       this.$nextTick(() => {
@@ -280,7 +282,13 @@ export default class SchemaForm extends Vue {
     return context;
   }
 
+  @Watch('value')
+  public valueChanged() {
+    this.setCurrentValue();
+  }
+
   public created() {
+    this.setCurrentValue();
     this.store.context = this.createContext();
     this.store.editable = this.mode !== undefined ? this.mode === 'edit' : this.editable;
     if (this.mode !== undefined) {
@@ -301,8 +309,14 @@ export default class SchemaForm extends Vue {
     });
   }
 
+  @Watch('currentValue', {deep: true})
+  public currentValueChanged(v) {
+    this.$emit('input', v);
+    this.$emit('change', v);
+  }
+
   public render() {
-    const {title, sticky, prefixCls, store, value, schema} = this;
+    const {title, sticky, prefixCls, store, currentValue, schema} = this;
     const rootFieldDef: SchemaFormField = Object.assign({}, schema, {
       type: 'object',
       title,
@@ -311,7 +325,7 @@ export default class SchemaForm extends Vue {
     let content: any = [
       this.$slots.header,
       renderField(null, store,
-        rootFieldDef, value, 0, false, this.$createElement
+        rootFieldDef, currentValue, 0, false, this.$createElement, this
       )
     ];
     let footer: any = [
@@ -397,23 +411,23 @@ export default class SchemaForm extends Vue {
           this.store.context.trigger(SchemaFormEvents.validate, errors);
         } else {
           if (callback) {
-            callback(this.value);
+            callback(this.currentValue);
           } else {
-            this.$emit('ok', this.value);
+            this.$emit('ok', this.currentValue);
           }
         }
       } else {
         if (callback) {
-          callback(this.value);
+          callback(this.currentValue);
         } else {
-          this.$emit('ok', this.value);
+          this.$emit('ok', this.currentValue);
         }
       }
     }
   }
 
   public validate(): Promise<IValidateResponse[]> | [] {
-    return runValidation(this.value, this.store.fields, true);
+    return runValidation(this.currentValue, this.store.fields, true);
   }
 
   private createSubmitButton(text: string = '', btnProps: object = null, action: () => any = null) {
@@ -487,5 +501,17 @@ export default class SchemaForm extends Vue {
 
   public onCancel() {
     this.$emit('cancel');
+  }
+
+  private setCurrentValue() {
+    if (!(this.currentValue && this.currentValue === this.value)) {
+      if (this.value) {
+        this.currentValue = JSON.parse(JSON.stringify(this.value));
+      } else if (this.schema.array) {
+        this.currentValue = [];
+      } else {
+        this.currentValue = {};
+      }
+    }
   }
 }

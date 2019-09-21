@@ -125,7 +125,7 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
 export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
                             field: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
-                            index: number, wrap: boolean, h) {
+                            index: number, wrap: boolean, h, vue) {
   if (field.slot) {
     return store.slots[field.slot];
   }
@@ -157,7 +157,7 @@ export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
   // @ts-ignore
   return <FormField props={props}
                     onInput={(v) => {
-                      setFieldValue(value, iField, v);
+                      setFieldValue(value, iField, v, vue);
                     }}
                     key={'field-' + field.property + '-' + index}/>;
 }

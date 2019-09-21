@@ -18,7 +18,7 @@ export default class FieldBasedComponent extends Vue {
   public store: SchemaFormStore;
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {
-    return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement);
+    return renderField(this.pathPrefix, this.store, field, currentValue, index, wrap, this.$createElement, this);
   }
 
 }
