@@ -94,15 +94,13 @@ export default class FormField extends mixins(Emitter) {
   public currentValueChanged(currentValue: any, old: any) {
     this.field.value = this.currentValue;
     if (this.store.editable && this.field.editable) {
-      if (!isEqual(currentValue, old)) {
-        this.$emit('input', currentValue);
-        this.$emit('change', currentValue);
-        this.store.context.trigger(SchemaFormEvents.fieldChange, {
-          path: this.field.plainPath,
-          value: currentValue,
-          field: this.field
-        });
-      }
+      this.$emit('input', currentValue);
+      this.$emit('change', currentValue);
+      this.store.context.trigger(SchemaFormEvents.fieldChange, {
+        path: this.field.plainPath,
+        value: currentValue,
+        field: this.field
+      });
     }
   }
 

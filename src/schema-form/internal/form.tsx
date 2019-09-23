@@ -20,8 +20,6 @@ class InternalForm extends mixins(FieldBasedComponent) {
   public pathPrefix: any;
   @Prop({type: Object, required: true})
   public definition: SchemaFormField;
-  @Prop({})
-  public props: any;
   @Prop(Array)
   public schemaPath: string[];
   @Prop({type: Boolean, default: false})
@@ -201,12 +199,12 @@ class InternalForm extends mixins(FieldBasedComponent) {
     return <RowComponent gutter={props && props.gutter || 0}>{group}</RowComponent>;
   }
 
-  public getFormProps(this: any) {
-    const formProps = Object.assign({
+  public getFormProps() {
+    const formProps: any = Object.assign({
       labelWidth: this.$attrs.labelWidth,
       labelCol: this.$attrs.labelCol,
       wrapperCol: this.$attrs.wrapperCol
-    }, this.store.props, this.props);
+    }, this.store.props, this.$attrs);
     if (this.isMobile) {
       formProps.title = this.$slots.title || this.title;
     }

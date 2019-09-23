@@ -3,6 +3,8 @@ import {setStructValue} from './destruct';
 
 export const setFieldValue = (parentValue: object, field: IField, v: any, vue) => {
   if (field.component.layout) {
+    vue.$emit('input', v);
+    vue.$emit('change', v);
     return;
   }
   if (!field.plainPath) {

@@ -5,6 +5,10 @@ export default [{
   component: () => import('@/views/demo/element/default.vue'),
   meta: {tag: 'Element UI', name: '默认值'}
 }, {
+  path: 'element/destruct',
+  component: () => import('@/views/demo/element/destruct.vue'),
+  meta: {tag: 'Element UI', name: '解构'}
+}, {
   path: 'element/display',
   component: () => import('@/views/demo/element/display.vue'),
   meta: {tag: 'Element UI', name: '详情'}
