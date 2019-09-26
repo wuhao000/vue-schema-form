@@ -1,17 +1,18 @@
 {
   "name": "v-schema-form",
-  "version": "0.1.4-4",
+  "version": "0.1.4-15",
   "private": false,
   "main": "src/index.ts",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-serviceg lint",
     "lib": "vue-cli-service build --target lib --name SchemaForm --dest lib src/index.ts",
     "docs": "tsc -p build && node build/docs.js",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
     "routes": "tsc -p build && node build/routes.js",
-    "build:components": "npm run docs && node compile/build-components.js"
+    "build:components": "npm run docs && node compile/build-components.js",
+    "publish": "npm run build:components"
   },
   "dependencies": {
     "aegis-ui-desktop": "^1.0.4",

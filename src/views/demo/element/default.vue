@@ -8,7 +8,6 @@
     </ae-layout-content>
   </ae-layout>
 </template>
-
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import ShowValue from '@/views/demo/show-value';
@@ -32,13 +31,22 @@
           title: '字段1',
           type: 'string',
           placeholder: '请输入',
-          default: 'abc'
+          default: ['abc', 'def'],
+          arrayProps: {
+            addBtnText: '添加文本',
+            addBtnProps: {
+              text: true
+            },
+            showRemoveBtn: false,
+            maxLength: 2
+          },
+          array: true
         },
         select: {
           title: '字段2',
           type: 'select',
-          enum: [{label: '1', value: 1}, {label: '2', value: 2}],
-          default: 2
+          enum: [{label: '是', value: 1}, {label: '否', value: 0}],
+          default: 0
         },
         date: {
           title: '日期',
@@ -95,7 +103,5 @@
     }
   }
 </script>
-
 <style scoped lang="less">
-
 </style>

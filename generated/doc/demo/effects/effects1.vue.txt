@@ -1,9 +1,8 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
-      <v-schema-form :schema="schema"
-                     :effects="effects">
-
+      <v-schema-form :effects="effects"
+                     :schema="schema">
       </v-schema-form>
     </ae-layout-content>
   </ae-layout>
@@ -24,10 +23,12 @@
               layout: [6, 6],
               fields: {
                 s1: {
-                  type: 'string'
+                  type: 'string',
+                  title: 'aa'
                 },
                 s2: {
-                  type: 'string'
+                  type: 'string',
+                  title: 'bb'
                 }
               }
             }

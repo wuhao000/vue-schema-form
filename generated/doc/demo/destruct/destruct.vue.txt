@@ -7,8 +7,6 @@
                      :props="props"></v-schema-form>
       <d-button @click="dialogVisible = true">查看数据</d-button>
     </ae-layout-content>
-    <d-cascader placeholder="请选择"
-                :options="options"/>
     <ae-modal v-model="dialogVisible">
       <pre>{{value}}</pre>
     </ae-modal>

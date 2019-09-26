@@ -1,9 +1,9 @@
-import {getFormItemComponent} from '../internal/utils';
-import BaseLayout from './base-layout';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
+import {getFormItemComponent} from '../internal/utils';
 import {LibComponents, MOBILE} from '../utils/utils';
+import BaseLayout from './base-layout';
 
 
 @Component({
@@ -24,13 +24,18 @@ export default class GridLayout extends BaseLayout {
     return this.layout.some(it => Array.isArray(it));
   }
 
+  get containsNumber() {
+    return this.layout.some(it => typeof it === 'number');
+  }
+
   public render() {
     const {layout, fields, wrapSingle, gutter, store: {platform}} = this;
     if (platform === MOBILE) {
       return <div>{this.$slots.default}</div>;
     }
     const groups = this.toGroups(fields, layout);
-    const layoutFields = layout.map((span, index) => {
+    const normalizedLayout = this.getNormalizedLayout();
+    const layoutFields = normalizedLayout.map((span, index) => {
       if (groups[index]) {
         if (typeof span === 'number') {
           const col = <LibComponents.col span={span}>{groups[index]}</LibComponents.col>;
@@ -52,15 +57,17 @@ export default class GridLayout extends BaseLayout {
       return <FormItemComponent title={this.title}
                                 props={this.$attrs}
                                 label={this.title}>
-        <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row>
+        {this.containsNumber ?
+            <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> : layoutFields}
       </FormItemComponent>;
     }
-    return <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row>;
+    return this.containsNumber ? <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> :
+        <div>{layoutFields}</div>;
   }
 
   public toGroups(fields: VNode[], layout: Array<number | number[]>) {
     if (!this.containsArray) {
-      return [this.layout];
+      return [fields];
     }
     const groups = [];
     const tmpFields = [].concat(fields);
@@ -79,4 +86,11 @@ export default class GridLayout extends BaseLayout {
     return groups;
   }
 
+  private getNormalizedLayout(): Array<number | number[]> {
+    if (!this.containsArray) {
+      return [this.layout as number[]];
+    } else {
+      return this.layout;
+    }
+  }
 }
