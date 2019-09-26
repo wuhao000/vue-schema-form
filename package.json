@@ -1,12 +1,12 @@
 {
   "name": "v-schema-form",
-  "version": "0.1.4-3",
+  "version": "0.1.4-14",
   "private": false,
   "main": "src/index.ts",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-serviceg lint",
     "lib": "vue-cli-service build --target lib --name SchemaForm --dest lib src/index.ts",
     "docs": "tsc -p build && node build/docs.js",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",

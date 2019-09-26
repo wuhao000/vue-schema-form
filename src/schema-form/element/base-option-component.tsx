@@ -11,7 +11,7 @@ export default {
     const InputComponent = this.component;
     const OptionComponent = this.optionComponent;
     const props = Object.assign({}, this.$attrs);
-    if (!props.value) {
+    if (props.value === undefined) {
       if (props.multiple) {
         props.value = [];
       } else {
