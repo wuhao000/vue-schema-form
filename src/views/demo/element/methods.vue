@@ -1,6 +1,7 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
+      {{value}}
       <v-schema-form v-model="value"
                      class="demo-form"
                      ref="form"
@@ -8,13 +9,14 @@
                      :effects="formProps.effects"
                      :props="props"
                      :schema="definition"></v-schema-form>
+      <el-button @click="setValue">赋值</el-button>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
   import {getProps} from '@/views/demo/utils';
-  import {EffectsContext, FormDescriptor, SchemaFormField} from 'v-schema-form-types';
+  import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -66,7 +68,9 @@
 
     public props = getProps();
 
-    public value = {};
+    public value: any = {
+      id: 'abc'
+    };
 
     get form(): any {
       return this.$refs.form;
@@ -74,6 +78,11 @@
 
     public created() {
       SchemaForm.registerElement();
+    }
+
+    public setValue() {
+      this.value.id = 'def';
+      this.value.select = 2;
     }
 
     public setOptions() {

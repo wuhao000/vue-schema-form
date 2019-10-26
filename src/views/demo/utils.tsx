@@ -28,8 +28,8 @@ export const getValue = () => {
     url: 'http://www',
     datetime: new Date(),
     date: new Date(),
-    start: new Date(),
-    end: new Date(),
+    start: '',
+    end: '',
     year: new Date(),
     month: new Date(),
     time: window.moment(),
@@ -80,24 +80,10 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     type: 'date'
   },
-  dateRange: {
+  '[start, end]': {
     title: '日期范围',
     required: true,
-    type: 'daterange',
-    processor: {
-      getValue: (value, field) => {
-        return [value && value['start'], value && value['end']];
-      },
-      setValue: (parentValue, field, value) => {
-        if (value) {
-          parentValue['start'] = value[0];
-          parentValue['end'] = value[1];
-        } else {
-          parentValue['start'] = null;
-          parentValue['end'] = null;
-        }
-      }
-    }
+    type: 'daterange'
   },
   datetime: {
     title: '日期时间',

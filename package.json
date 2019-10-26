@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "0.1.4-15",
+  "version": "0.1.4-18",
   "private": false,
   "main": "src/index.ts",
   "scripts": {
@@ -12,7 +12,8 @@
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
     "routes": "tsc -p build && node build/routes.js",
     "build:components": "npm run docs && node compile/build-components.js",
-    "publish": "npm run build:components"
+    "publish": "npm run build:components",
+    "test": "jest"
   },
   "dependencies": {
     "aegis-ui-desktop": "^1.0.4",
@@ -40,6 +41,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/jest": "^24.0.18",
     "@types/lodash.difference": "^4.5.6",
     "@types/lodash.eq": "^4.0.6",
     "@types/lodash.flatten": "^4.4.6",
@@ -49,8 +52,14 @@
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-typescript": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.19.0",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-requirejs": "^7.7.2",
+    "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
+    "babel-preset-env": "^1.7.0",
     "compression-webpack-plugin": "^3.0.0",
     "decoded-text-loader": "^1.0.0",
     "element-ui": "^2.12.0",
@@ -59,14 +68,18 @@
     "highlight.js": "^9.15.10",
     "hljs": "^6.2.3",
     "html-loader": "^0.5.5",
+    "jest": "^24.9.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "lodash.sum": "^4.0.2",
     "raw-loader": "^3.1.0",
+    "regenerator-runtime": "^0.13.3",
     "rxjs": "^6.5.2",
+    "ts-jest": "^24.1.0",
     "typescript": "^3.4.3",
     "v-schema-form-types": "^1.0.5",
     "vue-class-component": "^7.1.0",
+    "vue-jest": "^3.0.5",
     "vue-property-decorator": "^8.2.2",
     "vue-template-compiler": "^2.6.10"
   }

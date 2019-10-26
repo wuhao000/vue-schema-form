@@ -1,0 +1,18 @@
+module.exports = {
+  presets: [
+    '@babel/preset-typescript',
+    ['env', {
+      'targets:': { 'node': '6' } // change this to your node version
+    }]
+  ],
+  plugins: ['transform-vue-jsx'],
+  env: {
+    test: {
+      presets: [['env', {
+        targets: {
+          node: 'current'
+        }
+      }]]
+    }
+  }
+};

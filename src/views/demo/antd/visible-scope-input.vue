@@ -38,7 +38,8 @@
           <ul class="member-list">
             <li v-for="user in displayValue.users"
                 :key="user.id">
-              <img class="icon avatar avatar--mini"
+              <img alt=""
+                   class="icon avatar avatar--mini"
                    :src="user.avatar"/>
               <span>{{user.name}}</span>
               <ae-icon class="btn close-btn"
@@ -52,11 +53,11 @@
   </ae-layout>
 </template>
 <script lang="ts">
+  import _ from 'lodash';
   import difference from 'lodash.difference';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import {Prop, Watch} from 'vue-property-decorator';
-  import _ from 'lodash';
 
   @Component({
     name: 'VisibleScopeInput'
@@ -105,7 +106,7 @@
     get content() {
       if (this.currentValue.users) {
         return this.currentValue.departments.map(it => it.name).concat(
-          this.currentValue.users.map(it => it.name)
+            this.currentValue.users.map(it => it.name)
         ).join('、');
       } else if (this.value) {
         return this.value.toString();
@@ -186,14 +187,14 @@
       let hasDiff = false;
       if (Array.isArray(this.value)) {
         hasDiff = _.difference(this.value as any[], finalValue).concat(_.difference(finalValue,
-          this.value as any[])).length > 0;
+            this.value as any[])).length > 0;
       } else if (this.user && this.department) {
         const users1 = (this.value as any).users;
         const users2 = finalValue.users;
         const departments1 = (this.value as any).departments;
         const departments2 = finalValue.departments;
         hasDiff = _.difference(users1, users2).concat(_.difference(users2, users1)).length +
-          _.difference(departments1, departments2).concat(_.difference(departments2, departments1)).length > 0;
+            _.difference(departments1, departments2).concat(_.difference(departments2, departments1)).length > 0;
       } else {
         if (this.valueType === 'object') {
           hasDiff = this.value && (this.value as any).id !== finalValue && finalValue.id;
@@ -272,7 +273,7 @@
           return tmp;
         }
         const diffUsers = difference(this.currentValue.users.map(it => it.id), tmp.users.map(it => it.id))
-          .concat(difference(tmp.users.map(it => it.id), this.currentValue.users.map(it => it.id)));
+            .concat(difference(tmp.users.map(it => it.id), this.currentValue.users.map(it => it.id)));
         const currentDepIds = this.currentValue.departments.map(it => it.id);
         const newDepIds = tmp.departments.map(it => it.id);
         const diffDepartments = difference(currentDepIds, newDepIds).concat(difference(newDepIds, currentDepIds));

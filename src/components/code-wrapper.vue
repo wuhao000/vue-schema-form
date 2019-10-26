@@ -7,14 +7,14 @@
     <div class="demo-content">
       <slot/>
       <div class="clearfix">
-        <img class="code-expand-icon"
+        <img alt=""
+             class="code-expand-icon"
              :src="showCode ? 'https://gw.alipayobjects.com/zos/rmsportal/OpROPHYqWmrMDBFMZtKF.svg' :
                     'https://gw.alipayobjects.com/zos/rmsportal/wSAkBuJFbdxsosKKpqyq.svg'"
              @click="toggleCode"/>
       </div>
     </div>
     <div style="padding: 10px 20px;">
-
       <pre v-hljs
            v-show="showCode"
            class="code-box-code markdown-body clearfix">
@@ -46,7 +46,6 @@
   }
 </script>
 <style lang="less">
-
   .demo-content {
     margin-bottom: 20px;
     border-width: 1px;

@@ -26,7 +26,7 @@ export function setStructValue(parentValue: object, struct: string | any[] | obj
     vue.$set(parentValue, struct, structValue);
   } else if (Array.isArray(struct)) {
     struct.forEach((key, index) => {
-      vue.$set(parentValue, key, structValue[index]);
+      vue.$set(parentValue, key, structValue ? structValue[index] : undefined);
     });
   } else if (struct) {
     Object.keys(struct).forEach(key => {
