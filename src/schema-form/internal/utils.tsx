@@ -128,9 +128,6 @@ export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
                             field: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h, vue) {
-  if (field.slot) {
-    return store.slots[field.slot];
-  }
   let value = null;
   if (field.property && field.property.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);

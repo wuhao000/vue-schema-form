@@ -5,12 +5,13 @@ export default {
   props: {
     options: Array,
     labelProperty: {type: String, default: 'label'},
-    valueProperty: {type: String, default: 'value'}
+    valueProperty: {type: String, default: 'value'},
+    value: {}
   },
   render(this: any) {
     const InputComponent = this.component;
     const OptionComponent = this.optionComponent;
-    const props = Object.assign({}, this.$attrs);
+    const props = Object.assign({value: this.value}, this.$attrs);
     if (props.value === undefined) {
       if (props.multiple) {
         props.value = [];
