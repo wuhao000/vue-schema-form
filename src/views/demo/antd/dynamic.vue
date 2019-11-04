@@ -184,7 +184,7 @@
       $('name').subscribe('fieldKeydown', (p) => {
         const e = p.event;
         if (e.key === 'Enter') {
-
+          console.log('enter');
         }
       });
     }

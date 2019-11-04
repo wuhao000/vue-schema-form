@@ -2,6 +2,7 @@
   <ae-layout>
     <ae-layout-content>
       <v-schema-form v-model="value"
+                     :effects="effects"
                      :schema="schema"
                      @ok="showValue"></v-schema-form>
       <show-value :value="value"/>
@@ -9,6 +10,7 @@
   </ae-layout>
 </template>
 <script lang="ts">
+  import {EffectsContext} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import SchemaForm from '../../../schema-form';
@@ -35,7 +37,13 @@
           fields: {
             callerName: {
               type: 'string',
-              title: '来电人'
+              title: '来电人',
+              nativeEvents: {
+                keydown: ($, e) => {
+                  console.log($);
+                  console.log(e);
+                }
+              }
             },
             phoneMark: {
               type: 'select',
@@ -70,6 +78,12 @@
 
     public created() {
       SchemaForm.registerElement();
+    }
+
+    public effects($: EffectsContext) {
+      $('callerName').subscribe('onFieldKeydown', () => {
+
+      });
     }
 
     public showValue() {
