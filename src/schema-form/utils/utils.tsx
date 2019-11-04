@@ -25,6 +25,7 @@ export enum TYPES {
   time = 'time',
   select = 'select',
   date = 'date',
+  datetimerange = 'datetimerange',
   integer = 'integer',
   number = 'number',
   double = 'double',
@@ -224,7 +225,7 @@ export function addRule(rules: any, field: IField, rule: any) {
     if (options.length) {
       validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
     }
-  } else if (type === TYPES.daterange) {
+  } else if (type === TYPES.daterange || type === TYPES.datetimerange) {
     validateType = 'array';
   }
   rule.type = validateType;

@@ -12,9 +12,11 @@
     </div>
     <div v-else-if="listType === 'picture'">
       <img v-if="fileList.length"
+           alt=""
            style="height: 180px;width:180px;"
            :src="fileList[0].thumbUrl"/>
-      <div v-else class="ant-upload-plus">
+      <div v-else
+           class="ant-upload-plus">
         <ae-icon type="plus"></ae-icon>
       </div>
     </div>
@@ -37,9 +39,9 @@
   </a-upload-dragger>
 </template>
 <script lang="ts">
-  import BaseUpload from '../common/base-upload';
   import Component from 'vue-class-component';
   import {Prop} from 'vue-property-decorator';
+  import BaseUpload from '../common/base-upload';
 
   export interface AntUploadFile {
     lastModified: number;
@@ -100,7 +102,6 @@
   }
 </script>
 <style lang="less">
-
   .ant-upload.ant-upload-select-picture-card:hover {
   }
 
@@ -137,6 +138,7 @@
       }
     }
   }
+
   .ant-upload-plus {
     border: 1px solid #d9d9d9;
     cursor: pointer;
@@ -145,6 +147,7 @@
     height: 120px;
     text-align: center;
     line-height: 120px;
+
     & > i {
       font-size: 28px !important;
     }

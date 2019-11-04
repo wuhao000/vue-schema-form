@@ -4,7 +4,10 @@
       <v-schema-form v-model="value"
                      :effects="effects"
                      :schema="schema"></v-schema-form>
+      <v-schema-form v-model="value2"
+                     :schema="schema2"></v-schema-form>
       <show-value :value="value"></show-value>
+      <el-button @click="setValue">赋值</el-button>
     </ae-layout-content>
   </ae-layout>
 </template>
@@ -41,6 +44,10 @@
             maxLength: 2
           },
           array: true
+        },
+        text2: {
+          type: 'string',
+          title: 'text2'
         },
         select: {
           title: '字段2',
@@ -79,8 +86,90 @@
         }
       }
     };
+    public schema2 = {
+      props: {
+        labelWidth: '70px'
+      },
+      fields: {
+        mobileNo: {
+          title: '来电号码',
+          type: 'string'
+        },
+        phoneMark: {
+          type: 'select',
+          title: '来电类型',
+          props: {valueProperty: 'code', labelProperty: 'name'}
+        },
+        name: {
+          title: '姓名',
+          type: 'string'
+        },
+        gender: {
+          type: 'select',
+          title: '性别',
+          enum: [{
+            label: '男',
+            value: '1'
+          }, {
+            label: '女',
+            value: '0'
+          }]
+        },
+        identifyType: {
+          type: 'select',
+          title: '证件类型',
+          props: {valueProperty: 'code', labelProperty: 'name'}
+        },
+        identifyNumber: {
+          title: '证件号码',
+          type: 'string'
+        },
+        licenseNumber: {
+          title: '执业证号',
+          type: 'string'
+        },
+        lawFirm: {
+          type: 'string',
+          title: '所属律所'
+        },
+        enterpriseId: {
+          type: 'string',
+          title: '单位',
+          visible: false
+        },
+        job: {
+          type: 'string',
+          title: '职业',
+          visible: false
+        },
+        address: {
+          type: 'string',
+          title: '地址',
+          visible: false
+        }
+      }
+    };
+    public value: any = {
+      text: ['ef']
+    };
 
-    public value = {};
+    public value2: any = {
+      id: 'abc',
+      callerType: 1,
+      mobileNo: '',
+      phoneMark: 'normal',
+      callTimes: 1,
+      name: '',
+      gender: '1',
+      identifyType: 'residentIdentityCard',
+      identifyNumber: '',
+      licenseNumber: '',
+      lawFirm: '',
+      enterpriseId: '',
+      job: '',
+      address: '',
+      extendAttributes: {}
+    };
 
     public created() {
       SchemaForm.registerElement();
@@ -100,6 +189,31 @@
       $('sub.?.num').onFieldCreateOrChange((v) => {
         $('sum').value(sum($('sub.?.num').value()));
       });
+    }
+
+    public setValue() {
+      this.value = {
+        text: ['a', 'b', 'c'],
+        text2: 'abc'
+      };
+      this.value2 = {
+        address: '',
+        callTime: '0',
+        callTimes: '1',
+        callerType: 1,
+        enterpriseId: '',
+        firstCallTimes: '0',
+        gender: '1',
+        id: 'a78e393f46f74dc29211a3a6c7b1d730',
+        identifyNumber: '',
+        identifyType: 'residentIdentityCard',
+        job: '',
+        lawFirm: '',
+        licenseNumber: '',
+        mobileNo: '',
+        name: 'afdsa',
+        phoneMark: ''
+      };
     }
   }
 </script>

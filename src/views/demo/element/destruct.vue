@@ -50,8 +50,11 @@
               title: '案号'
             },
             '[startTime, endTime]': {
-              type: 'daterange',
-              title: '来电时间'
+              type: 'datetimerange',
+              title: '来电时间',
+              props: {
+                'default-time': ['00:00:00', '23:59:59']
+              }
             },
             status: {
               type: 'select',

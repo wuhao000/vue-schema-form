@@ -7,7 +7,6 @@
       <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="definition"
-                     :props="props"
                      :disabled="options.disabled"
                      :loading="options.loading"
                      :readonly="options.readonly"

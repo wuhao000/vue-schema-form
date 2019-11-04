@@ -1,14 +1,14 @@
 import {IField} from 'v-schema-form-types';
-import ElButton from './button';
-import ElUrlInput from './url.vue';
-import {registerDesktop} from '../utils/register';
-import {ComponentMap, getOptions, LibComponents, TYPES} from '../utils/utils';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';
 import ElExtRadio from '../element/radio-group';
 import ElExtSelect from '../element/select';
+import {registerDesktop} from '../utils/register';
+import {ComponentMap, getOptions, LibComponents, TYPES} from '../utils/utils';
+import ElButton from './button';
 import ElementUpload from './upload.vue';
+import ElUrlInput from './url.vue';
 
 
 export function registerElement() {
@@ -42,8 +42,8 @@ export function registerElement() {
   });
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
-  registerDesktop('el-date-picker', [TYPES.date, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-    (definition: IField) => ({type: definition.type.toLowerCase()}));
+  registerDesktop('el-date-picker', [TYPES.date, TYPES.datetimerange, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
+      (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {
