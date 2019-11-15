@@ -77,7 +77,7 @@
     "rxjs": "^6.5.2",
     "ts-jest": "^24.1.0",
     "typescript": "^3.7.2",
-    "v-schema-form-types": "^1.0.5",
+    "v-schema-form-types": "^1.0.9",
     "vue-class-component": "^7.1.0",
     "vue-jest": "^3.0.5",
     "vue-property-decorator": "^8.2.2",
