@@ -38,7 +38,7 @@ export default class ArrayWrapper extends Vue {
       ButtonComponent = 'm-button';
     }
     const buttonStyle: any = {};
-    if (this.addBtnProps && this.addBtnProps.block) {
+    if (this.addBtnProps?.block) {
       buttonStyle.width = '100%';
     }
     const props: any = Object.assign({}, this.addBtnProps);

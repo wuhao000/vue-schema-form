@@ -1,4 +1,5 @@
 import get from 'lodash.get';
+import uuid from 'uuid';
 import {
   Effects,
   EffectsContext,
@@ -10,7 +11,7 @@ import {
   SchemaFormField,
   ShowFieldCondition
 } from 'v-schema-form-types';
-import Vue, {VNode} from 'vue';
+import Vue from 'vue';
 import {clone, parseDestructPath, toArr} from '../../uform/utils';
 import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
@@ -28,9 +29,9 @@ export interface SchemaFormStore {
   readonly?: boolean;
   loading?: boolean;
   inline?: boolean;
-  slots?: { [key: string]: VNode[] | undefined };
   editable?: boolean;
   context?: EffectsContext | null;
+  root: any;
 }
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -53,8 +54,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-        .map(condition => matchCondition(currentValue, condition))
-        .some(it => !it);
+          .map(condition => matchCondition(currentValue, condition))
+          .some(it => !it);
     }
   }
 }
@@ -62,11 +63,18 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-      .filter(key => fields[key])
-      .map(key => ({
-        property: key,
-        ...fields[key]
-      }));
+        .filter(key => fields[key])
+        .map(key => {
+          const field = fields[key];
+          if (!field.id) {
+            field.id = uuid.v4();
+          }
+          return {
+            id: field.id,
+            property: key,
+            ...fields[key]
+          };
+        });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -129,10 +137,10 @@ export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h, vue) {
   if (field.slot) {
-    return store.slots[field.slot];
+    return store.root.$slots[field.slot];
   }
   let value = null;
-  if (field.property && field.property.includes('.')) {
+  if (field.property?.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
   } else {
     value = currentValue;
@@ -207,7 +215,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       valid: true,
       displayValue: definition.displayValue,
       required: definition.required,
-      fields: definition.fields,
+      fields: proxyFields(definition.fields),
       effectErrors: [],
       errors: [],
       hiddenFromParent: false,
@@ -221,6 +229,30 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
     });
   }
 }
+
+const proxyFields = (fields: FormFields): FormFields => {
+  if (fields) {
+    if (Array.isArray(fields)) {
+      fields.forEach((field, index) => {
+        fields[index] = proxyField(field);
+      });
+    } else {
+      Object.keys(fields).forEach(key => {
+        fields[key] = proxyField(fields[key]);
+      });
+    }
+  }
+  return fields;
+};
+
+const proxyField = (field: SchemaFormField): SchemaFormField => {
+  // return new Proxy(field, {
+  //   get: (target, property) => {
+  //     return target[property];
+  //   }
+  // });
+  return field;
+};
 
 const getRulesFromProps = (props: SchemaFormField) => {
   const rules = toArr(props.rules);
@@ -284,5 +316,5 @@ export enum SchemaFormEvents {
 
 export const filterErros = (errors: any[]) => {
   return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
-    .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
+      .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
 };

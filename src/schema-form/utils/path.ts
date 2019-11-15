@@ -1,5 +1,4 @@
-import flatten from 'lodash.flatten';
-import {IField} from 'v-schema-form-types';
+import {IField, Paths, SchemaFormField} from 'v-schema-form-types';
 
 const CACHE = {};
 
@@ -13,8 +12,20 @@ export const splitPath = (path: string): string[] => {
   }
 };
 
-export function match(paths: string[], fields: { [key: string]: IField }): string[] {
-  return flatten(paths.map(it => matchSinglePath(it, fields)));
+export function match(paths: Paths, fields: { [key: string]: IField }): string[] {
+  return paths.map(it => {
+    if (typeof it === 'string') {
+      return matchSinglePath(it, fields);
+    } else {
+      const field = findFieldPath(it, fields);
+      return field ? [field] : [];
+    }
+  }).flat();
+}
+
+export function findFieldPath(def: SchemaFormField, fields: { [key: string]: IField }): string {
+  const field = Object.values(fields).find(it => it.id === def.id);
+  return field && field.plainPath;
 }
 
 export function replaceLastPath(paths: string[], last: string[]): string[] {
@@ -41,8 +52,8 @@ export function isPathMatchPatterns(field: IField, patterns: string[]): boolean 
   return patterns.some(it => isPathMatchPattern(field, it));
 }
 
-export function isFuzzyPath(path: string) {
-  return path.includes('*') || path.includes('?');
+export function isFuzzyPath(path: string | SchemaFormField) {
+  return typeof path === 'string' && (path.includes('*') || path.includes('?'));
 }
 
 function isPathMatchPattern(origin: IField, pattern: string) {

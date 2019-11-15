@@ -233,5 +233,6 @@ export function addRule(rules: any, field: IField, rule: any) {
 }
 
 export const getConfirmFunction = (platform: Platform) => {
+  // @ts-ignore
   return platform === 'mobile' ? antdm.Modal.confirm : LibComponents.confirm;
 };

@@ -47,7 +47,7 @@ export const runValidation = async (
         return;
       }
     }
-    const title = field.props && field.props.title;
+    const title = field.props?.title;
     const rafId = setTimeout(() => {
       field.loading = true;
       field.dirty = true;

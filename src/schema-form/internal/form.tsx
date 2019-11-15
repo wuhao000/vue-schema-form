@@ -1,4 +1,4 @@
-import {clone, isEqual} from '@/uform/utils';
+import {clone, isEqual} from '../../uform/utils';
 import difference from 'lodash.difference';
 import {SchemaFormField} from 'v-schema-form-types';
 import Component, {mixins} from 'vue-class-component';
@@ -156,6 +156,7 @@ class InternalForm extends mixins(FieldBasedComponent) {
         : groups.map((group) => this.wrapGroup(group))}
     </FormComponent>;
     if (this.layoutType) {
+      // @ts-ignore
       const LayoutComponentDef = getComponentType(this.store, {
         type: this.layoutType,
         props: this.layoutProps

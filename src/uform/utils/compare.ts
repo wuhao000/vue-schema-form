@@ -121,7 +121,7 @@ export const isEqual = function exportedEqual(a: any, b: any, filter?: Filter) {
     return equal(a, b, filter);
   } catch (error) {
     if (
-        (error.message && error.message.match(/stack|recursion/i)) ||
+        (error.message?.match(/stack|recursion/i)) ||
         error.number === -2146828260
     ) {
       // warn on circular references, don't crash

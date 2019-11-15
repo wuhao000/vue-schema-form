@@ -187,6 +187,7 @@ export default class FormField extends mixins(Emitter) {
     if (field.array && inputFieldDef.forArray === false) {
       let ArrayComponent: any = ArrayWrapper;
       if (typeof definition.arrayComponent === 'string') {
+        // @ts-ignore
         const componentDef = getComponentType(this.store, {
           type: definition.arrayComponent,
           props: definition.arrayProps
@@ -356,7 +357,7 @@ export default class FormField extends mixins(Emitter) {
   public render() {
     const {props, field, type, definition, editable, store: {platform}} = this;
     if (definition.slot) {
-      return this.store.slots[definition.slot];
+      return this.store.root.$slots[definition.slot];
     }
     if (!editable) {
       props.definition = definition;
@@ -377,7 +378,7 @@ export default class FormField extends mixins(Emitter) {
           <FormItemComponent attrs={Object.assign({}, formItemProps, {label: null})}
                              class={className}
                              style={style}>
-            {definition.wrapperProps && definition.wrapperProps.noTitle ? null :
+            {definition?.wrapperProps?.noTitle ? null :
                 <span slot="label">{formItemProps.label}</span>}
             {inputComponent}
             {

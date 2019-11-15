@@ -45,7 +45,7 @@ export const getSchemaNodeFromPath = (schema: ISchema, path: Path) => {
 };
 
 export const schemaIs = (schema: ISchema, type: string) => {
-  return schema && schema.type === type;
+  return schema?.type === type;
 };
 
 export const isVirtualBox = (name: string) => {

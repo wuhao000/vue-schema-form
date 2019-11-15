@@ -49,7 +49,7 @@ export const resolveFieldPath = (path: Path | IFormPathMatcher): string[] => {
 };
 
 export const isChildField = (field, parent) => {
-  if (field && parent && field.path && parent.path) {
+  if (field?.path && parent?.path) {
     for (let i = 0; i < parent.path.length; i++) {
       if (field.path[i] !== parent.path[i]) {
         return false;
@@ -62,7 +62,7 @@ export const isChildField = (field, parent) => {
 
 export const hasRequired = rules => {
   return toArr(rules).some(rule => {
-    return rule && rule.required;
+    return rule?.required;
   });
 };
 

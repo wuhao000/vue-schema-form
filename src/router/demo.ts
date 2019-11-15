@@ -29,6 +29,10 @@ export default [{
   component: () => import('@/views/demo/element/simple.vue'),
   meta: {tag: 'Element UI', name: '简单场景'}
 }, {
+  path: 'element/slot',
+  component: () => import('@/views/demo/element/slot.vue'),
+  meta: {tag: 'Element UI', name: '插槽'}
+}, {
   path: 'antd/destruct',
   component: () => import('@/views/demo/antd/destruct.vue'),
   meta: {tag: 'Ant Design Vue', name: '解构'}

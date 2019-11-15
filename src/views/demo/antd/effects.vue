@@ -20,7 +20,7 @@
   import SchemaForm from '@/index';
   import FormBlock from '@/schema-form/layout/form-block';
   import {getProps} from '@/views/demo/utils';
-  import {EffectsContext, FormDescriptor, SchemaFormField} from 'v-schema-form-types';
+  import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import effects1 from '../schema/effects1.json';

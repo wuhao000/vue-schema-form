@@ -1,6 +1,0 @@
-projectKey=vue-schema-form
-serverUrl=http://sonar.aegis-info.com
-serverVersion=8.0.0.29455
-dashboardUrl=http://sonar.aegis-info.com/dashboard?id=vue-schema-form
-ceTaskId=AW4tZ4BX5BGP0m2GcFOF
-ceTaskUrl=http://sonar.aegis-info.com/api/ce/task?id=AW4tZ4BX5BGP0m2GcFOF

@@ -8,7 +8,7 @@ export function getStructValue(parentValue: object, struct: string | any[] | obj
     Object.keys(struct).forEach(key => {
       const destructValue = struct[key];
       if (typeof destructValue === 'string') {
-        value[key] = parentValue && parentValue[destructValue];
+        value[key] = parentValue?.[destructValue];
       } else {
         value[key] = getStructValue(parentValue, destructValue);
       }

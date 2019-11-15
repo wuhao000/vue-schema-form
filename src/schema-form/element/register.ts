@@ -17,6 +17,7 @@ export function registerElement() {
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].element;
   });
+  // @ts-ignore
   LibComponents.confirm = ELEMENT.MessageBox.confirm;
   Vue.component('el-ext-select', ElExtSelect);
   Vue.component('el-ext-checkbox', ElExtCheckbox);

@@ -2,11 +2,17 @@
   <ae-layout>
     <ae-layout-content>
       <d-button @click="loadData">加载</d-button>
+      {{selValue}}
       <v-schema-form v-model="model"
                      :effects="effects"
-                     :props="formProps"
                      :schema="formDefinition"
                      @ok="submit">
+        <d-form-item label="aaa"
+                     slot="select">
+          <el-ext-select :options="[{label: 1, value: 1}, {label: 2, value: 2}]"
+                         :value="selValue"
+                         @change="onChange"></el-ext-select>
+        </d-form-item>
       </v-schema-form>
       <show-value :value="model"/>
     </ae-layout-content>
@@ -59,15 +65,30 @@
     @Prop({type: Boolean, default: false})
     public value: boolean;
     public formDefinition: SchemaFormField = {
+      props: {
+        labelWidth: '150px',
+        rules: {
+          name: [{required: true, message: '请输入名称'}],
+          code: [{required: true, message: '请输入编码'}]
+        }
+      },
       fields: [{
+        title: 'aaa',
+        slot: 'select',
+        type: 'select'
+      }, {
         type: 'string',
         property: 'name',
         title: '名称'
       }, {
         type: 'button',
-        title: 'abc'
+        title: 'abc',
+        props: {
+          action: this.onAbc
+        }
       }]
     };
+
     public iconTypeOptions = [{
       label: '未设置', value: null
     }, {
@@ -77,6 +98,7 @@
     }];
 
     private loading: boolean = false;
+
     public model: any = this.getDefaultBean();
     public formDefinition2: SchemaFormField = {
       fields: [{
@@ -112,18 +134,9 @@
         title: '颜色'
       }]
     };
-    public type: string = 'aaa';
 
-    get formProps() {
-      return {
-        labelWidth: '150px',
-        model: this.model,
-        rules: {
-          name: [{required: true, message: '请输入名称'}],
-          code: [{required: true, message: '请输入编码'}]
-        }
-      };
-    }
+    public selValue = 1;
+    public type: string = 'aaa';
 
     @Watch('id')
     public async idChanged(id: string) {
@@ -143,6 +156,7 @@
     }
 
     public async created() {
+      SchemaForm.registerElement();
       SchemaForm.registerAntd();
       setTimeout(() => {
         const definitions = [{
@@ -230,8 +244,23 @@
       };
     }
 
+    public onAbc() {
+      console.log(this.selValue);
+      this.selValue = 2;
+      console.log(this.selValue);
+    }
+
     public onCancel() {
       this.hideAndSendEvent('cancel');
+    }
+
+    public onChange(v) {
+      console.log('changed: ' + v);
+      this.selValue = v;
+    }
+
+    public onSelValueChanged(v) {
+      console.log(v);
     }
 
     public async saveData() {

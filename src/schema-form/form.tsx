@@ -1,4 +1,3 @@
-import {clone, isEqual} from '@/uform/utils';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import {
@@ -7,7 +6,7 @@ import {
   EffectsContext,
   EffectsHandlers,
   FormProps,
-  IField,
+  IField, Paths,
   Platform,
   SchemaFormField
 } from 'v-schema-form-types';
@@ -15,13 +14,14 @@ import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
 import {IValidateResponse} from '../uform/types';
+import {clone, isEqual} from '../uform/utils';
 import runValidation from '../uform/validator';
 import {registerAntd} from './antd/register';
 import {registerElement} from './element/register';
 import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
 import {registerLayout} from './layout/register';
 import {registerAntdMobile} from './mobile/register';
-import {appendPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
+import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
 import {register, registerDisplay} from './utils/register';
 import {ASchemaForm, LibComponents} from './utils/utils';
 
@@ -78,16 +78,11 @@ export default class SchemaForm extends Vue {
     props: this.props,
     effects: this.effects,
     inline: this.inline,
-    slots: this.$slots,
     editable: this.editable,
-    context: null
+    context: null,
+    root: this
   });
   public currentValue: any = null;
-
-  @Watch('$slots')
-  public slotsChanged(slots: any) {
-    this.store.slots = slots;
-  }
 
   @Watch('readonly', {immediate: true})
   public readonlyChanged(readonly: boolean) {
@@ -125,13 +120,13 @@ export default class SchemaForm extends Vue {
     }
   }
 
-  public matchFields(paths: string[]): IField[] {
+  public matchFields(paths: Paths): IField[] {
     const matchedPaths = match(paths, this.store.fields);
     return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it);
   }
 
   public createContext(): EffectsContext {
-    const context: EffectsContext = (...paths: string[]) => {
+    const context: EffectsContext = (...paths) => {
       return {
         paths: () => {
           return context(...paths).fields().map(it => it.plainPath);
@@ -210,10 +205,28 @@ export default class SchemaForm extends Vue {
           return context(...paths);
         },
         takePath: (number: number): EffectsHandlers => {
-          return context(...takePath(paths, number));
+          if (paths.length === 0) {
+            return context();
+          } else {
+            if (typeof paths[0] === 'string') {
+              return context(...takePath(paths as string[], number));
+            } else {
+              return context(...takePath((paths as SchemaFormField[]).map(it => findFieldPath(
+                  it, this.store.fields
+              )), number));
+            }
+          }
         },
         appendPath: (suffix: string): EffectsHandlers => {
-          return context(...appendPath(paths, suffix));
+          if (paths.length === 0) {
+            return context();
+          } else {
+            if (typeof paths[0] === 'string') {
+              return context(...appendPath(paths as string[], suffix));
+            } else {
+              return context(...appendPath((paths as SchemaFormField[]).map(it => findFieldPath(it, this.store.fields)), suffix));
+            }
+          }
         },
         disable: () => {
           this.matchFields(paths).forEach(field => {
@@ -228,7 +241,7 @@ export default class SchemaForm extends Vue {
           return context(...paths);
         },
         replaceLastPath: (...last: string[]): EffectsHandlers => {
-          return context(...replaceLastPath(paths, last));
+          return context(...replaceLastPath(paths as string[], last));
         }
       } as EffectsHandlers;
     };
@@ -241,13 +254,23 @@ export default class SchemaForm extends Vue {
           this.$nextTick(() => {
             if (typeof pathsOrHandler === 'function') {
               pathsOrHandler(v);
-            } else if (isPathMatchPatterns(v.field, typeof pathsOrHandler === 'string' ? [pathsOrHandler] : pathsOrHandler)) {
-              if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
-                handler(v.value, v.path);
-              } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
-                handler(v.path);
-              } else {
-                handler(v);
+            } else {
+              const patterns = typeof pathsOrHandler === 'string' ? [pathsOrHandler]
+                  : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: string | SchemaFormField) => {
+                    if (typeof item === 'string') {
+                      return item;
+                    } else {
+                      return findFieldPath(item, this.store.fields);
+                    }
+                  }) : [findFieldPath(pathsOrHandler, this.store.fields)]);
+              if (isPathMatchPatterns(v.field, patterns)) {
+                if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
+                  handler(v.value, v.path);
+                } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
+                  handler(v.path);
+                } else {
+                  handler(v);
+                }
               }
             }
           });
@@ -476,7 +499,7 @@ export default class SchemaForm extends Vue {
     const buttonProps = btnProps || (props && props.cancelProps) || {};
     buttonProps.disabled = this.disabled || this.loading;
     return this.createButton(
-        text || props && props.cancelText || '取消',
+        text || props?.cancelText || '取消',
         action || this.onCancel, buttonProps,
         'cancel-btn'
     );

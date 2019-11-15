@@ -197,7 +197,7 @@
             _.difference(departments1, departments2).concat(_.difference(departments2, departments1)).length > 0;
       } else {
         if (this.valueType === 'object') {
-          hasDiff = this.value && (this.value as any).id !== finalValue && finalValue.id;
+          hasDiff = this.value?.id !== finalValue && finalValue.id;
         } else {
           hasDiff = this.value !== finalValue;
         }

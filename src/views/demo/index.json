@@ -8,7 +8,8 @@
       "effects": "副作用函数",
       "methods": "表单项操作",
       "default": "默认值",
-      "destruct": "解构"
+      "destruct": "解构",
+      "slot": "插槽"
     }
   },
   "antd": {
