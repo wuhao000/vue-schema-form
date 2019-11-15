@@ -1,27 +1,10 @@
-import {EffectsContext} from 'v-schema-form-types';
-import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Inject, Prop} from 'vue-property-decorator';
-import {SchemaFormStore} from '../internal/utils';
+import BaseButton from '../common/base-button';
 
 @Component({
   name: 'AntdButton'
 })
-export default class AntdButton extends Vue {
-  @Prop()
-  public action: (context: EffectsContext, event) => any;
-  @Prop()
-  public title: string;
-  @Inject('store')
-  public store: SchemaFormStore;
-
-
-  public onClick(e) {
-    if (this.action) {
-      this.action(this.store.context, e);
-    }
-  }
-
+export default class AntdButton extends BaseButton {
   public render() {
     return <d-button attrs={this.$attrs}
                      html-type="button"
