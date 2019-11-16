@@ -9,7 +9,8 @@
       "methods": "表单项操作",
       "default": "默认值",
       "destruct": "解构",
-      "slot": "插槽"
+      "slot": "插槽",
+      "value": "赋值"
     }
   },
   "antd": {

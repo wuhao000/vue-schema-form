@@ -35,7 +35,6 @@ function createDemoRoutes() {
                         });
                     }
                 });
-                Object.keys(demos);
             }
         }
     });

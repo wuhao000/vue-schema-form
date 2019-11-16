@@ -33,6 +33,10 @@ export default [{
   component: () => import('@/views/demo/element/slot.vue'),
   meta: {tag: 'Element UI', name: '插槽'}
 }, {
+  path: 'element/value',
+  component: () => import('@/views/demo/element/value.vue'),
+  meta: {tag: 'Element UI', name: '赋值'}
+}, {
   path: 'antd/destruct',
   component: () => import('@/views/demo/antd/destruct.vue'),
   meta: {tag: 'Ant Design Vue', name: '解构'}

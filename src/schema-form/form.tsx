@@ -6,7 +6,8 @@ import {
   EffectsContext,
   EffectsHandlers,
   FormProps,
-  IField, Paths,
+  IField,
+  Paths,
   Platform,
   SchemaFormField
 } from 'v-schema-form-types';
@@ -21,7 +22,15 @@ import {registerElement} from './element/register';
 import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
 import {registerLayout} from './layout/register';
 import {registerAntdMobile} from './mobile/register';
-import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './utils/path';
+import {
+  appendPath,
+  findFieldPath,
+  isFuzzyPath,
+  isPathMatchPatterns,
+  match,
+  replaceLastPath,
+  takePath
+} from './utils/path';
 import {register, registerDisplay} from './utils/register';
 import {ASchemaForm, LibComponents} from './utils/utils';
 
@@ -306,7 +315,7 @@ export default class SchemaForm extends Vue {
     return context;
   }
 
-  @Watch('value')
+  @Watch('value', {deep: true})
   public valueChanged() {
     this.setCurrentValue();
   }
@@ -335,8 +344,9 @@ export default class SchemaForm extends Vue {
 
   @Watch('currentValue', {deep: true})
   public currentValueChanged(v) {
-    this.$emit('input', v);
-    this.$emit('change', v);
+    const cloneValue = clone(v);
+    this.$emit('input', cloneValue);
+    this.$emit('change', cloneValue);
   }
 
   public render() {
