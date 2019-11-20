@@ -152,12 +152,16 @@ export default class FormField extends mixins(Emitter) {
     this.dispatch('ASchemaForm', 'SchemaForm.addSchemaField', [field]);
   }
 
+  get isDisabled() {
+    return this.disabled || this.field.disabled || (this.field.props && this.field.props.disabled);
+  }
+
   public beforeDestroy() {
     this.dispatch('ASchemaForm', 'SchemaForm.removeSchemaField', [this.field]);
   }
 
   public renderInputComponent() {
-    const {props, content, onInput, onArrayItemInput, currentValue, store: {platform}, disabled, definition, field} = this;
+    const {props, content, onInput, onArrayItemInput, currentValue, store: {platform}, isDisabled, definition, field} = this;
     const inputFieldDef = this.component;
     const InputFieldComponent = inputFieldDef.component;
     if (content) {
@@ -208,7 +212,7 @@ export default class FormField extends mixins(Emitter) {
           props={arrayProps}
           class={arrayClass}
           style={arrayStyle}
-          disabled={disabled}
+          disabled={isDisabled}
           subForm={field.type === TYPES.object}
           addBtnText={props.addBtnText}
           ref="array"
@@ -258,7 +262,7 @@ export default class FormField extends mixins(Emitter) {
                 class={className}
                 style={style}
                 arrayIndex={index}
-                disabled={disabled}
+                disabled={isDisabled}
                 key={field.plainPath + '-' + index}
                 value={v}
                 title={platform === 'mobile' ? field.title : null}
@@ -271,7 +275,7 @@ export default class FormField extends mixins(Emitter) {
         }
       </ArrayComponent>;
     }
-    props.disabled = disabled;
+    props.disabled = isDisabled;
     props.value = currentValue;
     props.title = props.title || (platform === 'mobile' ? field.title : null);
     if (definition.type === TYPES.object
