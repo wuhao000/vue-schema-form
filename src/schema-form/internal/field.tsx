@@ -96,12 +96,12 @@ export default class FormField extends mixins(Emitter) {
     if (this.store.editable && this.field.editable) {
       this.$emit('input', currentValue);
       this.$emit('change', currentValue);
-      this.store.context.trigger(SchemaFormEvents.fieldChange, {
-        path: this.field.plainPath,
-        value: currentValue,
-        field: this.field
-      });
     }
+    this.store.context.trigger(SchemaFormEvents.fieldChange, {
+      path: this.field.plainPath,
+      value: currentValue,
+      field: this.field
+    });
   }
 
   @Watch('value', {immediate: true})

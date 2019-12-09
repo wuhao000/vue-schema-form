@@ -3,18 +3,20 @@
     <ae-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
+                     :editable="false"
                      ref="form"
                      :schema="definition"
                      :effects="formProps.effects"
                      :props="props"></v-schema-form>
       <d-button @click="setOptions">设置选项</d-button>
+      <d-button @click="setValue">设置值</d-button>
     </ae-layout-content>
   </ae-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
   import {getProps} from '@/views/demo/utils';
-  import {EffectsContext, FormDescriptor, SchemaFormField} from 'v-schema-form-types';
+  import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 
@@ -46,7 +48,7 @@
 
     public formProps = {
       effects: ($: EffectsContext) => {
-        $('select').onFieldChange((value) => {
+        $('select').onFieldCreateOrChange((value) => {
           if (value === 1) {
             $('text').hide();
             $('select2').show();
@@ -67,12 +69,18 @@
       return this.$refs.form;
     }
 
+    public setValue() {
+      this.value = {
+        select: 1
+      };
+    }
+
     public created() {
       SchemaForm.registerElement();
     }
 
     public setOptions() {
-      const $ = this.form.context;
+      const $ = this.form.store.context;
       $('select').setFieldProps({options: [{label: '1', value: '2'}]});
     }
   }
