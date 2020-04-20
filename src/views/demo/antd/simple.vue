@@ -1,5 +1,7 @@
 <template>
-  <simple-edit-demo :init="register"/>
+  <div>
+    <simple-edit-demo :init="register"/>
+  </div>
 </template>
 <script lang="ts">
   import SchemaForm from '@/index';
@@ -14,8 +16,8 @@
   export default class DesktopEdit extends Vue {
 
     public register() {
-
       SchemaForm.registerAntd();
     }
+
   }
 </script>

@@ -1,6 +1,9 @@
 <template>
   <ae-layout class="demo-wrapper">
     <ae-layout-content>
+      <v-schema-form v-model="value3"
+                     :effects="effects3"
+                     :schema="definition3"/>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :actions="actions"
@@ -18,6 +21,7 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
+  import {SchemaFormEvents} from '@/schema-form/internal/utils';
   import FormBlock from '@/schema-form/layout/form-block';
   import {getProps} from '@/views/demo/utils';
   import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
@@ -37,6 +41,21 @@
     public props = getProps();
 
     public schema2 = effects2;
+    public value3 = {};
+    public definition3: SchemaFormField = {
+      fields: {
+        text: {
+          type: 'string',
+          title: 'abc'
+        }
+      }
+    };
+
+    public effects3($: EffectsContext) {
+      $('text').subscribe(SchemaFormEvents.fieldKeydown, (e) => {
+        console.log(e);
+      });
+    }
 
     public value = {
       f1: {

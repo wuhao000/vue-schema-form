@@ -60,6 +60,10 @@
       title: 'Checkbox',
       required: true
     },
+    text: {
+      type: 'string',
+      title: 'Text'
+    },
     textarea: {
       type: 'text',
       title: 'TextArea'
