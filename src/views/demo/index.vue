@@ -2,10 +2,9 @@
   <router-view/>
 </template>
 <script lang="tsx">
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
-  @Component({
+  @Options({
     name: 'DemoIndex'
   })
   export default class DemoIndex extends Vue {

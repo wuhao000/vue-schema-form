@@ -1,22 +1,21 @@
 <template>
-  <ae-layout>
-    <ae-layout-content class="demo-wrapper">
+  <a-layout>
+    <a-layout-content class="demo-wrapper">
       <v-schema-form v-model="value"
                      class="demo-form"
                      :props="props"
                      :schema="schema"
                      @ok="onOk"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import ShowValue from '@/views/demo/show-value';
   import axios from 'axios';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
-  @Component({
+  @Options({
     name: 'AntdList',
     components: {ShowValue}
   })
@@ -85,7 +84,6 @@
     }];
 
     public created() {
-      SchemaForm.registerElement();
     }
 
     public onOk() {

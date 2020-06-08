@@ -1,9 +1,9 @@
-import {SchemaFormStore} from '../internal/utils';
-import Vue, {VNode} from 'vue';
-import Component from 'vue-class-component';
+import {VNode} from 'vue';
+import {Options, Vue} from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';
+import {SchemaFormStore} from '../internal/utils';
 
-@Component({
+@Options({
   name: 'BaseLayout'
 })
 export default class BaseLayout extends Vue {

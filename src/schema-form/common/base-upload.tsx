@@ -1,8 +1,7 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 
-@Component({
+@Options({
   name: 'BaseUpload'
 })
 export default class BaseUpload extends Vue {

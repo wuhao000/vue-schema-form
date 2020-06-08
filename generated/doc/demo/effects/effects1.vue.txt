@@ -1,11 +1,11 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form :effects="effects"
                      :schema="schema">
       </v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
@@ -37,7 +37,6 @@
       };
     },
     created() {
-      SchemaForm.registerElement();
     },
     methods: {
       effects($: EffectsContext) {

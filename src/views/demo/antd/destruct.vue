@@ -1,28 +1,27 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="definition"
                      :props="props"></v-schema-form>
       <d-button @click="dialogVisible = true">查看数据</d-button>
-    </ae-layout-content>
+    </a-layout-content>
     <d-cascader placeholder="请选择"
                 :options="options"/>
     <ae-modal v-model="dialogVisible">
       <pre>{{value}}</pre>
     </ae-modal>
-  </ae-layout>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
   import {getProps} from '@/views/demo/utils';
   import {SchemaFormField} from 'v-schema-form-types';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
   SchemaForm.registerAntd();
-  @Component({
+  @Options({
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Vue {

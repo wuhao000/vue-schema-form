@@ -1,8 +1,8 @@
-import BaseLayout from './base-layout';
-import Component, {mixins} from 'vue-class-component';
+import {mixins, Options} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
+import BaseLayout from './base-layout';
 
-@Component({
+@Options({
   name: 'Card'
 })
 export default class Card extends mixins(BaseLayout) {

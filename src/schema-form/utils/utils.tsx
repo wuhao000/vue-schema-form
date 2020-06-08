@@ -187,6 +187,10 @@ export const getColComponent = () => {
   return LibComponents.col;
 };
 
+export const getIconComponent = () => {
+  return LibComponents.icon;
+}
+
 export const getButtonComponent = () => {
   return LibComponents.button;
 };

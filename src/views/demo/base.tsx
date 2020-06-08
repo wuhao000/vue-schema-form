@@ -1,11 +1,8 @@
-import {getPlatform} from '@/utils/util';
 import {getFormDefinition, getProps, getValue} from '@/views/demo/utils';
-
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
-@Component({
+@Options({
   name: 'Base'
 })
 export default class Base extends Vue {

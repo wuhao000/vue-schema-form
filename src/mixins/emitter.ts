@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 
 function broadcast(this: any, componentName, eventName, params) {
   this.$children.forEach(child => {
@@ -12,7 +11,7 @@ function broadcast(this: any, componentName, eventName, params) {
   });
 }
 
-@Component({
+@Options({
   name: 'Emitter'
 })
 export default class Emitter extends Vue {

@@ -1,18 +1,17 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <v-schema-form :effects="effects"
                      :schema="schema"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/index';
   import {EffectsContext} from 'v-schema-form-types';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
-  @Component({
+  @Options({
     name: 'ApiPath'
   })
   export default class ApiPath extends Vue {

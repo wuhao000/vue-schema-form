@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="schema"
@@ -8,16 +8,16 @@
                      @ok="()=>{}"
                      @reset="()=>{}"></v-schema-form>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import ShowValue from '@/views/demo/show-value';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
-  @Component({
+
+  @Options({
     name: 'LayoutNested',
     components: {ShowValue}
   })

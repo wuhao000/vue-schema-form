@@ -16,17 +16,16 @@ export function registerAntd() {
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].antd;
   });
-  LibComponents.confirm = window.aegis.AeModal.confirm;
-  registerDesktop('d-range-picker', [TYPES.daterange], false);
-  registerDesktop('d-input', [TYPES.string], false);
+  registerDesktop('a-range-picker', [TYPES.daterange], false);
+  registerDesktop('a-input', [TYPES.string], false);
   registerDesktop(AntdUrlInput, TYPES.url, false);
-  registerDesktop('d-textarea', [TYPES.text], false);
-  registerDesktop('d-date-picker', [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  registerDesktop('d-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
-  registerDesktop('d-checkbox', TYPES.checkbox, false);
-  registerDesktop('d-switch', TYPES.boolean);
-  registerDesktop('d-select', TYPES.select, null, field => {
+  registerDesktop('a-textarea', [TYPES.text], false);
+  registerDesktop('a-date-picker', [TYPES.date, TYPES.year, TYPES.month, TYPES.datetime], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerDesktop('a-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerDesktop('a-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
+  registerDesktop('a-checkbox', TYPES.checkbox, false);
+  registerDesktop('a-switch', TYPES.boolean);
+  registerDesktop('a-select', TYPES.select, null, field => {
     return {dropdownMatchSelectWidth: false, multiple: field.array, options: getOptions(field)};
   });
   registerDesktop(AntdButton, TYPES.button, null, field => {
@@ -35,18 +34,18 @@ export function registerAntd() {
   registerDesktop(AntdUpload, TYPES.upload, null, def => {
     return {multiple: def.array};
   });
-  registerDesktop('d-cascader', TYPES.cascader, false, def => {
+  registerDesktop('a-cascader', TYPES.cascader, false, def => {
     return {options: def.enum};
   });
-  registerDesktop('d-checkbox-group', TYPES.expandSelect, true, field => {
+  registerDesktop('a-checkbox-group', TYPES.expandSelect, true, field => {
     return {options: getOptions(field), multiple: true};
   });
-  registerDesktop('d-radio-group', TYPES.expandSelect, false, field => {
+  registerDesktop('a-radio-group', TYPES.expandSelect, false, field => {
     return {options: getOptions(field)};
   });
-  registerDesktop('d-color-picker', 'color');
-  registerDesktop('d-rate', TYPES.rate);
-  registerDesktop('d-transfer', TYPES.transfer, false, def => {
+  registerDesktop('a-color-picker', 'color');
+  registerDesktop('a-rate', TYPES.rate);
+  registerDesktop('a-transfer', TYPES.transfer, false, def => {
     const data = (def.props && def.props.dataSource) || def.enum || [];
     const dataSource = data.map((item: any) => {
       if (typeof item === 'string') {
@@ -62,7 +61,7 @@ export function registerAntd() {
     });
     return {dataSource};
   });
-  register('d-slider', DESKTOP, TYPES.range, false, () => {
+  register('a-slider', DESKTOP, TYPES.range, false, () => {
     return {range: true};
   });
 }

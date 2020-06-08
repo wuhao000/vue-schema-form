@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="options"
                      :platform="platform"
                      :schema="optionFormDefinition"></v-schema-form>
@@ -17,14 +17,14 @@
                      @ok="onOk"
                      @reset="onReset"></v-schema-form>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import Base from '@/views/demo/base';
   import ShowValue from '@/views/demo/show-value';
   import {FormDescriptor, SchemaFormField} from 'v-schema-form-types';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
   const def: { [key: string]: SchemaFormField } = {
     radio: {
@@ -165,7 +165,7 @@
     }
   };
   const imgUrl = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1567405580995&di=fbc97d869418de6f9bd14376f7a3eb7e&imgtype=0&src=http%3A%2F%2Fwww.33lc.com%2Farticle%2FUploadPic%2F2012-9%2F20129181714587674.jpg';
-  @Component({
+  @Options({
     name: 'SimpleEditDemo',
     components: {ShowValue}
   })

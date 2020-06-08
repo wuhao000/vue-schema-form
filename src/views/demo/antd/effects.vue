@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value3"
                      :effects="effects3"
                      :schema="definition3"/>
@@ -16,8 +16,8 @@
                      :actions="actions"
                      :effects="effects2"
                      :schema="schema2"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
@@ -25,14 +25,13 @@
   import FormBlock from '@/schema-form/layout/form-block';
   import {getProps} from '@/views/demo/utils';
   import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
   import effects1 from '../schema/effects1.json';
   import effects2 from '../schema/effects2.json';
 
   Vue.component('FormBlock', FormBlock);
   SchemaForm.registerAntd();
-  @Component({
+  @Options({
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Vue {

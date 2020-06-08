@@ -1,8 +1,8 @@
 import BaseLayout from './base-layout';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import './text-box.less';
 
-@Component({
+@Options({
   name: 'TextBox'
 })
 export default class TextBox extends BaseLayout {

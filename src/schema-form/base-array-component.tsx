@@ -1,11 +1,9 @@
+import {Options, Vue} from 'vue-class-component';
+import {Inject, Prop, Watch} from 'vue-property-decorator';
 import {SchemaFormStore} from './internal/utils';
 import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Inject, Prop, Watch} from 'vue-property-decorator';
-
-@Component({
+@Options({
   name: 'BaseArrayComponent'
 })
 export default class BaseArrayComponent extends Vue {

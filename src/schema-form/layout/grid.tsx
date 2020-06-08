@@ -1,12 +1,13 @@
 import {VNode} from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 import {getFormItemComponent} from '../internal/utils';
 import {LibComponents, MOBILE} from '../utils/utils';
 import BaseLayout from './base-layout';
 
-
-@Component({
+const LibComponentsRow = LibComponents.row;
+const LibComponentsCol = LibComponents.col;
+@Options({
   name: 'GridLayout'
 })
 export default class GridLayout extends BaseLayout {
@@ -38,17 +39,17 @@ export default class GridLayout extends BaseLayout {
     const layoutFields = normalizedLayout.map((span, index) => {
       if (groups[index]) {
         if (typeof span === 'number') {
-          const col = <LibComponents.col span={span}>{groups[index]}</LibComponents.col>;
+          const col = <LibComponentsCol span={span}>{groups[index]}</LibComponentsCol>;
           if (wrapSingle) {
-            return <LibComponents.row gutter={gutter}>{col}</LibComponents.row>;
+            return <LibComponentsRow gutter={gutter}>{col}</LibComponentsRow>;
           }
           return col;
         } else if (Array.isArray(span)) {
-          return <LibComponents.row gutter={gutter}>
+          return <LibComponentsRow gutter={gutter}>
             {span.map((subspan, subindex) => {
-              return <LibComponents.col span={subspan}>{groups[index][subindex]}</LibComponents.col>;
+              return <LibComponentsCol span={subspan}>{groups[index][subindex]}</LibComponentsCol>;
             })}
-          </LibComponents.row>;
+          </LibComponentsRow>;
         }
       }
     });
@@ -58,10 +59,10 @@ export default class GridLayout extends BaseLayout {
                                 props={this.$attrs}
                                 label={this.title}>
         {this.containsNumber ?
-            <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> : layoutFields}
+            <LibComponentsRow gutter={this.gutter}>{layoutFields}</LibComponentsRow> : layoutFields}
       </FormItemComponent>;
     }
-    return this.containsNumber ? <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> :
+    return this.containsNumber ? <LibComponentsRow gutter={this.gutter}>{layoutFields}</LibComponentsRow> :
         <div>{layoutFields}</div>;
   }
 

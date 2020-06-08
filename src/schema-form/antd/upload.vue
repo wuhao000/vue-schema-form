@@ -39,7 +39,7 @@
   </a-upload-dragger>
 </template>
 <script lang="ts">
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
   import {Prop} from 'vue-property-decorator';
   import BaseUpload from '../common/base-upload';
 
@@ -67,7 +67,7 @@
     fileList: AntUploadFile[];
   }
 
-  @Component({
+  @Options({
     name: 'AntdUpload'
   })
   export default class AntdUpload extends BaseUpload {

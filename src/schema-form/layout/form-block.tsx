@@ -1,10 +1,12 @@
-import {LibComponents} from '../utils/utils';
-import Vue, {VNode} from 'vue';
-import Component from 'vue-class-component';
+import {VNode} from 'vue';
+import {Options, Vue} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
+import {LibComponents} from '../utils/utils';
 import './form-block.less';
 
-@Component({
+const IconComponent = LibComponents.icon;
+
+@Options({
   name: 'FormBlock'
 })
 export default class FormBlock extends Vue {
@@ -17,7 +19,6 @@ export default class FormBlock extends Vue {
   public maxItems: number;
 
   public render() {
-    const IconComponent = LibComponents.icon;
     return <div class="array-form-block">
       {
         this.$slots.default ? this.$slots.default.map((it, index) => {
@@ -31,7 +32,7 @@ export default class FormBlock extends Vue {
                    onClick={() => {
                      this.$emit('remove', index);
                    }}>
-                <LibComponents.icon type="delete"/>
+                <IconComponent type="delete"/>
                 <span class="op-name">{this.removeText}</span>
               </div>
               {this.$slots.default.length > 1 ? [
@@ -58,7 +59,7 @@ export default class FormBlock extends Vue {
           }
         }}>
           <div class="array-empty">
-            <LibComponents.icon type="plus"/>
+            <IconComponent type="plus"/>
             <span>添加</span>
           </div>
         </d-empty>
@@ -75,7 +76,7 @@ export default class FormBlock extends Vue {
            onclick={() => {
              this.$emit('add');
            }}>
-        <LibComponents.icon type="plus"/>
+        <IconComponent type="plus"/>
         {this.addText}
       </div>
     </div>;

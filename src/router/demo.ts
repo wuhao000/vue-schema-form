@@ -1,42 +1,6 @@
-import {RouteConfig} from 'vue-router';
+import {RouteRecordRaw} from 'vue-router';
 
 export default [{
-  path: 'element/default',
-  component: () => import('@/views/demo/element/default.vue'),
-  meta: {tag: 'Element UI', name: '默认值'}
-}, {
-  path: 'element/destruct',
-  component: () => import('@/views/demo/element/destruct.vue'),
-  meta: {tag: 'Element UI', name: '解构'}
-}, {
-  path: 'element/display',
-  component: () => import('@/views/demo/element/display.vue'),
-  meta: {tag: 'Element UI', name: '详情'}
-}, {
-  path: 'element/edit',
-  component: () => import('@/views/demo/element/edit.vue'),
-  meta: {tag: 'Element UI', name: '编辑'}
-}, {
-  path: 'element/effects',
-  component: () => import('@/views/demo/element/effects.vue'),
-  meta: {tag: 'Element UI', name: '副作用函数'}
-}, {
-  path: 'element/methods',
-  component: () => import('@/views/demo/element/methods.vue'),
-  meta: {tag: 'Element UI', name: '表单项操作'}
-}, {
-  path: 'element/simple',
-  component: () => import('@/views/demo/element/simple.vue'),
-  meta: {tag: 'Element UI', name: '简单场景'}
-}, {
-  path: 'element/slot',
-  component: () => import('@/views/demo/element/slot.vue'),
-  meta: {tag: 'Element UI', name: '插槽'}
-}, {
-  path: 'element/value',
-  component: () => import('@/views/demo/element/value.vue'),
-  meta: {tag: 'Element UI', name: '赋值'}
-}, {
   path: 'antd/destruct',
   component: () => import('@/views/demo/antd/destruct.vue'),
   meta: {tag: 'Ant Design Vue', name: '解构'}
@@ -69,22 +33,6 @@ export default [{
   component: () => import('@/views/demo/antd/validate.vue'),
   meta: {tag: 'Ant Design Vue', name: '校验'}
 }, {
-  path: 'mobile/destruct',
-  component: () => import('@/views/demo/mobile/destruct.tsx'),
-  meta: {tag: 'Antd Mobile Vue', name: '解构'}
-}, {
-  path: 'mobile/display',
-  component: () => import('@/views/demo/mobile/display.vue'),
-  meta: {tag: 'Antd Mobile Vue', name: '详情'}
-}, {
-  path: 'mobile/edit',
-  component: () => import('@/views/demo/mobile/edit.vue'),
-  meta: {tag: 'Antd Mobile Vue', name: '编辑'}
-}, {
-  path: 'mobile/effects',
-  component: () => import('@/views/demo/mobile/effects.vue'),
-  meta: {tag: 'Antd Mobile Vue', name: '副作用函数'}
-}, {
   path: 'layout/inline',
   component: () => import('@/views/demo/layout/inline.vue'),
   meta: {tag: '布局', name: '线性布局'}
@@ -108,4 +56,4 @@ export default [{
   path: 'subform/mobile',
   component: () => import('@/views/demo/subform/mobile.vue'),
   meta: {tag: '子表单', name: '移动端'}
-}] as RouteConfig[];
+}] as RouteRecordRaw[];

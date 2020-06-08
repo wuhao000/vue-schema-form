@@ -1,14 +1,16 @@
-import {clone, isEqual} from '../../uform/utils';
 import difference from 'lodash.difference';
 import {SchemaFormField} from 'v-schema-form-types';
-import Component, {mixins} from 'vue-class-component';
+import {mixins, Options} from 'vue-class-component';
 
 import {Prop, Watch} from 'vue-property-decorator';
+import {clone, isEqual} from '../../uform/utils';
 import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
 import FieldBasedComponent from './field-based-component';
 import {getComponentType, getRealFields} from './utils';
 
-@Component({
+export default InternalForm as any;
+
+@Options({
   name: 'InternalForm'
 })
 class InternalForm extends mixins(FieldBasedComponent) {
@@ -161,12 +163,13 @@ class InternalForm extends mixins(FieldBasedComponent) {
         type: this.layoutType,
         props: this.layoutProps
       });
+      const LayoutComponentDefComponent = LayoutComponentDef.component;
       // @ts-ignore
-      return <LayoutComponentDef.component props={
+      return <LayoutComponentDefComponent props={
         this.layoutProps
       }>
         {form}
-      </LayoutComponentDef.component>;
+      </LayoutComponentDefComponent>;
     }
     return form;
   }
@@ -221,5 +224,3 @@ class InternalForm extends mixins(FieldBasedComponent) {
     </div>;
   }
 }
-
-export default InternalForm as any;

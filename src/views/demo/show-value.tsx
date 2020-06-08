@@ -1,9 +1,8 @@
 import beautify from 'js-beautify';
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
-@Component({
+@Options({
   name: 'ShowValue'
 })
 class ShowValue extends Vue {
@@ -18,7 +17,7 @@ class ShowValue extends Vue {
   public render() {
     return <div>
       <d-button onClick={this.showData}>查看数据</d-button>
-      <ae-modal hideCancel
+      <ae-modal hideCancel={true}
                 onOk={() => {
                   this.valueModalVisible = false;
                 }}

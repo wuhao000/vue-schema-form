@@ -48,7 +48,6 @@
       };
     },
     created() {
-      SchemaForm.registerElement();
     }
   };
 </script>

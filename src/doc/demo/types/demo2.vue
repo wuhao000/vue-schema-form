@@ -3,7 +3,6 @@
                  :value="value"></v-schema-form>
 </template>
 <script lang="ts">
-  import SchemaForm from '@/schema-form';
 
   export default {
     name: 'TypesDemo1',
@@ -37,7 +36,6 @@
       };
     },
     created() {
-      SchemaForm.registerElement();
     }
   };
 </script>

@@ -37,7 +37,6 @@
       };
     },
     created() {
-      SchemaForm.registerElement();
     }
   };
 </script>

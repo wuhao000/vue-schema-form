@@ -1,10 +1,16 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';
 import {SchemaFormStore} from './internal/utils';
-import {getButtonComponent, getColComponent, getRowComponent, LibComponents, MOBILE} from './utils/utils';
+import {
+  getButtonComponent,
+  getColComponent,
+  getIconComponent,
+  getRowComponent,
+  LibComponents,
+  MOBILE
+} from './utils/utils';
 
-@Component({
+@Options({
   name: 'ArrayWrapper'
 })
 export default class ArrayWrapper extends Vue {
@@ -80,6 +86,7 @@ export default class ArrayWrapper extends Vue {
   }
 
   private renderFields() {
+    const ColComponent = getColComponent();
     if (this.store.platform === MOBILE) {
       return this.$slots.default && this.$slots.default.map((it, index) => {
         return <div style={{position: 'relative'}}>{
@@ -89,7 +96,7 @@ export default class ArrayWrapper extends Vue {
     }
     return this.$slots.default && this.$slots.default.map((it, index) => {
       return [
-        <LibComponents.col span={this.cellSpan}>{it}</LibComponents.col>, this.renderDesktopDeleteBtn(index)];
+        <ColComponent span={this.cellSpan}>{it}</ColComponent>, this.renderDesktopDeleteBtn(index)];
     });
   }
 
@@ -97,18 +104,19 @@ export default class ArrayWrapper extends Vue {
     if (!this.store.editable || !this.showRemoveBtn) {
       return null;
     }
+    const IconComponent = getIconComponent();
     return <a
-        style={{
-          color: '#e94721',
-          position: 'absolute',
-          right: 0,
-          top: '15px',
-          cursor: 'pointer'
-        }}
-        onclick={() => {
-          this.$emit('remove', index);
-        }}>
-      <LibComponents.icon type="delete"/>
+      style={{
+        color: '#e94721',
+        position: 'absolute',
+        right: 0,
+        top: '15px',
+        cursor: 'pointer'
+      }}
+      onclick={() => {
+        this.$emit('remove', index);
+      }}>
+      <IconComponent type="delete"/>
       删除
     </a>;
   }
@@ -117,17 +125,18 @@ export default class ArrayWrapper extends Vue {
     if (!this.store.editable || !this.showRemoveBtn) {
       return null;
     }
+    const IconComponent = getIconComponent();
     return <div style={{textAlign: 'right'}}
                 class="d-image-picker">
       <a
-          style={{
-            color: '#e94721',
-            cursor: 'pointer'
-          }}
-          onclick={() => {
-            this.$emit('remove', index);
-          }}>
-        <LibComponents.icon type="delete"/>
+        style={{
+          color: '#e94721',
+          cursor: 'pointer'
+        }}
+        onclick={() => {
+          this.$emit('remove', index);
+        }}>
+        <IconComponent type="delete"/>
         删除
       </a>
     </div>;

@@ -1,12 +1,11 @@
 import DemoIndex from '@/views/demo/index.vue';
 import DemoNav from '@/views/demo/nav.vue';
-import VueRouter from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import demoRoutes from './demo';
 import docRoutes from './doc';
 
-
-export default new VueRouter({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes: [{
     path: '/',
     redirect: '/doc/readme'

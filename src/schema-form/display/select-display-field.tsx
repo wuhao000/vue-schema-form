@@ -1,10 +1,9 @@
-import {getOptions} from '../utils/utils';
 import {IField} from 'v-schema-form-types';
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
+import {getOptions} from '../utils/utils';
 
-@Component({
+@Options({
   name: 'SelectDisplayField'
 })
 class SelectDisplayField extends Vue {

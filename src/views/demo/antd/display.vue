@@ -1,20 +1,20 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form class="demo-form"
                      :editable="false"
                      :schema="definition"
                      :props="props"
                      :value="value"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
   import Base from '@/views/demo/base';
-  import Component from 'vue-class-component';
+  import {Options} from 'vue-class-component';
 
-  @Component({
+  @Options({
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Base {

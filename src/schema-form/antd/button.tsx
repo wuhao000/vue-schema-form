@@ -1,7 +1,7 @@
-import Component from 'vue-class-component';
+import {Options, Vue} from 'vue-class-component';
 import BaseButton from '../common/base-button';
 
-@Component({
+@Options({
   name: 'AntdButton'
 })
 export default class AntdButton extends BaseButton {

@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="bg-white wrapper">
-    <ae-layout-content>
+  <a-layout class="bg-white wrapper">
+    <a-layout-content>
       <v-schema-form :editable="editable"
                      :schema="schema"
                      :value="value"></v-schema-form>
@@ -20,17 +20,16 @@
         {{editable ? '详情' : '编辑'}}
       </d-button>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import ShowValue from '@/views/demo/show-value';
   import {SchemaFormField} from 'v-schema-form-types';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
-  @Component({
+  @Options({
     name: 'LayoutInline',
     components: {ShowValue}
   })
@@ -117,7 +116,6 @@
 
     public beforeCreate() {
       SchemaForm.registerAntd();
-      // SchemaForm.registerElement();
     }
 
     public changeMode() {

@@ -1,7 +1,7 @@
-import Component, {mixins} from 'vue-class-component';
+import {mixins, Options} from 'vue-class-component';
 import BaseUrl from '../common/url';
 
-@Component({
+@Options({
   name: 'DUrlInput'
 })
 export default class DUrlInput extends mixins(BaseUrl) {

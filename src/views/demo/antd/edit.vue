@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form inline
                      v-model="options"
                      :schema="optionFormDefinition"></v-schema-form>
@@ -18,17 +18,17 @@
                      @cancel="onCancel"
                      @ok="onOk"
                      @reset="onReset"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';
   import Base from '@/views/demo/base';
   import {EffectsContext} from 'v-schema-form-types';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
 
   SchemaForm.registerAntd();
-  @Component({
+  @Options({
     name: 'DesktopEdit'
   })
   export default class DesktopEdit extends Base {

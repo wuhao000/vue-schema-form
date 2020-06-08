@@ -1,6 +1,6 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <d-button @click="loadData">加载</d-button>
       {{selValue}}
       <v-schema-form v-model="model"
@@ -15,15 +15,14 @@
         </d-form-item>
       </v-schema-form>
       <show-value :value="model"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/schema-form';
   import {DESKTOP} from '@/schema-form/utils/utils';
   import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Options, Vue} from 'vue-class-component';
   import {Prop, Watch} from 'vue-property-decorator';
   import ShowValue from '../show-value';
   import User from './visible-scope-input.vue';
@@ -49,7 +48,7 @@
     return fields;
   };
 
-  @Component({
+  @Options({
     name: 'BasicDataItemEdit',
     components: {ShowValue}
   })
@@ -156,7 +155,6 @@
     }
 
     public async created() {
-      SchemaForm.registerElement();
       SchemaForm.registerAntd();
       setTimeout(() => {
         const definitions = [{
