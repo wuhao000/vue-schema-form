@@ -1,36 +1,39 @@
-import {Options, Vue} from 'vue-class-component';
+import {ComponentInternalInstance} from '@vue/runtime-core';
+import {ComponentOptions, getCurrentInstance} from 'vue';
 
-function broadcast(this: any, componentName, eventName, params) {
-  this.$children.forEach(child => {
-    const name = child.$options.componentName;
-    if (name === componentName) {
-      child.$emit.apply(child, [eventName].concat(params));
-    } else {
-      broadcast.apply(child, [componentName, eventName].concat([params]) as any);
-    }
-  });
-}
-
-@Options({
-  name: 'Emitter'
-})
-export default class Emitter extends Vue {
-
-  public dispatch(componentName: string, eventName: any, params?: any[]) {
-    let parent = this.$parent || this.$root;
-    let name = parent.$options.name;
-    while (parent && (!name || name !== componentName)) {
-      parent = parent.$parent;
-      if (parent) {
-        name = parent.$options.name;
+function broadcast(this: ComponentInternalInstance, componentName, eventName, params) {
+  if (this.slots.default) {
+    const children = this.slots.default();
+    children.forEach(child => {
+      const name = (child.type as ComponentOptions).name;
+      if (name === componentName) {
+        child.component.emit.apply(child, [eventName].concat(params));
+      } else {
+        broadcast.apply(child, [componentName, eventName].concat([params]) as any);
       }
-    }
-    if (parent) {
-      parent.$emit.apply(parent, params ? [eventName].concat(params) as any : [eventName]);
-    }
+    });
   }
 
-  public broadcast(componentName, eventName, params) {
-    broadcast.call(this, componentName, eventName, params);
-  }
 }
+
+export const useEmitter = () => {
+  const instance = getCurrentInstance();
+  return {
+    dispatch(componentName: string, eventName: any, params?: any[]) {
+      let parent = instance.parent || instance.root;
+      let name = (parent.type as ComponentOptions).name;
+      while (parent && (!name || name !== componentName)) {
+        parent = parent.parent;
+        if (parent) {
+          name = (parent.type as ComponentOptions).name;
+        }
+      }
+      if (parent) {
+        parent.emit.apply(parent, params ? [eventName].concat(params) as any : [eventName]);
+      }
+    },
+    broadcast(componentName, eventName, params) {
+      broadcast.call(instance, componentName, eventName, params);
+    }
+  };
+};

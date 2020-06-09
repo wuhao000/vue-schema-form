@@ -7,7 +7,7 @@
       <a-layout-sider width="200px">
         <router-view name="nav"/>
       </a-layout-sider>
-      <a-layout-content>
+      <a-layout-content id="main-content">
         <router-view/>
       </a-layout-content>
     </a-layout>
@@ -28,12 +28,17 @@
 </script>
 <style lang="less">
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'Avenir/*', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    width: 800px;
-    margin: 60px auto 0;
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+  }
+
+  #main-content {
+    padding: 20px;
   }
 
   .wrapper {
