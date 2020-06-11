@@ -85,6 +85,10 @@ export default [{
   component: () => import('@/views/demo/mobile/effects.vue'),
   meta: {tag: 'Antd Mobile Vue', name: '副作用函数'}
 }, {
+  path: 'layout/array',
+  component: () => import('@/views/demo/layout/array.vue'),
+  meta: {tag: '布局', name: '数组'}
+}, {
   path: 'layout/inline',
   component: () => import('@/views/demo/layout/inline.vue'),
   meta: {tag: '布局', name: '线性布局'}

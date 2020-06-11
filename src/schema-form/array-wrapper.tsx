@@ -88,8 +88,16 @@ export default class ArrayWrapper extends Vue {
       });
     }
     return this.$slots.default && this.$slots.default.map((it, index) => {
-      return [
-        <LibComponents.col span={this.cellSpan}>{it}</LibComponents.col>, this.renderDesktopDeleteBtn(index)];
+      return <LibComponents.col span={this.cellSpan}>
+        <ae-layout>
+          <ae-layout-content>
+            {it}
+          </ae-layout-content>
+          <ae-layout-sider>
+            {this.renderDesktopDeleteBtn(index)}
+          </ae-layout-sider>
+        </ae-layout>
+      </LibComponents.col>;
     });
   }
 
@@ -98,16 +106,16 @@ export default class ArrayWrapper extends Vue {
       return null;
     }
     return <a
-        style={{
-          color: '#e94721',
-          position: 'absolute',
-          right: 0,
-          top: '15px',
-          cursor: 'pointer'
-        }}
-        onclick={() => {
-          this.$emit('remove', index);
-        }}>
+      style={{
+        color: '#e94721',
+        position: 'absolute',
+        right: 0,
+        top: '15px',
+        cursor: 'pointer'
+      }}
+      onclick={() => {
+        this.$emit('remove', index);
+      }}>
       <LibComponents.icon type="delete"/>
       删除
     </a>;
@@ -120,13 +128,13 @@ export default class ArrayWrapper extends Vue {
     return <div style={{textAlign: 'right'}}
                 class="d-image-picker">
       <a
-          style={{
-            color: '#e94721',
-            cursor: 'pointer'
-          }}
-          onclick={() => {
-            this.$emit('remove', index);
-          }}>
+        style={{
+          color: '#e94721',
+          cursor: 'pointer'
+        }}
+        onclick={() => {
+          this.$emit('remove', index);
+        }}>
         <LibComponents.icon type="delete"/>
         删除
       </a>
