@@ -162,6 +162,15 @@ export default class FormField extends mixins(Emitter) {
 
   public renderInputComponent() {
     const {props, content, onInput, onArrayItemInput, currentValue, store: {platform}, isDisabled, definition, field} = this;
+    if (definition.slot) {
+      if (this.store.root.$slots && this.store.root.$slots[definition.slot]) {
+        return this.store.root.$slots[definition.slot];
+      }
+      if (this.store.root.$scopedSlots && this.store.root.$scopedSlots[definition.slot]) {
+        return this.store.root.$scopedSlots[definition.slot](currentValue);
+      }
+      return;
+    }
     const inputFieldDef = this.component;
     const InputFieldComponent = inputFieldDef.component;
     if (content) {
@@ -360,9 +369,6 @@ export default class FormField extends mixins(Emitter) {
 
   public render() {
     const {props, field, type, definition, editable, store: {platform}} = this;
-    if (definition.slot) {
-      return this.store.root.$slots[definition.slot];
-    }
     if (!editable) {
       props.definition = definition;
       props.field = field;
@@ -409,7 +415,15 @@ export default class FormField extends mixins(Emitter) {
     if (!field.visible) {
       style.display = 'none';
     }
-    (item as VNode).data.staticStyle = style;
+    if (item) {
+      if (item.data) {
+        (item as VNode).data.staticStyle = style;
+      } else {
+        (item as VNode).data = {
+          staticStyle: style
+        };
+      }
+    }
     return item;
   }
 
