@@ -54,8 +54,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   }
 }
@@ -63,18 +63,18 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => {
-          const field = fields[key];
-          if (!field.id) {
-            field.id = uuid.v4();
-          }
-          return {
-            id: field.id,
-            property: key,
-            ...fields[key]
-          };
-        });
+      .filter(key => fields[key])
+      .map(key => {
+        const field = fields[key];
+        if (!field.id) {
+          field.id = uuid.v4();
+        }
+        return {
+          id: field.id,
+          property: key,
+          ...fields[key]
+        };
+      });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -136,9 +136,6 @@ export function renderField(pathPrefix: string[] | null, store: SchemaFormStore,
                             field: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, h, vue) {
-  if (field.slot) {
-    return store.root.$slots[field.slot];
-  }
   let value = null;
   if (field.property?.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
@@ -315,5 +312,5 @@ export enum SchemaFormEvents {
 
 export const filterErros = (errors: any[]) => {
   return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
-      .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
+    .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
 };

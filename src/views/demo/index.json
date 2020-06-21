@@ -40,7 +40,8 @@
     "demos": {
       "simple": "简单布局",
       "inline": "线性布局",
-      "nested": "组合布局"
+      "nested": "组合布局",
+      "array": "数组"
     }
   },
   "subform": {
