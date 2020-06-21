@@ -193,7 +193,6 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
     existsField.component = getComponentType(store, definition);
     return existsField;
   } else {
-    const plainPath = buildArrayPath(pathPrefix, definition).join('.');
     return Vue.observable({
       id: definition.id,
       definition,
@@ -211,7 +210,7 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
       plainPath,
       destructPath: parseDestructPath(definition.property),
       props: Object.assign({}, definition.props),
-      visible: calcShowState(currentValue, definition),
+      visible: definition.visible !== undefined ? definition.visible : true,
       valid: true,
       displayValue: definition.displayValue,
       required: definition.required,

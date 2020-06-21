@@ -108,4 +108,8 @@ export default [{
   path: 'subform/mobile',
   component: () => import('@/views/demo/subform/mobile.vue'),
   meta: {tag: '子表单', name: '移动端'}
+}, {
+  path: 'feature/depends',
+  component: () => import('@/views/demo/feature/depends.vue'),
+  meta: {tag: '特性', name: '关联显示'}
 }] as RouteConfig[];

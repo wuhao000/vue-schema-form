@@ -50,5 +50,11 @@
       "edit": "编辑",
       "mobile": "移动端"
     }
+  },
+  "feature": {
+    "name": "特性",
+    "demos": {
+      "depends": "关联显示"
+    }
   }
 }

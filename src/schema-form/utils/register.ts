@@ -1,12 +1,13 @@
-import Empty from '../empty';
-import {DESKTOP, MOBILE, Mode} from './utils';
 import {IField, Platform, SchemaFormComponent, SchemaFormField} from 'v-schema-form-types';
+import Empty, {createEmpty} from '../empty';
+import {DESKTOP, MOBILE, Mode} from './utils';
 
-const EmptyDefinition = {
-  component: Empty,
-  getProps: (_) => ({})
-} as SchemaFormComponent;
-
+function getEmptyDefinition(text: string) {
+  return {
+    component: createEmpty(text),
+    getProps: (_) => ({})
+  } as SchemaFormComponent;
+}
 
 const SchemaFormComponentDefinitions: SchemaFormComponent[] = [];
 const DisplayComponentDefinitions: SchemaFormComponent[] = [];
@@ -145,10 +146,10 @@ function searchStore(mode: Mode,
   const typeDef = store[mode][platform][type];
   if (!typeDef) {
     console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
-    return EmptyDefinition;
+    return getEmptyDefinition(`<不支持的类型${type}>`);
   }
   if (definition.array) {
-    const res = typeDef[1] || typeDef[0] || typeDef[2] || EmptyDefinition;
+    const res = typeDef[1] || typeDef[0] || typeDef[2] || getEmptyDefinition('');
     if (res.component === Empty) {
       console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
     }

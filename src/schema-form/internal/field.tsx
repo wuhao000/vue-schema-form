@@ -19,6 +19,7 @@ import {
   TYPES
 } from '../utils/utils';
 import {
+  calcShowState,
   getComponentType,
   getFormItemComponent,
   getRealFields,
@@ -406,7 +407,8 @@ export default class FormField extends mixins(Emitter) {
       }
     }
     const style: any = {};
-    if (!field.visible) {
+    const visible = calcShowState(this.formValue, this.definition);
+    if (!visible) {
       style.display = 'none';
     }
     (item as VNode).data.staticStyle = style;
