@@ -177,9 +177,19 @@ export default class SchemaForm extends Vue {
           });
           return context(...paths);
         },
+        setTitle: (title: any) => {
+          this.matchFields(paths).forEach(field => {
+            field.title = title;
+          });
+          return context(...paths);
+        },
         setFieldProps: (props): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
-            field.props = Object.assign({}, field.props, props);
+            if (typeof props === 'function') {
+              field.props = Object.assign({}, field.props, props(field));
+            } else {
+              field.props = Object.assign({}, field.props, props);
+            }
           });
           return context(...paths);
         },

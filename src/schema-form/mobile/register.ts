@@ -27,9 +27,6 @@ export function registerAntdMobile() {
     (definition: IField) => {
       return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
     });
-  // registerMobile(MobileUpload, [TYPES.file], null, field => {
-  //   return {multiple: field.array, title: field.title};
-  // });
   registerMobile(StepperItem, [TYPES.integer], false, field => {
     return {title: field.title};
   });

@@ -116,4 +116,8 @@ export default [{
   path: 'feature/depends',
   component: () => import('@/views/demo/feature/depends.vue'),
   meta: {tag: '特性', name: '关联显示'}
+}, {
+  path: 'feature/title',
+  component: () => import('@/views/demo/feature/title.vue'),
+  meta: {tag: '特性', name: '修改标题'}
 }] as RouteConfig[];

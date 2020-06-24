@@ -55,7 +55,8 @@
   "feature": {
     "name": "特性",
     "demos": {
-      "depends": "关联显示"
+      "depends": "关联显示",
+      "title": "修改标题"
     }
   }
 }

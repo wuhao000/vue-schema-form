@@ -115,6 +115,9 @@ class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   public getGroups(this: any, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
+    if (!this.definition.fields) {
+      return [];
+    }
     const groups = [];
     const spanGroups = [];
     let lastHasSpan = false;

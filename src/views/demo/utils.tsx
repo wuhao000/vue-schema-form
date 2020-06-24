@@ -159,6 +159,7 @@ const fields: { [key: string]: SchemaFormField } = {
 export const getFormDefinition = (): SchemaFormField => {
   return {
     props: {
+      title: '这是标题',
       section: true,
       spaceBetweenSection: 16
     },

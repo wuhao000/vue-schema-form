@@ -55,7 +55,6 @@
     },
     created() {
       SchemaForm.registerAntd();
-      SchemaForm.registerElement();
     }
   };
 </script>
