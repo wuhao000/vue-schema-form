@@ -1,8 +1,7 @@
-import {EffectsContext} from 'v-schema-form-types';
+import {EffectsContext, SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';
-import {SchemaFormStore} from '../internal/utils';
 
 @Component({
   name: 'BaseButton'
@@ -10,8 +9,8 @@ import {SchemaFormStore} from '../internal/utils';
 export default class BaseButton extends Vue {
   @Prop()
   public action: (context: EffectsContext, event) => void;
-  @Prop()
-  public title: string;
+  @Prop({type: [String, Object]})
+  public title: string | object;
   @Inject('store')
   public store: SchemaFormStore;
 

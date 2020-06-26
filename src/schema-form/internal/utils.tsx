@@ -1,14 +1,12 @@
 import get from 'lodash.get';
 import uuid from 'uuid';
 import {
-  Effects,
-  EffectsContext,
   FormFields,
-  FormProps,
   IField,
   Platform,
   SchemaFormComponent,
   SchemaFormField,
+  SchemaFormStore,
   ShowFieldCondition
 } from 'v-schema-form-types';
 import Vue from 'vue';
@@ -19,20 +17,6 @@ import {splitPath} from '../utils/path';
 import {getComponent, getDisplayComponent} from '../utils/register';
 import {getFormComponent, TYPES} from '../utils/utils';
 import FormField from './field';
-
-export interface SchemaFormStore {
-  fields: { [key: string]: IField };
-  effects?: Effects;
-  props?: FormProps;
-  disabled?: boolean;
-  platform?: Platform;
-  readonly?: boolean;
-  loading?: boolean;
-  inline?: boolean;
-  editable?: boolean;
-  context?: EffectsContext | null;
-  root: any;
-}
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
   const propertyPath = splitPath(property);
@@ -195,37 +179,38 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
     return existsField;
   } else {
     return Vue.observable({
-      id: definition.id,
-      definition,
-      disabled: false,
-      enum: definition.enum || null,
-      title: definition.title,
       array: definition.array,
-      type: definition.type,
       component: getComponentType(store, definition),
-      processor: definition.processor,
-      display: true,
-      editable: definition.editable === undefined ? true : definition.editable,
-      name: definition.property,
-      path: buildArrayPath(pathPrefix, definition),
-      plainPath,
+      definition,
       destructPath: parseDestructPath(definition.property),
-      props: Object.assign({}, definition.props),
-      visible: calcShowState(currentValue, definition),
-      valid: true,
+      disabled: false,
+      display: true,
       displayValue: definition.displayValue,
-      required: definition.required,
-      fields: proxyFields(definition.fields),
+      editable: definition.editable === undefined ? true : definition.editable,
       effectErrors: [],
+      enum: definition.enum || null,
       errors: [],
+      fields: proxyFields(definition.fields),
       hiddenFromParent: false,
+      id: definition.id,
       initialValue: null,
       initialize: () => {
       },
       invalid: false,
-      value: currentValue,
+      name: definition.property,
+      path: buildArrayPath(pathPrefix, definition),
+      plainPath,
+      processor: definition.processor,
+      props: Object.assign({}, definition.props),
+      required: definition.required,
+      rules: getRulesFromProps(definition),
       setGetValue: null,
-      rules: getRulesFromProps(definition)
+      store,
+      title: definition.title,
+      type: definition.type,
+      valid: true,
+      value: currentValue,
+      visible: calcShowState(currentValue, definition)
     });
   }
 }

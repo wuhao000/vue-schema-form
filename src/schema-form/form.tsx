@@ -9,7 +9,7 @@ import {
   IField,
   Paths,
   Platform,
-  SchemaFormField
+  SchemaFormField, SchemaFormStore
 } from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
@@ -19,7 +19,7 @@ import {clone, isEqual} from '../uform/utils';
 import runValidation from '../uform/validator';
 import {registerAntd} from './antd/register';
 import {registerElement} from './element/register';
-import {hasListener, renderField, SchemaFormEvents, SchemaFormStore} from './internal/utils';
+import {hasListener, renderField, SchemaFormEvents} from './internal/utils';
 import {registerLayout} from './layout/register';
 import {registerAntdMobile} from './mobile/register';
 import {
@@ -150,7 +150,8 @@ export default class SchemaForm extends Vue {
           return context(...paths);
         },
         value: (value: any) => {
-          const res = this.matchFields(paths).map(it => it.setGetValue(value));
+          const res = this.matchFields(paths).map(it =>
+              typeof value === 'function' ? it.setGetValue(value(it)) : it.setGetValue(value));
           if (value === undefined) {
             if (paths.length === 1 && !isFuzzyPath(paths[0])) {
               return res[0];
@@ -173,13 +174,21 @@ export default class SchemaForm extends Vue {
         },
         setEnum: (options: any): EffectsHandlers => {
           this.matchFields(paths).forEach(field => {
-            field.enum = options;
+            if (typeof options === 'function') {
+              field.enum = options(field);
+            } else {
+              field.enum = options;
+            }
           });
           return context(...paths);
         },
-        setTitle: (title: any) => {
+        setTitle: (title) => {
           this.matchFields(paths).forEach(field => {
-            field.title = title;
+            if (typeof title === 'function') {
+              field.title = title(field);
+            } else {
+              field.title = title;
+            }
           });
           return context(...paths);
         },
@@ -201,9 +210,13 @@ export default class SchemaForm extends Vue {
           context.subscribe(SchemaFormEvents.fieldBlur, paths, callback);
           return context(...paths);
         },
-        setDisplayValue: (value: any) => {
+        setDisplayValue: (value) => {
           this.matchFields(paths).forEach(field => {
-            field.displayValue = value;
+            if (typeof value === 'function') {
+              field.displayValue = value(field);
+            } else {
+              field.displayValue = value;
+            }
           });
           return context(...paths);
         },

@@ -1,21 +1,28 @@
 <template>
   <div>
     <v-schema-form :schema="schema"
+                   platform="mobile"
                    :effects="effects"/>
-    <d-button @click="changeTitle"></d-button>
+    <d-button @click="changeTitle">修改标题</d-button>
   </div>
 </template>
 <script lang="ts">
   import {EffectsContext} from 'v-schema-form-types';
-  import SchemaForm from '../../../index';
   import Vue from 'vue';
+  import SchemaForm from '../../../index';
 
   export default Vue.extend({
     data() {
       return {
         schema: {
           props: {
-            title: '标题'
+            title: '表单标题'
+          },
+          fields: {
+            name: {
+              title: '组件标题',
+              type: 'string'
+            }
           }
         },
         context: null
@@ -23,13 +30,17 @@
     },
     created() {
       SchemaForm.registerAntd();
+      SchemaForm.registerAntdMobile();
     },
     methods: {
       effects($: EffectsContext) {
         this.context = $;
       },
       changeTitle() {
-        this.context('').setFieldProps({title: 'bbb'});
+        this.context('').setFieldProps((field) => {
+          return {title: field.definition.props.title + '-new'};
+        });
+        this.context('name').setTitle('cccc');
       }
     }
   });

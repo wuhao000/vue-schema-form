@@ -90,13 +90,13 @@ export const addComponent = (options: {
       type: options.types,
       forArray,
       layout: options.layout,
-      getProps: (definition: IField) => {
-        const props: any = getProps(definition, options.platforms as any) || {};
-        if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
-          props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;
+      getProps: (field: IField) => {
+        const props: any = getProps(field, options.platforms as any) || {};
+        if (field.title && options.platforms === MOBILE && !props.labelNumber) {
+          props.labelNumber = typeof field.title === 'string' ? (field.title.length > 7 ? 7 : field.title.length) : 7;
         }
-        if (definition.props) {
-          Object.assign(props, definition.props);
+        if (field.props) {
+          Object.assign(props, field.props);
         }
         return props;
       }

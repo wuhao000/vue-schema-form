@@ -1,5 +1,5 @@
 import AsyncValidator from 'async-validator';
-import {IField, SchemaFormField} from 'v-schema-form-types';
+import {IField, SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
@@ -19,13 +19,12 @@ import {
   TYPES
 } from '../utils/utils';
 import {
-  calcShowState,
   getComponentType,
   getFormItemComponent,
-  getRealFields, matchCondition,
+  getRealFields,
+  matchCondition,
   renderField,
-  SchemaFormEvents,
-  SchemaFormStore
+  SchemaFormEvents
 } from './utils';
 
 @Component({
@@ -207,7 +206,7 @@ export default class FormField extends mixins(Emitter) {
     const style: any = Object.assign({}, props.style || {});
     if (inputFieldDef.layout) {
       props.layout = definition.layout;
-      const noWrap = !this.definition.title;
+      const noWrap = !this.field.title;
       props.fields = getRealFields(definition.fields).map((field, index) => {
         return this.renderField(field, currentValue, index, !noWrap);
       });
@@ -289,7 +288,7 @@ export default class FormField extends mixins(Emitter) {
                 disabled={isDisabled}
                 key={field.plainPath + '-' + index}
                 value={v}
-                title={platform === 'mobile' ? field.definition.title : null}
+                title={platform === 'mobile' ? field.title : null}
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 onInput={(val) => {
@@ -398,7 +397,7 @@ export default class FormField extends mixins(Emitter) {
       const className = formItemProps.className;
       delete formItemProps.style;
       delete formItemProps.className;
-      const noWrap = !definition.title;
+      const noWrap = !field.title;
       const formItem = noWrap ? inputComponent :
           <FormItemComponent attrs={Object.assign({}, formItemProps, {label: null})}
                              class={className}
@@ -420,7 +419,7 @@ export default class FormField extends mixins(Emitter) {
         if (type === TYPES.object) {
           item = inputComponent;
         } else {
-          item = <m-list-item title={definition.title} extra={inputComponent}/>;
+          item = <m-list-item title={field.title} extra={inputComponent}/>;
         }
       } else {
         item = inputComponent;
@@ -474,8 +473,8 @@ export default class FormField extends mixins(Emitter) {
     const component = getFormItemComponent(platform);
     const props: any = {
       required: editable ? definition.required : null,
-      title: definition.title,
-      label: definition.title
+      title: field.title,
+      label: field.title
     };
     if (platform === DESKTOP) {
       if (definition.tip) {
@@ -484,16 +483,15 @@ export default class FormField extends mixins(Emitter) {
             content={definition.tip}
             trigger="hover">
           <span slot={popover === 'el-popover' ? 'reference' : 'default'}>
-            {definition.title}
+            {field.title}
             <LibComponents.icon style={{marginLeft: '5px', color: '#247dc5'}}
                                 type={LibComponents.icons.info}/>
           </span>
         </LibComponents.popover>;
       } else {
-        props.label = definition.title;
+        props.label = field.title;
       }
     }
-
     if (definition.wrapperProps) {
       Object.assign(props, definition.wrapperProps);
       if (definition.wrapperProps.noTitle) {

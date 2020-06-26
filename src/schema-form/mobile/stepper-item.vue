@@ -13,7 +13,7 @@
     name: 'StepperItem',
     props: {
       value: Number,
-      title: String
+      title: [String, Object]
     },
     methods: {
       onInput(value) {

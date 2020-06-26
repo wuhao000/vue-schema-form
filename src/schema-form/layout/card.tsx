@@ -7,8 +7,8 @@ import {Prop} from 'vue-property-decorator';
 })
 export default class Card extends mixins(BaseLayout) {
 
-  @Prop()
-  public title: any;
+  @Prop({type: [String, Object]})
+  public title: string | object;
 
   public render() {
     return <a-card title={this.title}>

@@ -1,4 +1,4 @@
-import {SchemaFormStore} from './internal/utils';
+import {SchemaFormStore} from 'v-schema-form-types';
 import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
 import Vue from 'vue';

@@ -1,7 +1,7 @@
+import {SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';
-import {SchemaFormStore} from './internal/utils';
 import {getButtonComponent, getColComponent, getRowComponent, LibComponents, MOBILE} from './utils/utils';
 
 @Component({
