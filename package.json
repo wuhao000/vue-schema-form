@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "0.1.18-2",
+  "version": "0.1.18-3",
   "private": false,
   "main": "src/index.ts",
   "scripts": {

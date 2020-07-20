@@ -176,6 +176,10 @@ export function createField(currentValue: any, store: SchemaFormStore, pathPrefi
   const existsField: IField = store.fields[plainPath];
   if (existsField) {
     existsField.component = getComponentType(store, definition);
+    existsField.definition = definition;
+    if (existsField.fields !== definition.fields) {
+      existsField.fields = definition.fields;
+    }
     return existsField;
   } else {
     return Vue.observable({

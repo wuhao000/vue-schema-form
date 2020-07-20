@@ -56,7 +56,8 @@
     "name": "特性",
     "demos": {
       "depends": "关联显示",
-      "title": "修改标题"
+      "title": "修改标题",
+      "dynamic": "动态表单"
     }
   }
 }

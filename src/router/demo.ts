@@ -117,6 +117,10 @@ export default [{
   component: () => import('@/views/demo/feature/depends.vue'),
   meta: {tag: '特性', name: '关联显示'}
 }, {
+  path: 'feature/dynamic',
+  component: () => import('@/views/demo/feature/dynamic.vue'),
+  meta: {tag: '特性', name: '动态表单'}
+}, {
   path: 'feature/title',
   component: () => import('@/views/demo/feature/title.vue'),
   meta: {tag: '特性', name: '修改标题'}
