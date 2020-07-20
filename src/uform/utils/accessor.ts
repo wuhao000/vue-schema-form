@@ -209,7 +209,6 @@ const parseDestruct = (str: PathNode) => {
   if (!isStr(str)) {
     return str;
   }
-
   let destruct: Destruct;
   const stack = [];
   let token = '';
@@ -321,12 +320,13 @@ const parseDestructPath = (path: Path): any => {
   const newPath = getPathSegments(path);
   const lastKey = newPath[newPath.length - 1];
   const startPath = newPath.slice(0, newPath.length - 1);
+
   const destruct = parseDestruct(lastKey);
   return {
     path: newPath,
     lastKey,
     startPath,
-    destruct
+    destruct: destruct === undefined ? lastKey : destruct
   };
 };
 

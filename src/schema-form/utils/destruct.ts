@@ -1,8 +1,20 @@
-export function getStructValue(parentValue: object, struct: string | any[] | object) {
+import {getDefaultValue} from '@/schema-form/utils/utils';
+import {IField} from 'v-schema-form-types';
+
+export function getStructValue(parentValue: object,
+                               struct: string | any[] | object,
+                               vue: any,
+                               field: IField = null) {
   if (Array.isArray(struct)) {
-    return struct.map(key => getStructValue(parentValue, key));
+    return struct.map(key => getStructValue(parentValue, key, vue));
   } else if (typeof struct === 'string') {
-    return parentValue && parentValue[struct];
+    const v = parentValue && parentValue[struct];
+    if (v === undefined && field) {
+      const defaultValue = getDefaultValue(field);
+      vue.$set(parentValue, struct, defaultValue);
+      return defaultValue;
+    }
+    return v;
   } else if (typeof struct === 'object') {
     const value = {};
     Object.keys(struct).forEach(key => {
@@ -10,7 +22,7 @@ export function getStructValue(parentValue: object, struct: string | any[] | obj
       if (typeof destructValue === 'string') {
         value[key] = parentValue?.[destructValue];
       } else {
-        value[key] = getStructValue(parentValue, destructValue);
+        value[key] = getStructValue(parentValue, destructValue, vue);
       }
     });
     return value;

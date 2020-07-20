@@ -113,6 +113,10 @@ export default [{
   component: () => import('@/views/demo/subform/mobile.vue'),
   meta: {tag: '子表单', name: '移动端'}
 }, {
+  path: 'feature/complex',
+  component: () => import('@/views/demo/feature/complex.vue'),
+  meta: {tag: '特性', name: '复杂对象'}
+}, {
   path: 'feature/depends',
   component: () => import('@/views/demo/feature/depends.vue'),
   meta: {tag: '特性', name: '关联显示'}

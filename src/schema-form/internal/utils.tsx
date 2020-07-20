@@ -18,12 +18,14 @@ import {getComponent, getDisplayComponent} from '../utils/register';
 import {getFormComponent, TYPES} from '../utils/utils';
 import FormField from './field';
 
-export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
+export function getPropertyValueByPath(property: string,
+                                       currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
+                                       vue: any) {
   const propertyPath = splitPath(property);
   let tmp = currentValue;
   propertyPath.forEach(path => {
     if (!tmp[path]) {
-      tmp[path] = {};
+      vue.$set(tmp, path, {});
     }
     tmp = tmp[path];
   });
@@ -126,7 +128,8 @@ export function renderField(pathPrefix: string[] | null,
                             index: number, wrap: boolean, h, vue) {
   let value = null;
   if (field.property?.includes('.')) {
-    value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
+    value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')),
+        currentValue, vue);
   } else {
     value = currentValue;
   }
@@ -141,7 +144,7 @@ export function renderField(pathPrefix: string[] | null,
   const iField = createField(currentValue, store, pathPrefix, field);
   const component = getComponentType(store, field);
   const props = {
-    value: getFieldValue(value, iField, component),
+    value: getFieldValue(value, iField, component, vue),
     wrap,
     field: iField,
     path: buildArrayPath(pathPrefix, field),
@@ -251,14 +254,15 @@ const getRulesFromProps = (props: SchemaFormField) => {
   return clone(rules);
 
 };
-export const getFieldValue = (value: any, field: IField<any>, component: SchemaFormComponent) => {
+export const getFieldValue = (value: any, field: IField<any>,
+                              component: SchemaFormComponent, vue: any) => {
   if (component.layout) {
     return value;
   }
   if (field.processor) {
     return field.processor.getValue(value, field);
   } else {
-    return getStructValue(value, field.destructPath!.destruct || field.name);
+    return getStructValue(value, field.destructPath!.destruct || field.name, vue, field);
   }
 };
 
