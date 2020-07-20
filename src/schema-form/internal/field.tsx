@@ -133,7 +133,7 @@ export default class FormField extends mixins(Emitter) {
     field.validate = this.validate;
     field.value = this.currentValue;
     field.focus = this.focus;
-    if (this.definition.default) {
+    if (this.definition.default && !this.currentValue) {
       this.currentValue = this.definition.default;
     }
     field.setGetValue = (value: any) => {
