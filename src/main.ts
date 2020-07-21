@@ -6,6 +6,9 @@ import router from './router';
 import store from './store';
 import './styles/index.less';
 import App from './views/index.vue';
+import Vant from 'vant';
+
+Vue.use(Vant);
 
 Vue.directive('hljs', el => {
   const blocks = el.querySelectorAll('pre code');

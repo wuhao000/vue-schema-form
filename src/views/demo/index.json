@@ -35,6 +35,16 @@
       "destruct": "解构"
     }
   },
+  "vant": {
+    "name": "Vant",
+    "demos": {
+      "basic": "基本",
+      "display": "详情",
+      "edit": "编辑",
+      "effects": "副作用函数",
+      "destruct": "解构"
+    }
+  },
   "layout": {
     "name": "布局",
     "demos": {

@@ -85,6 +85,26 @@ export default [{
   component: () => import('@/views/demo/mobile/effects.vue'),
   meta: {tag: 'Antd Mobile Vue', name: '副作用函数'}
 }, {
+  path: 'vant/basic',
+  component: () => import('@/views/demo/vant/basic.vue'),
+  meta: {tag: 'Vant', name: '基本'}
+}, {
+  path: 'vant/destruct',
+  component: () => import('@/views/demo/vant/destruct.tsx'),
+  meta: {tag: 'Vant', name: '解构'}
+}, {
+  path: 'vant/display',
+  component: () => import('@/views/demo/vant/display.vue'),
+  meta: {tag: 'Vant', name: '详情'}
+}, {
+  path: 'vant/edit',
+  component: () => import('@/views/demo/vant/edit.vue'),
+  meta: {tag: 'Vant', name: '编辑'}
+}, {
+  path: 'vant/effects',
+  component: () => import('@/views/demo/vant/effects.vue'),
+  meta: {tag: 'Vant', name: '副作用函数'}
+}, {
   path: 'layout/array',
   component: () => import('@/views/demo/layout/array.vue'),
   meta: {tag: '布局', name: '数组'}

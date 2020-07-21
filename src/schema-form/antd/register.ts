@@ -3,7 +3,7 @@ import {
   ComponentMap,
   DESKTOP,
   getOptions,
-  LibComponents,
+  LibComponents, LibName,
   TYPES
 } from '../utils/utils';
 import {IField} from 'v-schema-form-types';
@@ -13,6 +13,7 @@ import AntdUpload from '../antd/upload.vue';
 
 export function registerAntd() {
   console.debug('注册Ant Design Vue表单组件');
+  LibName.desktop = 'antd';
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].antd;
   });

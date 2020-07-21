@@ -5,7 +5,7 @@ import ElExtIcon from '../element/el-ext-icon';
 import ElExtRadio from '../element/radio-group';
 import ElExtSelect from '../element/select';
 import {registerDesktop} from '../utils/register';
-import {ComponentMap, getOptions, LibComponents, TYPES} from '../utils/utils';
+import {ComponentMap, getOptions, LibComponents, LibName, TYPES} from '../utils/utils';
 import ElButton from './button';
 import ElementUpload from './upload.vue';
 import ElUrlInput from './url.vue';
@@ -13,6 +13,7 @@ import ElUrlInput from './url.vue';
 
 export function registerElement() {
   console.debug('注册ElementUI表单组件');
+  LibName.desktop = 'element';
   Vue.component('ElExtIcon', ElExtIcon);
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].element;
@@ -44,7 +45,7 @@ export function registerElement() {
   registerDesktop('el-time-picker', TYPES.time, false);
   registerDesktop('el-rate', TYPES.rate, false);
   registerDesktop('el-date-picker', [TYPES.date, TYPES.datetimerange, TYPES.daterange, TYPES.year, TYPES.month, TYPES.datetime], false,
-      (definition: IField) => ({type: definition.type.toLowerCase()}));
+    (definition: IField) => ({type: definition.type.toLowerCase()}));
   registerDesktop('el-input-number', [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop('el-switch', [TYPES.boolean], false);
   registerDesktop('el-ext-select', [TYPES.select], null, definition => {

@@ -12,7 +12,7 @@
   export default Vue.extend({
     name: 'StepperItem',
     props: {
-      value: Number,
+      value: [Number, String],
       title: [String, Object]
     },
     methods: {

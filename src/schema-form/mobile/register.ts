@@ -1,25 +1,24 @@
-import MobileImagePicker from './image-picker';
-import {register} from '../utils/register';
-import {getOptions, MOBILE, TYPES} from '../utils/utils';
 import {IField, Platform} from 'v-schema-form-types';
-import MButton from './button';
 import StepperItem from '../mobile/stepper-item.vue';
+import {register} from '../utils/register';
+import {ComponentMap, getOptions, LibName, MOBILE, MobileLibComponents, TYPES} from '../utils/utils';
+import MButton from './button';
+import MobileImagePicker from './image-picker';
 
-const registerMobile = (component: string | object,
-                        types: string | string[],
-                        forArray: boolean = null,
-                        getProps: ((definition: IField, platform: Platform) => object) = null) => {
+export const registerMobile = (component: string | object,
+                               types: string | string[],
+                               forArray: boolean = null,
+                               getProps: ((definition: IField, platform: Platform) => object) = null) => {
   register(component, MOBILE, types, forArray, getProps);
 };
 
 
 export function registerAntdMobile() {
   console.debug('注册Ant Design Mobile表单组件');
-  const components = [{
-    component: 'm-input',
-    types: [TYPES.string, TYPES.url],
-    array: false
-  }];
+  LibName.mobile = 'antdm';
+  Object.keys(ComponentMap).forEach(key => {
+    MobileLibComponents[key] = ComponentMap[key].antdm;
+  });
   registerMobile('m-input', [TYPES.string, TYPES.url], false);
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
     (definition: IField) => ({mode: definition.type.toLowerCase()}));
@@ -42,6 +41,7 @@ export function registerAntdMobile() {
   registerMobile('m-radio-popup-list', [TYPES.select], false, field => {
     return {options: getOptions(field)};
   });
+  registerMobile('m-checkbox-item', [TYPES.checkbox], false);
   registerMobile('m-checkbox-list', [TYPES.expandSelect], true, field => {
     return {options: getOptions(field)};
   });

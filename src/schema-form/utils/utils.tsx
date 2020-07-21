@@ -45,12 +45,14 @@ export const ComponentMap = {
   checkbox: {
     element: 'el-checkbox',
     antd: 'd-checkbox',
-    antdm: 'm-checkbox-item'
+    antdm: 'm-checkbox-item',
+    vant: 'van-checkbox'
   },
   button: {
     element: 'el-button',
     antd: 'd-button',
-    antdm: 'm-button'
+    antdm: 'm-button',
+    vant: 'van-button'
   },
   row: {
     element: 'el-row',
@@ -63,12 +65,14 @@ export const ComponentMap = {
   form: {
     element: 'el-form',
     antd: 'd-form',
-    antdm: 'm-list'
+    antdm: 'm-list',
+    vant: 'van-form'
   },
   formItem: {
     element: 'el-form-item',
     antd: 'd-form-item',
-    antdm: 'm-list-item'
+    antdm: 'm-list-item',
+    vant: 'van-cell'
   },
   alert: {
     element: 'el-alert',
@@ -119,6 +123,29 @@ export const ComponentMap = {
 export function swap(array, x, y) {
   array.splice(x, 1, ...array.splice(y, 1, array[x]));
 }
+
+export const LibName = {
+  desktop: 'antd',
+  mobile: 'antdm'
+};
+
+export const MobileLibComponents: ILibComponents = {
+  icons: null,
+  alert: null,
+  button: null,
+  col: null,
+  confirm: null,
+  content: null,
+  footer: null,
+  form: null,
+  formItem: null,
+  header: null,
+  icon: null,
+  layout: null,
+  popover: null,
+  row: null,
+  sider: null
+};
 
 export const LibComponents: ILibComponents = {
   icons: null,
@@ -176,7 +203,7 @@ export const getDefaultValue = (field: IField) => {
 
 
 export const getFormComponent = (platform: Platform) => {
-  return platform === DESKTOP ? LibComponents.form : 'm-list';
+  return platform === DESKTOP ? LibComponents.form : MobileLibComponents.form;
 };
 
 export const getRowComponent = () => {

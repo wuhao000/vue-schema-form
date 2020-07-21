@@ -33,6 +33,7 @@ import {
 } from './utils/path';
 import {register, registerDisplay} from './utils/register';
 import {ASchemaForm, LibComponents} from './utils/utils';
+import { registerVant } from './vant';
 
 
 @Component({
@@ -43,6 +44,7 @@ export default class SchemaForm extends Vue {
   public static install: (Vue) => void;
   public static registerAntd = registerAntd;
   public static registerAntdMobile = registerAntdMobile;
+  public static registerVant = registerVant;
   public static registerElement = registerElement;
   public static registerComponent = register;
   public static registerLayout = registerLayout;
