@@ -1,4 +1,4 @@
-import {createSimpleFieldComponent} from '@/schema-form/compatible';
+import {createSimpleMobileFieldComponent} from '@/schema-form/compatible';
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import {VNode} from 'vue';
@@ -423,7 +423,9 @@ export default class FormField extends mixins(Emitter) {
         if (type === TYPES.object) {
           item = inputComponent;
         } else {
-          item = createSimpleFieldComponent(field.title, inputComponent, this.$createElement);
+          item = createSimpleMobileFieldComponent(field.title,
+              inputComponent, field,
+              this.$createElement);
         }
       } else {
         item = inputComponent;

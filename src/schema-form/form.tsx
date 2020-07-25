@@ -31,7 +31,7 @@ import {
   replaceLastPath,
   takePath
 } from './utils/path';
-import {register, registerDisplay} from './utils/register';
+import {register, addComponent, registerResponsiveComponent, registerDisplay} from './utils/register';
 import {ASchemaForm, LibComponents} from './utils/utils';
 import { registerVant } from './vant';
 
@@ -47,6 +47,8 @@ export default class SchemaForm extends Vue {
   public static registerVant = registerVant;
   public static registerElement = registerElement;
   public static registerComponent = register;
+  public static register = addComponent;
+  public static registerResponsiveComponent = registerResponsiveComponent;
   public static registerLayout = registerLayout;
   public static registerDisplayComponent = registerDisplay;
   @Prop({type: String, default: 'schema-form'})
@@ -299,7 +301,7 @@ export default class SchemaForm extends Vue {
                   }) : [findFieldPath(pathsOrHandler, this.store.fields)]);
               if (isPathMatchPatterns(v.field, patterns)) {
                 if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
-                  handler(v.value, v.path);
+                  handler(v.value, v.path, v.field);
                 } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
                   handler(v.path);
                 } else {

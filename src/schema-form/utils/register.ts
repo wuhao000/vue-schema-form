@@ -1,4 +1,4 @@
-import {IField, Platform, SchemaFormComponent, SchemaFormField} from 'v-schema-form-types';
+import {IField, Platform, SchemaFormComponent, SchemaFormField, WrapType} from 'v-schema-form-types';
 import Empty, {createEmpty} from '../empty';
 import {DESKTOP, MOBILE, Mode} from './utils';
 
@@ -57,10 +57,11 @@ export const addComponent = (options: {
   component: string | object,
   platforms: Platform | Platform[],
   types: string | string[],
-  forArray: boolean,
-  getProps: (definition: IField, platform: Platform) => object,
   forDisplay: boolean,
-  layout: boolean
+  layout?: boolean,
+  forArray?: boolean,
+  getProps?: (definition: IField, platform: Platform) => object,
+  wrap?: WrapType
 }) => {
   if (Array.isArray(options.types)) {
     options.types.forEach(type => {
@@ -88,6 +89,7 @@ export const addComponent = (options: {
       component: options.component,
       platform: options.platforms,
       type: options.types,
+      wrap: options.wrap,
       forArray,
       layout: options.layout,
       getProps: (field: IField) => {
@@ -132,7 +134,7 @@ export const registerDesktop = (component: string | object,
   register(component, DESKTOP, types, forArray, getProps);
 };
 
-const registerResponsiveComponent = (component: string | object,
+export const registerResponsiveComponent = (component: string | object,
                                      types: string | string[],
                                      forArray: boolean = null,
                                      getProps: ((definition: IField, platform: Platform) => object) = null) => {
