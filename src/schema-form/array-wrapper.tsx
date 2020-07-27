@@ -1,3 +1,4 @@
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import {SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -24,13 +25,13 @@ export default class ArrayWrapper extends Vue {
   public maxLength: number;
   @Prop({type: Boolean, default: false})
   public subForm: boolean;
-  @Inject('store')
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 
 
   public renderAddButton() {
     if (!this.store.editable || !this.showAddBtn || (this.maxLength > 0 && this.$slots.default && this.$slots.default.length >= this.maxLength)) {
-      return null;
+      return;
     }
     const ColComponent = getColComponent();
     let ButtonComponent = getButtonComponent();

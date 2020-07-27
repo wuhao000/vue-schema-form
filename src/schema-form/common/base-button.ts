@@ -1,3 +1,4 @@
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import {EffectsContext, SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -11,7 +12,7 @@ export default class BaseButton extends Vue {
   public action: (context: EffectsContext, event) => void;
   @Prop({type: [String, Object]})
   public title: string | object;
-  @Inject('store')
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 
 

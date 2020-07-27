@@ -135,9 +135,9 @@ export const registerDesktop = (component: string | object,
 };
 
 export const registerResponsiveComponent = (component: string | object,
-                                     types: string | string[],
-                                     forArray: boolean = null,
-                                     getProps: ((definition: IField, platform: Platform) => object) = null) => {
+                                            types: string | string[],
+                                            forArray: boolean = null,
+                                            getProps: ((definition: IField, platform: Platform) => object) = null) => {
   register(component, [MOBILE, DESKTOP], types, forArray, getProps);
 };
 

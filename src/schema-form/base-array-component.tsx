@@ -1,3 +1,4 @@
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import {SchemaFormStore} from 'v-schema-form-types';
 import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
@@ -24,7 +25,7 @@ export default class BaseArrayComponent extends Vue {
   @Prop({type: Boolean, default: false})
   public disabled: boolean;
   public current = this.value || [];
-  @Inject('store')
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 
   @Watch('value')
