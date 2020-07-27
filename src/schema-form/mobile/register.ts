@@ -1,6 +1,6 @@
 import {IField, Platform} from 'v-schema-form-types';
 import StepperItem from '../mobile/stepper-item.vue';
-import {register} from '../utils/register';
+import {addComponent, register} from '../utils/register';
 import {ComponentMap, getOptions, LibName, MOBILE, MobileLibComponents, TYPES} from '../utils/utils';
 import MButton from './button';
 import MobileImagePicker from './image-picker';
@@ -19,13 +19,19 @@ export function registerAntdMobile() {
   Object.keys(ComponentMap).forEach(key => {
     MobileLibComponents[key] = ComponentMap[key].antdm;
   });
-  registerMobile('m-input', [TYPES.string, TYPES.url], false);
+  addComponent({
+    component: 'm-input',
+    types: [TYPES.string, TYPES.url],
+    forArray: false,
+    forDisplay: false,
+    platforms: ['mobile']
+  });
   registerMobile('m-date-picker-item', [TYPES.date, TYPES.datetime, TYPES.month, TYPES.year, TYPES.time], false,
-    (definition: IField) => ({mode: definition.type.toLowerCase()}));
+      (definition: IField) => ({mode: definition.type.toLowerCase()}));
   registerMobile('m-input', [TYPES.double, TYPES.number], false,
-    (definition: IField) => {
-      return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
-    });
+      (definition: IField) => {
+        return {type: definition.type.toLowerCase() === TYPES.double ? 'digit' : 'number', textAlign: 'right'};
+      });
   registerMobile(StepperItem, [TYPES.integer], false, field => {
     return {title: field.title};
   });

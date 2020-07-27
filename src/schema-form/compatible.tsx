@@ -1,4 +1,4 @@
-import {MobileLibComponents} from '@/schema-form/utils/utils';
+import {MobileLibComponents, TYPES} from '@/schema-form/utils/utils';
 import {IField} from 'v-schema-form-types';
 import {CreateElement, VNode} from 'vue';
 
@@ -11,9 +11,11 @@ import {CreateElement, VNode} from 'vue';
 
 export function createSimpleMobileFieldComponent(title: string | VNode, inputComponent: any,
                                                  field: IField, h: CreateElement) {
-  const props: any = {};
+  if (field.type === TYPES.object) {
+    return inputComponent;
+  }
+  const props: any = {title};
   const FormItem = MobileLibComponents.formItem;
-  props.title = title;
   let wrap = true;
   if (field.component.wrap === false || (typeof field.component.wrap === 'object'
       && field.component.wrap.mobile === false)) {

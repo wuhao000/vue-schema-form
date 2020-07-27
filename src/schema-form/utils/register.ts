@@ -52,7 +52,9 @@ export const register = (component: string | object,
     component, platforms, types, forArray, getProps, forDisplay: false, layout: false
   });
 };
-
+const DEFAULT_OPTIONS = {
+  forDisplay: false
+};
 export const addComponent = (options: {
   component: string | object,
   platforms: Platform | Platform[],
@@ -63,13 +65,15 @@ export const addComponent = (options: {
   getProps?: (definition: IField, platform: Platform) => object,
   wrap?: WrapType
 }) => {
+
   if (Array.isArray(options.types)) {
     options.types.forEach(type => {
       addComponent({
         component: options.component, platforms: options.platforms,
         types: type, forArray: options.forArray, getProps: options.getProps,
         forDisplay: options.forDisplay,
-        layout: options.layout
+        layout: options.layout,
+        wrap: options.wrap
       });
     });
   } else if (Array.isArray(options.platforms)) {
@@ -79,7 +83,9 @@ export const addComponent = (options: {
         platforms: platform,
         types: options.types,
         forArray: options.forArray, getProps: options.getProps,
-        forDisplay: options.forDisplay, layout: options.layout
+        forDisplay: options.forDisplay,
+        layout: options.layout,
+        wrap: options.wrap
       });
     });
   } else {
@@ -135,9 +141,9 @@ export const registerDesktop = (component: string | object,
 };
 
 export const registerResponsiveComponent = (component: string | object,
-                                     types: string | string[],
-                                     forArray: boolean = null,
-                                     getProps: ((definition: IField, platform: Platform) => object) = null) => {
+                                            types: string | string[],
+                                            forArray: boolean = null,
+                                            getProps: ((definition: IField, platform: Platform) => object) = null) => {
   register(component, [MOBILE, DESKTOP], types, forArray, getProps);
 };
 

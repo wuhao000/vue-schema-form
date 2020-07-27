@@ -176,7 +176,7 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public renderInputComponent() {
-    const {props, content, onInput, onArrayItemInput, currentValue, store: {platform}, isDisabled, definition, field} = this;
+    const {props, content, onInput, currentValue, store: {platform}, isDisabled, definition, field} = this;
     if (definition.slot) {
       if (this.store.root.$slots && this.store.root.$slots[definition.slot]) {
         return this.store.root.$slots[definition.slot];
@@ -213,91 +213,7 @@ export default class FormField extends mixins(Emitter) {
       });
     }
     if (field.array && inputFieldDef.forArray === false) {
-      let ArrayComponent: any = ArrayWrapper;
-      if (typeof definition.arrayComponent === 'string') {
-        // @ts-ignore
-        const componentDef = getComponentType(this.store, {
-          type: definition.arrayComponent,
-          props: definition.arrayProps
-        });
-        if (componentDef.component !== 'empty') {
-          ArrayComponent = componentDef.component;
-        }
-      } else if (['function', 'object'].includes(typeof definition.arrayComponent)) {
-        ArrayComponent = definition.arrayComponent;
-      }
-      const arrayProps = Object.assign({}, this.props, definition.arrayProps);
-      const arrayClass = arrayProps.className;
-      const arrayStyle = arrayProps.style;
-      delete arrayProps.className;
-      delete arrayProps.style;
-      // @ts-ignore
-      return <ArrayComponent
-          props={arrayProps}
-          class={arrayClass}
-          style={arrayStyle}
-          disabled={isDisabled}
-          subForm={field.type === TYPES.object}
-          addBtnText={props.addBtnText}
-          ref="array"
-          key={field.plainPath}
-          platform={platform}
-          addBtnProps={props.addBtnProps}
-          cellSpan={props.cellSpan}
-          onRemove={async (index) => {
-            try {
-              const confirmFunc = getConfirmFunction(platform);
-              await confirmFunc('确定删除该条吗？', '提示');
-              this.removeArrayItem(index);
-            } catch (e) {
-              console.error(e);
-            }
-          }}
-          onMoveDown={(index) => {
-            if (index <= currentValue.length - 1) {
-              swap(currentValue, index, index + 1);
-            }
-          }}
-          onMoveUp={(index) => {
-            if (index > 0) {
-              swap(currentValue, index, index - 1);
-            }
-          }}
-          onAdd={() => {
-            this.addArrayItem();
-          }}>
-        {
-          currentValue ? currentValue.map((v, index) => {
-            const itemProps = Object.assign({}, props, {
-              pathPrefix: this.path.concat(index),
-              schemaPath: this.path
-            });
-            if (field.type === TYPES.object) {
-              itemProps.definition = Object.assign({}, itemProps.definition);
-              delete itemProps.definition.array;
-            }
-            const className = itemProps.className;
-            const style = itemProps.style;
-            delete itemProps.className;
-            delete itemProps.style;
-            // @ts-ignore
-            return <InputFieldComponent
-                attrs={itemProps}
-                class={className}
-                style={style}
-                arrayIndex={index}
-                disabled={isDisabled}
-                key={field.plainPath + '-' + index}
-                value={v}
-                title={platform === 'mobile' ? field.title : null}
-                onBlur={this.onBlur}
-                onFocus={this.onFocus}
-                onInput={(val) => {
-                  onArrayItemInput(val, index);
-                }}/>;
-          }) : null
-        }
-      </ArrayComponent>;
+      return this.createArrayInputComponent(InputFieldComponent);
     }
     props.disabled = isDisabled;
     props.value = currentValue;
@@ -309,7 +225,7 @@ export default class FormField extends mixins(Emitter) {
       }
       Object.keys(definition.props).forEach(key => {
         if (key !== 'props') {
-          definition.props!.props[key] = definition.props[key];
+          definition.props.props[key] = definition.props[key];
         }
       });
     }
@@ -354,6 +270,96 @@ export default class FormField extends mixins(Emitter) {
         ref="input"/>;
   }
 
+  private createArrayInputComponent(InputFieldComponent: string | object) {
+    const platform = this.store.platform;
+    const {onArrayItemInput, props, currentValue, isDisabled, field, definition} = this;
+    let ArrayComponent: any = ArrayWrapper;
+    if (typeof definition.arrayComponent === 'string') {
+      // @ts-ignore
+      const componentDef = getComponentType(this.store, {
+        type: definition.arrayComponent,
+        props: definition.arrayProps
+      });
+      if (componentDef.component !== 'empty') {
+        ArrayComponent = componentDef.component;
+      }
+    } else if (['function', 'object'].includes(typeof definition.arrayComponent)) {
+      ArrayComponent = definition.arrayComponent;
+    }
+    const arrayProps = Object.assign({}, this.props, definition.arrayProps);
+    const arrayClass = arrayProps.className;
+    const arrayStyle = arrayProps.style;
+    delete arrayProps.className;
+    delete arrayProps.style;
+    // @ts-ignore
+    return <ArrayComponent
+        props={arrayProps}
+        class={arrayClass}
+        style={arrayStyle}
+        disabled={isDisabled}
+        subForm={field.type === TYPES.object}
+        addBtnText={props.addBtnText}
+        ref="array"
+        key={field.plainPath}
+        platform={platform}
+        addBtnProps={props.addBtnProps}
+        cellSpan={props.cellSpan}
+        onRemove={async (index) => {
+          try {
+            const confirmFunc = getConfirmFunction(platform);
+            await confirmFunc('确定删除该条吗？', '提示');
+            this.removeArrayItem(index);
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        onMoveDown={(index) => {
+          if (index <= currentValue.length - 1) {
+            swap(currentValue, index, index + 1);
+          }
+        }}
+        onMoveUp={(index) => {
+          if (index > 0) {
+            swap(currentValue, index, index - 1);
+          }
+        }}
+        onAdd={() => {
+          this.addArrayItem();
+        }}>
+      {
+        currentValue ? currentValue.map((v, index) => {
+          const itemProps = Object.assign({}, props, {
+            pathPrefix: this.path.concat(index),
+            schemaPath: this.path
+          });
+          if (field.type === TYPES.object) {
+            itemProps.definition = Object.assign({}, itemProps.definition);
+            delete itemProps.definition.array;
+          }
+          const className = itemProps.className;
+          const style = itemProps.style;
+          delete itemProps.className;
+          delete itemProps.style;
+          // @ts-ignore
+          return <InputFieldComponent
+              attrs={itemProps}
+              class={className}
+              style={style}
+              arrayIndex={index}
+              disabled={isDisabled}
+              key={field.plainPath + '-' + index}
+              value={v}
+              title={platform === 'mobile' ? field.title : null}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+              onInput={(val) => {
+                onArrayItemInput(val, index);
+              }}/>;
+        }) : null
+      }
+    </ArrayComponent>;
+  }
+
   public onBlur(event) {
     if (!this.field.valid) {
       this.validate();
@@ -386,7 +392,7 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public render() {
-    const {props, field, type, definition, editable, store: {platform}} = this;
+    const {props, field, definition, editable, store: {platform}} = this;
     if (!editable) {
       props.definition = definition;
       props.field = field;
@@ -396,37 +402,12 @@ export default class FormField extends mixins(Emitter) {
     const FormItemComponent = getFormItemComponent(platform);
     const ColComponent = getColComponent();
     if (platform === DESKTOP) {
-      const formItemProps = this.getFormItemProps();
-      const style = formItemProps.style;
-      const className = formItemProps.className;
-      delete formItemProps.style;
-      delete formItemProps.className;
-      const noWrap = !field.title;
-      const formItem = noWrap ? inputComponent :
-          <FormItemComponent attrs={Object.assign({}, formItemProps, {label: null})}
-                             class={className}
-                             style={style}>
-            {definition?.wrapperProps?.noTitle ? null :
-                <span slot="label">{formItemProps.label}</span>}
-            {inputComponent}
-            {
-              definition.description ? <div>{definition.description}</div> : null
-            }
-          </FormItemComponent>;
-      if (definition.span) {
-        item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
-      } else {
-        item = formItem;
-      }
+      item = this.renderDesktopComponent(inputComponent, FormItemComponent, item, ColComponent);
     } else if (platform === MOBILE) {
       if (!editable) {
-        if (type === TYPES.object) {
-          item = inputComponent;
-        } else {
-          item = createSimpleMobileFieldComponent(field.title,
-              inputComponent, field,
-              this.$createElement);
-        }
+        item = createSimpleMobileFieldComponent(field.title,
+            inputComponent, field,
+            this.$createElement);
       } else {
         item = inputComponent;
       }
@@ -443,6 +424,33 @@ export default class FormField extends mixins(Emitter) {
           staticStyle: style
         };
       }
+    }
+    return item;
+  }
+
+  private renderDesktopComponent(inputComponent, FormItemComponent: string, item, ColComponent: string) {
+    const {definition, field} = this;
+    const formItemProps = this.getFormItemProps();
+    const style = formItemProps.style;
+    const className = formItemProps.className;
+    delete formItemProps.style;
+    delete formItemProps.className;
+    const noWrap = !field.title;
+    const formItem = noWrap ? inputComponent :
+        <FormItemComponent attrs={Object.assign({}, formItemProps, {label: null})}
+                           class={className}
+                           style={style}>
+          {definition?.wrapperProps?.noTitle ? null :
+              <span slot="label">{formItemProps.label}</span>}
+          {inputComponent}
+          {
+            definition.description ? <div>{definition.description}</div> : null
+          }
+        </FormItemComponent>;
+    if (definition.span) {
+      item = <ColComponent span={definition.span}>{formItem}</ColComponent>;
+    } else {
+      item = formItem;
     }
     return item;
   }
