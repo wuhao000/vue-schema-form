@@ -1,4 +1,4 @@
-import {createSimpleMobileFieldComponent} from '@/schema-form/compatible';
+import {createSimpleMobileFieldComponent} from '../compatible';
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import {VNode} from 'vue';
