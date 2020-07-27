@@ -13,6 +13,7 @@
 </template>
 <script lang="tsx">
   import SchemaForm from '@/schema-form';
+  import {createVNode} from '@/views/demo/layout/util';
   import ShowValue from '@/views/demo/show-value';
   import {SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
@@ -35,9 +36,7 @@
           textbox1: {
             type: 'text-box',
             title: '文本串联',
-            layout: <span style="white-space: nowrap;display: flex;">%s
-              <a>元</a>
-            </span>,
+            layout: createVNode(this.$createElement),
             fields: {
               a: {
                 type: 'string',
