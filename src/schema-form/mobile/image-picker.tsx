@@ -1,5 +1,6 @@
 import '../../styles/image-picker.less';
 import '../../styles/mobile-image-picker.less';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import {SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -15,7 +16,7 @@ export default class MobileImagePicker extends Vue {
   public currentValue: Array<{ url: string }> = [];
   @Prop({type: Boolean, default: false})
   public multiple: boolean;
-  @Inject('store')
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 
   @Watch('value', {immediate: true})

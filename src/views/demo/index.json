@@ -50,6 +50,7 @@
     "demos": {
       "simple": "简单布局",
       "inline": "线性布局",
+      "text-box": "文本插值",
       "nested": "组合布局",
       "array": "数组"
     }

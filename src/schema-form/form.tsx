@@ -36,6 +36,8 @@ import {ASchemaForm, LibComponents} from './utils/utils';
 import { registerVant } from './vant';
 
 
+export const SCHEMA_FORM_STORE_INJECT_KEY = 'store';
+
 @Component({
   name: ASchemaForm
 })
@@ -81,7 +83,7 @@ export default class SchemaForm extends Vue {
   public inline: boolean;
   @Prop({type: Boolean, default: false})
   public sticky: boolean;
-  @Provide()
+  @Provide(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore = Vue.observable({
     fields: {},
     disabled: this.disabled,

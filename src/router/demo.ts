@@ -121,6 +121,10 @@ export default [{
   component: () => import('@/views/demo/layout/simple.vue'),
   meta: {tag: '布局', name: '简单布局'}
 }, {
+  path: 'layout/text-box',
+  component: () => import('@/views/demo/layout/text-box.vue'),
+  meta: {tag: '布局', name: '文本插值'}
+}, {
   path: 'subform/display',
   component: () => import('@/views/demo/subform/display.vue'),
   meta: {tag: '子表单', name: '详情'}

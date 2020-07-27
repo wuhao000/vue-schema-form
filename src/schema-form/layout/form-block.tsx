@@ -1,7 +1,9 @@
-import {LibComponents} from '../utils/utils';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
+import {SchemaFormStore} from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Inject, Prop} from 'vue-property-decorator';
+import {LibComponents} from '../utils/utils';
 import './form-block.less';
 
 @Component({
@@ -15,6 +17,8 @@ export default class FormBlock extends Vue {
   public removeText: string | VNode;
   @Prop(Number)
   public maxItems: number;
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
+  public store: SchemaFormStore;
 
   public render() {
     const IconComponent = LibComponents.icon;
@@ -26,30 +30,7 @@ export default class FormBlock extends Vue {
               <span>{index + 1}</span>
             </div>
             <div class="array-item-wrapper">{it}</div>
-            <div class="array-item-operator">
-              <div class="circle-btn"
-                   onClick={() => {
-                     this.$emit('remove', index);
-                   }}>
-                <LibComponents.icon type="delete"/>
-                <span class="op-name">{this.removeText}</span>
-              </div>
-              {this.$slots.default.length > 1 ? [
-                index !== this.$slots.default.length - 1 ? <div class="circle-btn"
-                                                                onClick={() => {
-                                                                  this.$emit('moveDown', index);
-                                                                }}>
-                  <IconComponent type={LibComponents.icons.down}/>
-                  <span class="op-name"/>
-                </div> : null,
-                index !== 0 ? <div class="circle-btn" onClick={() => {
-                  this.$emit('moveUp', index);
-                }}>
-                  <IconComponent type={LibComponents.icons.up}/>
-                  <span class="op-name"/>
-                </div> : null
-              ] : null}
-            </div>
+            {this.createOperators(index, IconComponent)}
             {index === this.$slots.default.length - 1 ? this.renderAddBtn() : null}
           </div>;
         }) : <d-empty description="" nativeOn={{
@@ -66,7 +47,40 @@ export default class FormBlock extends Vue {
     </div>;
   }
 
+  private createOperators(index: number, IconComponent: string) {
+    if (!this.store.editable) {
+      return;
+    }
+    return <div class="array-item-operator">
+      <div class="circle-btn"
+           onClick={() => {
+             this.$emit('remove', index);
+           }}>
+        <LibComponents.icon type="delete"/>
+        <span class="op-name">{this.removeText}</span>
+      </div>
+      {this.$slots.default.length > 1 ? [
+        index !== this.$slots.default.length - 1 ? <div class="circle-btn"
+                                                        onClick={() => {
+                                                          this.$emit('moveDown', index);
+                                                        }}>
+          <IconComponent type={LibComponents.icons.down}/>
+          <span class="op-name"/>
+        </div> : null,
+        index !== 0 ? <div class="circle-btn" onClick={() => {
+          this.$emit('moveUp', index);
+        }}>
+          <IconComponent type={LibComponents.icons.up}/>
+          <span class="op-name"/>
+        </div> : null
+      ] : null}
+    </div>;
+  }
+
   private renderAddBtn() {
+    if (!this.store.editable) {
+      return;
+    }
     if (this.maxItems && this.maxItems <= this.$slots.default.length) {
       return;
     }

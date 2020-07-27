@@ -1,3 +1,4 @@
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import {renderField} from './utils';
 import {SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
@@ -14,7 +15,7 @@ export default class FieldBasedComponent extends Vue {
   @Prop(Array)
   public pathPrefix: string[];
   public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
-  @Inject()
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {

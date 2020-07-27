@@ -1,4 +1,4 @@
-import {createSimpleMobileFieldComponent} from '@/schema-form/compatible';
+import {createSimpleMobileFieldComponent} from '../compatible';
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import {VNode} from 'vue';
@@ -27,6 +27,7 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
+import { SCHEMA_FORM_STORE_INJECT_KEY } from '../form';
 
 @Component({
   name: 'FormField'
@@ -53,7 +54,7 @@ export default class FormField extends mixins(Emitter) {
   public field: IField;
   @Prop(Array)
   public pathPrefix: string[];
-  @Inject()
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
   public currentValue: any = clone(this.value) || null;
 
