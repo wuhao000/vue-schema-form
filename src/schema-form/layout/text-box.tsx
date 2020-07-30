@@ -42,7 +42,6 @@ export default class TextBox extends BaseLayout {
       if (typeof this.layout === 'object') {
         this.visitVnode(this.layout, fields);
         if (!fields.length) {
-          console.log(this.layout);
           return this.layout;
         } else {
           array.push(this.layout);
