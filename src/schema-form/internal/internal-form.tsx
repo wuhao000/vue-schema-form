@@ -1,3 +1,4 @@
+import {getFormDefinition} from '@/views/demo/utils';
 import {clone, isEqual} from '../../uform/utils';
 import difference from 'lodash.difference';
 import {SchemaFormField} from 'v-schema-form-types';
@@ -58,20 +59,9 @@ class InternalForm extends mixins(FieldBasedComponent) {
   }
 
   @Watch('currentValue', {deep: true})
-  public currentValueChanged(currentValue: any) {
+  public currentValueChanged(currentValue: any, old) {
     this.$emit('input', currentValue);
     this.$emit('change', currentValue);
-  }
-
-  @Watch('definition')
-  public definitionChanged(this: any) {
-    const currentValue = this.currentValue;
-    const value = this.value;
-    if (this.definition.array) {
-      if (difference(currentValue as any[], value as any[])
-        .concat(difference(value as any[], currentValue as any[])).length > 0) {
-      }
-    }
   }
 
   @Watch('value', {

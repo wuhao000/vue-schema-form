@@ -1,4 +1,4 @@
-import InternalForm from '../internal/form';
+import InternalForm from '../internal/internal-form';
 import {addComponent, register, registerDisplay} from '../utils/register';
 import {DESKTOP, getOptions, MOBILE, TYPES} from '../utils/utils';
 import MobileDisplayField from './mobile-display-field';
