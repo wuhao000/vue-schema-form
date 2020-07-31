@@ -69,7 +69,8 @@
       "depends": "关联显示",
       "title": "修改标题",
       "dynamic": "动态表单",
-      "complex": "复杂对象"
+      "complex": "复杂对象",
+      "default-value": "默认值"
     }
   }
 }

@@ -141,6 +141,10 @@ export default [{
   component: () => import('@/views/demo/feature/complex.vue'),
   meta: {tag: '特性', name: '复杂对象'}
 }, {
+  path: 'feature/default-value',
+  component: () => import('@/views/demo/feature/default-value.vue'),
+  meta: {tag: '特性', name: '默认值'}
+}, {
   path: 'feature/depends',
   component: () => import('@/views/demo/feature/depends.vue'),
   meta: {tag: '特性', name: '关联显示'}

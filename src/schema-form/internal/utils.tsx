@@ -78,9 +78,6 @@ export function getComponentType(store: SchemaFormStore,
   } else {
     component = getComponent(store.platform, definition);
   }
-  if (component.component === 'empty') {
-    console.warn(`类型${definition.type}${definition.array ? '（数组）' : ''}没有对应的${store.editable ? '编辑' : '详情'}组件`);
-  }
   return component;
 }
 

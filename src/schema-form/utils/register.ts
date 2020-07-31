@@ -147,19 +147,26 @@ export const registerResponsiveComponent = (component: string | object,
   register(component, [MOBILE, DESKTOP], types, forArray, getProps);
 };
 
+export const MISSING_TYPES = [];
+
 function searchStore(mode: Mode,
                      platform: Platform,
                      definition: SchemaFormField): SchemaFormComponent {
   const type = definition.xType || definition.type;
   const typeDef = store[mode][platform][type];
   if (!typeDef) {
-    console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+    if (type && !MISSING_TYPES.includes(type)) {
+      console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+      MISSING_TYPES.push(type);
+    }
     return getEmptyDefinition(`<不支持的类型${type}>`);
   }
   if (definition.array) {
     const res = typeDef[1] || typeDef[0] || typeDef[2] || getEmptyDefinition('');
     if (res.component === Empty) {
-      console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+      if (type) {
+        console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
+      }
     }
     return res;
   } else {
