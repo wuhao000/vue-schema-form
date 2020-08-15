@@ -34,7 +34,8 @@ export enum TYPES {
   range = 'range',
   empty = 'empty',
   text = 'text',
-  object = 'object'
+  object = 'object',
+  plain = 'plain',
 }
 
 export const DESKTOP = 'desktop';

@@ -1,3 +1,4 @@
+import Plain from '@/schema-form/common/plain.vue';
 import {IField} from 'v-schema-form-types';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';
@@ -23,6 +24,7 @@ export function registerElement() {
   Vue.component('el-ext-select', ElExtSelect);
   Vue.component('el-ext-checkbox', ElExtCheckbox);
   Vue.component('el-ext-radio', ElExtRadio);
+  registerDesktop(Plain, [TYPES.plain], false);
   registerDesktop('el-transfer', TYPES.transfer, false, field => {
     const data = (field.enum || []).map(item => ({
       key: item.value,

@@ -1,15 +1,11 @@
-import {register, registerDesktop} from '../utils/register';
-import {
-  ComponentMap,
-  DESKTOP,
-  getOptions,
-  LibComponents, LibName,
-  TYPES
-} from '../utils/utils';
+import {registerMobile} from '@/schema-form/mobile/register';
 import {IField} from 'v-schema-form-types';
+import AntdUpload from '../antd/upload.vue';
+import Plain from '../common/plain.vue';
+import {register, registerDesktop} from '../utils/register';
+import {ComponentMap, DESKTOP, getOptions, LibComponents, LibName, TYPES} from '../utils/utils';
 import AntdButton from './button';
 import AntdUrlInput from './url';
-import AntdUpload from '../antd/upload.vue';
 
 export function registerAntd() {
   console.debug('注册Ant Design Vue表单组件');
@@ -19,6 +15,8 @@ export function registerAntd() {
   });
   LibComponents.confirm = window.aegis.AeModal.confirm;
   registerDesktop('d-range-picker', [TYPES.daterange], false);
+  registerDesktop(Plain, TYPES.plain, false);
+  registerMobile(Plain, TYPES.plain, false);
   registerDesktop('d-input', [TYPES.string], false);
   registerDesktop(AntdUrlInput, TYPES.url, false);
   registerDesktop('d-textarea', [TYPES.text], false);
