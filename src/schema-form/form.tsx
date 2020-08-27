@@ -37,6 +37,8 @@ import { registerVant } from './vant';
 
 
 export const SCHEMA_FORM_STORE_INJECT_KEY = 'store';
+export const SCHEMA_FIELD_INJECT_KEY = '_field';
+export const SCHEMA_FIELD_FORM_VALUE_INJECT_KEY = '_form_value';
 
 @Component({
   name: ASchemaForm
