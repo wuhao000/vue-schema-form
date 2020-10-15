@@ -1,6 +1,4 @@
-import {getFormDefinition} from '@/views/demo/utils';
 import {clone, isEqual} from '../../uform/utils';
-import difference from 'lodash.difference';
 import {SchemaFormField} from 'v-schema-form-types';
 import Component, {mixins} from 'vue-class-component';
 

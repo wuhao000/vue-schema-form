@@ -1,4 +1,4 @@
-import Plain from '@/schema-form/common/plain.vue';
+import Plain from '../common/plain.vue';
 import {IField} from 'v-schema-form-types';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';

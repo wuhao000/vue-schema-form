@@ -1,7 +1,7 @@
-import MobileDisplayField from '@/schema-form/display/mobile-display-field';
-import {registerMobile} from '@/schema-form/mobile/register';
-import {registerDisplay} from '@/schema-form/utils/register';
-import {ComponentMap, LibName, MOBILE, MobileLibComponents, TYPES} from '@/schema-form/utils/utils';
+import MobileDisplayField from '../display/mobile-display-field';
+import {registerMobile} from '../mobile/register';
+import {registerDisplay} from '../utils/register';
+import {ComponentMap, LibName, MOBILE, MobileLibComponents, TYPES} from '../utils/utils';
 import DatePicker from './date-picker.vue';
 import DateRange from './date-range.vue';
 

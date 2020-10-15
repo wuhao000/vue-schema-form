@@ -1,4 +1,4 @@
-import {getDefaultValue} from '@/schema-form/utils/utils';
+import {getDefaultValue} from './utils';
 import {IField} from 'v-schema-form-types';
 
 export function getStructValue(parentValue: object,

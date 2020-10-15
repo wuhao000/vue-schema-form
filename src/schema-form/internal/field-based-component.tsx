@@ -1,4 +1,4 @@
-import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '../form';
 import {renderField} from './utils';
 import {SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';

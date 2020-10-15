@@ -1,4 +1,4 @@
-import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '../form';
 import {EffectsContext, SchemaFormStore} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';

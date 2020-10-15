@@ -1,4 +1,4 @@
-import {registerMobile} from '@/schema-form/mobile/register';
+import {registerMobile} from '../mobile/register';
 import {IField} from 'v-schema-form-types';
 import AntdUpload from '../antd/upload.vue';
 import Plain from '../common/plain.vue';

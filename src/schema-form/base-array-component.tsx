@@ -1,4 +1,4 @@
-import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from './form';
 import {SchemaFormStore} from 'v-schema-form-types';
 import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 

@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content style="background: #f9f9f9;">
+  <a-layout class="demo-wrapper">
+    <a-layout-content style="background: #f9f9f9;">
       <v-schema-form v-model="value"
                      class="demo-form"
                      platform="mobile"
@@ -9,8 +9,8 @@
                      @cancel="onCancel"
                      @ok="onOk"
                      @reset="onReset"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/schema-form';
