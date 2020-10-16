@@ -90,14 +90,14 @@ export default class ArrayWrapper extends Vue {
     }
     return this.$slots.default && this.$slots.default.map((it, index) => {
       return <LibComponents.col span={this.cellSpan}>
-        <LibComponents.layout>
-          <LibComponents.content>
+        <ae-layout>
+          <ae-layout-content>
             {it}
-          </LibComponents.content>
-          <LibComponents.sider>
+          </ae-layout-content>
+          <ae-layout-sider>
             {this.renderDesktopDeleteBtn(index)}
-          </LibComponents.sider>
-        </LibComponents.layout>
+          </ae-layout-sider>
+        </ae-layout>
       </LibComponents.col>;
     });
   }

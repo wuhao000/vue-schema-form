@@ -6,6 +6,7 @@ module.exports = function(api) {
 
   return {
     presets: [
+      '@vue/app',
       [
         '@babel/preset-env',
         {
