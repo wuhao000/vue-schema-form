@@ -1,7 +1,6 @@
 const protocols = ['http', 'https'];
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
 
 @Component({
   name: 'UrlInput'

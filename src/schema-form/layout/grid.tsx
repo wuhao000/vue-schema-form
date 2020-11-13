@@ -1,6 +1,5 @@
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
 import {getFormItemComponent} from '../internal/utils';
 import {LibComponents, MOBILE} from '../utils/utils';
 import BaseLayout from './base-layout';

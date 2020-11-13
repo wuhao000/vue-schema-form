@@ -14,38 +14,31 @@
 </template>
 <script lang="ts">
   import demoRoutes from '@/router/demo';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {getCurrentInstance, ref} from 'vue';
 
-  @Component({
-    name: 'DemoNav'
-  })
-  export default class DemoNav extends Vue {
-    private groups: object = {};
-    public openKeys = [];
-
-    public created() {
+  export default {
+    name: 'DemoNav',
+    setup() {
       const groups = {};
+      const openKeys = ref([]);
       demoRoutes.forEach(route => {
         const key = route.meta && route.meta.tag || '其他';
         groups[key] = groups[key] || [];
         groups[key].push(route);
       });
-      this.groups = groups;
+      const onOpenChange = (keys) => {
+        const latestOpenKey = keys.find(key => openKeys.value.indexOf(key) === -1);
+        if (Object.keys(groups).indexOf(latestOpenKey) === -1) {
+          openKeys.value = keys;
+        } else {
+          openKeys.value = latestOpenKey ? [latestOpenKey] : [];
+        }
+      };
+      const {ctx} = getCurrentInstance();
+      const to = (path: string) => {
+        return (ctx.$router as any).push('/demo/' + path);
+      };
+      return {groups, onOpenChange, to};
     }
-
-    public onOpenChange(openKeys) {
-      const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
-      if (Object.keys(this.groups).indexOf(latestOpenKey) === -1) {
-        this.openKeys = openKeys;
-      } else {
-        this.openKeys = latestOpenKey ? [latestOpenKey] : [];
-      }
-    }
-
-    public to(path: string) {
-      return this.$router.push('/demo/' + path);
-    }
-
-  }
+  };
 </script>

@@ -1,22 +1,20 @@
 import '@/styles/github-markdown.less';
 import 'element-ui/lib/theme-chalk/index.css';
-import Vue from 'vue';
-import SchemaForm from './index';
+import {createApp} from 'vue';
 import router from './router';
 import store from './store';
 import './styles/index.less';
 import App from './views/index.vue';
+import plugins from '@/plugins';
 
-Vue.directive('hljs', el => {
-  const blocks = el.querySelectorAll('pre code');
-  blocks.forEach(block => {
-    hljs.highlightBlock(block);
-  });
-});
-
-SchemaForm.registerAntdMobile();
-new Vue({
-  store,
-  router,
-  render: h => h(App)
-}).$mount('#app');
+const app = createApp(App as any);
+app.use(store);
+app.use(plugins);
+// app.directive('hljs', el => {
+//   const blocks = el.querySelectorAll('pre code');
+//   blocks.forEach(block => {
+//     hljs.highlightBlock(block);
+//   });
+// });
+app.use(router);
+app.mount('#app');

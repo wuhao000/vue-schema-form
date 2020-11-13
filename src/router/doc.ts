@@ -1,4 +1,4 @@
-import {RouteConfig} from 'vue-router';
+import {RouteRecordRaw} from 'vue-router';
 
 export default [{
   path: 'api',
@@ -21,4 +21,4 @@ export default [{
 }, {
   path: 'types',
   component: () => import('../../generated/doc/types.vue')
-}] as RouteConfig[];
+}] as RouteRecordRaw[];

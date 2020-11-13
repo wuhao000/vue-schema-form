@@ -41,28 +41,29 @@
   </div>
 </template>
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Component, computed, getCurrentInstance} from 'vue';
 
-  @Component({
-    name: 'banner'
-  })
-  export default class Banner extends Vue {
-
-    get activeKey() {
-      if (this.$route.path === '/doc/changelog') {
-        return 'changelog';
-      }
-      if (this.$route.path) {
-        return this.$route.path.split('/').filter(it => it.length > 0)[0];
-      }
-      return 'doc';
+  export default {
+    name: 'Banner',
+    setup() {
+      const {ctx} = getCurrentInstance();
+      return {
+        activeKey: computed(() => {
+          const path = (ctx.$router as any).currentRoute.path;
+          if (path === '/doc/changelog') {
+            return 'changelog';
+          }
+          if (path) {
+            return path.split('/').filter(it => it.length > 0)[0];
+          }
+          return 'doc';
+        }),
+        toGithub: () => {
+          window.open('https://github.com/wuhao000/vue-schema-form');
+        }
+      };
     }
-
-    public toGithub() {
-      window.open('https://github.com/wuhao000/vue-schema-form');
-    }
-  }
+  } as Component;
 </script>
 <style scoped lang="less">
   .header-content {

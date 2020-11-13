@@ -1,19 +1,19 @@
 import DemoIndex from '@/views/demo/index.vue';
 import DemoNav from '@/views/demo/nav.vue';
-import VueRouter from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import demoRoutes from './demo';
 import docRoutes from './doc';
 
 
-export default new VueRouter({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(),
   routes: [{
     path: '/',
     redirect: '/doc/readme'
   }, {
     path: '/doc',
     components: {
-      default: DemoIndex,
+      default: DemoIndex as any,
       nav: () => import('@/doc/nav.vue')
     },
     children: docRoutes
@@ -21,8 +21,8 @@ export default new VueRouter({
     path: '/demo',
     name: 'demo',
     components: {
-      default: DemoIndex,
-      nav: DemoNav
+      default: DemoIndex as any,
+      nav: DemoNav as any
     },
     redirect: '/demo/element/simple',
     children: demoRoutes

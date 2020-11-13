@@ -3,7 +3,6 @@ import difference from 'lodash.difference';
 import {SchemaFormField} from 'v-schema-form-types';
 import Component, {mixins} from 'vue-class-component';
 
-import {Prop, Watch} from 'vue-property-decorator';
 import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
 import FieldBasedComponent from './field-based-component';
 import {getComponentType, getRealFields} from './utils';

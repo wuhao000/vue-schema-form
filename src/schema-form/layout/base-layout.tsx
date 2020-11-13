@@ -1,7 +1,6 @@
 import {SchemaFormStore} from '../internal/utils';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
-import {Inject, Prop} from 'vue-property-decorator';
 
 @Component({
   name: 'BaseLayout'

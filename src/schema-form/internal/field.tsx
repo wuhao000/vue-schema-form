@@ -2,7 +2,6 @@ import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField} from 'v-schema-form-types';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
-import {Inject, Prop, Watch} from 'vue-property-decorator';
 import Emitter from '../../mixins/emitter';
 import {clone, isEqual} from '../../uform/utils';
 import ArrayWrapper from '../array-wrapper';

@@ -3,7 +3,6 @@ import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBIL
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Inject, Prop, Watch} from 'vue-property-decorator';
 
 @Component({
   name: 'BaseArrayComponent'

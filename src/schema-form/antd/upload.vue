@@ -40,7 +40,6 @@
 </template>
 <script lang="ts">
   import Component from 'vue-class-component';
-  import {Prop} from 'vue-property-decorator';
   import BaseUpload from '../common/base-upload';
 
   export interface AntUploadFile {

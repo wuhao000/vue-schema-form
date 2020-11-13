@@ -17,16 +17,13 @@
 </template>
 <script lang="ts">
   import Banner from '@/views/banner.vue';
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
-
-  @Component({
+  import {Component} from 'vue';
+  export default {
     name: 'App',
-    components: {Banner}
-  })
-  export default class App extends Vue {
-
-  }
+    components: {Banner: Banner as any},
+    setup() {
+    }
+  } as Component;
 </script>
 <style lang="less">
   #app {
@@ -37,9 +34,11 @@
     width: 800px;
     margin: 60px auto 0;
   }
+
   .wrapper {
     padding: 15px;
   }
+
   .bg-white {
     background: white;
   }

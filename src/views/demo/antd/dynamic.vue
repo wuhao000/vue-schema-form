@@ -18,7 +18,6 @@
   import {EffectsContext, SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import {Prop, Watch} from 'vue-property-decorator';
   import ShowValue from '../show-value';
   import User from './visible-scope-input.vue';
 

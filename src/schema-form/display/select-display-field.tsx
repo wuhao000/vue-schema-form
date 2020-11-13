@@ -2,7 +2,6 @@ import {getOptions} from '../utils/utils';
 import {IField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
 
 @Component({
   name: 'SelectDisplayField'

@@ -2,7 +2,6 @@ import {renderField, SchemaFormStore} from './utils';
 import {SchemaFormField} from 'v-schema-form-types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Inject, Prop} from 'vue-property-decorator';
 
 @Component({
   name: 'FieldBasedComponent'

@@ -62,11 +62,9 @@ module.exports = {
         })
     );
     config.externals = {
-      'vue': 'Vue',
       'moment': 'moment',
       'highlight': 'hljs',
       'codemirror': 'CodeMirror',
-      'vue-router': 'VueRouter',
       'core-js': 'CoreJS'
     };
     if (analyze) {

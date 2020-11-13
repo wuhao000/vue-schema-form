@@ -2,12 +2,9 @@
   <router-view/>
 </template>
 <script lang="tsx">
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
+  import {Component} from '@vue/runtime-core';
 
-  @Component({
+  export default {
     name: 'DemoIndex'
-  })
-  export default class DemoIndex extends Vue {
-  }
+  } as Component;
 </script>

@@ -13,7 +13,6 @@ import {
 } from 'v-schema-form-types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
-import {Prop, Provide, Watch} from 'vue-property-decorator';
 import {IValidateResponse} from '../uform/types';
 import runValidation from '../uform/validator';
 import {registerAntd} from './antd/register';

@@ -1,31 +1,25 @@
-import {getPlatform} from '@/utils/util';
 import {getFormDefinition, getProps, getValue} from '@/views/demo/utils';
 
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Component, computed, ref} from 'vue';
 
-@Component({
-  name: 'Base'
-})
-export default class Base extends Vue {
+export default {
+  name: 'Base',
+  props: {
+    platform: {type: String, default: 'desktop'},
+    init: {type: Function}
+  },
+  setup() {
+    const props = getProps();
+    const value = ref(getValue());
+    const options = {
+      disabled: false,
+      loading: false,
+      readonly: false,
+      displayMode: false,
+      sticky: false,
+      mobile: false
+    };
 
-  @Prop({type: String, default: 'desktop'})
-  public platform: string;
-  @Prop(Function)
-  public init: () => any;
-  public props = getProps();
-  public value: any = getValue();
-  public options = {
-    disabled: false,
-    loading: false,
-    readonly: false,
-    displayMode: false,
-    sticky: false,
-    mobile: false
-  };
-
-  public created() {
     if (this.init) {
       this.init();
     }
@@ -41,42 +35,41 @@ export default class Base extends Vue {
     window.onresize = () => {
       console.log(window.outerHeight + '/' + window.outerWidth);
     };
+
+    const optionFormDefinition = {
+      title: '选项',
+      props: {
+        inline: true,
+        title: '选项'
+      },
+      fields: [{
+        title: '禁用', type: 'boolean', property: 'disabled'
+      }, {
+        title: '加载中', type: 'boolean', property: 'loading'
+      }, {
+        title: '详情模式', type: 'boolean', property: 'displayMode'
+      }, {
+        title: '固定模式', type: 'boolean', property: 'sticky'
+      }]
+    };
+    const definition = computed(() => {
+      return getFormDefinition();
+    });
+
+    const onOk = () => {
+      // @ts-ignore
+      this.$message.success('ok clicked');
+    };
+
+    const onReset = () => {
+      // @ts-ignore
+      this.$message.error('reset click');
+    };
+
+    const onCancel = () => {
+      // @ts-ignore
+      this.$message.warning('cancel clicked');
+    };
+    return {onCancel, onOk, onReset, definition}
   }
-
-  public optionFormDefinition = {
-    title: '选项',
-    props: {
-      inline: true,
-      title: '选项'
-    },
-    fields: [{
-      title: '禁用', type: 'boolean', property: 'disabled'
-    }, {
-      title: '加载中', type: 'boolean', property: 'loading'
-    }, {
-      title: '详情模式', type: 'boolean', property: 'displayMode'
-    }, {
-      title: '固定模式', type: 'boolean', property: 'sticky'
-    }]
-  };
-
-
-  get definition() {
-    return getFormDefinition();
-  }
-
-  public onOk() {
-    // @ts-ignore
-    this.$message.success('ok clicked');
-  }
-
-  public onReset() {
-    // @ts-ignore
-    this.$message.error('reset click');
-  }
-
-  public onCancel() {
-    // @ts-ignore
-    this.$message.warning('cancel clicked');
-  }
-}
+} as Component;
