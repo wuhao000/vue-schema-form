@@ -1,4 +1,4 @@
-import {IField, Platform, SchemaFormComponent, SchemaFormField, WrapType} from 'types';
+import {IField, Platform, SchemaFormComponent, SchemaFormField, WrapType} from '../../../types';
 import Empty, {createEmpty} from '../empty';
 import {DESKTOP, MOBILE, Mode} from './utils';
 

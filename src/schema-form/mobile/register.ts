@@ -1,4 +1,4 @@
-import {IField, Platform} from 'types';
+import {IField, Platform} from '../../../types';
 import StepperItem from '../mobile/stepper-item.vue';
 import {addComponent, register} from '../utils/register';
 import {ComponentMap, getOptions, LibName, MOBILE, MobileLibComponents, TYPES} from '../utils/utils';

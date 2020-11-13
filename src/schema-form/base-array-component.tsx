@@ -1,4 +1,4 @@
-import {SchemaFormStore} from 'types';
+import {SchemaFormStore} from '../../types';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -34,7 +34,7 @@ export default class BaseArrayComponent extends Vue {
   }
 
   @Watch('current')
-  public currentChanged(this: any, current: any[]) {
+  public currentChanged(current: any[]) {
     this.$emit('input', current);
     this.$emit('change', current);
   }
@@ -43,7 +43,7 @@ export default class BaseArrayComponent extends Vue {
     return true;
   }
 
-  public renderAddButton(this: any) {
+  public renderAddButton() {
     if (!this.store.editable) {
       return null;
     }
@@ -70,11 +70,11 @@ export default class BaseArrayComponent extends Vue {
     return <ColComponent span={this.cellSpan}>{button}</ColComponent>;
   }
 
-  public onAddClick(this: any) {
+  public onAddClick() {
     this.current.push(null);
   }
 
-  public render(this: any) {
+  public render() {
     const InputComponent = this.component;
     const RowComponent = getRowComponent();
     const ColComponent = getColComponent();
@@ -83,6 +83,7 @@ export default class BaseArrayComponent extends Vue {
         const input = <InputComponent
           attrs={Object.assign({arrayIndex: index}, this.$attrs)}
           onRemove={async (index) => {
+            // @ts-ignore
             await this.$mconfirm('确定删除此项吗?', '提示');
             this.current.splice(index, 1);
           }}

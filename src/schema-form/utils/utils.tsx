@@ -1,4 +1,4 @@
-import {IField, ILibComponents, Platform} from 'types';
+import {IField, ILibComponents, Platform} from '../../../types';
 
 export const ASchemaForm = 'ASchemaForm';
 

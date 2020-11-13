@@ -20,7 +20,7 @@
 <script lang="tsx">
   import SchemaForm from '@/index';
   import Base from '@/views/demo/base';
-  import {EffectsContext} from 'types';
+  import {EffectsContext} from '../../../../types';
   import Component from 'vue-class-component';
 
   SchemaForm.registerAntd();

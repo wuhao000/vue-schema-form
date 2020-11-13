@@ -30,7 +30,7 @@ export interface IValidateResponse {
   value: any;
 }
 
-export interface SchemaForm {
+export class SchemaForm {
   install: (Vue) => void;
   registerAntd: () => void;
   registerAntdMobile: () => void;

@@ -1,4 +1,4 @@
-import {IField} from 'types';
+import {IField} from '../../../types';
 import Vue from 'vue';
 import AntdUpload from '../antd/upload.vue';
 import Plain from '../common/plain.vue';

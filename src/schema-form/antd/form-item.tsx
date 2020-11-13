@@ -1,6 +1,6 @@
 import AsyncValidator from 'async-validator';
 import debounce from 'lodash.debounce';
-import {ValidateRule, ValidateRules} from 'types';
+import {ValidateRule, ValidateRules} from '../../../types';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Provide} from 'vue-property-decorator';
 import Emitter from '../../mixins/emitter';
@@ -38,7 +38,7 @@ export default class DFormItem extends mixins(Emitter) {
   @Prop({})
   public value: any;
 
-  get fieldValue(this: any) {
+  get fieldValue() {
     if (this.value !== null && this.value !== undefined) {
       return this.value;
     }
@@ -54,7 +54,7 @@ export default class DFormItem extends mixins(Emitter) {
     return getPropByPath(model, path, true).v;
   }
 
-  get isRequired(this: any) {
+  get isRequired() {
     if (this.required) {
       return this.required;
     } else {
@@ -62,7 +62,7 @@ export default class DFormItem extends mixins(Emitter) {
     }
   }
 
-  get labelCol(this: any) {
+  get labelCol() {
     let labelCol: any = {};
     if (this.$attrs['label-col']) {
       labelCol = this.$attrs['label-col'];
@@ -78,7 +78,7 @@ export default class DFormItem extends mixins(Emitter) {
     return labelCol;
   }
 
-  get labelStyle(this: any) {
+  get labelStyle() {
     const labelWidth = this.labelWidth ? this.labelWidth : (this.form && this.form.labelWidth);
     const style: any = {};
     if (labelWidth) {
@@ -88,7 +88,7 @@ export default class DFormItem extends mixins(Emitter) {
     return style;
   }
 
-  get wrapperCol(this: any) {
+  get wrapperCol() {
     let wrapperCol: any = {};
     if (this.$attrs['wrapper-col']) {
       wrapperCol = this.$attrs['wrapper-col'];
@@ -108,7 +108,7 @@ export default class DFormItem extends mixins(Emitter) {
     return wrapperCol;
   }
 
-  get wrapperStyle(this: any) {
+  get wrapperStyle() {
     const labelWidth = this.labelWidth ? this.labelWidth : (this.form && this.form.labelWidth);
     const style: any = {};
     if (labelWidth) {
@@ -160,7 +160,7 @@ export default class DFormItem extends mixins(Emitter) {
     }).map(rule => Object.assign({}, rule));
   }
 
-  public getRules(this: any): ValidateRule[] {
+  public getRules(): ValidateRule[] {
     let formRules: ValidateRules = this.form && this.form.rules;
     const selfRules = this.rules;
     const requiredRule = this.required !== undefined ? {required: this.required} : [];

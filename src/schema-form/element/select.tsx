@@ -6,7 +6,7 @@ export default {
     component() {
       return 'el-select';
     },
-    optionComponent(this: any) {
+    optionComponent() {
       return 'el-option';
     }
   }

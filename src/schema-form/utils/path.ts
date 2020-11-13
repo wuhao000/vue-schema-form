@@ -1,4 +1,4 @@
-import {IField, Paths, SchemaFormField} from 'types';
+import {IField, Paths, SchemaFormField} from '../../../types';
 
 const CACHE = {};
 

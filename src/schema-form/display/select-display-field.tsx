@@ -1,5 +1,5 @@
 import {getOptions} from '../utils/utils';
-import {IField} from 'types';
+import {IField} from '../../../types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';

@@ -1,5 +1,5 @@
 import {getDefaultValue} from './utils';
-import {IField} from 'types';
+import {IField} from '../../../types';
 
 export function getStructValue(parentValue: object,
                                struct: string | any[] | object,

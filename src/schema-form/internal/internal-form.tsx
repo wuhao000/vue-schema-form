@@ -1,5 +1,5 @@
 import {clone, isEqual} from '../../uform/utils';
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../types';
 import Component, {mixins} from 'vue-class-component';
 
 import {Prop, Watch} from 'vue-property-decorator';

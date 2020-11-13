@@ -1,5 +1,5 @@
 import Plain from '../common/plain.vue';
-import {IField} from 'types';
+import {IField} from '../../../types';
 import Vue from 'vue';
 import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';

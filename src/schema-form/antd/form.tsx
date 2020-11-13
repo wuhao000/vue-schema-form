@@ -1,4 +1,4 @@
-import {ValidateRules} from 'types';
+import {ValidateRules} from '../../../types';
 import classNames from 'classnames';
 import Vue from 'vue';
 import Component from 'vue-class-component';
