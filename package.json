@@ -3,6 +3,9 @@
   "version": "0.2.1",
   "private": false,
   "main": "src/index.ts",
+  "files": [
+    "src", "lib", "es", "types"
+  ],
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
