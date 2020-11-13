@@ -48,6 +48,8 @@ export default class DInput extends BaseFormComponent {
   public static Search: any;
 
   public static TextArea: any;
+
+  public static Password: any;
 }
 
 
@@ -59,6 +61,18 @@ class DInputGroup extends BaseFormComponent {
 
   public getInputComponent() {
     return 'a-input-group';
+  }
+
+}
+
+@Component({
+  name: 'DInputPassword',
+  inheritAttrs: false
+})
+class DInputPassword extends BaseFormComponent {
+
+  public getInputComponent() {
+    return 'a-input-password';
   }
 
 }
@@ -118,3 +132,5 @@ DInput.TextArea = DTextArea;
 DInput.Search = DInputSearch;
 
 DInput.Group = DInputGroup;
+
+DInput.Password = DInputPassword;

@@ -1,5 +1,5 @@
 import {MobileLibComponents, TYPES} from './utils/utils';
-import {IField} from 'v-schema-form-types';
+import {IField} from 'types';
 import {CreateElement, VNode} from 'vue';
 
 /**

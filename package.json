@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "0.2.0-1",
+  "version": "0.2.1",
   "private": false,
   "main": "src/index.ts",
   "scripts": {
@@ -82,10 +82,10 @@
     "regenerator-runtime": "^0.13.3",
     "ts-jest": "^24.1.0",
     "typescript": "^3.7.2",
-    "v-schema-form-types": "^1.0.23",
     "vue-class-component": "^7.1.0",
     "vue-jest": "^3.0.5",
     "vue-property-decorator": "^8.2.2",
     "vue-template-compiler": "^2.6.10"
-  }
+  },
+  "typings": "types/index.d.ts"
 }

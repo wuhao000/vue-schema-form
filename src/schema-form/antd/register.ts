@@ -1,4 +1,4 @@
-import {IField} from 'v-schema-form-types';
+import {IField} from 'types';
 import Vue from 'vue';
 import AntdUpload from '../antd/upload.vue';
 import Plain from '../common/plain.vue';
@@ -10,11 +10,12 @@ import Cascader from './cascader';
 import DatePicker from './date-picker';
 import Form from './form';
 import FormItem from './form-item';
+import DInput from './input';
 import Input from './input';
+import InputNumber from './input-number';
 import RangePicker from './range-picker';
 import Select from './select';
 import AntdUrlInput from './url';
-import InputNumber from './input-number';
 
 export function registerAntd() {
   console.debug('注册Ant Design Vue表单组件');
@@ -34,9 +35,8 @@ export function registerAntd() {
   registerMobile(Plain, TYPES.plain, false);
   registerDesktop(Input, [TYPES.string], false);
   registerDesktop(AntdUrlInput, TYPES.url, false);
-  registerDesktop(Input, [TYPES.text], false, () => {
-    return {type: 'textarea'};
-  });
+  registerDesktop(Input.TextArea, [TYPES.text], false);
+  registerDesktop(Input.Password, [TYPES.password], false);
   registerDesktop(InputNumber, [TYPES.double, TYPES.integer, TYPES.number], false);
   if (window.aegis) {
     LibComponents.confirm = window.aegis['AeModal'].confirm;

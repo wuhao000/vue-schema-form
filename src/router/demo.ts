@@ -153,6 +153,10 @@ export default [{
   component: () => import('@/views/demo/feature/dynamic.vue'),
   meta: {tag: '特性', name: '动态表单'}
 }, {
+  path: 'feature/login',
+  component: () => import('@/views/demo/feature/login.vue'),
+  meta: {tag: '特性', name: '登录框'}
+}, {
   path: 'feature/title',
   component: () => import('@/views/demo/feature/title.vue'),
   meta: {tag: '特性', name: '修改标题'}

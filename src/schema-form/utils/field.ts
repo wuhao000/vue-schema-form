@@ -1,4 +1,4 @@
-import {IField} from 'v-schema-form-types';
+import {IField} from 'types';
 import {setStructValue} from './destruct';
 
 export const setFieldValue = (parentValue: object, field: IField, v: any, vue) => {

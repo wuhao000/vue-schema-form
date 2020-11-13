@@ -1,4 +1,4 @@
-import {IField, ILibComponents, Platform} from 'v-schema-form-types';
+import {IField, ILibComponents, Platform} from 'types';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -34,6 +34,7 @@ export enum TYPES {
   range = 'range',
   empty = 'empty',
   text = 'text',
+  password = 'password',
   object = 'object',
   plain = 'plain',
 }

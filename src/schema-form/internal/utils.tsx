@@ -8,7 +8,7 @@ import {
   SchemaFormField,
   SchemaFormStore,
   ShowFieldCondition
-} from 'v-schema-form-types';
+} from 'types';
 import Vue from 'vue';
 import {clone, parseDestructPath, toArr} from '../../uform/utils';
 import {getStructValue} from '../utils/destruct';

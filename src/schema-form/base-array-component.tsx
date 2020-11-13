@@ -1,4 +1,4 @@
-import {SchemaFormStore} from 'v-schema-form-types';
+import {SchemaFormStore} from 'types';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';

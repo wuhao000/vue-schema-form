@@ -7,7 +7,7 @@
   </div>
 </template>
 <script lang="ts">
-  import {EffectsContext} from 'v-schema-form-types';
+  import {EffectsContext} from 'types';
   import Vue from 'vue';
   import SchemaForm from '../../../index';
 

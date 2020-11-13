@@ -10,7 +10,7 @@ import {
   Paths,
   Platform,
   SchemaFormField, SchemaFormStore
-} from 'v-schema-form-types';
+} from 'types';
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';

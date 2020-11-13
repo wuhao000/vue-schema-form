@@ -1,4 +1,4 @@
-import {IField} from 'v-schema-form-types';
+import {IField} from 'types';
 
 export interface IValidateResponse {
   errors: string[];

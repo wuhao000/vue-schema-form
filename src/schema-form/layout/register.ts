@@ -4,7 +4,7 @@ import GridLayout from './grid';
 import TextBox from './text-box';
 import {addComponent} from '../utils/register';
 import {DESKTOP, MOBILE} from '../utils/utils';
-import {IField, Platform} from 'v-schema-form-types';
+import {IField, Platform} from 'types';
 
 /**
  *

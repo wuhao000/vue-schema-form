@@ -17,7 +17,7 @@
 <script lang="tsx">
   import SchemaForm from '@/index';
   import {getProps} from '@/views/demo/utils';
-  import {SchemaFormField} from 'v-schema-form-types';
+  import {SchemaFormField} from 'types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

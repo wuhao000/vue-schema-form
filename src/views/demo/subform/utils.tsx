@@ -1,4 +1,4 @@
-import {SchemaFormField} from 'v-schema-form-types';
+import {SchemaFormField} from 'types';
 
 export const getSubFormValue = () => {
   return {

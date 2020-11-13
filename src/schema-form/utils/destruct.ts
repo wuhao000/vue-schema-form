@@ -1,5 +1,5 @@
 import {getDefaultValue} from './utils';
-import {IField} from 'v-schema-form-types';
+import {IField} from 'types';
 
 export function getStructValue(parentValue: object,
                                struct: string | any[] | object,

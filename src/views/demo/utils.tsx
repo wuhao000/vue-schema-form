@@ -1,5 +1,5 @@
 import {TYPES} from '@/schema-form/utils/utils';
-import {SchemaFormField} from 'v-schema-form-types';
+import {SchemaFormField} from 'types';
 
 export const options = [{
   label: '选项1',
