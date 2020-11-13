@@ -5,3 +5,8 @@ export function createVNode(h) {
     </span>
   );
 }
+
+const str = 'abc';
+if (str) {
+  console.log(1);
+}

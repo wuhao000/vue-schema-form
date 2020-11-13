@@ -1,10 +1,10 @@
-import {SCHEMA_FORM_STORE_INJECT_KEY} from './form';
 import {SchemaFormStore} from 'v-schema-form-types';
-import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from './form';
+import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, isNull, MOBILE} from './utils/utils';
 
 @Component({
   name: 'BaseArrayComponent'
@@ -24,7 +24,7 @@ export default class BaseArrayComponent extends Vue {
   public component: string;
   @Prop({type: Boolean, default: false})
   public disabled: boolean;
-  public current = this.value || [];
+  public current = isNull(this.value) ? [] : this.value;
   @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
 

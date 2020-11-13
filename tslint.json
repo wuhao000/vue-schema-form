@@ -10,6 +10,7 @@
         "jsx-double"
       ]
     },
+    "no-promise-as-boolean": true,
     "indent": true,
     "max-line-length": [
       true,

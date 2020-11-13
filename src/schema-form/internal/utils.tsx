@@ -308,3 +308,15 @@ export const filterErros = (errors: any[]) => {
   return errors.filter(it => Array.isArray(it) && it.length > 0).flat()
       .concat(errors.filter(it => typeof it === 'object' && !Array.isArray(it) && it !== null));
 };
+
+
+export function getCurrentValue(value, defaultValue) {
+  const cloneValue = clone(value);
+  if (cloneValue !== undefined && cloneValue !== null) {
+    return cloneValue;
+  }
+  if (defaultValue !== undefined) {
+    return defaultValue;
+  }
+  return null;
+}

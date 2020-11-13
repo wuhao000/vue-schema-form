@@ -1,7 +1,6 @@
 <template>
   <div style="width: 600px"
        class="bg-white">
-    {{ value }}
     <v-schema-form :schema="schema"
                    :effects="effects"
                    v-model="value"/>

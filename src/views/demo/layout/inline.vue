@@ -25,6 +25,7 @@
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
+  import {isNotNull} from '@/schema-form/utils/utils';
   import ShowValue from '@/views/demo/show-value';
   import {SchemaFormField} from 'v-schema-form-types';
   import Vue from 'vue';
@@ -74,7 +75,7 @@
               }
             },
             setValue: (parentValue, field, fieldValue: Date) => {
-              if (fieldValue) {
+              if (isNotNull(fieldValue)) {
                 parentValue.year = fieldValue.getFullYear();
                 parentValue.month = fieldValue.getMonth() + 1;
               }

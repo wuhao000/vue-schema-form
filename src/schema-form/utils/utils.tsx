@@ -264,3 +264,11 @@ export const getConfirmFunction = (platform: Platform) => {
   // @ts-ignore
   return platform === 'mobile' ? antdm.Modal.confirm : LibComponents.confirm;
 };
+
+export const isNull = (value: any) => {
+  return value === undefined || value === null;
+};
+
+export const isNotNull = (value: any) => {
+  return !isNull(value);
+};

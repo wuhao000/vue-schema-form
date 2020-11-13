@@ -42,6 +42,9 @@ const isNativeObject = (values: any): any => {
 };
 
 export const clone = (values: any, filter?: Filter) => {
+  if (values === null || values === undefined) {
+    return values;
+  }
   let nativeClone: (values: any) => any;
   if (Array.isArray(values)) {
     return values;

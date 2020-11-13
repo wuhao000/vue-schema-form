@@ -1,11 +1,10 @@
 import AsyncValidator from 'async-validator';
 import {IField, SchemaFormField, SchemaFormStore} from 'v-schema-form-types';
-import {IRuleDescription} from 'v-schema-form-types/types/uform/index';
 import {VNode} from 'vue';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Watch} from 'vue-property-decorator';
 import Emitter from '../../mixins/emitter';
-import {clone, isEqual} from '../../uform/utils';
+import {isEqual} from '../../uform/utils';
 import ArrayWrapper from '../array-wrapper';
 import {createSimpleMobileFieldComponent} from '../compatible';
 import {SCHEMA_FIELD_FORM_VALUE_INJECT_KEY, SCHEMA_FIELD_INJECT_KEY, SCHEMA_FORM_STORE_INJECT_KEY} from '../form';
@@ -23,16 +22,13 @@ import {
 } from '../utils/utils';
 import {
   getComponentType,
+  getCurrentValue,
   getFormItemComponent,
   getRealFields,
   matchCondition,
   renderField,
   SchemaFormEvents
 } from './utils';
-
-function getCurrentValue(value, defaultValue) {
-  return clone(value) || defaultValue || null;
-}
 
 @Component({
   name: 'FormField',
