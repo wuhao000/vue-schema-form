@@ -1,10 +1,13 @@
 {
   "name": "v-schema-form",
-  "version": "0.2.1",
+  "version": "0.2.1-0",
   "private": false,
   "main": "src/index.ts",
   "files": [
-    "src", "lib", "es", "types"
+    "src",
+    "lib",
+    "es",
+    "types"
   ],
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -21,17 +24,18 @@
     "aegis-ui-desktop": "^1.0.6-3",
     "antd-mobile": "^2.2.14",
     "antd-mobile-vue": "^0.3.10",
+    "async-validator": "^3.5.0",
     "classname": "0.0.0",
     "classnames": "^2.2.6",
     "core-js": "^2.6.5",
     "dot-match": "^0.1.22",
-    "rxjs": "^6.5.2",
     "js-beautify": "^1.10.2",
     "lodash.difference": "^4.5.0",
     "lodash.eq": "^4.0.0",
     "lodash.flatten": "^4.4.0",
     "lodash.get": "^4.4.2",
     "markdown-loader": "^5.1.0",
+    "rxjs": "^6.5.2",
     "scheduler": "^0.15.0",
     "trie-search": "^1.2.11",
     "uuid": "^3.3.3",

@@ -1,12 +1,13 @@
-import AsyncValidator, {ValidateRule, ValidateRules} from 'async-validator';
+import AsyncValidator from 'async-validator';
 import debounce from 'lodash.debounce';
+import {ValidateRule, ValidateRules} from 'types';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Provide} from 'vue-property-decorator';
 import Emitter from '../../mixins/emitter';
 import {getPropByPath, noop} from './utils';
 
 @Component({
-  name: 'DFormItem',
+  name: 'DFormItem'
 })
 export default class DFormItem extends mixins(Emitter) {
   public static componentName: 'ElFormItem';
