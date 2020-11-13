@@ -29,9 +29,11 @@ export default class TextBox extends BaseLayout {
         vnode.children = array;
       }
     } else {
-      vnode.children.forEach(item => {
-        this.visitVnode(item, fields, vnode);
-      });
+      if (vnode.children) {
+        vnode.children.forEach(item => {
+          this.visitVnode(item, fields, vnode);
+        });
+      }
     }
   }
 

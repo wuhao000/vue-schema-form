@@ -81,7 +81,7 @@
           editable: false,
           title: '总金额',
           description: '子表单金额的总和',
-          value: 0,
+          default: 0,
           type: 'number'
         }
       }

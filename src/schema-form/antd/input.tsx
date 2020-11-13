@@ -4,7 +4,6 @@ import {Prop} from 'vue-property-decorator';
 import BaseFormComponent from '../../mixins/base-input-component';
 import hasProp, {hasListener} from '../../utils/props-util';
 
-const Input: any = window.antd['Input'];
 @Component({
   name: 'DInput',
   inheritAttrs: false
@@ -15,7 +14,7 @@ export default class DInput extends BaseFormComponent {
 
 
   public getInputComponent() {
-    return Input;
+    return 'a-input';
   }
 
   public getInitValue() {
@@ -59,7 +58,7 @@ export default class DInput extends BaseFormComponent {
 class DInputGroup extends BaseFormComponent {
 
   public getInputComponent() {
-    return Input.Group;
+    return 'a-input-group';
   }
 
 }
@@ -75,7 +74,7 @@ class DInputSearch extends BaseFormComponent {
   public enterButton: any;
 
   public getInputComponent() {
-    return Input.Search;
+    return 'a-input-search';
   }
 
   public getSlots(): {} {
@@ -109,7 +108,7 @@ class DInputSearch extends BaseFormComponent {
 class DTextArea extends BaseFormComponent {
 
   public getInputComponent() {
-    return Input.TextArea;
+    return 'a-textarea';
   }
 
 }

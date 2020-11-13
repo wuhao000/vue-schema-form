@@ -6,7 +6,7 @@
             @preview="onPreview">
     <div v-if="listType === 'card' || listType === 'picture-card'"
          class="ant-upload-select-btn">
-      <d-icon size="lg"
+      <a-icon size="lg"
                type="plus"/>
       <div class="ant-upload-text">选择文件</div>
     </div>
@@ -17,7 +17,7 @@
            :src="fileList[0].thumbUrl"/>
       <div v-else
            class="ant-upload-plus">
-        <d-icon type="plus"></d-icon>
+        <a-icon type="plus"></a-icon>
       </div>
     </div>
     <a-button v-else-if="listType === 'text'"

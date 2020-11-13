@@ -4,8 +4,6 @@ import Component from 'vue-class-component';
 import {Prop, Provide} from 'vue-property-decorator';
 import OptionsBasedComponent from '../../mixins/options-based-component';
 import {getNodeText} from '../../utils/vnode';
-
-const Select = window.antd['Select'];
 /**
  * 选项较多的时候
  */
@@ -76,7 +74,7 @@ export default class DSelect extends OptionsBasedComponent {
   }
 
   public getInputComponent() {
-    return Select;
+    return 'a-select';
   }
 
   public getListeners(): {} {
@@ -145,9 +143,9 @@ export default class DSelect extends OptionsBasedComponent {
     }
   }
 
-  public static Option = Select.Option;
+  public static Option = 'a-select-option';
 
-  public static OptionGroup = Select['OptGroup'];
+  public static OptionGroup = 'a-select-option-group';
 
   private filterOptions() {
     const inputValue = this.store.inputValue;

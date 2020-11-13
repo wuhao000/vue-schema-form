@@ -5,7 +5,6 @@ import {Prop, Watch} from 'vue-property-decorator';
 import BaseFormComponent from '../../mixins/base-input-component';
 import RangePicker from './range-picker';
 
-const DatePicker = window.antd['DatePicker'];
 @Component({
   name: 'DDatePicker'
 })
@@ -57,11 +56,11 @@ export default class DDatePicker extends BaseFormComponent {
 
   public getInputComponent(): {} {
     if (this.mode === 'date' || this.mode === 'datetime') {
-      return DatePicker;
+      return 'a-date-picker';
     } else if (this.mode === 'month') {
-      return DatePicker['MonthPicker'];
+      return 'a-month-picker';
     } else if (this.mode === 'week') {
-      return DatePicker['WeekPicker'];
+      return 'a-week-picker';
     }
   }
 

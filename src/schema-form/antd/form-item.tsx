@@ -1,12 +1,9 @@
 import AsyncValidator, {ValidateRule, ValidateRules} from 'async-validator';
 import debounce from 'lodash.debounce';
-import Vue from 'vue';
 import Emitter from '../../mixins/emitter';
 import {getPropByPath, noop} from './utils';
 
-const Form = window.antd['Form'];
-
-export default Vue.extend({
+export default {
   name: 'DFormItem',
   mixins: [Emitter],
   componentName: 'ElFormItem',
@@ -211,9 +208,9 @@ export default Vue.extend({
     props.labelCol = this.labelCol;
     props.validateStatus = this.validateStatus || this.currentValidateStatus;
     props.wrapperCol = this.wrapperCol;
-    return <Form.Item props={props}
+    return <a-form-item props={props}
                       attrs={this.$attrs}>
       {this.$slots.default}
-    </Form.Item>;
+    </a-form-item>;
   }
-});
+};

@@ -9,7 +9,7 @@ import BaseFormComponent from '../../mixins/base-input-component';
 export default class DInputNumber extends BaseFormComponent {
 
   public getInputComponent() {
-    return window.antd['InputNumber'];
+    return 'a-input-number';
   }
 
 }

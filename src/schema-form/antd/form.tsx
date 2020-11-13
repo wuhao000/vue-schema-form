@@ -4,8 +4,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide} from 'vue-property-decorator';
 
-const Button = window.antd['Button'];
-
 @Component({
   name: 'DForm'
 })
@@ -25,7 +23,7 @@ export default class DForm extends Vue {
   @Prop({
     type: [Number, Object], default(this: any) {
       const layout = this.$options.propsData &&
-          this.$options.propsData.layout;
+        this.$options.propsData.layout;
       if (layout === 'horizontal') {
         return {
           xs: {span: 24},
@@ -66,7 +64,7 @@ export default class DForm extends Vue {
   @Prop({
     type: [Number, Object], default(this: any) {
       const layout = this.$options.propsData &&
-          this.$options.propsData.layout;
+        this.$options.propsData.layout;
       if (layout === 'horizontal') {
         return {
           xs: {span: 24},
@@ -102,10 +100,10 @@ export default class DForm extends Vue {
 
   public clearValidate(props = []) {
     const fields = props.length
-        ? (typeof props === 'string'
-                ? this.fields.filter(field => props === (field as any).prop)
-                : this.fields.filter(field => props.indexOf((field as any).prop) > -1)
-        ) : this.fields;
+      ? (typeof props === 'string'
+          ? this.fields.filter(field => props === (field as any).prop)
+          : this.fields.filter(field => props.indexOf((field as any).prop) > -1)
+      ) : this.fields;
     fields.forEach(field => {
       (field as any).clearValidate();
     });
@@ -191,10 +189,10 @@ export default class DForm extends Vue {
       [`${prefixCls}-hide-required-mark`]: hideRequiredMark
     });
     return (
-        <form onSubmit={onSubmit} class={formClassName}>
-          {$slots.default}
-          {this.renderButtons()}
-        </form>
+      <form onSubmit={onSubmit} class={formClassName}>
+        {$slots.default}
+        {this.renderButtons()}
+      </form>
     );
   }
 
@@ -211,18 +209,18 @@ export default class DForm extends Vue {
       return <div class={this.prefixCls + '-footer-btns'}>
         {
           // @ts-ignore
-          <Button onClick={(e) => {
+          <a-button onClick={(e) => {
             this.$emit('cancel', e);
-          }}>{this.cancelText}</Button>
+          }}>{this.cancelText}</a-button>
         }
         {
           // @ts-ignore
-          <Button
-              onClick={(e) => {
-                this.$emit('ok', e);
-              }}
-              type={'primary'}
-              style={{marginLeft: '8px'}}>{this.okText}</Button>
+          <a-button
+            onClick={(e) => {
+              this.$emit('ok', e);
+            }}
+            type={'primary'}
+            style={{marginLeft: '8px'}}>{this.okText}</a-button>
         }
       </div>;
     }

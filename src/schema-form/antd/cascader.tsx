@@ -2,7 +2,6 @@ import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 import BaseFormComponent from '../../mixins/base-input-component';
 
-
 @Component({
   name: 'DCascader',
   inheritAttrs: false
@@ -15,7 +14,7 @@ export default class DCascader extends BaseFormComponent {
   public static install: (Vue) => void;
 
   public getInputComponent() {
-    return window.antd['Cascader'];
+    return 'a-cascader';
   }
 
 }

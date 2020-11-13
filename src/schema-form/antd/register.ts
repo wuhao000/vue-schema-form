@@ -34,7 +34,7 @@ export function registerAntd() {
   registerMobile(Plain, TYPES.plain, false);
   registerDesktop(Input, [TYPES.string], false);
   registerDesktop(AntdUrlInput, TYPES.url, false);
-  registerDesktop(Input, [TYPES.text], false, definition => {
+  registerDesktop(Input, [TYPES.text], false, () => {
     return {type: 'textarea'};
   });
   registerDesktop(InputNumber, [TYPES.double, TYPES.integer, TYPES.number], false);
@@ -75,7 +75,9 @@ export function registerAntd() {
     Vue.component(FormItem.name, FormItem);
     Vue.component('d-form', Form);
     Vue.component('d-form-item', FormItem);
-    LibComponents.confirm = window.antd['Modal'].confirm;
+    if (window.antd) {
+      LibComponents.confirm = window.antd.Modal.confirm;
+    }
     registerDesktop('a-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
     registerDesktop('a-checkbox', TYPES.checkbox, false);
     registerDesktop('a-switch', TYPES.boolean);

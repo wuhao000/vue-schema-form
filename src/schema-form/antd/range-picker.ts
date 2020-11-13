@@ -4,7 +4,6 @@ import {Prop, Watch} from 'vue-property-decorator';
 import BaseFormComponent from '../../mixins/base-input-component';
 import moment from 'moment';
 
-const DatePicker = window.antd['DatePicker'];
 @Component({
   name: 'DRangePicker'
 })
@@ -35,7 +34,7 @@ export default class DRangePicker extends BaseFormComponent {
   }
 
   public getInputComponent(): {} {
-    return DatePicker.RangePicker;
+    return 'a-range-picker';
   }
 
   public getProps() {
