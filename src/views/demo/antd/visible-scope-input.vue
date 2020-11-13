@@ -1,6 +1,6 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <span v-if="display"
             v-text="content"></span>
       <d-form-item v-else-if="$attrs.title"
@@ -19,10 +19,10 @@
                :value="content"
                @click="showMemberSelect = true"/>
       <template v-else-if="selectType === 'button'">
-        <d-button v-text="btnText"
+        <a-button v-text="btnText"
                   type="primary"
                   @click="showMemberSelect = true">
-        </d-button>
+        </a-button>
         <div>
           <ul class="member-list">
             <li v-for="department in displayValue.departments"
@@ -49,8 +49,8 @@
           </ul>
         </div>
       </template>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import _ from 'lodash';

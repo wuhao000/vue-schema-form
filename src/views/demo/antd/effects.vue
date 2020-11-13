@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value3"
                      :effects="effects3"
                      :schema="definition3"/>
@@ -16,8 +16,8 @@
                      :actions="actions"
                      :effects="effects2"
                      :schema="schema2"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

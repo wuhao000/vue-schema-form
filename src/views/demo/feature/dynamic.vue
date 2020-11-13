@@ -5,7 +5,7 @@
                      v-model="value2"/>
     </div>
     <div>
-      <d-button @click="addField">添加</d-button>
+      <a-button @click="addField">添加</a-button>
     </div>
     <div>
       <v-schema-form :schema="schema"

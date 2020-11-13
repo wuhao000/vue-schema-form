@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="bg-whte">
-    <ae-layout-content class="demo-wrapper">
+  <a-layout class="bg-whte">
+    <a-layout-content class="demo-wrapper">
       <v-schema-form v-model="value"
                      :effects="effects"
                      :schema="schema"></v-schema-form>
@@ -8,8 +8,8 @@
                      :schema="schema2"></v-schema-form>
       <show-value :value="value"></show-value>
       <el-button @click="setValue">赋值</el-button>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';

@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="schema"
@@ -8,8 +8,8 @@
                      @ok="()=>{}"
                      @reset="()=>{}"></v-schema-form>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

@@ -1,14 +1,14 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form class="demo-form"
                      :schema="definition"
                      :props="props"
                      @ok="onOk"
                      @cancel="onCancel"
                      :value="value2"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

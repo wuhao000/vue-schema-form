@@ -1,6 +1,6 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <v-schema-form v-model="value2"
                      :effects="effects2"
                      :schema="schema2"
@@ -10,8 +10,8 @@
                      style="width: 800px"
                      :effects="effects"
                      :schema="schema"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';

@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="options"
                      :platform="platform"
                      :schema="optionFormDefinition"></v-schema-form>
@@ -17,8 +17,8 @@
                      @ok="onOk"
                      @reset="onReset"></v-schema-form>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import Base from '@/views/demo/base';

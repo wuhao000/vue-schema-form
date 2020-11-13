@@ -45,23 +45,23 @@ export const MOBILE = 'mobile';
 export const ComponentMap = {
   checkbox: {
     element: 'el-checkbox',
-    antd: 'd-checkbox',
+    antd: window.aegis ? 'd-checkbox' : 'a-checkbox',
     antdm: 'm-checkbox-item',
     vant: 'van-checkbox'
   },
   button: {
     element: 'el-button',
-    antd: 'd-button',
+    antd: window.aegis ? 'd-button' : 'a-button',
     antdm: 'm-button',
     vant: 'van-button'
   },
   row: {
     element: 'el-row',
-    antd: 'd-row'
+    antd: 'a-row'
   },
   col: {
     element: 'el-col',
-    antd: 'd-col'
+    antd: 'a-col'
   },
   form: {
     element: 'el-form',
@@ -81,27 +81,27 @@ export const ComponentMap = {
   },
   layout: {
     element: 'el-container',
-    antd: 'd-layout'
+    antd: 'a-layout'
   },
   header: {
     element: 'el-header',
-    antd: 'd-layout-header'
+    antd: 'a-layout-header'
   },
   footer: {
     element: 'el-footer',
-    antd: 'd-layout-footer'
+    antd: 'a-layout-footer'
   },
   sider: {
     element: 'el-aside',
-    antd: 'd-layout-sider'
+    antd: 'a-layout-sider'
   },
   content: {
     element: 'el-main',
-    antd: 'd-layout-content'
+    antd: 'a-layout-content'
   },
   icon: {
     element: 'el-ext-icon',
-    antd: 'd-icon'
+    antd: window.aegis ? 'd-icon' : 'a-icon'
   },
   popover: {
     element: 'el-popover',

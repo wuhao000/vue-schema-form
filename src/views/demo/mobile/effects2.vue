@@ -1,13 +1,13 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <v-schema-form v-model="value"
                      platform="mobile"
                      style="width: 800px"
                      :effects="effects"
                      :schema="schema"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import {EffectsContext} from 'v-schema-form-types';

@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :editable="false"
@@ -8,10 +8,10 @@
                      :schema="definition"
                      :effects="formProps.effects"
                      :props="props"></v-schema-form>
-      <d-button @click="setOptions">设置选项</d-button>
-      <d-button @click="setValue">设置值</d-button>
-    </ae-layout-content>
-  </ae-layout>
+      <a-button @click="setOptions">设置选项</a-button>
+      <a-button @click="setValue">设置值</a-button>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

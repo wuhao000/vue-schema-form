@@ -1,18 +1,18 @@
 <template>
-  <ae-layout class="bg-white" style="padding-bottom: 20px;">
-    <ae-layout-content>
-      <ae-layout-content class="demo-wrapper">
+  <a-layout class="bg-white" style="padding-bottom: 20px;">
+    <a-layout-content>
+      <a-layout-content class="demo-wrapper">
         <code v-html="md"
               class="markdown-body"></code>
-      </ae-layout-content>
+      </a-layout-content>
       <code-wrapper :code="code0" :md="md0">
         <demo0/>
       </code-wrapper>
 <code-wrapper :code="code1" :md="md1">
         <demo1/>
       </code-wrapper>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import CodeWrapper from '@/components/code-wrapper.vue';

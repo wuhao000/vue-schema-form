@@ -1,14 +1,14 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form class="demo-form"
                      :editable="false"
                      platform="mobile"
                      :schema="definition"
                      :props="props"
                      :value="value"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import Base from '@/views/demo/base';

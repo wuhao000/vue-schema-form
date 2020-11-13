@@ -6,8 +6,8 @@ import BaseButton from '../common/base-button';
 })
 export default class AntdButton extends BaseButton {
   public render() {
-    return <d-button attrs={this.$attrs}
+    return <a-button attrs={this.$attrs}
                      html-type="button"
-                     onClick={this.onClick}>{this.title}</d-button>;
+                     onClick={this.onClick}>{this.title}</a-button>;
   }
 }

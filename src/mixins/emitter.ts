@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 
 function broadcast(this: any, componentName, eventName, params) {
   this.$children.forEach(child => {
-    const name = child.$options.componentName;
+    const name = (child.$options as any).componentName;
     if (name === componentName) {
       child.$emit.apply(child, [eventName].concat(params));
     } else {
@@ -15,7 +15,7 @@ function broadcast(this: any, componentName, eventName, params) {
 @Component({
   name: 'Emitter'
 })
-export default class Emitter extends Vue {
+export default class EventEmitter extends Vue {
 
   public dispatch(componentName: string, eventName: any, params?: any[]) {
     let parent = this.$parent || this.$root;

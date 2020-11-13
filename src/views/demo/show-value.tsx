@@ -17,8 +17,8 @@ class ShowValue extends Vue {
 
   public render() {
     return <div>
-      <d-button onClick={this.showData}>查看数据</d-button>
-      <ae-modal hideCancel
+      <a-button onClick={this.showData}>查看数据</a-button>
+      <a-modal hideCancel
                 onOk={() => {
                   this.valueModalVisible = false;
                 }}
@@ -26,7 +26,7 @@ class ShowValue extends Vue {
         {this.valueModalVisible ? <pre>
           {this.getContent()}
         </pre> : null}
-      </ae-modal>
+      </a-modal>
     </div>;
   }
 

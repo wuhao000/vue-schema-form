@@ -7,19 +7,19 @@ import BaseUrl from '../common/url';
 export default class DUrlInput extends mixins(BaseUrl) {
   public render() {
     return <div class="ant-url-input">
-      <d-input-group compact={true}>
-        <d-select vModel={this.protocol}
+      <a-input-group compact={true}>
+        <a-select vModel={this.protocol}
                   placeholder="请选择"
                   disabled={this.disabled}
                   options={this.options}>
-        </d-select>
-        <d-input vModel={this.domain}
+        </a-select>
+        <a-input vModel={this.domain}
                  class="input-with-select"
                  placeholder="请输入内容"
                  style="display:inline-block;width: 50%"
                  disabled={this.disabled}>
-        </d-input>
-      </d-input-group>
+        </a-input>
+      </a-input-group>
     </div>;
   }
 }

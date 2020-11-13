@@ -3,7 +3,7 @@
     <v-schema-form :schema="schema"
                    platform="mobile"
                    :effects="effects"/>
-    <d-button @click="changeTitle">修改标题</d-button>
+    <a-button @click="changeTitle">修改标题</a-button>
   </div>
 </template>
 <script lang="ts">

@@ -1,8 +1,8 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
-      <ae-row>
-        <ae-col :span="12">
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
+      <a-row>
+        <a-col :span="12">
           <v-schema-form v-model="value2"
                          class="demo-form"
                          :actions="actions"
@@ -12,10 +12,10 @@
                          @cancel="onCancel"
                          @ok="onOk"
                          @reset="onReset"></v-schema-form>
-        </ae-col>
-      </ae-row>
-    </ae-layout-content>
-  </ae-layout>
+        </a-col>
+      </a-row>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

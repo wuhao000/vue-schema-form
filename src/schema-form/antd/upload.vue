@@ -20,9 +20,9 @@
         <d-icon type="plus"></d-icon>
       </div>
     </div>
-    <d-button v-else-if="listType === 'text'"
+    <a-button v-else-if="listType === 'text'"
               :disabled="$attrs.disabled">选择文件
-    </d-button>
+    </a-button>
     <slot/>
   </a-upload>
   <a-upload-dragger v-else

@@ -1,7 +1,7 @@
 <template>
-  <ae-layout class="bg-white wrapper">
-    <ae-layout-content>
-      <d-button @click="changeAge">修改年龄</d-button>
+  <a-layout class="bg-white wrapper">
+    <a-layout-content>
+      <a-button @click="changeAge">修改年龄</a-button>
       <v-schema-form v-model="value"
                      :schema="schema">
         <template slot="age"
@@ -12,8 +12,8 @@
           222
         </template>
       </v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';

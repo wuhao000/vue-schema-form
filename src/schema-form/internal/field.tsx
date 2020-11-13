@@ -63,6 +63,7 @@ export default class FormField extends mixins(Emitter) {
   public pathPrefix: string[];
   @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore;
+  // @ts-ignore
   public currentValue: any = getCurrentValue(this.value, this.definition.default);
 
   public renderField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {

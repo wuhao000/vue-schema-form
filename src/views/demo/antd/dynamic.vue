@@ -1,7 +1,7 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
-      <d-button @click="loadData">加载</d-button>
+  <a-layout>
+    <a-layout-content>
+      <a-button @click="loadData">加载</a-button>
       {{selValue}}
       <v-schema-form v-model="model"
                      :effects="effects"
@@ -15,8 +15,8 @@
         </d-form-item>
       </v-schema-form>
       <show-value :value="model"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/schema-form';

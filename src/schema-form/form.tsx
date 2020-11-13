@@ -88,13 +88,21 @@ export default class SchemaForm extends Vue {
   @Provide(SCHEMA_FORM_STORE_INJECT_KEY)
   public store: SchemaFormStore = Vue.observable({
     fields: {},
+    // @ts-ignore
     disabled: this.disabled,
+    // @ts-ignore
     loading: this.loading,
+    // @ts-ignore
     readonly: this.readonly,
+    // @ts-ignore
     platform: this.platform,
+    // @ts-ignore
     props: this.props,
+    // @ts-ignore
     effects: this.effects,
+    // @ts-ignore
     inline: this.inline,
+    // @ts-ignore
     editable: this.editable,
     context: null,
     root: this

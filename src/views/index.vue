@@ -1,19 +1,19 @@
 <template>
-  <ae-layout theme="light">
-    <ae-layout-header style="background: white;">
+  <a-layout theme="light">
+    <a-layout-header style="background: white;">
       <banner/>
-    </ae-layout-header>
-    <ae-layout>
-      <ae-layout-sider style="margin: 10px;overflow:auto;"
+    </a-layout-header>
+    <a-layout>
+      <a-layout-sider style="margin: 10px;overflow:auto;"
                        width="200px">
         <router-view name="nav"/>
-      </ae-layout-sider>
-      <ae-layout-content style="margin: 10px 10px 10px 0;">
+      </a-layout-sider>
+      <a-layout-content style="margin: 10px 10px 10px 0;">
         <router-view/>
-      </ae-layout-content>
-    </ae-layout>
-    <ae-layout-footer></ae-layout-footer>
-  </ae-layout>
+      </a-layout-content>
+    </a-layout>
+    <a-layout-footer></a-layout-footer>
+  </a-layout>
 </template>
 <script lang="ts">
   import Banner from '@/views/banner.vue';

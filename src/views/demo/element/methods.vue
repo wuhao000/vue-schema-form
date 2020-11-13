@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       {{value}}
       <v-schema-form v-model="value"
                      class="demo-form"
@@ -10,8 +10,8 @@
                      :props="props"
                      :schema="definition"></v-schema-form>
       <el-button @click="setValue">赋值</el-button>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

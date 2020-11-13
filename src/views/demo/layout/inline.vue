@@ -1,6 +1,6 @@
 <template>
-  <ae-layout class="bg-white wrapper">
-    <ae-layout-content>
+  <a-layout class="bg-white wrapper">
+    <a-layout-content>
       <v-schema-form :editable="editable"
                      :schema="schema"
                      :value="value"></v-schema-form>
@@ -8,7 +8,7 @@
                      class="m-b"
                      :schema="searchFormDefinition">
         <d-form-item slot="search">
-          <d-button>查询</d-button>
+          <a-button>查询</a-button>
         </d-form-item>
       </v-schema-form>
       <v-schema-form v-model="value2"
@@ -16,12 +16,12 @@
                      :schema="schema2">
 
       </v-schema-form>
-      <d-button @click="changeMode">
+      <a-button @click="changeMode">
         {{editable ? '详情' : '编辑'}}
-      </d-button>
+      </a-button>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';

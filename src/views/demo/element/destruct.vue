@@ -1,13 +1,13 @@
 <template>
-  <ae-layout>
-    <ae-layout-content>
+  <a-layout>
+    <a-layout-content>
       <v-schema-form v-model="value"
                      :effects="effects"
                      :schema="schema"
                      @ok="showValue"></v-schema-form>
       <show-value :value="value"/>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import {EffectsContext} from 'v-schema-form-types';

@@ -1,16 +1,16 @@
 <template>
-  <ae-layout class="demo-wrapper">
-    <ae-layout-content>
+  <a-layout class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form v-model="value"
                      class="demo-form"
                      :schema="definition"
                      :props="props"></v-schema-form>
-      <d-button @click="dialogVisible = true">查看数据</d-button>
-    </ae-layout-content>
-    <ae-modal v-model="dialogVisible">
+      <a-button @click="dialogVisible = true">查看数据</a-button>
+    </a-layout-content>
+    <a-modal v-model="dialogVisible">
       <pre>{{value}}</pre>
-    </ae-modal>
-  </ae-layout>
+    </a-modal>
+  </a-layout>
 </template>
 <script lang="tsx">
   import SchemaForm from '@/index';

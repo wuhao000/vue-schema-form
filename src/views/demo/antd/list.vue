@@ -1,13 +1,13 @@
 <template>
-  <ae-layout>
-    <ae-layout-content class="demo-wrapper">
+  <a-layout>
+    <a-layout-content class="demo-wrapper">
       <v-schema-form v-model="value"
                      class="demo-form"
                      :props="props"
                      :schema="schema"
                      @ok="onOk"></v-schema-form>
-    </ae-layout-content>
-  </ae-layout>
+    </a-layout-content>
+  </a-layout>
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
