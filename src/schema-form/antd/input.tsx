@@ -57,7 +57,7 @@ export default class DInput extends BaseFormComponent {
   name: 'DInputGroup',
   inheritAttrs: false
 })
-class DInputGroup extends BaseFormComponent {
+class DInputGroup extends DInput {
 
   public getInputComponent() {
     return 'a-input-group';
@@ -69,7 +69,7 @@ class DInputGroup extends BaseFormComponent {
   name: 'DInputPassword',
   inheritAttrs: false
 })
-class DInputPassword extends BaseFormComponent {
+class DInputPassword extends DInput {
 
   public getInputComponent() {
     return 'a-input-password';
@@ -82,7 +82,7 @@ class DInputPassword extends BaseFormComponent {
   name: 'DInputSearch',
   inheritAttrs: false
 })
-class DInputSearch extends BaseFormComponent {
+class DInputSearch extends DInput {
 
   @Prop({})
   public enterButton: any;
@@ -119,7 +119,7 @@ class DInputSearch extends BaseFormComponent {
   name: 'DTextarea',
   inheritAttrs: false
 })
-class DTextArea extends BaseFormComponent {
+class DTextArea extends DInput {
 
   public getInputComponent() {
     return 'a-textarea';
