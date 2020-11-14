@@ -286,7 +286,6 @@ export default class FormField extends mixins(Emitter) {
     // @ts-ignore
     return <InputFieldComponent
         props={props}
-        slots={slots}
         scopedSlots={scopedSlots}
         value={currentValue}
         class={className}

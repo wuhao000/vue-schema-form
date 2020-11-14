@@ -5,6 +5,7 @@ import Component from 'vue-class-component';
 import {Prop, Provide} from 'vue-property-decorator';
 
 @Component({
+  inheritAttrs: false,
   name: 'DForm'
 })
 export default class DForm extends Vue {

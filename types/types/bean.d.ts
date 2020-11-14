@@ -33,7 +33,7 @@ export interface SchemaFormField {
    * 枚举选项
    */
   enum?: any[];
-  events?: {[key:string]: (...args: any[]) => any};
+  events?: {[key: string]: (...args: any[]) => any};
   /**
    * 当字段类型为object时，子表单的字段列表
    */
@@ -50,7 +50,7 @@ export interface SchemaFormField {
    * 数值输入组件的最大值
    */
   max?: number;
-  nativeEvents?: {[key:string]: (...args: any[]) => any};
+  nativeEvents?: {[key: string]: (...args: any[]) => any};
   /**
    * 提示信息
    */

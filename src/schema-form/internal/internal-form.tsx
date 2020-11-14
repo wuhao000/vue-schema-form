@@ -8,6 +8,7 @@ import FieldBasedComponent from './field-based-component';
 import {getComponentType, getRealFields} from './utils';
 
 @Component({
+  inheritAttrs: false,
   name: 'InternalForm'
 })
 class InternalForm extends mixins(FieldBasedComponent) {

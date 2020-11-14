@@ -7,6 +7,7 @@ import BaseLayout from './base-layout';
 
 
 @Component({
+  inheritAttrs: false,
   name: 'GridLayout'
 })
 export default class GridLayout extends BaseLayout {
@@ -24,8 +25,8 @@ export default class GridLayout extends BaseLayout {
     return this.layout.some(it => Array.isArray(it));
   }
 
-  get containsNumber() {
-    return this.layout.some(it => typeof it === 'number');
+  get isMixed() {
+    return this.layout.some(it => typeof it === 'number') && this.layout.some(it => typeof it !== 'number');
   }
 
   public render() {
@@ -57,12 +58,12 @@ export default class GridLayout extends BaseLayout {
       return <FormItemComponent title={this.title}
                                 props={this.$attrs}
                                 label={this.title}>
-        {this.containsNumber ?
-            <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> : layoutFields}
+        {this.isMixed ?
+          <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> : layoutFields}
       </FormItemComponent>;
     }
-    return this.containsNumber ? <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> :
-        <div>{layoutFields}</div>;
+    return this.isMixed ? <LibComponents.row gutter={this.gutter}>{layoutFields}</LibComponents.row> :
+      <div>{layoutFields}</div>;
   }
 
   public toGroups(fields: VNode[], layout: Array<number | number[]>) {
