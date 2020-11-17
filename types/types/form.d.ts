@@ -18,7 +18,7 @@ export interface EffectsContext {
   trigger: (event: string, value?: any) => void;
   validate: (callback?: (errors: IValidateResponse[], context: EffectsContext) => any) => Promise<IValidateResponse[]>;
 
-  (...path: Paths): EffectsHandlers
+  (...path: Paths): EffectsHandlers;
 }
 
 export interface IValidateResponse {
@@ -31,11 +31,11 @@ export interface IValidateResponse {
 }
 
 export class SchemaForm {
-  install: (Vue) => void;
-  registerAntd: () => void;
-  registerAntdMobile: () => void;
-  registerElement: () => void;
-  register: (options: {
+  public static install: (Vue) => void;
+  public static registerAntd: () => void;
+  public static registerAntdMobile: () => void;
+  public static registerElement: () => void;
+  public static register: (options: {
     component: string | object,
     platforms: Platform | Platform[],
     types: string | string[],
@@ -45,27 +45,27 @@ export class SchemaForm {
     layout?: boolean,
     wrap?: WrapType
   }) => void;
-  registerResponsiveComponent: (component: string | object,
-                                types: string | string[],
-                                forArray?: boolean,
-                                getProps?: ((definition: IField, platform: Platform) => object)) => void;
-  registerComponent: (component: string | object,
-                      platforms: Platform | Platform[],
-                      types: string | string[],
-                      forArray?: boolean,
-                      getProps?: ((definition: IField, platform: Platform) => object)) => void;
-  registerLayout: (options: {
+  public static registerResponsiveComponent: (component: string | object,
+                                              types: string | string[],
+                                              forArray?: boolean,
+                                              getProps?: ((definition: IField, platform: Platform) => object)) => void;
+  public static registerComponent: (component: string | object,
+                                    platforms: Platform | Platform[],
+                                    types: string | string[],
+                                    forArray?: boolean,
+                                    getProps?: ((definition: IField, platform: Platform) => object)) => void;
+  public static registerLayout: (options: {
     component: string | object,
     platforms: Platform | Platform[],
     types: string | string[],
     getProps?: ((definition: IField, platform: Platform) => object)
   }) => void;
-  registerDisplayComponent: (component: string | object,
-                             platforms: Platform | Platform[],
-                             types: string | string[],
-                             forArray?: boolean,
-                             getProps?: ((definition: IField, platform: Platform) => object),
-                             layout?: boolean) => void;
+  public static registerDisplayComponent: (component: string | object,
+                                           platforms: Platform | Platform[],
+                                           types: string | string[],
+                                           forArray?: boolean,
+                                           getProps?: ((definition: IField, platform: Platform) => object),
+                                           layout?: boolean) => void;
 }
 
 export type ValidateHandler = (response: IValidateResponse[]) => void;
