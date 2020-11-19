@@ -37,6 +37,7 @@ export enum TYPES {
   password = 'password',
   object = 'object',
   plain = 'plain',
+  timerange = 'timerange',
 }
 
 export const DESKTOP = 'desktop';
@@ -261,9 +262,8 @@ export function addRule(rules: any, field: IField, rule: any) {
   rules.push(rule);
 }
 
-export const getConfirmFunction = (platform: Platform) => {
-  // @ts-ignore
-  return platform === 'mobile' ? antdm.Modal.confirm : LibComponents.confirm;
+export const getConfirmFunction = (platform: Platform): ((...args: any[]) => any) => {
+  return platform === 'mobile' ? antdm['Modal'].confirm : LibComponents.confirm;
 };
 
 export const isNull = (value: any) => {

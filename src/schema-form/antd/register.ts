@@ -1,5 +1,5 @@
-import {IField} from '../../../types';
 import Vue from 'vue';
+import {AntdRegisterOptions, IField} from '../../../types';
 import AntdUpload from '../antd/upload.vue';
 import Plain from '../common/plain.vue';
 import {registerMobile} from '../mobile/register';
@@ -10,14 +10,15 @@ import Cascader from './cascader';
 import DatePicker from './date-picker';
 import Form from './form';
 import FormItem from './form-item';
-import DInput from './input';
 import Input from './input';
 import InputNumber from './input-number';
+import TimePicker from './time-picker';
+import TimeRangePicker from './time-range-picker.vue';
 import RangePicker from './range-picker';
 import Select from './select';
 import AntdUrlInput from './url';
 
-export function registerAntd() {
+export function registerAntd(options?: AntdRegisterOptions) {
   console.debug('注册Ant Design Vue表单组件');
   LibName.desktop = 'antd';
   Object.keys(ComponentMap).forEach(key => {
@@ -38,6 +39,8 @@ export function registerAntd() {
   registerDesktop(Input.TextArea, [TYPES.text], false);
   registerDesktop(Input.Password, [TYPES.password], false);
   registerDesktop(InputNumber, [TYPES.double, TYPES.integer, TYPES.number], false);
+  registerDesktop(TimePicker, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
+  registerDesktop(TimeRangePicker, [TYPES.timerange]);
   if (window.aegis) {
     LibComponents.confirm = window.aegis['AeModal'].confirm;
     registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
@@ -75,10 +78,11 @@ export function registerAntd() {
     Vue.component(FormItem.name, FormItem);
     Vue.component('d-form', Form);
     Vue.component('d-form-item', FormItem);
-    if (window.antd) {
-      LibComponents.confirm = window.antd.Modal.confirm;
+    if (options) {
+      LibComponents.confirm = options.confirm;
+    } else if (window.antd) {
+      LibComponents.confirm = window.antd['Modal'].confirm;
     }
-    registerDesktop('a-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
     registerDesktop('a-checkbox', TYPES.checkbox, false);
     registerDesktop('a-switch', TYPES.boolean);
     registerDesktop('a-checkbox-group', TYPES.expandSelect, true, field => {

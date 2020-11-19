@@ -1,8 +1,8 @@
 import AsyncValidator from 'async-validator';
 import debounce from 'lodash.debounce';
-import {ValidateRule, ValidateRules} from '../../../types';
 import Component, {mixins} from 'vue-class-component';
 import {Inject, Prop, Provide} from 'vue-property-decorator';
+import {ValidateRule, ValidateRules} from '../../../types';
 import Emitter from '../../mixins/emitter';
 import {getPropByPath, noop} from './utils';
 
@@ -17,7 +17,11 @@ export default class DFormItem extends mixins(Emitter) {
   @Inject({from: 'form', default: () => undefined})
   public form: any;
   @Provide('formItem')
-  public formItem = this;
+  public formItem = {
+    ...this.$props,
+    ...this.$data,
+    validate: this.validate
+  };
   @Prop({type: Boolean, default: false})
   public hasFeedback: boolean;
   @Prop({type: String})
@@ -117,13 +121,13 @@ export default class DFormItem extends mixins(Emitter) {
     return style;
   }
 
-  public beforeDestroy(this: any) {
+  public beforeDestroy() {
     if (this.prop) {
       this.dispatch('DForm', 'd.form.removeField', [this]);
     }
   }
 
-  public created(this: any) {
+  public created() {
     if (this.prop) {
       this.dispatch('DForm', 'd.form.addField', [this]);
       this.$on('d.form-item.setControl', (control) => {
@@ -140,13 +144,13 @@ export default class DFormItem extends mixins(Emitter) {
     this.validate = debounce(this.validate, 300);
   }
 
-  public focus(this: any) {
+  public focus() {
     if (this.control && this.control.focus.bind(this.control).bind(this.control).bind(this.control).bind(this.control).bind(this.control)) {
       this.control.focus();
     }
   }
 
-  public getFilteredRule(this: any, trigger) {
+  public getFilteredRule(trigger) {
     const rules = this.getRules();
     return rules.filter(rule => {
       if (!rule.trigger || trigger === '') {
@@ -169,11 +173,11 @@ export default class DFormItem extends mixins(Emitter) {
     return [].concat(selfRules || formRules || []).concat(requiredRule);
   }
 
-  public onFieldBlur(this: any) {
+  public onFieldBlur() {
     this.validate('blur');
   }
 
-  public onFieldChange(this: any) {
+  public onFieldChange() {
     if (this.validateDisabled) {
       this.validateDisabled = false;
       return;
@@ -181,7 +185,7 @@ export default class DFormItem extends mixins(Emitter) {
     this.validate('change');
   }
 
-  public render(this: any) {
+  public render() {
     const props = Object.assign({}, this.$props);
     if (this.$slots.label) {
       props.label = this.$slots.label;
@@ -196,7 +200,7 @@ export default class DFormItem extends mixins(Emitter) {
     </a-form-item>;
   }
 
-  public validate(this: any, trigger, callback = noop) {
+  public validate(trigger, callback = noop) {
     this.$nextTick(() => {
       this.validateDisabled = false;
       const rules = this.getFilteredRule(trigger);

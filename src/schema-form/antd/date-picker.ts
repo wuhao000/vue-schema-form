@@ -1,4 +1,4 @@
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
+import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';

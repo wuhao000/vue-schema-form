@@ -1,4 +1,4 @@
-import {noop} from 'ant-design-vue/es/_util/vue-types/utils';
+import {noop} from 'ant-design-vue/lib/_util/vue-types/utils';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide} from 'vue-property-decorator';

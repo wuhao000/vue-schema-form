@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "0.2.1-4",
+  "version": "0.2.1-5",
   "private": false,
   "main": "src/index.ts",
   "files": [
@@ -46,7 +46,6 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@ant-design/icons": "^2.1.1",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-typescript": "^7.6.0",
@@ -64,9 +63,10 @@
     "@vue/cli-plugin-typescript": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "ant-design-vue": "^1.6.4",
+    "ant-design-vue": "^1.7.2",
     "axios": "^0.19.0",
     "babel-jest": "^24.9.0",
+    "babel-plugin-import": "^1.13.1",
     "babel-plugin-requirejs": "^7.7.2",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",

@@ -1,13 +1,13 @@
-import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
+import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN';
 import Component from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
+import {Model, Prop, Watch} from 'vue-property-decorator';
 import BaseFormComponent from '../../mixins/base-input-component';
 import moment from 'moment';
 
-@Component({
-  name: 'DRangePicker'
-})
-export default class DRangePicker extends BaseFormComponent {
+@Component
+export default class DDateRangePicker extends BaseFormComponent {
+  @Model('change')
+  public value: any;
   @Prop({type: Object, default: () => locale})
   public locale: object;
   @Prop({type: String, default: 'zh'})

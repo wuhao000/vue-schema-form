@@ -30,9 +30,13 @@ export interface IValidateResponse {
   value: any;
 }
 
+export interface AntdRegisterOptions {
+  confirm: (...args: any[]) => any;
+}
+
 export class SchemaForm {
   public static install: (Vue) => void;
-  public static registerAntd: () => void;
+  public static registerAntd: (options?: AntdRegisterOptions) => void;
   public static registerAntdMobile: () => void;
   public static registerElement: () => void;
   public static register: (options: {
@@ -128,7 +132,7 @@ export interface ILibComponents {
   alert: string;
   button: string;
   col: string;
-  confirm: string;
+  confirm: (...args: any[]) => any;
   content: string;
   footer: string;
   form: string;

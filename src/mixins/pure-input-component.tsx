@@ -2,6 +2,7 @@ import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {mixins} from 'vue-class-component/lib/util';
 import {Prop, Watch} from 'vue-property-decorator';
+import {isNotNull} from '../schema-form/utils/utils';
 import hasProp, {hasListener} from '../utils/props-util';
 import Emitter from './emitter';
 
@@ -141,11 +142,12 @@ export default class PureInputComponent extends mixins(Emitter) {
   }
 
   public handleChange(value) {
-    if (value !== null && value !== undefined && value.toString() === '[object InputEvent]') {
+    if (isNotNull(value) && value.toString() === '[object InputEvent]') {
       return;
     }
     const comp: any = this.getInputComponent();
-    if (comp.model && comp.model.prop === 'value' && comp.model.event === 'change') {
+    if (comp.model && comp.model.prop === 'value' && comp.model.event === 'change'
+      || comp === 'a-time-picker') {
       this.stateValue = value;
     }
   }

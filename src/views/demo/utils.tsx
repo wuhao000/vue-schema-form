@@ -90,6 +90,16 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     type: 'datetime'
   },
+  time: {
+    title: '时间',
+    required: true,
+    type: 'time'
+  },
+  timerange: {
+    title: '时间范围',
+    required: true,
+    type: 'timerange'
+  },
   month: {
     title: '月份',
     required: true,

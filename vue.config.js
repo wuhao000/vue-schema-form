@@ -25,6 +25,7 @@ module.exports = {
   },
   runtimeCompiler: false,
   configureWebpack: (config) => {
+    // config.entry = path.resolve('src/index.ts');
     if (config.devServer) {
       config.devServer.port = 8021;
     } else {
@@ -32,7 +33,6 @@ module.exports = {
         port: 8021
       };
     }
-    config.resolve.alias['@ant-design/icons/lib/dist'] = path.resolve(__dirname, './src/icons.ts');
     config.module.rules.push({
       test: /\.md$/,
       use: [
@@ -52,6 +52,7 @@ module.exports = {
         { loader: 'decoded-text-loader' }
       ]
     });
+    config.resolve.alias['@ant-design/icons/lib/dist'] = path.resolve(__dirname, './src/icons.ts');
     config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
     config.plugins.push(
         new CompressionWebpackPlugin({
