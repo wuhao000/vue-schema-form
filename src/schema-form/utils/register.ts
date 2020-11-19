@@ -1,4 +1,4 @@
-import {IField, Platform, SchemaFormComponent, SchemaFormField, WrapType} from '../../../types';
+import {IField, Platform, SchemaFormComponent, SchemaFormComponentOptions, SchemaFormField} from '../../../types';
 import Empty, {createEmpty} from '../empty';
 import {DESKTOP, MOBILE, Mode} from './utils';
 
@@ -52,52 +52,37 @@ export const register = (component: string | object,
     component, platforms, types, forArray, getProps, forDisplay: false, layout: false
   });
 };
-const DEFAULT_OPTIONS = {
-  forDisplay: false
-};
-export const addComponent = (options: {
-  component: string | object,
-  platforms: Platform | Platform[],
-  types: string | string[],
-  forDisplay: boolean,
-  layout?: boolean,
-  forArray?: boolean,
-  getProps?: (definition: IField, platform: Platform) => object,
-  wrap?: WrapType
-}) => {
 
+export const addComponent = (options: SchemaFormComponentOptions) => {
+  const finalOptions = {
+    component: options.component,
+    wrap: options.wrap,
+    layout: options.layout,
+    forArray: options.forArray !== undefined ? options.forArray : null,
+    platforms: options.platforms,
+    modelEvent: options.modelEvent
+  };
   if (Array.isArray(options.types)) {
     options.types.forEach(type => {
-      addComponent({
-        component: options.component, platforms: options.platforms,
-        types: type, forArray: options.forArray, getProps: options.getProps,
+      addComponent(Object.assign(finalOptions, {
+        types: type,
+        getProps: options.getProps,
         forDisplay: options.forDisplay,
-        layout: options.layout,
-        wrap: options.wrap
-      });
+      }));
     });
   } else if (Array.isArray(options.platforms)) {
     options.platforms.forEach(platform => {
-      addComponent({
-        component: options.component,
+      addComponent(Object.assign(finalOptions, {
         platforms: platform,
         types: options.types,
-        forArray: options.forArray, getProps: options.getProps,
+        getProps: options.getProps,
         forDisplay: options.forDisplay,
-        layout: options.layout,
-        wrap: options.wrap
-      });
+      }));
     });
   } else {
-    const forArray = options.forArray !== undefined ? options.forArray : null;
     const getProps = options.getProps || (() => ({}));
-    const def: SchemaFormComponent = {
-      component: options.component,
-      platform: options.platforms,
+    const def: SchemaFormComponent = Object.assign(finalOptions, {
       type: options.types,
-      wrap: options.wrap,
-      forArray,
-      layout: options.layout,
       getProps: (field: IField) => {
         const props: any = getProps(field, options.platforms as any) || {};
         if (field.title && options.platforms === MOBILE && !props.labelNumber) {
@@ -108,15 +93,15 @@ export const addComponent = (options: {
         }
         return props;
       }
-    };
+    });
     const mode = options.forDisplay ? 'display' : 'edit';
     const typeDef = store[mode][options.platforms];
     if (!typeDef[options.types]) {
       typeDef[options.types] = {};
     }
-    if (forArray) {
+    if (def.forArray) {
       typeDef[options.types][1] = def;
-    } else if (forArray === false) {
+    } else if (def.forArray === false) {
       typeDef[options.types][2] = def;
     } else {
       typeDef[options.types][0] = def;
@@ -133,6 +118,7 @@ export const addComponent = (options: {
     }
   }
 };
+
 export const registerDesktop = (component: string | object,
                                 types: string | string[],
                                 forArray: boolean = null,

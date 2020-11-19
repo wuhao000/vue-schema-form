@@ -119,6 +119,7 @@ export interface SchemaFormComponent {
   platform: Platform;
   type: string;
   wrap?: WrapType;
+  modelEvent?: string;
 }
 
 
@@ -216,4 +217,18 @@ export interface IField<V = any> {
   visible?: boolean;
 }
 
+
+export interface SchemaFormComponentOptions {
+  component: string | object;
+  platforms: Platform | Platform[];
+  types: string | string[];
+  forDisplay: boolean;
+  layout?: boolean;
+  forArray?: boolean;
+  getProps?: (definition: IField, platform: Platform) => object;
+  wrap?: WrapType;
+  modelEvent?: string;
+}
+
 export type Actions = Action[];
+

@@ -530,6 +530,11 @@ export default class FormField extends mixins(Emitter) {
   }
 
   public onChange(value) {
+    if (this.component.modelEvent === 'change') {
+      this.onInput(value);
+    } else {
+      this.$emit('change', value);
+    }
   }
 
   get error() {

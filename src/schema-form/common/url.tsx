@@ -1,7 +1,9 @@
 const protocols = ['http', 'https'];
+import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
+import {Inject, Prop, Watch} from 'vue-property-decorator';
+import {SchemaFormStore} from '../../../types';
 
 @Component({
   name: 'UrlInput'
@@ -15,6 +17,8 @@ export default class UrlInput extends Vue {
   public value: string;
   public domain = '';
   public protocol = 'https';
+  @Inject(SCHEMA_FORM_STORE_INJECT_KEY)
+  public store: SchemaFormStore;
 
   get current() {
     return (this.protocol ? this.protocol + '://' : '') + (this.domain ? this.domain : '');

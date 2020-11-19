@@ -35,6 +35,7 @@ export const getValue = () => {
     time: window.moment(),
     select: 1,
     multiSelect: [1, 3],
+    timerange: [],
     expandSelect: 2,
     expandMultiSelect: [2, 3],
     subForm: {

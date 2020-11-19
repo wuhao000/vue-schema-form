@@ -11,16 +11,12 @@ class ValueField extends Vue {
   public value: any;
   private highlight: boolean = false;
 
-  @Watch('value')
+  @Watch('value', {deep: true})
   public valueChanged(value, old) {
-    if (value !== old) {
-      this.highlight = true;
-      setTimeout(() => {
-        this.highlight = false;
-      }, 800);
-    } else {
+    this.highlight = true;
+    setTimeout(() => {
       this.highlight = false;
-    }
+    }, 800);
   }
 
   get highlightStyle() {

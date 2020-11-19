@@ -3,7 +3,7 @@ import {AntdRegisterOptions, IField} from '../../../types';
 import AntdUpload from '../antd/upload.vue';
 import Plain from '../common/plain.vue';
 import {registerMobile} from '../mobile/register';
-import {register, registerDesktop} from '../utils/register';
+import {addComponent, register, registerDesktop} from '../utils/register';
 import {ComponentMap, DESKTOP, getOptions, LibComponents, LibName, TYPES} from '../utils/utils';
 import AntdButton from './button';
 import Cascader from './cascader';
@@ -12,10 +12,10 @@ import Form from './form';
 import FormItem from './form-item';
 import Input from './input';
 import InputNumber from './input-number';
-import TimePicker from './time-picker';
-import TimeRangePicker from './time-range-picker.vue';
 import RangePicker from './range-picker';
 import Select from './select';
+import TimePicker from './time-picker';
+import TimeRangePicker from './time-range-picker.vue';
 import AntdUrlInput from './url';
 
 export function registerAntd(options?: AntdRegisterOptions) {
@@ -40,7 +40,14 @@ export function registerAntd(options?: AntdRegisterOptions) {
   registerDesktop(Input.Password, [TYPES.password], false);
   registerDesktop(InputNumber, [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop(TimePicker, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  registerDesktop(TimeRangePicker, [TYPES.timerange], false);
+  addComponent({
+    component: TimeRangePicker,
+    platforms: 'desktop',
+    types: [TYPES.timerange],
+    forArray: false,
+    modelEvent: 'change'
+  });
+  registerDesktop();
   if (window.aegis) {
     LibComponents.confirm = window.aegis['AeModal'].confirm;
     registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
@@ -84,7 +91,13 @@ export function registerAntd(options?: AntdRegisterOptions) {
       LibComponents.confirm = window.antd['Modal'].confirm;
     }
     registerDesktop('a-checkbox', TYPES.checkbox, false);
-    registerDesktop('a-switch', TYPES.boolean);
+    addComponent({
+      component: 'a-switch',
+      platforms: 'desktop',
+      types: TYPES.boolean,
+      forArray: false,
+      modelEvent: 'change'
+    });
     registerDesktop('a-checkbox-group', TYPES.expandSelect, true, field => {
       return {options: getOptions(field), multiple: true};
     });
