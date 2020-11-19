@@ -83,6 +83,7 @@ export const addComponent = (options: SchemaFormComponentOptions) => {
     const getProps = options.getProps || (() => ({}));
     const def: SchemaFormComponent = Object.assign(finalOptions, {
       type: options.types,
+      platform: options.platforms,
       getProps: (field: IField) => {
         const props: any = getProps(field, options.platforms as any) || {};
         if (field.title && options.platforms === MOBILE && !props.labelNumber) {

@@ -42,12 +42,12 @@ export function registerAntd(options?: AntdRegisterOptions) {
   registerDesktop(TimePicker, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
   addComponent({
     component: TimeRangePicker,
+    forDisplay: false,
     platforms: 'desktop',
     types: [TYPES.timerange],
     forArray: false,
     modelEvent: 'change'
   });
-  registerDesktop();
   if (window.aegis) {
     LibComponents.confirm = window.aegis['AeModal'].confirm;
     registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
@@ -93,6 +93,7 @@ export function registerAntd(options?: AntdRegisterOptions) {
     registerDesktop('a-checkbox', TYPES.checkbox, false);
     addComponent({
       component: 'a-switch',
+      forDisplay: false,
       platforms: 'desktop',
       types: TYPES.boolean,
       forArray: false,

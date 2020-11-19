@@ -5,7 +5,7 @@ import {Prop} from 'vue-property-decorator';
 @Component({
   name: 'Card'
 })
-export default class Card extends mixins(BaseLayout) {
+export default class LayoutCard extends mixins(BaseLayout) {
 
   @Prop({type: [String, Object]})
   public title: string | object;

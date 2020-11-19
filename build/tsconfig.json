@@ -39,7 +39,8 @@
   },
   "include": [
     "*.ts",
-    "../types/api-generate.d.ts"
+    "../types/api-generate.d.ts",
+    "../node_modules/@types/node/globals.d.ts"
   ]
 }
 

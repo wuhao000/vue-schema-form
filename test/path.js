@@ -1,4 +1,8 @@
-const splits = ['a', 'b', 'c', 'd'];
-const last = ['a', 'b', 'c', 'd', 'e'];
-splits.splice(splits.length - last.length, last.length, ...last);
-console.log(splits);
+const a = '  import a from \'@/a/b/c\';';
+const b = '  import a from \'@/a/b/c\'';
+
+const reg = /.*import .* from.*'(@\/.*)';?/;
+if (reg.test(a)) {
+  const r = a.match(reg);
+  const path = r[1];
+}
