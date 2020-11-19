@@ -40,7 +40,7 @@ export function registerAntd(options?: AntdRegisterOptions) {
   registerDesktop(Input.Password, [TYPES.password], false);
   registerDesktop(InputNumber, [TYPES.double, TYPES.integer, TYPES.number], false);
   registerDesktop(TimePicker, [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
-  registerDesktop(TimeRangePicker, [TYPES.timerange]);
+  registerDesktop(TimeRangePicker, [TYPES.timerange], false);
   if (window.aegis) {
     LibComponents.confirm = window.aegis['AeModal'].confirm;
     registerDesktop('d-time-picker', [TYPES.time], false, (definition: IField) => ({mode: definition.type.toLowerCase()}));
