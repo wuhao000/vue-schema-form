@@ -27,7 +27,7 @@
   import SchemaForm from '@/schema-form';
   import {isNotNull} from '@/schema-form/utils/utils';
   import ShowValue from '@/views/demo/show-value';
-  import {SchemaFormField} from 'types';
+  import {SchemaFormField} from '../../../../types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

@@ -1,4 +1,4 @@
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../../types';
 
 export const getSubFormValue = () => {
   return {

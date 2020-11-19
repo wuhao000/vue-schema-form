@@ -35,6 +35,14 @@ export default class DTimePicker extends BaseFormComponent {
     return value;
   }
 
+  public handleChange(value) {
+    if (isNotNull(value) && value.toString() === '[object InputEvent]') {
+      return;
+    }
+    this.$emit('change', value);
+    this.stateValue = value;
+  }
+
   public getInputComponent(): {} {
     return 'a-time-picker';
   }

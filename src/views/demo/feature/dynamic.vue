@@ -17,7 +17,7 @@
 <script lang="tsx">
 import SchemaForm from '@/index';
 import Vue from 'vue';
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../../types';
 
 SchemaForm.registerDisplayComponent(
     {

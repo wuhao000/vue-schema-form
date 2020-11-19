@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
   import SchemaForm from '@/index';
-  import {EffectsContext} from 'types';
+  import {EffectsContext} from '../../../../types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
 

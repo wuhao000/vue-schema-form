@@ -1,5 +1,5 @@
 import {TYPES} from '@/schema-form/utils/utils';
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../types';
 
 export const options = [{
   label: '选项1',
@@ -110,6 +110,10 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     type: 'select',
     props: {options, clearable: true}
+  },
+  boolean: {
+    title: '布尔',
+    type: 'boolean'
   },
   image: {
     title: '图片',

@@ -38,6 +38,7 @@ export default class DInput extends BaseFormComponent {
     if (typeof value !== 'object' && typeof value !== 'function') {
       const comp: any = this.getInputComponent();
       if (comp.model && comp.model.prop === 'value' && comp.model.event === 'change') {
+        this.$emit('change', value);
         this.stateValue = value;
       }
     }

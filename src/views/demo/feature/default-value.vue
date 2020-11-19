@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
 import SchemaForm from '@/index';
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../../types';
 
 export const familyInfoFields: SchemaFormField[] = [{
   property: 'name',

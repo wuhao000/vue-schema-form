@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import SchemaForm from '@/index';
-import {EffectsContext} from 'types';
+import {EffectsContext} from '../../../../types';
 import Vue from 'vue';
 
 export default Vue.extend({

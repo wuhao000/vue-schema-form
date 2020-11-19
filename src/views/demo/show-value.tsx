@@ -1,7 +1,61 @@
 import beautify from 'js-beautify';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Prop, Watch} from 'vue-property-decorator';
+
+@Component
+class ValueField extends Vue {
+  @Prop()
+  public name: string;
+  @Prop()
+  public value: any;
+  private highlight: boolean = false;
+
+  @Watch('value')
+  public valueChanged(value, old) {
+    if (value !== old) {
+      this.highlight = true;
+      setTimeout(() => {
+        this.highlight = false;
+      }, 800);
+    } else {
+      this.highlight = false;
+    }
+  }
+
+  get highlightStyle() {
+    if (this.highlight) {
+      return {
+        backgroundColor: 'red',
+        color: 'white',
+        fontSize: '120%',
+        fontWeight: 'bold'
+      };
+    }
+    return {};
+  }
+
+  public render() {
+    return (
+      <div style={{height: '38px', marginBottom: '20px'}}>
+        <span>{this.name}</span>: {this.renderValue()}
+      </div>
+    );
+  }
+
+  private renderValue() {
+    if (Array.isArray(this.value)) {
+      return this.value.map(item => {
+        if (typeof item === 'object') {
+          // @ts-ignore
+          return <ShowValue value={item} modal={false}/>;
+        }
+        return <span style={this.highlightStyle}>{item?.toString()}</span>;
+      });
+    }
+    return <span style={this.highlightStyle}>{this.value?.toString()}</span>;
+  }
+}
 
 @Component({
   name: 'ShowValue'
@@ -9,6 +63,8 @@ import {Prop} from 'vue-property-decorator';
 class ShowValue extends Vue {
   @Prop()
   public value: any;
+  @Prop({type: Boolean, default: true})
+  public modal: boolean;
   public valueModalVisible = false;
 
   public showData(this: any) {
@@ -16,17 +72,27 @@ class ShowValue extends Vue {
   }
 
   public render() {
-    return <div>
-      <a-button onClick={this.showData}>查看数据</a-button>
-      <a-modal hideCancel
-                onOk={() => {
-                  this.valueModalVisible = false;
-                }}
-                vModel={this.valueModalVisible}>
-        {this.valueModalVisible ? <pre>
+    if (this.modal) {
+      return <div>
+        <a-button onClick={this.showData}>查看数据</a-button>
+        <a-modal hideCancel
+                 onOk={() => {
+                   this.valueModalVisible = false;
+                 }}
+                 vModel={this.valueModalVisible}>
+        <pre>
           {this.getContent()}
-        </pre> : null}
-      </a-modal>
+        </pre>
+        </a-modal>
+      </div>;
+    }
+    return <div>
+      {
+        Object.keys(this.value).map(key => (
+          // @ts-ignore
+          <ValueField name={key} value={this.value[key]}/>
+        ))
+      }
     </div>;
   }
 

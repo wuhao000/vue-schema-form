@@ -1,4 +1,4 @@
-import {IField} from 'types';
+import {IField} from '../../../types';
 import {IValidateResponse, ValidateHandler} from '../types';
 import {clone, each, format, isArr, isEmpty, isEqual, isFn, reduce, toArr} from './utils';
 import {validate} from './validators';

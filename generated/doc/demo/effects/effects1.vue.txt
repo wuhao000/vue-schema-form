@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
   import SchemaForm from '@/schema-form';
-  import {EffectsContext} from 'types';
+  import {EffectsContext} from '../../../../types';
 
   export default {
     name: 'DemoEffects1',

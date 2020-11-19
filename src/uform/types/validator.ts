@@ -1,4 +1,4 @@
-import {IField} from 'types';
+import {IField} from '../../../types';
 
 export interface IValidateResponse {
   errors: string[];

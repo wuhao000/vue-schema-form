@@ -1,3 +1,4 @@
+import {isNotNull} from '../utils/utils';
 import {noop} from 'ant-design-vue/lib/_util/vue-types/utils';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
@@ -98,6 +99,14 @@ export default class DSelect extends OptionsBasedComponent {
       return this.filter(inputValue, Object.assign({text}, option.componentOptions.propsData));
     }
     return true;
+  }
+
+  public handleChange(value) {
+    if (isNotNull(value) && value.toString() === '[object InputEvent]') {
+      return;
+    }
+    this.$emit('change', value);
+    this.stateValue = value;
   }
 
   public getProps(): {} {

@@ -22,7 +22,7 @@
 </template>
 <script lang="ts">
 import {registerAntd} from '@/schema-form/antd/register';
-import {SchemaFormField} from 'types';
+import {SchemaFormField} from '../../../../types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 

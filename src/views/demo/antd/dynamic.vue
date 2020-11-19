@@ -21,7 +21,7 @@
 <script lang="tsx">
   import SchemaForm from '@/schema-form';
   import {DESKTOP} from '@/schema-form/utils/utils';
-  import {EffectsContext, SchemaFormField} from 'types';
+  import {EffectsContext, SchemaFormField} from '../../../../types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import {Prop, Watch} from 'vue-property-decorator';

@@ -88,7 +88,6 @@ export default class PureInputComponent extends mixins(Emitter) {
     if (hasProp(this, 'value')) {
       this.$emit('input', val);
     }
-    this.$emit('change', val);
     this.dispatch('DFormItem', 'd.form.change', [val]);
   }
 
@@ -146,8 +145,8 @@ export default class PureInputComponent extends mixins(Emitter) {
       return;
     }
     const comp: any = this.getInputComponent();
-    if (comp.model && comp.model.prop === 'value' && comp.model.event === 'change'
-      || comp === 'a-time-picker') {
+    this.$emit('change', value);
+    if (comp.model && comp.model.prop === 'value' && comp.model.event === 'change') {
       this.stateValue = value;
     }
   }
@@ -166,6 +165,7 @@ export default class PureInputComponent extends mixins(Emitter) {
       val = value.target.value;
     }
     this.$emit('input', val);
+    this.$emit('change', val);
     if (!(hasProp(this, 'value') && hasListener(this, 'input'))) {
       this.stateValue = val;
     }

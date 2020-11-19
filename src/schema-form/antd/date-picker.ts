@@ -1,3 +1,4 @@
+import {isNotNull} from '../utils/utils';
 import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 import Component from 'vue-class-component';
@@ -73,6 +74,13 @@ export default class DDatePicker extends BaseFormComponent {
     };
   }
 
+  public handleChange(value) {
+    if (isNotNull(value) && value.toString() === '[object InputEvent]') {
+      return;
+    }
+    this.$emit('change', value);
+    this.stateValue = value;
+  }
 
   @Watch('value')
   public valueChanged(value: any) {

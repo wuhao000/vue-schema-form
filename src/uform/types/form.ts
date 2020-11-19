@@ -1,4 +1,4 @@
-import {IField} from 'types';
+import {IField} from '../../../types';
 import {IFieldState} from './field';
 import {Path} from './path';
 import {ISchema} from './schema';

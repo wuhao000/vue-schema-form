@@ -10,7 +10,7 @@
   </a-layout>
 </template>
 <script lang="ts">
-  import {EffectsContext} from 'types';
+  import {EffectsContext} from '../../../../types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import SchemaForm from '../../../schema-form';

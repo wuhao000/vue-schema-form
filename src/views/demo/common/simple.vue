@@ -23,7 +23,7 @@
 <script lang="ts">
   import Base from '@/views/demo/base';
   import ShowValue from '@/views/demo/show-value';
-  import {FormDescriptor, SchemaFormField} from 'types';
+  import {FormDescriptor, SchemaFormField} from '../../../../types';
   import Component from 'vue-class-component';
 
   const def: { [key: string]: SchemaFormField } = {
