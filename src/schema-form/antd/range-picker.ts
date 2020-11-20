@@ -3,7 +3,7 @@ import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 import Component from 'vue-class-component';
 import {Model, Prop, Watch} from 'vue-property-decorator';
-import BaseFormComponent from '../../mixins/base-input-component';
+import BaseFormComponent from '../mixins/base-input-component';
 
 @Component
 export default class DDateRangePicker extends BaseFormComponent {

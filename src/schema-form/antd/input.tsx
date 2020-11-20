@@ -1,8 +1,8 @@
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
-import BaseFormComponent from '../../mixins/base-input-component';
-import hasProp, {hasListener} from '../../utils/props-util';
+import BaseFormComponent from '../mixins/base-input-component';
+import hasProp, {hasListener} from '../utils/props-util';
 
 @Component({
   name: 'DInput',

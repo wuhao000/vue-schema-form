@@ -16,7 +16,7 @@
 <script lang="tsx">
   import Component from 'vue-class-component';
   import {Model, Prop, Watch} from 'vue-property-decorator';
-  import BaseFormComponent from '../../mixins/base-input-component';
+  import BaseFormComponent from '../mixins/base-input-component';
   import TimePicker from './time-picker';
 
   @Component({

@@ -2,7 +2,7 @@ import locale from 'ant-design-vue/lib/time-picker/locale/zh_CN';
 import moment, {Moment} from 'moment';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import BaseFormComponent from '../../mixins/base-input-component';
+import BaseFormComponent from '../mixins/base-input-component';
 import {isNotNull, isNull} from '../utils/utils';
 
 @Component

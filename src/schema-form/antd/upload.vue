@@ -38,7 +38,7 @@
     </div>
   </a-upload-dragger>
 </template>
-<script lang="ts">
+<script lang="tsx">
   import Component from 'vue-class-component';
   import {Prop} from 'vue-property-decorator';
   import BaseUpload from '../common/base-upload';

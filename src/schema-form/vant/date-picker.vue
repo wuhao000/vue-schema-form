@@ -39,45 +39,46 @@
     },
     computed: {
       displayValue(this: any) {
-        if (this.type === 'year-month') {
-          if (!this.value) {
-            return '';
-          }
-          if (this.value instanceof Date) {
-            const year = this.value.getFullYear();
-            const month = this.value.getMonth() + 1;
-            return year + '-' + (month < 10 ? ('0' + month) : month);
-          }
-        }
-        return dateToString(this.value, this.type);
-      },
-      listeners() {
-        const result = {};
-        Object.keys(this.$listeners).forEach(event => {
-          if (event !== 'input') {
-            result[event] = this.$listeners[event];
-          }
-        });
-        return result;
+    if (this.type === 'year-month') {
+      if (!this.value) {
+        return '';
       }
-    },
-    methods: {
-      toggle() {
-        this.popupVisible = !this.popupVisible;
-      },
-      onInput(value) {
-        this.currentValue = value;
-      },
-      cancel() {
-        this.currentValue = this.value;
-        this.popupVisible = false;
-      },
-      confirm() {
-        this.$emit('input', this.currentValue);
-        this.popupVisible = false;
+      if (this.value instanceof Date) {
+        const year = this.value.getFullYear();
+        const month = this.value.getMonth() + 1;
+        return year + '-' + (month < 10 ? ('0' + month) : month);
       }
     }
+    return dateToString(this.value, this.type);
+  },
+  listeners() {
+    const result = {};
+    Object.keys(this.$listeners).forEach(event => {
+      if (event !== 'input') {
+        result[event] = this.$listeners[event];
+      }
+    });
+    return result;
+  }
+  },
+  methods: {
+    toggle() {
+      this.popupVisible = !this.popupVisible;
+    },
+    onInput(value) {
+      this.currentValue = value;
+    },
+    cancel() {
+      this.currentValue = this.value;
+      this.popupVisible = false;
+    },
+    confirm() {
+      this.$emit('input', this.currentValue);
+      this.popupVisible = false;
+    }
+  }
   });
+
 </script>
 <style lang="less">
   .van-picker__cancel, .van-picker__confirm {

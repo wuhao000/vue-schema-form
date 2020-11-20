@@ -15,11 +15,12 @@
     </el-select>
   </el-input>
 </template>
-<script lang="ts">
+<script lang="tsx">
   import BaseUrl from '../common/url';
 
   export default {
     name: 'ElUrlInput',
     mixins: [BaseUrl]
   };
+
 </script>

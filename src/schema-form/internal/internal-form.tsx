@@ -1,4 +1,4 @@
-import {clone, isEqual} from '../../uform/utils';
+import {clone, isEqual} from '../uform/utils';
 import {SchemaFormField} from '../../../types';
 import Component, {mixins} from 'vue-class-component';
 

@@ -3,8 +3,8 @@ import {noop} from 'ant-design-vue/lib/_util/vue-types/utils';
 import {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide} from 'vue-property-decorator';
-import OptionsBasedComponent from '../../mixins/options-based-component';
-import {getNodeText} from '../../utils/vnode';
+import OptionsBasedComponent from '../mixins/options-based-component';
+import {getNodeText} from '../utils/vnode';
 /**
  * 选项较多的时候
  */

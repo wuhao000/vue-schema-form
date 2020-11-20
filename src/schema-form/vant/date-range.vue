@@ -54,43 +54,44 @@
     },
     computed: {
       displayValue(this: any) {
-        if (this.type === 'year-month') {
-          if (!this.value || !this.value.length) {
-            return [];
-          }
-          if (this.value instanceof Date) {
-            return this.value.map(it => formatMonth(it));
-          }
-        }
-        return this.value.map(it => dateToString(it, this.type));
-      },
-      listeners() {
-        const result = {};
-        Object.keys(this.$listeners).forEach(event => {
-          if (event !== 'input') {
-            result[event] = this.$listeners[event];
-          }
-        });
-        return result;
+    if (this.type === 'year-month') {
+      if (!this.value || !this.value.length) {
+        return [];
       }
-    },
-    methods: {
-      toggle() {
-        this.popupVisible = !this.popupVisible;
-      },
-      cancel() {
-        this.currentValue = this.value && [null, null];
-        this.popupVisible = false;
-      },
-      confirm() {
-        this.$emit('input', this.currentValue);
-        this.popupVisible = false;
-      },
-      onInput(date: Date, index: number) {
-        this.currentValue[index] = date;
+      if (this.value instanceof Date) {
+        return this.value.map(it => formatMonth(it));
       }
     }
+    return this.value.map(it => dateToString(it, this.type));
+  },
+  listeners() {
+    const result = {};
+    Object.keys(this.$listeners).forEach(event => {
+      if (event !== 'input') {
+        result[event] = this.$listeners[event];
+      }
+    });
+    return result;
+  }
+  },
+  methods: {
+    toggle() {
+      this.popupVisible = !this.popupVisible;
+    },
+    cancel() {
+      this.currentValue = this.value && [null, null];
+      this.popupVisible = false;
+    },
+    confirm() {
+      this.$emit('input', this.currentValue);
+      this.popupVisible = false;
+    },
+    onInput(date: Date, index: number) {
+      this.currentValue[index] = date;
+    }
+  }
   });
+
 </script>
 <style lang="less">
   .van-daterange {

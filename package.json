@@ -1,10 +1,11 @@
 {
   "name": "v-schema-form",
-  "version": "0.2.3-3",
+  "version": "1.0.0-14",
   "private": false,
-  "main": "lib/v-schema-form.umd.min.js",
+  "main": "es/index.js",
   "files": [
     "lib",
+    "es",
     "types",
     "src"
   ],
@@ -16,10 +17,11 @@
     "docs": "tsc -p build && node build/docs.js",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
     "routes": "tsc -p build && node build/routes.js",
-    "build:components": "npm run docs && node compile/build-components.js",
+    "build:components": "npm run check && npm run docs && node compile/build-components.js",
     "test": "jest",
     "check": "tsc -p build && node build/check.js",
-    "publish": "npm run check"
+    "release": "npm run build:components && npm publish",
+    "compile": "webpack --config webpack.conf.js"
   },
   "dependencies": {
     "aegis-ui-desktop": "^1.0.6-3",
@@ -48,6 +50,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.1",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-typescript": "^7.6.0",
     "@types/classnames": "^2.2.11",
@@ -60,6 +64,9 @@
     "@types/lodash.sum": "^4.0.6",
     "@types/uuid": "^3.4.6",
     "@types/vue": "^2.0.0",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
+    "@vue/babel-plugin-jsx": "^1.0.0-rc.3",
+    "@vue/babel-preset-jsx": "^1.2.4",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-typescript": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
@@ -93,7 +100,8 @@
     "vue-class-component": "^7.1.0",
     "vue-jest": "^3.0.5",
     "vue-property-decorator": "^8.2.2",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "webpack-cli": "^4.2.0"
   },
   "typings": "types/index.d.ts"
 }

@@ -9,9 +9,7 @@ const path_1 = tslib_1.__importDefault(require("path"));
 const srcDir = path_1.default.join(__dirname, '../src');
 const paths = [
     path_1.default.join(__dirname, '../src/schema-form'),
-    path_1.default.join(__dirname, '../src/uform'),
     path_1.default.join(__dirname, '../src/utils'),
-    path_1.default.join(__dirname, '../src/mixins')
 ];
 const scriptRegExp = /\.(js|jsx|ts|vue|tsx)$/;
 const isDir = dir => fs_1.default.lstatSync(dir).isDirectory();

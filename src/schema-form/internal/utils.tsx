@@ -10,7 +10,7 @@ import {
   ShowFieldCondition
 } from '../../../types';
 import Vue from 'vue';
-import {clone, parseDestructPath, toArr} from '../../uform/utils';
+import {clone, parseDestructPath, toArr} from '../uform/utils';
 import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';

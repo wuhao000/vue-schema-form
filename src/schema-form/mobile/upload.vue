@@ -7,7 +7,7 @@
                   :after-read="afterRead"></van-uploader>
   </m-list-item>
 </template>
-<script lang="ts">
+<script lang="tsx">
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import {Prop, Watch} from 'vue-property-decorator';
@@ -30,6 +30,7 @@
       console.log(n);
     }
   }
+
 </script>
 <style lang="less">
 

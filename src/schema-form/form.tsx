@@ -14,9 +14,9 @@ import {
 import Vue, {VNode} from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Provide, Watch} from 'vue-property-decorator';
-import {IValidateResponse} from '../uform/types';
-import {clone, isEqual} from '../uform/utils';
-import runValidation from '../uform/validator';
+import {IValidateResponse} from './uform/types';
+import {clone, isEqual} from './uform/utils';
+import runValidation from './uform/validator';
 import {registerAntd} from './antd/register';
 import {registerElement} from './element/register';
 import {hasListener, renderField, SchemaFormEvents} from './internal/utils';

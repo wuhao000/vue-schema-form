@@ -25,8 +25,6 @@ module.exports = {
   },
   runtimeCompiler: false,
   configureWebpack: (config) => {
-    console.log(config.entry);
-    console.log(config.output)
     config.entry = {
       app: resolve('src/main.ts'),
       lib: resolve('src/index.ts')

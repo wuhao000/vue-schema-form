@@ -1,7 +1,7 @@
 import '@/styles/github-markdown.less';
 import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
-import SchemaForm from './index';
+import SchemaForm from '../es/index';
 import router from './router';
 import store from './store';
 import './styles/index.less';

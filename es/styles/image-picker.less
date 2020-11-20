@@ -1,0 +1,99 @@
+@imagePickerPrefixCls: d-image-picker;
+@hd: 1px; // 基本单位
+@import "~antd-mobile-vue/src/packages/style/themes/default";
+@import "~antd-mobile-vue/src/packages/style/mixins";
+
+.@{imagePickerPrefixCls} {
+
+&-list {
+    padding: @v-spacing-md @h-spacing-md 0;
+    margin-bottom: @h-spacing-lg;
+    position: relative;
+
+    .am-flexbox {
+      margin-bottom: @v-spacing-sm;
+
+      .am-flexbox-item {
+        position: relative;
+        margin-right: @h-spacing-sm;
+        margin-left: 0;
+
+        &:after {
+          display: block;
+          content: ' ';
+          padding-bottom: 100%;
+        }
+      }
+    }
+
+    .@{imagePickerPrefixCls}-item {
+      top: 50%;
+      width: 96px;
+      height: 96px;
+      position: relative;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 6px;
+
+      .@{imagePickerPrefixCls}-item-remove {
+        width: @icon-size-xxs;
+        height: @icon-size-xxs;
+        position: absolute;
+        right: -6 * @hd;
+        top: -6 * @hd;
+        text-align: right;
+        vertical-align: top;
+        z-index: 2;
+        background-size: @icon-size-xxs auto;
+        .encoded-svg-background('image_picker_delete');
+        cursor: pointer;
+      }
+
+      .@{imagePickerPrefixCls}-item-content {
+        max-height: 100%;
+        max-width: 100%;
+        border-radius: @radius-sm;
+        background-size: cover;
+      }
+    }
+
+    .@{imagePickerPrefixCls}-upload-btn {
+      box-sizing: border-box;
+      border-radius: @radius-sm;
+      border: @border-width-md solid @border-color-base;
+      background-color: @fill-base;
+      cursor: pointer;
+
+      &:before,
+      &:after {
+        width: @border-width-md;
+        height: 25 * @hd;
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: @color-icon-base;
+      }
+
+      &:after {
+        width: 25 * @hd;
+        height: @border-width-md;
+      }
+
+      &-active {
+        background-color: @fill-tap;
+      }
+
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        opacity: 0;
+      }
+    }
+  }
+}
+

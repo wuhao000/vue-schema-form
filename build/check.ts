@@ -7,9 +7,7 @@ import path from 'path';
 const srcDir = path.join(__dirname, '../src');
 const paths = [
   path.join(__dirname, '../src/schema-form'),
-  path.join(__dirname, '../src/uform'),
   path.join(__dirname, '../src/utils'),
-  path.join(__dirname, '../src/mixins')
 ];
 
 const scriptRegExp = /\.(js|jsx|ts|vue|tsx)$/;

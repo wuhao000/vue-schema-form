@@ -67,7 +67,7 @@ export const addComponent = (options: SchemaFormComponentOptions) => {
       addComponent(Object.assign(finalOptions, {
         types: type,
         getProps: options.getProps,
-        forDisplay: options.forDisplay,
+        forDisplay: options.forDisplay
       }));
     });
   } else if (Array.isArray(options.platforms)) {
@@ -76,7 +76,7 @@ export const addComponent = (options: SchemaFormComponentOptions) => {
         platforms: platform,
         types: options.types,
         getProps: options.getProps,
-        forDisplay: options.forDisplay,
+        forDisplay: options.forDisplay
       }));
     });
   } else {
@@ -140,7 +140,7 @@ function searchStore(mode: Mode,
                      platform: Platform,
                      definition: SchemaFormField): SchemaFormComponent {
   const type = definition.xType || definition.type;
-  const typeDef = store[mode][platform][type];
+  const typeDef = store[mode ?? 'edit'][platform ?? 'desktop'][type];
   if (!typeDef) {
     if (type && !MISSING_TYPES.includes(type)) {
       console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);

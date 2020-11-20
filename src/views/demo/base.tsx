@@ -1,4 +1,3 @@
-import {getPlatform} from '@/utils/util';
 import {getFormDefinition, getProps, getValue} from '@/views/demo/utils';
 
 import Vue from 'vue';
@@ -6,9 +5,9 @@ import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
 @Component({
-  name: 'Base'
+  name: 'BaseDemo'
 })
-export default class Base extends Vue {
+export default class BaseDemo extends Vue {
 
   @Prop({type: String, default: 'desktop'})
   public platform: string;

@@ -1,7 +1,7 @@
 import {isNotNull} from '../utils/utils';
 import Component from 'vue-class-component';
 import {Model} from 'vue-property-decorator';
-import BaseFormComponent from '../../mixins/base-input-component';
+import BaseFormComponent from '../mixins/base-input-component';
 
 
 @Component({

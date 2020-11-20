@@ -1,0 +1,1 @@
+export var globalThisPolyfill = self || window || global || Function('return this')();

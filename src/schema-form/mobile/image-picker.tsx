@@ -1,5 +1,5 @@
-import '../../styles/image-picker.less';
-import '../../styles/mobile-image-picker.less';
+import '../styles/image-picker.less';
+import '../styles/mobile-image-picker.less';
 import {SCHEMA_FORM_STORE_INJECT_KEY} from '../form';
 import {SchemaFormStore} from '../../../types';
 import Vue from 'vue';
