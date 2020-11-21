@@ -4,6 +4,7 @@
   </div>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import SimpleEditDemo from '../common/simple.vue';
   import Vue from 'vue';
   import Component from 'vue-class-component';
@@ -15,7 +16,7 @@
   export default class DesktopEdit extends Vue {
 
     public register() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
   }

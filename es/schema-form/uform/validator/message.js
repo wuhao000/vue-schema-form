@@ -35,6 +35,6 @@ export var setLanguage = function setLanguage(lang) {
   LOCALE.lang = lang;
 };
 export var getMessage = function getMessage(path) {
-  return getIn(LOCALE.messages, "".concat(getMatchLang(LOCALE.lang), ".").concat(path)) || 'field is not valid,but not found error message.';
+  return getIn(LOCALE.messages, getMatchLang(LOCALE.lang) + "." + path) || 'field is not valid,but not found error message.';
 };
 setLocale(locales);

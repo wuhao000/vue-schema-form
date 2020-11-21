@@ -33,8 +33,9 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Base from '../base';
-  import Component from 'vue-class-component';
+  import Component, {mixins} from 'vue-class-component';
   import {EffectsContext} from '../../../../types';
   import ShowValue from '../show-value';
 
@@ -42,8 +43,7 @@
     name: 'DesktopEdit',
     components: {ShowValue}
   })
-  export default class DesktopEdit extends Base {
-
+  export default class DesktopEdit extends mixins(Base) {
 
     public actions = [
       'submit', 'reset', 'cancel', {
@@ -52,7 +52,7 @@
     ];
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
     public customAction($: EffectsContext) {

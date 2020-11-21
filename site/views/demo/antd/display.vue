@@ -10,6 +10,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Base from '../base';
   import Component from 'vue-class-component';
 
@@ -20,7 +21,7 @@
 
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
       setTimeout(() => {
         this.value.string = '新的值';
       }, 3000);

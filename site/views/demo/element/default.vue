@@ -12,6 +12,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import ShowValue from '../show-value';
   import sum from 'lodash.sum';
   import {EffectsContext, SchemaFormField} from '../../../../types';
@@ -171,7 +172,7 @@
     };
 
     public created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     }
 
     public effects($: EffectsContext) {

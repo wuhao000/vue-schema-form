@@ -19,6 +19,7 @@
   </div>
 </template>
 <script lang="ts">
+import {SchemaForm} from '../../../main';
 import {EffectsContext} from '../../../../types';
 import Vue from 'vue';
 
@@ -304,7 +305,7 @@ export default Vue.extend({
     }
   },
   created() {
-    window.SchemaForm.registerAntd();
+    SchemaForm.registerAntd();
   }
 });
 </script>

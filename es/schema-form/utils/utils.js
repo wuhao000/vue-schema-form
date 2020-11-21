@@ -1,17 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 export var ASchemaForm = 'ASchemaForm';
 export var Mode;
 
@@ -136,7 +122,7 @@ export var ComponentMap = {
   }
 };
 export function swap(array, x, y) {
-  array.splice.apply(array, [x, 1].concat(_toConsumableArray(array.splice(y, 1, array[x]))));
+  array.splice.apply(array, [x, 1].concat(array.splice(y, 1, array[x])));
 }
 export var LibName = {
   desktop: 'antd',
@@ -184,7 +170,7 @@ export var getOptions = function getOptions(field) {
   if (field.props && field.props.options) {
     if (typeof field.props.options === 'function') {
       return field.props.options() || [];
-    } else if (_typeof(field.props.options) === 'object') {
+    } else if (typeof field.props.options === 'object') {
       return field.props.options || [];
     }
   } else {
@@ -256,7 +242,7 @@ export function addRule(rules, field, rule) {
     var options = getOptions(field);
 
     if (options.length) {
-      validateType = _typeof(getOptionProperty(options[0], field.props && field.props.valueProperty || 'value'));
+      validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
     }
   } else if (type === TYPES.daterange || type === TYPES.datetimerange) {
     validateType = 'array';

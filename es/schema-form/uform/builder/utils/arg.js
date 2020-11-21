@@ -1,5 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 /*
   arg.js - v1.4
   JavaScript URL argument processing once and for all.
@@ -142,7 +140,7 @@ export default (function () {
 
 
   Arg.stringify = function (obj, keyPrefix) {
-    switch (_typeof(obj)) {
+    switch (typeof obj) {
       case 'object':
         var segs = [];
         var thisKey;
@@ -164,7 +162,7 @@ export default (function () {
             thisKey = keyPrefix ? keyPrefix + '[' + key + ']' : key;
           }
 
-          if (_typeof(val) === 'object') {
+          if (typeof val === 'object') {
             segs.push(Arg.stringify(val, thisKey));
           } else {
             segs.push(encodeURIComponent(thisKey) + '=' + encodeURIComponent(val));

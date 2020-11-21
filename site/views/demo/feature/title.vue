@@ -7,6 +7,7 @@
   </div>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import {EffectsContext} from '../../../../types';
   import Vue from 'vue';
 
@@ -28,8 +29,8 @@
       };
     },
     created() {
-      window.SchemaForm.registerAntd();
-      window.SchemaForm.registerAntdMobile();
+      SchemaForm.registerAntd();
+      SchemaForm.registerAntdMobile();
     },
     methods: {
       effects($: EffectsContext) {

@@ -53,6 +53,23 @@ export const register = (component: string | object,
   });
 };
 
+/**
+ *
+ * @param options
+ */
+export const registerLayout = (options: {
+  component: string | object,
+  platforms: Platform | Platform[],
+  types: string | string[],
+  getProps?: ((definition: IField, platform: Platform) => object)
+}) => {
+  addComponent({
+    component: options.component, platforms: options.platforms,
+    types: options.types, forArray: null, getProps: options.getProps,
+    forDisplay: null, layout: true
+  });
+};
+
 export const addComponent = (options: SchemaFormComponentOptions) => {
   const finalOptions = {
     component: options.component,

@@ -1,3 +1,4 @@
+import {SchemaForm} from '../../../main';
 import DestructSchema from '../schema/mobile-destruct.json';
 import ShowValue from '../show-value';
 import Vue from 'vue';
@@ -11,7 +12,7 @@ export default class DestructComponent extends Vue {
   public value = {};
 
   public created() {
-    window.SchemaForm.registerAntdMobile();
+    SchemaForm.registerAntdMobile();
   }
 
   public render() {

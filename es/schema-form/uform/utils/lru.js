@@ -1,5 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 /**
  * A doubly linked list-based Least Recently Used (LRU) cache. Will keep most
  * recently used items while discarding least recently used items when its limit
@@ -341,7 +339,7 @@ LRUMap.prototype[Symbol.iterator] = function () {
 LRUMap.prototype.forEach = function (fun, thisObj) {
   var copyThisObj = thisObj;
 
-  if (_typeof(copyThisObj) !== 'object') {
+  if (typeof copyThisObj !== 'object') {
     copyThisObj = this;
   }
 

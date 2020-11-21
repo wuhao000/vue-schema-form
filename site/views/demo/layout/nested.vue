@@ -12,6 +12,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import ShowValue from '../show-value';
   import Vue from 'vue';
   import Component from 'vue-class-component';
@@ -149,7 +150,7 @@
     public value = {};
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
     public showData() {

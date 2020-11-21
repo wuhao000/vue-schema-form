@@ -2,14 +2,6 @@ import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 import get from 'lodash.get';
 import uuid from 'uuid';
 import Vue from 'vue';
@@ -52,7 +44,7 @@ export function calcShowState(currentValue, definition) {
   }
 }
 export function getRealFields(fields) {
-  if (_typeof(fields) === 'object') {
+  if (typeof fields === 'object') {
     return Object.keys(fields).filter(function (key) {
       return fields[key];
     }).map(function (key) {
@@ -62,7 +54,7 @@ export function getRealFields(fields) {
         field.id = uuid.v4();
       }
 
-      return _objectSpread({
+      return _extends({
         id: field.id,
         property: key
       }, fields[key]);
@@ -301,7 +293,7 @@ export function searchSchema(path, def) {
   var df = def;
   parts.forEach(function (part) {
     if (df.fields) {
-      if (_typeof(df.fields) === 'object') {
+      if (typeof df.fields === 'object') {
         df = df.fields[part];
       } else if (Array.isArray(df.fields)) {
         df = df.fields.find(function (it) {
@@ -330,7 +322,7 @@ export var filterErros = function filterErros(errors) {
   return errors.filter(function (it) {
     return Array.isArray(it) && it.length > 0;
   }).flat().concat(errors.filter(function (it) {
-    return _typeof(it) === 'object' && !Array.isArray(it) && it !== null;
+    return typeof it === 'object' && !Array.isArray(it) && it !== null;
   }));
 };
 export function getCurrentValue(value, defaultValue) {

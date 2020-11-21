@@ -8,6 +8,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import {EffectsContext} from '../../../../types';
 
   export default {
@@ -36,7 +37,7 @@
       };
     },
     created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     },
     methods: {
       effects($: EffectsContext) {

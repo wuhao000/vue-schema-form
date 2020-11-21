@@ -14,6 +14,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import {getProps} from '../utils';
   import {EffectsContext, SchemaFormField} from '../../../../types';
   import Vue from 'vue';
@@ -75,7 +76,7 @@
     }
 
     public created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     }
 
     public setOptions() {

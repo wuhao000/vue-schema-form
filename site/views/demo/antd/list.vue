@@ -10,6 +10,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import ShowValue from '../show-value';
   import axios from 'axios';
   import Vue from 'vue';
@@ -84,7 +85,7 @@
     }];
 
     public created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     }
 
     public onOk() {

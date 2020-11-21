@@ -15,10 +15,11 @@
   </div>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Vue from 'vue';
   import {SchemaFormField} from '../../../../types';
 
-  window.SchemaForm.registerDisplayComponent(
+  SchemaForm.registerDisplayComponent(
       {
         props: {value: {}},
         render() {
@@ -70,8 +71,8 @@
       }
     },
     created() {
-      window.SchemaForm.registerElement();
-      window.SchemaForm.registerAntdMobile();
+      SchemaForm.registerElement();
+      SchemaForm.registerAntdMobile();
     },
     methods: {
       addField() {

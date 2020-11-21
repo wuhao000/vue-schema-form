@@ -38,9 +38,14 @@ var isVirtualBoxSchema = function isVirtualBoxSchema(schema) {
   return isVirtualBox(schema.type) || isVirtualBox(schema['x-component']);
 };
 
-var schemaTraverse = function schemaTraverse(schema, callback) {
-  var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  var schemaPath = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+var schemaTraverse = function schemaTraverse(schema, callback, path, schemaPath) {
+  if (path === void 0) {
+    path = [];
+  }
+
+  if (schemaPath === void 0) {
+    schemaPath = [];
+  }
 
   if (schema) {
     if (isVirtualBoxSchema(schema)) {

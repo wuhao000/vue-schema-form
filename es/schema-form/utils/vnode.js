@@ -1,5 +1,7 @@
-export function setListeners(vnode) {
-  var listeners = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+export function setListeners(vnode, listeners) {
+  if (listeners === void 0) {
+    listeners = {};
+  }
 
   if (vnode.componentOptions) {
     if (!vnode.componentOptions.listeners) {
@@ -11,8 +13,10 @@ export function setListeners(vnode) {
     });
   }
 }
-export function setProps(vnode) {
-  var nodeProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+export function setProps(vnode, nodeProps) {
+  if (nodeProps === void 0) {
+    nodeProps = {};
+  }
 
   if (vnode.componentOptions) {
     if (!vnode.componentOptions.propsData) {

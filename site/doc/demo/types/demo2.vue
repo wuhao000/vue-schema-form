@@ -4,6 +4,8 @@
 </template>
 <script lang="ts">
 
+  import {SchemaForm} from '../../../main';
+
   export default {
     name: 'TypesDemo1',
     data() {
@@ -36,7 +38,7 @@
       };
     },
     created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     }
   };
 </script>

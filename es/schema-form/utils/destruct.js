@@ -1,8 +1,8 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 import { getDefaultValue } from "./utils";
-export function getStructValue(parentValue, struct, vue) {
-  var field = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+export function getStructValue(parentValue, struct, vue, field) {
+  if (field === void 0) {
+    field = null;
+  }
 
   if (Array.isArray(struct)) {
     return struct.map(function (key) {
@@ -18,7 +18,7 @@ export function getStructValue(parentValue, struct, vue) {
     }
 
     return v;
-  } else if (_typeof(struct) === 'object') {
+  } else if (typeof struct === 'object') {
     var value = {};
     Object.keys(struct).forEach(function (key) {
       var destructValue = struct[key];

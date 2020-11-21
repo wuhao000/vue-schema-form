@@ -13,6 +13,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Base from '../base';
   import Component from 'vue-class-component';
 
@@ -22,7 +23,7 @@
   export default class DesktopEdit extends Base {
     public v = 1;
     public created() {
-      window.SchemaForm.registerVant();
+      SchemaForm.registerVant();
     }
   }
 </script>

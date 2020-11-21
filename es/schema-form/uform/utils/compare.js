@@ -1,5 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 import { isArr, isFn } from "../types";
 var isArray = isArr;
 var keyList = Object.keys;
@@ -12,7 +10,7 @@ function equal(a, b, filter) {
     return true;
   }
 
-  if (a && b && _typeof(a) === 'object' && _typeof(b) === 'object') {
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
     var arrA = isArray(a);
     var arrB = isArray(b);
     var i;

@@ -1,5 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 import Plain from "../common/plain.vue";
 import Vue from 'vue';
 import ElExtCheckbox from "../element/checkbox-group";
@@ -83,7 +81,7 @@ export function registerElement() {
             return it;
           }
         });
-      } else if (_typeof(field.props.marks) === 'object') {
+      } else if (typeof field.props.marks === 'object') {
         var marks = {};
         Object.keys(field.props.marks).forEach(function (key) {
           var value = field.props.marks[key];

@@ -12,6 +12,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import {createVNode} from '../layout/util';
   import ShowValue from '../show-value';
   import {SchemaFormField} from '../../../../types';
@@ -73,7 +74,7 @@
     public value = {};
 
     public beforeCreate() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
     public changeMode() {

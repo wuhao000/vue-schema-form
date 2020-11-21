@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "1.0.0-18",
+  "version": "1.0.0-20",
   "private": false,
   "main": "es/schema-form/index.js",
   "files": [
@@ -9,16 +9,15 @@
     "types"
   ],
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "dev": "npm run docs && vue-cli-service serve",
+    "build": "npm run docs && vue-cli-service build",
     "lint": "vue-cli-serviceg lint",
     "lib": "vue-cli-service build --target lib --name v-schema-form --dest lib src/index.ts",
-    "docs": "tsc -p build && node build/docs.js",
+    "docs": "tsc -p build && node build/docs.js && node build/routes.js",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
-    "routes": "tsc -p build && node build/routes.js",
     "build:components": "npm run docs && node compile/build-components.js",
     "test": "jest",
-    "release": "npm run build:components && npm publish",
+    "release": "npm run docs && npm run build:components && npm publish",
     "compile": "webpack --config webpack.conf.js"
   },
   "dependencies": {
@@ -63,7 +62,6 @@
     "@types/uuid": "^3.4.6",
     "@types/vue": "^2.0.0",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
-    "@vue/babel-plugin-jsx": "^1.0.0-rc.3",
     "@vue/babel-preset-jsx": "^1.2.4",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-typescript": "^3.11.0",

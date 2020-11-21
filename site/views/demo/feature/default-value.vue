@@ -7,6 +7,7 @@
   </div>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import {SchemaFormField} from '../../../../types';
 
   export const familyInfoFields: SchemaFormField[] = [{
@@ -78,7 +79,7 @@
       };
     },
     created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     },
     methods: {
       effects($) {

@@ -13,6 +13,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import {getProps} from '../../../views/demo/utils';
   import {SchemaFormField} from '../../../../types';
   import Vue from 'vue';
@@ -76,7 +77,7 @@
     }
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
   }
 </script>

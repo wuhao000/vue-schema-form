@@ -10,6 +10,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Base from '../base';
   import Component from 'vue-class-component';
 
@@ -19,7 +20,7 @@
   export default class DesktopEdit extends Base {
 
     public created() {
-      window.SchemaForm.registerElement();
+      SchemaForm.registerElement();
     }
   }
 </script>

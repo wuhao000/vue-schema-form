@@ -3,9 +3,15 @@ import { addComponent, register } from "../utils/register";
 import { ComponentMap, getOptions, LibName, MOBILE, MobileLibComponents, TYPES } from "../utils/utils";
 import MButton from "./button";
 import MobileImagePicker from "./image-picker";
-export var registerMobile = function registerMobile(component, types) {
-  var forArray = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var getProps = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+export var registerMobile = function registerMobile(component, types, forArray, getProps) {
+  if (forArray === void 0) {
+    forArray = null;
+  }
+
+  if (getProps === void 0) {
+    getProps = null;
+  }
+
   register(component, MOBILE, types, forArray, getProps);
 };
 export function registerAntdMobile() {

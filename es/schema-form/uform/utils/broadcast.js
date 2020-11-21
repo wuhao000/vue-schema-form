@@ -1,8 +1,4 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 import { isFn } from "../types";
 import { each } from "./array";
@@ -14,86 +10,82 @@ var noop = function noop() {
 
 export var Broadcast = /*#__PURE__*/function () {
   function Broadcast() {
-    _classCallCheck(this, Broadcast);
+    _defineProperty(this, "buffer", []);
 
-    this.buffer = [];
-    this.entries = [];
-    this.length = void 0;
+    _defineProperty(this, "entries", []);
+
+    _defineProperty(this, "length", void 0);
   }
 
-  _createClass(Broadcast, [{
-    key: "flushBuffer",
-    value: function flushBuffer(_ref) {
-      var subscriber = _ref.subscriber,
-          subscription = _ref.subscription;
-      each(this.buffer, function (_ref2) {
-        var payload = _ref2.payload,
-            filter = _ref2.filter;
+  var _proto = Broadcast.prototype;
 
-        if (isFn(filter)) {
-          var _notification = filter(payload, subscription);
+  _proto.flushBuffer = function flushBuffer(_ref) {
+    var subscriber = _ref.subscriber,
+        subscription = _ref.subscription;
+    each(this.buffer, function (_ref2) {
+      var payload = _ref2.payload,
+          filter = _ref2.filter;
 
-          if (_notification !== undefined) {
-            subscriber(_notification);
-          }
-        } else {
-          subscriber(payload, subscription);
+      if (isFn(filter)) {
+        var _notification = filter(payload, subscription);
+
+        if (_notification !== undefined) {
+          subscriber(_notification);
         }
-      });
-    }
-  }, {
-    key: "notify",
-    value: function notify(payload, filter) {
-      if (this.length === 0) {
-        this.buffer.push({
-          payload: payload,
-          filter: filter
-        });
-        return;
+      } else {
+        subscriber(payload, subscription);
       }
+    });
+  };
 
-      each(this.entries, function (_ref3) {
-        var subscriber = _ref3.subscriber,
-            subscription = _ref3.subscription;
+  _proto.notify = function notify(payload, filter) {
+    if (this.length === 0) {
+      this.buffer.push({
+        payload: payload,
+        filter: filter
+      });
+      return;
+    }
 
-        if (isFn(filter)) {
-          var _notification2 = filter(payload, subscription);
+    each(this.entries, function (_ref3) {
+      var subscriber = _ref3.subscriber,
+          subscription = _ref3.subscription;
 
-          if (_notification2 !== undefined) {
-            subscriber(_notification2);
-          }
-        } else {
-          subscriber(payload, subscription);
+      if (isFn(filter)) {
+        var _notification2 = filter(payload, subscription);
+
+        if (_notification2 !== undefined) {
+          subscriber(_notification2);
         }
-      });
-      this.buffer.length = 0;
-    }
-  }, {
-    key: "subscribe",
-    value: function subscribe(subscriber, subscription) {
-      var _this = this;
-
-      if (!isFn(subscriber)) {
-        return noop;
+      } else {
+        subscriber(payload, subscription);
       }
+    });
+    this.buffer.length = 0;
+  };
 
-      var index = this.entries.length;
-      this.entries.push({
-        subscriber: subscriber,
-        subscription: subscription
-      });
-      this.flushBuffer(this.entries[index]);
-      return function () {
-        _this.entries.splice(index, 1);
-      };
+  _proto.subscribe = function subscribe(subscriber, subscription) {
+    var _this = this;
+
+    if (!isFn(subscriber)) {
+      return noop;
     }
-  }, {
-    key: "unsubscribe",
-    value: function unsubscribe() {
-      this.entries.length = 0;
-      this.buffer.length = 0;
-    }
-  }]);
+
+    var index = this.entries.length;
+    this.entries.push({
+      subscriber: subscriber,
+      subscription: subscription
+    });
+    this.flushBuffer(this.entries[index]);
+    return function () {
+      _this.entries.splice(index, 1);
+    };
+  };
+
+  _proto.unsubscribe = function unsubscribe() {
+    this.entries.length = 0;
+    this.buffer.length = 0;
+  };
 
   return Broadcast;
 }();

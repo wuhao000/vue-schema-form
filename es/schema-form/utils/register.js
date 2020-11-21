@@ -24,12 +24,21 @@ var store = {
     mobile: {}
   }
 };
-export var registerDisplay = function registerDisplay(component, platforms, types) {
-  var forArray = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-  var getProps = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {
-    return {};
-  };
-  var layout = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+export var registerDisplay = function registerDisplay(component, platforms, types, forArray, getProps, layout) {
+  if (forArray === void 0) {
+    forArray = null;
+  }
+
+  if (getProps === void 0) {
+    getProps = function getProps() {
+      return {};
+    };
+  }
+
+  if (layout === void 0) {
+    layout = false;
+  }
+
   addComponent({
     component: component,
     platforms: platforms,
@@ -49,11 +58,17 @@ export var registerDisplay = function registerDisplay(component, platforms, type
  * @param {(definition: IField, platform: Platform) => object} getProps 组件属性转换器（可选）
  */
 
-export var register = function register(component, platforms, types) {
-  var forArray = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-  var getProps = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {
-    return {};
-  };
+export var register = function register(component, platforms, types, forArray, getProps) {
+  if (forArray === void 0) {
+    forArray = null;
+  }
+
+  if (getProps === void 0) {
+    getProps = function getProps() {
+      return {};
+    };
+  }
+
   addComponent({
     component: component,
     platforms: platforms,
@@ -62,6 +77,22 @@ export var register = function register(component, platforms, types) {
     getProps: getProps,
     forDisplay: false,
     layout: false
+  });
+};
+/**
+ *
+ * @param options
+ */
+
+export var registerLayout = function registerLayout(options) {
+  addComponent({
+    component: options.component,
+    platforms: options.platforms,
+    types: options.types,
+    forArray: null,
+    getProps: options.getProps,
+    forDisplay: null,
+    layout: true
   });
 };
 export var addComponent = function addComponent(options) {
@@ -142,14 +173,26 @@ export var addComponent = function addComponent(options) {
     }
   }
 };
-export var registerDesktop = function registerDesktop(component, types) {
-  var forArray = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var getProps = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+export var registerDesktop = function registerDesktop(component, types, forArray, getProps) {
+  if (forArray === void 0) {
+    forArray = null;
+  }
+
+  if (getProps === void 0) {
+    getProps = null;
+  }
+
   register(component, DESKTOP, types, forArray, getProps);
 };
-export var registerResponsiveComponent = function registerResponsiveComponent(component, types) {
-  var forArray = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var getProps = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+export var registerResponsiveComponent = function registerResponsiveComponent(component, types, forArray, getProps) {
+  if (forArray === void 0) {
+    forArray = null;
+  }
+
+  if (getProps === void 0) {
+    getProps = null;
+  }
+
   register(component, [MOBILE, DESKTOP], types, forArray, getProps);
 };
 export var MISSING_TYPES = [];
@@ -160,12 +203,10 @@ function searchStore(mode, platform, definition) {
 
   if (!typeDef) {
     if (type && !MISSING_TYPES.includes(type)) {
-      console.log(store);
-      console.warn("\u7C7B\u578B".concat(type).concat(definition.array ? '（数组）' : '', "\u6CA1\u6709\u5BF9\u5E94\u7684").concat(mode === 'display' ? '详情' : '编辑', "\u7EC4\u4EF6"));
       MISSING_TYPES.push(type);
     }
 
-    return getEmptyDefinition("<\u4E0D\u652F\u6301\u7684\u7C7B\u578B".concat(type, ">"));
+    return getEmptyDefinition("<\u4E0D\u652F\u6301\u7684\u7C7B\u578B" + type + ">");
   }
 
   if (definition.array) {
@@ -173,7 +214,7 @@ function searchStore(mode, platform, definition) {
 
     if (res.component === Empty) {
       if (type) {
-        console.warn("\u7C7B\u578B".concat(type).concat(definition.array ? '（数组）' : '', "\u6CA1\u6709\u5BF9\u5E94\u7684").concat(mode === 'display' ? '详情' : '编辑', "\u7EC4\u4EF6"));
+        console.warn("\u7C7B\u578B" + type + (definition.array ? '（数组）' : '') + "\u6CA1\u6709\u5BF9\u5E94\u7684" + (mode === 'display' ? '详情' : '编辑') + "\u7EC4\u4EF6");
       }
     }
 

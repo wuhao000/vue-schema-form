@@ -1,22 +1,4 @@
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 import merge from 'lodash.merge';
 /**
@@ -44,7 +26,7 @@ export var isEmptyObj = function isEmptyObj(obj) {
 
 export var wrapEnums = function wrapEnums(enums) {
   return enums.map(function (item) {
-    return _typeof(item) === 'object' ? item : {
+    return typeof item === 'object' ? item : {
       value: item,
       label: item
     };
@@ -62,19 +44,25 @@ export var wrapEnums = function wrapEnums(enums) {
  * @param {Array} schema 组件schema
  */
 
-export var getCompDetailById = function getCompDetailById() {
-  var componentIdList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var schema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+export var getCompDetailById = function getCompDetailById(componentIdList, schema) {
+  if (componentIdList === void 0) {
+    componentIdList = [];
+  }
 
-  var _componentIdList = _toConsumableArray(componentIdList);
+  if (schema === void 0) {
+    schema = {};
+  }
+
+  var _componentIdList = [].concat(componentIdList);
 
   var _componentId = _componentIdList.shift();
 
-  var _schema$properties = schema.properties,
-      properties = _schema$properties === void 0 ? {} : _schema$properties;
+  var _schema2 = schema,
+      _schema2$properties = _schema2.properties,
+      properties = _schema2$properties === void 0 ? {} : _schema2$properties;
 
   if (!_componentIdList.length) {
-    return properties[_componentId] ? _objectSpread({
+    return properties[_componentId] ? _extends({
       id: _componentId
     }, properties[_componentId]) : {};
   }
@@ -87,10 +75,12 @@ export var getCompDetailById = function getCompDetailById() {
  * @param {Boolean} keepAll 保留所有字段
  */
 
-export var wrapSubmitSchema = function wrapSubmitSchema(schema) {
-  var keepAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+export var wrapSubmitSchema = function wrapSubmitSchema(schema, keepAll) {
+  if (keepAll === void 0) {
+    keepAll = false;
+  }
 
-  if (!schema || _typeof(schema) !== 'object') {
+  if (!schema || typeof schema !== 'object') {
     return {
       type: 'object',
       properties: {}
@@ -144,17 +134,23 @@ export var wrapSubmitSchema = function wrapSubmitSchema(schema) {
  * @param {String} containerId 相对容器id
  */
 
-export var getOrderProperties = function getOrderProperties() {
-  var schema = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var containerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+export var getOrderProperties = function getOrderProperties(schema, containerId) {
+  if (schema === void 0) {
+    schema = {};
+  }
+
+  if (containerId === void 0) {
+    containerId = [];
+  }
 
   if (containerId.length) {
     var id = containerId.shift();
     return getOrderProperties(schema.properties[id], containerId);
   }
 
-  var _schema$properties2 = schema.properties,
-      properties = _schema$properties2 === void 0 ? {} : _schema$properties2;
+  var _schema3 = schema,
+      _schema3$properties = _schema3.properties,
+      properties = _schema3$properties === void 0 ? {} : _schema3$properties;
 
   if (isEmptyObj(properties)) {
     return [];
@@ -166,7 +162,7 @@ export var getOrderProperties = function getOrderProperties() {
     var index = item['x-index'];
 
     if (typeof index !== 'number') {
-      newProperties.push(_objectSpread(_objectSpread({}, item), {}, {
+      newProperties.push(_extends({}, item, {
         id: key,
         'x-index': newProperties.length
       }));
@@ -180,19 +176,19 @@ export var getOrderProperties = function getOrderProperties() {
       if (!newProperties[index]) {
         var _key = index > newProperties.length + 1 ? newProperties.length : index;
 
-        newProperties[_key] = _objectSpread(_objectSpread({}, item), {}, {
+        newProperties[_key] = _extends({}, item, {
           id: key
         });
       } else {
         var _tempProperties = newProperties.slice(0, index);
 
         for (var i = index; i < newProperties.length; i++) {
-          _tempProperties[i + 1] = _objectSpread(_objectSpread({}, newProperties[i]), {}, {
+          _tempProperties[i + 1] = _extends({}, newProperties[i], {
             'x-index': i + 1
           });
         }
 
-        _tempProperties[index] = _objectSpread(_objectSpread({}, item), {}, {
+        _tempProperties[index] = _extends({}, item, {
           id: key
         });
         newProperties = _tempProperties;
@@ -201,12 +197,15 @@ export var getOrderProperties = function getOrderProperties() {
   });
   return newProperties;
 };
-export var initOrderProperties = function initOrderProperties() {
-  var schema = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+export var initOrderProperties = function initOrderProperties(schema) {
+  if (schema === void 0) {
+    schema = {};
+  }
+
   var newProperties = getOrderProperties(schema);
   var properties = {};
   newProperties.forEach(function (item) {
-    var newItem = _objectSpread({}, item);
+    var newItem = _extends({}, item);
 
     if (newItem.active) {
       delete newItem.active;
@@ -215,14 +214,17 @@ export var initOrderProperties = function initOrderProperties() {
     properties[item.id] = newItem;
   });
 
-  var newShema = _objectSpread(_objectSpread({}, schema), {}, {
+  var newShema = _extends({}, schema, {
     properties: properties
   });
 
   return newShema;
 };
-export var flatObj = function flatObj() {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+export var flatObj = function flatObj(obj) {
+  if (obj === void 0) {
+    obj = {};
+  }
+
   // 深拷贝一份
   var result = JSON.parse(JSON.stringify(obj));
 
@@ -230,7 +232,7 @@ export var flatObj = function flatObj() {
     var _key = arr.shift();
 
     if (!arr.length) {
-      if (value && _typeof(value) === 'object') {
+      if (value && typeof value === 'object') {
         if (Array.isArray(value)) {
           _obj[_key] = value;
         } else {
@@ -253,14 +255,17 @@ export var flatObj = function flatObj() {
   return result;
 }; // 校验schema id是否有重复的
 
-export var checkRepeatId = function checkRepeatId() {
-  var schema = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+export var checkRepeatId = function checkRepeatId(schema) {
+  if (schema === void 0) {
+    schema = {};
+  }
+
   var result = {};
 
   var loop = function loop(_schema) {
     var temp = {};
-    var _schema$properties3 = _schema.properties,
-        properties = _schema$properties3 === void 0 ? {} : _schema$properties3;
+    var _schema$properties = _schema.properties,
+        properties = _schema$properties === void 0 ? {} : _schema$properties;
     Object.keys(properties).forEach(function (propKey) {
       var item = properties[propKey];
       var key = item.__id__ ? item.__id__ : propKey;

@@ -1,15 +1,11 @@
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 import { parseDestructPath } from "../../utils";
 import moment from 'moment';
 import Arg from "./arg";
 export var isType = function isType(type) {
   return function (obj) {
-    return obj != null && Object.prototype.toString.call(obj) === "[object ".concat(type, "]");
+    return obj != null && Object.prototype.toString.call(obj) === "[object " + type + "]";
   };
 };
 export var isFn = isType('Function');
@@ -123,18 +119,20 @@ export var getDefault = function getDefault(v, path) {
   }
 };
 
-var normalizeDefault = function normalizeDefault(properties) {
-  var _buf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var normalizeDefault = function normalizeDefault(properties, _buf) {
+  if (_buf === void 0) {
+    _buf = {};
+  }
 
   return Object.keys(properties).reduce(function (buf, k) {
     if (properties[k].properties && Object.keys(properties[k].properties).length) {
-      buf[k] = _objectSpread({
+      buf[k] = _extends({
         type: 'object',
         properties: {}
       }, properties[k]);
       normalizeDefault(properties[k].properties, buf[k].properties);
     } else {
-      buf[k] = _objectSpread(_objectSpread({}, properties[k]), {}, {
+      buf[k] = _extends({}, properties[k], {
         default: getDefault(properties[k].default, k)
       });
     }
@@ -155,9 +153,9 @@ export var normalizeSchema = function normalizeSchema(schema) {
 
   var _properties = normalizeDefault(properties);
 
-  return _objectSpread(_objectSpread({
+  return _extends({
     type: type
-  }, schema), {}, {
+  }, schema, {
     properties: _properties
   });
 };

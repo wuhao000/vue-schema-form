@@ -93,8 +93,10 @@ function compile(dir) {
         // console.log(sc);
       } else {
         const { code } = babel.transformFileSync(filePath, babelConfig);
-        fs.removeSync(filePath);
-        fs.outputFileSync(filePath.replace(scriptRegExp, '.js'), code);
+        // if (file !== 'form.tsx') {
+          fs.removeSync(filePath);
+          fs.outputFileSync(filePath.replace(scriptRegExp, '.js'), code);
+        // }
       }
     }
   });

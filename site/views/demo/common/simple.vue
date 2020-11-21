@@ -24,7 +24,7 @@
   import Base from '../base';
   import ShowValue from '../show-value';
   import {FormDescriptor, SchemaFormField} from '../../../../types';
-  import Component from 'vue-class-component';
+  import Component, {mixins} from 'vue-class-component';
 
   const def: { [key: string]: SchemaFormField } = {
     radio: {
@@ -169,7 +169,7 @@
     name: 'SimpleEditDemo',
     components: {ShowValue}
   })
-  export default class SimpleEditDemo extends Base {
+  export default class SimpleEditDemo extends mixins(Base) {
 
     public checked = false;
     public value = {
@@ -181,7 +181,6 @@
     };
 
     public year = [2019];
-
 
     get definition(): FormDescriptor {
       return {

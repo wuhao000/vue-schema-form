@@ -14,6 +14,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import {EffectsContext} from '../../../../types';
   import Vue from 'vue';
   import Component from 'vue-class-component';
@@ -100,8 +101,8 @@
     public value2: any = {s1: '444444', s4: null};
 
     public created() {
-      window.SchemaForm.registerAntdMobile();
-      window.SchemaForm.registerElement();
+      SchemaForm.registerAntdMobile();
+      SchemaForm.registerElement();
       setTimeout(() => {
         this.value = {
           name: '张三',

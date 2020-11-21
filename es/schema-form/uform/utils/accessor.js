@@ -1,8 +1,4 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 import { isArr, isNum, isObj, isPlainObj, isStr } from "../types";
 import { each, every, map } from "./array";
@@ -64,19 +60,28 @@ export function getPathSegments(path) {
 
 var DestructTokenizer = /*#__PURE__*/function () {
   function DestructTokenizer(text, handlers) {
-    _classCallCheck(this, DestructTokenizer);
+    _defineProperty(this, "EOF", void 0);
 
-    this.EOF = void 0;
-    this.declareNameEnd = void 0;
-    this.declareNameStart = void 0;
-    this.destructKey = void 0;
-    this.destructKeyStart = void 0;
-    this.handlers = void 0;
-    this.index = void 0;
-    this.nbraceCount = void 0;
-    this.nbracketCount = void 0;
-    this.state = void 0;
-    this.text = void 0;
+    _defineProperty(this, "declareNameEnd", void 0);
+
+    _defineProperty(this, "declareNameStart", void 0);
+
+    _defineProperty(this, "destructKey", void 0);
+
+    _defineProperty(this, "destructKeyStart", void 0);
+
+    _defineProperty(this, "handlers", void 0);
+
+    _defineProperty(this, "index", void 0);
+
+    _defineProperty(this, "nbraceCount", void 0);
+
+    _defineProperty(this, "nbracketCount", void 0);
+
+    _defineProperty(this, "state", void 0);
+
+    _defineProperty(this, "text", void 0);
+
     this.text = text;
     this.index = 0;
     this.handlers = handlers;
@@ -87,111 +92,105 @@ var DestructTokenizer = /*#__PURE__*/function () {
     this.nbracketCount = 0;
   }
 
-  _createClass(DestructTokenizer, [{
-    key: "parse",
-    value: function parse() {
-      var char = '';
-      var prev = '';
-      var l = this.text.length;
+  var _proto = DestructTokenizer.prototype;
 
-      for (; this.index < l; this.index++) {
-        char = this.text.charAt(this.index);
-        this.EOF = l - 1 === this.index;
-        this.state(char, prev);
-        prev = char;
-      }
+  _proto.parse = function parse() {
+    var char = '';
+    var prev = '';
+    var l = this.text.length;
+
+    for (; this.index < l; this.index++) {
+      char = this.text.charAt(this.index);
+      this.EOF = l - 1 === this.index;
+      this.state(char, prev);
+      prev = char;
     }
-  }, {
-    key: "getName",
-    value: function getName() {
-      return this.text.substring(this.declareNameStart, this.declareNameEnd);
-    }
-  }, {
-    key: "processDestructKey",
-    value: function processDestructKey(char, prev) {
-      if (char === '}') {
-        this.nbraceCount--;
+  };
 
-        if (this.nbraceCount || this.nbracketCount) {
-          this.state = this.processDestructStart;
-        }
+  _proto.getName = function getName() {
+    return this.text.substring(this.declareNameStart, this.declareNameEnd);
+  };
 
-        if (!whitespace(prev)) {
-          this.destructKey = this.text.substring(this.destructKeyStart, this.index);
-        }
+  _proto.processDestructKey = function processDestructKey(char, prev) {
+    if (char === '}') {
+      this.nbraceCount--;
 
-        this.handlers.destructKey(this.destructKey);
-        this.handlers.destructObjectEnd();
-
-        if (!this.nbraceCount && !this.nbracketCount) {
-          this.index = this.text.length;
-        }
-      } else if (char === ']') {
-        this.nbracketCount--;
-
-        if (this.nbraceCount || this.nbracketCount) {
-          this.state = this.processDestructStart;
-        }
-
-        if (!whitespace(prev)) {
-          this.destructKey = this.text.substring(this.destructKeyStart, this.index);
-        }
-
-        this.handlers.destructKey(this.destructKey);
-        this.handlers.destructArrayEnd();
-
-        if (!this.nbraceCount && !this.nbracketCount) {
-          this.index = this.text.length;
-        }
-      } else if (whitespace(char) || char === ':' || char === ',') {
-        if (!whitespace(prev)) {
-          this.destructKey = this.text.substring(this.destructKeyStart, this.index);
-        }
-
-        if (!whitespace(char)) {
-          this.state = this.processDestructStart;
-          this.handlers.destructKey(this.destructKey, char === ':');
-        }
-      }
-    }
-  }, {
-    key: "processDestructStart",
-    value: function processDestructStart(char) {
-      if (char === '{') {
-        this.nbraceCount++;
-        this.handlers.destructObjectStart();
-      } else if (char === '[') {
-        this.nbracketCount++;
-        this.handlers.destructArrayStart();
-      } else if (!whitespace(char)) {
-        this.state = this.processDestructKey;
-        this.destructKeyStart = this.index;
-        this.index--;
-      }
-    }
-  }, {
-    key: "processName",
-    value: function processName(char, prev) {
-      if (whitespace(char)) {
-        this.declareNameEnd = this.index;
-        this.handlers.name(this.getName());
-      } else if (this.EOF) {
-        this.declareNameEnd = this.index + 1;
-        this.handlers.name(this.getName());
-      }
-    }
-  }, {
-    key: "processNameStart",
-    value: function processNameStart(char) {
-      if (char === '{' || char === '[') {
+      if (this.nbraceCount || this.nbracketCount) {
         this.state = this.processDestructStart;
-        this.index--;
-      } else if (!whitespace(char)) {
-        this.declareNameStart = this.index;
-        this.state = this.processName;
+      }
+
+      if (!whitespace(prev)) {
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index);
+      }
+
+      this.handlers.destructKey(this.destructKey);
+      this.handlers.destructObjectEnd();
+
+      if (!this.nbraceCount && !this.nbracketCount) {
+        this.index = this.text.length;
+      }
+    } else if (char === ']') {
+      this.nbracketCount--;
+
+      if (this.nbraceCount || this.nbracketCount) {
+        this.state = this.processDestructStart;
+      }
+
+      if (!whitespace(prev)) {
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index);
+      }
+
+      this.handlers.destructKey(this.destructKey);
+      this.handlers.destructArrayEnd();
+
+      if (!this.nbraceCount && !this.nbracketCount) {
+        this.index = this.text.length;
+      }
+    } else if (whitespace(char) || char === ':' || char === ',') {
+      if (!whitespace(prev)) {
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index);
+      }
+
+      if (!whitespace(char)) {
+        this.state = this.processDestructStart;
+        this.handlers.destructKey(this.destructKey, char === ':');
       }
     }
-  }]);
+  };
+
+  _proto.processDestructStart = function processDestructStart(char) {
+    if (char === '{') {
+      this.nbraceCount++;
+      this.handlers.destructObjectStart();
+    } else if (char === '[') {
+      this.nbracketCount++;
+      this.handlers.destructArrayStart();
+    } else if (!whitespace(char)) {
+      this.state = this.processDestructKey;
+      this.destructKeyStart = this.index;
+      this.index--;
+    }
+  };
+
+  _proto.processName = function processName(char, prev) {
+    if (whitespace(char)) {
+      this.declareNameEnd = this.index;
+      this.handlers.name(this.getName());
+    } else if (this.EOF) {
+      this.declareNameEnd = this.index + 1;
+      this.handlers.name(this.getName());
+    }
+  };
+
+  _proto.processNameStart = function processNameStart(char) {
+    if (char === '{' || char === '[') {
+      this.state = this.processDestructStart;
+      this.index--;
+    } else if (!whitespace(char)) {
+      this.declareNameStart = this.index;
+      this.state = this.processName;
+    }
+  };
 
   return DestructTokenizer;
 }();

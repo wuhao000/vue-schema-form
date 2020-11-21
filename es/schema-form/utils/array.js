@@ -1,5 +1,7 @@
-export function isSame(first, second) {
-  var ignoreOrder = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+export function isSame(first, second, ignoreOrder) {
+  if (ignoreOrder === void 0) {
+    ignoreOrder = true;
+  }
 
   if (ignoreOrder) {
     return !(first.find(function (role) {

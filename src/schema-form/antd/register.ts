@@ -19,7 +19,7 @@ import TimeRangePicker from './time-range-picker.vue';
 import AntdUrlInput from './url';
 
 export function registerAntd(options?: AntdRegisterOptions) {
-  console.debug('注册Ant Design Vue表单组件');
+  console.info('注册Ant Design Vue表单组件');
   LibName.desktop = 'antd';
   Object.keys(ComponentMap).forEach(key => {
     LibComponents[key] = ComponentMap[key].antd;

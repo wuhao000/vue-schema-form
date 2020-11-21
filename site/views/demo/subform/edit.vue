@@ -11,6 +11,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import {getSubFormDefinition, getSubFormValue} from '../subform/utils';
   import Component from 'vue-class-component';
   import Base from '../base';
@@ -27,7 +28,7 @@
     }
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
   }

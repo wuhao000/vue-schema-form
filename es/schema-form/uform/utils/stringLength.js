@@ -8,7 +8,7 @@ var ansiRegex = function ansiRegex() {
 var regex = "[\uD800-\uDBFF][\uDC00-\uDFFF]";
 
 var astralRegex = function astralRegex(opts) {
-  return opts && opts.exact ? new RegExp("^".concat(regex, "$")) : new RegExp(regex, 'g');
+  return opts && opts.exact ? new RegExp("^" + regex + "$") : new RegExp(regex, 'g');
 }; // stripAnsi
 
 

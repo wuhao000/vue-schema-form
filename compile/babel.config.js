@@ -1,9 +1,7 @@
 module.exports = function(api) {
   const { BABEL_MODULE, NODE_ENV } = process.env;
   const useESModules = BABEL_MODULE !== 'commonjs' && NODE_ENV !== 'test';
-
   api && api.cache(false);
-
   return {
     presets: [
       ['@vue/app', {
@@ -21,12 +19,6 @@ module.exports = function(api) {
         modules: false,
         loose: true
       }],
-      [
-        '@babel/preset-env',
-        {
-          modules: useESModules ? false : 'commonjs'
-        }
-      ],
       '@babel/preset-typescript'
     ],
     plugins: [
@@ -37,19 +29,11 @@ module.exports = function(api) {
           'utils': './es/utils'
         }
       }],
-      ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-      ['@babel/plugin-proposal-class-properties', { 'loose': true }],
-      // [
-      //   '@babel/plugin-transform-runtime',
-      //   {
-      //     corejs: false,
-      //     useESModules
-      //   }
-      // ],
-      // '@vue/babel-plugin-jsx',
+      ['@babel/plugin-proposal-decorators', { legacy: true }],
+      ['@babel/plugin-proposal-class-properties', { 'loose': false }],
       '@babel/plugin-transform-object-assign',
       '@babel/plugin-proposal-nullish-coalescing-operator',
-      '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-proposal-optional-chaining'
     ]
   };
 };

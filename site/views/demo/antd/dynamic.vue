@@ -19,6 +19,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import {DESKTOP} from '../../../utils/util';
   import {EffectsContext, SchemaFormField} from '../../../../types';
   import Vue from 'vue';
@@ -27,7 +28,7 @@
   import ShowValue from '../show-value';
   import User from './visible-scope-input.vue';
 
-  window.SchemaForm.registerComponent(User, DESKTOP, 'User', null, (def) => {
+  SchemaForm.registerComponent(User, DESKTOP, 'User', null, (def) => {
     return {maxUsers: def.array ? 0 : 1};
   });
   export const transform = (extraDefinitions: any[]): SchemaFormField[] => {
@@ -155,8 +156,8 @@
     }
 
     public async created() {
-      window.SchemaForm.registerElement();
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerElement();
+      SchemaForm.registerAntd();
       setTimeout(() => {
         const definitions = [{
           'name': 'userToChooseResume',

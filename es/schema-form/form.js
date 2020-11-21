@@ -1,235 +1,174 @@
 import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
 import _regeneratorRuntime from "/Users/wuhao/IdeaProjects/github/vue-schema-form/node_modules/@babel/runtime/regenerator";
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _class3, _temp;
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
 import className from 'classname';
 import { Subject } from 'rxjs';
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop, Provide, Watch } from 'vue-property-decorator';
-import { clone, isEqual } from "./uform/utils";
-import runValidation from "./uform/validator";
 import { registerAntd } from "./antd/register";
 import { registerElement } from "./element/register";
 import { hasListener, renderField, SchemaFormEvents } from "./internal/utils";
-import { registerLayout } from "./layout/register";
 import { registerAntdMobile } from "./mobile/register";
+import { clone, isEqual } from "./uform/utils";
+import runValidation from "./uform/validator";
 import { appendPath as _appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath as _replaceLastPath, takePath as _takePath } from "./utils/path";
-import { register, addComponent, registerResponsiveComponent, registerDisplay } from "./utils/register";
-import { ASchemaForm, LibComponents } from "./utils/utils";
+import { addComponent, register, registerDisplay, registerLayout, registerResponsiveComponent } from "./utils/register";
+import { LibComponents } from "./utils/utils";
 import { registerVant } from "./vant";
 export var SCHEMA_FORM_STORE_INJECT_KEY = 'store';
 export var SCHEMA_FIELD_INJECT_KEY = '_field';
 export var SCHEMA_FIELD_FORM_VALUE_INJECT_KEY = '_form_value';
-var SchemaForm = (_dec = Component({
-  name: ASchemaForm
-}), _dec2 = Prop({
-  type: String,
-  default: 'schema-form'
-}), _dec3 = Prop({
-  type: Boolean,
-  default: false
-}), _dec4 = Prop({
-  type: Boolean,
-  default: false
-}), _dec5 = Prop({
-  type: Boolean,
-  default: false
-}), _dec6 = Prop({
-  type: Array
-}), _dec7 = Prop({
-  type: String,
-  default: 'desktop'
-}), _dec8 = Prop({
-  type: String
-}), _dec9 = Prop({
-  type: Boolean,
-  default: true
-}), _dec10 = Prop(Function), _dec11 = Prop({
-  type: Object,
-  required: true
-}), _dec12 = Prop({
-  type: Object,
-  default: function _default() {
-    return {};
-  }
-}), _dec13 = Prop([Object, Array]), _dec14 = Prop([String, Object]), _dec15 = Prop({
-  type: Boolean,
-  default: false
-}), _dec16 = Prop({
-  type: Boolean,
-  default: false
-}), _dec17 = Provide(SCHEMA_FORM_STORE_INJECT_KEY), _dec18 = Watch('readonly', {
-  immediate: true
-}), _dec19 = Watch('disabled', {
-  immediate: true
-}), _dec20 = Watch('platform'), _dec21 = Watch('props', {
-  immediate: true,
-  deep: true
-}), _dec22 = Watch('mode'), _dec23 = Watch('loading', {
-  immediate: true
-}), _dec24 = Watch('value', {
-  deep: true
-}), _dec25 = Watch('currentValue', {
-  deep: true
-}), _dec(_class = (_class2 = (_temp = _class3 = /*#__PURE__*/function (_Vue) {
-  _inherits(SchemaForm, _Vue);
-
-  var _super = _createSuper(SchemaForm);
-
-  function SchemaForm() {
-    var _this;
-
-    _classCallCheck(this, SchemaForm);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+var Form = Vue.extend({
+  props: {
+    prefixCls: {
+      type: String,
+      default: 'schema-form'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    actions: {
+      type: Array
+    },
+    platform: {
+      type: String,
+      default: 'desktop'
+    },
+    mode: {
+      type: String
+    },
+    editable: {
+      type: Boolean,
+      default: true
+    },
+    effects: {
+      type: Function
+    },
+    schema: {
+      type: Object,
+      required: true
+    },
+    value: {
+      type: [Object, Array]
+    },
+    title: {
+      type: [String, Object]
+    },
+    inline: {
+      type: Boolean,
+      default: false
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
+  },
+  provide: function provide() {
+    var _ref;
 
-    _this = _super.call.apply(_super, [this].concat(args));
-
-    _initializerDefineProperty(_this, "prefixCls", _descriptor, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "disabled", _descriptor2, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "readonly", _descriptor3, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "loading", _descriptor4, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "actions", _descriptor5, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "platform", _descriptor6, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "mode", _descriptor7, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "editable", _descriptor8, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "effects", _descriptor9, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "schema", _descriptor10, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "props", _descriptor11, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "value", _descriptor12, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "title", _descriptor13, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "inline", _descriptor14, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "sticky", _descriptor15, _assertThisInitialized(_this));
-
-    _initializerDefineProperty(_this, "store", _descriptor16, _assertThisInitialized(_this));
-
-    _this.currentValue = null;
-    return _this;
-  }
-
-  _createClass(SchemaForm, [{
-    key: "readonlyChanged",
-    value: function readonlyChanged(readonly) {
-      this.store.readonly = readonly;
-    }
-  }, {
-    key: "disabledChanged",
-    value: function disabledChanged(disabled) {
-      this.store.disabled = disabled;
-    }
-  }, {
-    key: "platformChanged",
-    value: function platformChanged(platform) {
-      this.store.platform = platform;
-    }
-  }, {
-    key: "propsChanged",
-    value: function propsChanged(props) {
-      this.store.props = props;
-    }
-  }, {
-    key: "modeChanged",
-    value: function modeChanged(mode) {
-      this.store.editable = mode === 'edit';
-    }
-  }, {
-    key: "loadingChanged",
-    value: function loadingChanged(loading) {
-      this.store.loading = loading;
-    }
-  }, {
-    key: "mounted",
-    value: function mounted() {
-      if (this.effects) {
-        this.effects(this.store.context);
+    var store = this.store;
+    return _ref = {}, _ref[SCHEMA_FORM_STORE_INJECT_KEY] = Vue.observable(store), _ref;
+  },
+  data: function data() {
+    return {
+      currentValue: null,
+      store: {
+        fields: {},
+        // @ts-ignore
+        disabled: this.disabled,
+        // @ts-ignore
+        loading: this.loading,
+        // @ts-ignore
+        readonly: this.readonly,
+        // @ts-ignore
+        platform: this.platform,
+        // @ts-ignore
+        props: this.props,
+        // @ts-ignore
+        effects: this.effects,
+        // @ts-ignore
+        inline: this.inline,
+        // @ts-ignore
+        editable: this.editable,
+        context: null,
+        root: this
+      }
+    };
+  },
+  watch: {
+    readonly: {
+      immediate: true,
+      handler: function handler(readonly) {
+        this.store.readonly = readonly;
+      }
+    },
+    disabled: {
+      immediate: true,
+      handler: function handler(disabled) {
+        this.store.disabled = disabled;
+      }
+    },
+    platform: function platform(_platform) {
+      this.store.platform = _platform;
+    },
+    loading: {
+      immediate: true,
+      handler: function handler(loading) {
+        this.store.loading = loading;
+      }
+    },
+    value: {
+      deep: true,
+      handler: function handler() {
+        this.setCurrentValue();
+      }
+    },
+    currentValue: {
+      deep: true,
+      handler: function handler(v) {
+        var cloneValue = clone(v);
+        this.$emit('input', cloneValue);
+        this.$emit('change', cloneValue);
       }
     }
-  }, {
-    key: "matchFields",
-    value: function matchFields(paths) {
-      var _this2 = this;
-
-      var matchedPaths = match(paths, this.store.fields);
+  },
+  mounted: function mounted() {
+    if (this.effects) {
+      this.effects(this.store.context);
+    }
+  },
+  methods: {
+    matchFields: function matchFields(paths) {
+      var store = this.store;
+      var matchedPaths = match(paths, store.fields);
       return matchedPaths.map(function (path) {
-        return _this2.store.fields[path];
+        return store.fields[path];
       }).filter(function (it) {
         return !!it;
       });
-    }
-  }, {
-    key: "createContext",
-    value: function createContext() {
-      var _this3 = this;
+    },
+    createContext: function createContext() {
+      var _this = this;
+
+      var store = this.store;
 
       var context = function context() {
-        for (var _len2 = arguments.length, _paths = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-          _paths[_key2] = arguments[_key2];
+        for (var _len = arguments.length, _paths = new Array(_len), _key = 0; _key < _len; _key++) {
+          _paths[_key] = arguments[_key];
         }
 
         return {
@@ -239,10 +178,10 @@ var SchemaForm = (_dec = Component({
             });
           },
           fields: function fields() {
-            return _this3.matchFields(_paths);
+            return _this.matchFields(_paths);
           },
           toggle: function toggle() {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               field.visible = !field.visible;
             });
 
@@ -259,7 +198,7 @@ var SchemaForm = (_dec = Component({
 
             return value;
           }(function (value) {
-            var res = _this3.matchFields(_paths).map(function (it) {
+            var res = _this.matchFields(_paths).map(function (it) {
               return typeof value === 'function' ? it.setGetValue(value(it)) : it.setGetValue(value);
             });
 
@@ -272,21 +211,21 @@ var SchemaForm = (_dec = Component({
             }
           }),
           hide: function hide() {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               field.visible = false;
             });
 
             return context.apply(void 0, _paths);
           },
           show: function show() {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               field.visible = true;
             });
 
             return context.apply(void 0, _paths);
           },
           setEnum: function setEnum(options) {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               if (typeof options === 'function') {
                 field.enum = options(field);
               } else {
@@ -297,7 +236,7 @@ var SchemaForm = (_dec = Component({
             return context.apply(void 0, _paths);
           },
           setTitle: function setTitle(title) {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               if (typeof title === 'function') {
                 field.title = title(field);
               } else {
@@ -308,7 +247,7 @@ var SchemaForm = (_dec = Component({
             return context.apply(void 0, _paths);
           },
           setFieldProps: function setFieldProps(props) {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               if (typeof props === 'function') {
                 field.props = _extends({}, field.props, props(field));
               } else {
@@ -327,7 +266,7 @@ var SchemaForm = (_dec = Component({
             return context.apply(void 0, _paths);
           },
           setDisplayValue: function setDisplayValue(value) {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               if (typeof value === 'function') {
                 field.displayValue = value(field);
               } else {
@@ -357,11 +296,11 @@ var SchemaForm = (_dec = Component({
               return context();
             } else {
               if (typeof _paths[0] === 'string') {
-                return context.apply(void 0, _toConsumableArray(_takePath(_paths, number)));
+                return context.apply(void 0, _takePath(_paths, number));
               } else {
-                return context.apply(void 0, _toConsumableArray(_takePath(_paths.map(function (it) {
-                  return findFieldPath(it, _this3.store.fields);
-                }), number)));
+                return context.apply(void 0, _takePath(_paths.map(function (it) {
+                  return findFieldPath(it, store.fields);
+                }), number));
               }
             }
           },
@@ -370,34 +309,34 @@ var SchemaForm = (_dec = Component({
               return context();
             } else {
               if (typeof _paths[0] === 'string') {
-                return context.apply(void 0, _toConsumableArray(_appendPath(_paths, suffix)));
+                return context.apply(void 0, _appendPath(_paths, suffix));
               } else {
-                return context.apply(void 0, _toConsumableArray(_appendPath(_paths.map(function (it) {
-                  return findFieldPath(it, _this3.store.fields);
-                }), suffix)));
+                return context.apply(void 0, _appendPath(_paths.map(function (it) {
+                  return findFieldPath(it, store.fields);
+                }), suffix));
               }
             }
           },
           disable: function disable() {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               field.disabled = true;
             });
 
             return context.apply(void 0, _paths);
           },
           enable: function enable() {
-            _this3.matchFields(_paths).forEach(function (field) {
+            _this.matchFields(_paths).forEach(function (field) {
               field.disabled = false;
             });
 
             return context.apply(void 0, _paths);
           },
           replaceLastPath: function replaceLastPath() {
-            for (var _len3 = arguments.length, last = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-              last[_key3] = arguments[_key3];
+            for (var _len2 = arguments.length, last = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+              last[_key2] = arguments[_key2];
             }
 
-            return context.apply(void 0, _toConsumableArray(_replaceLastPath(_paths, last)));
+            return context.apply(void 0, _replaceLastPath(_paths, last));
           }
         };
       };
@@ -409,7 +348,7 @@ var SchemaForm = (_dec = Component({
 
         context.subscribes[e].subscribe({
           next: function next(v) {
-            _this3.$nextTick(function () {
+            _this.$nextTick(function () {
               if (typeof pathsOrHandler === 'function') {
                 pathsOrHandler(v);
               } else {
@@ -417,9 +356,9 @@ var SchemaForm = (_dec = Component({
                   if (typeof item === 'string') {
                     return item;
                   } else {
-                    return findFieldPath(item, _this3.store.fields);
+                    return findFieldPath(item, store.fields);
                   }
-                }) : [findFieldPath(pathsOrHandler, _this3.store.fields)];
+                }) : [findFieldPath(pathsOrHandler, store.fields)];
 
                 if (isPathMatchPatterns(v.field, patterns)) {
                   if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
@@ -437,18 +376,18 @@ var SchemaForm = (_dec = Component({
       };
 
       context.submit = function (forceValidate, callback) {
-        _this3.onOk(forceValidate, callback);
+        _this.onOk(forceValidate, callback);
       };
 
       context.validate = /*#__PURE__*/function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(handler) {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(handler) {
           var errors;
           return _regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return runValidation(_this3.currentValue, _this3.store.fields, true);
+                  return runValidation(_this.currentValue, store.fields, true);
 
                 case 2:
                   errors = _context.sent;
@@ -474,7 +413,7 @@ var SchemaForm = (_dec = Component({
         }));
 
         return function (_x2) {
-          return _ref.apply(this, arguments);
+          return _ref2.apply(this, arguments);
         };
       }();
 
@@ -485,12 +424,12 @@ var SchemaForm = (_dec = Component({
       context.subscribes = {};
 
       context.getValue = function () {
-        return _this3.currentValue;
+        return _this.currentValue;
       };
 
       context.trigger = function (event, value) {
-        _this3.$nextTick(function () {
-          var subject = _this3.store.context.subscribes[event];
+        _this.$nextTick(function () {
+          var subject = store.context.subscribes[event];
 
           if (subject) {
             subject.next(value);
@@ -499,82 +438,9 @@ var SchemaForm = (_dec = Component({
       };
 
       return context;
-    }
-  }, {
-    key: "valueChanged",
-    value: function valueChanged() {
-      this.setCurrentValue();
-    }
-  }, {
-    key: "created",
-    value: function created() {
-      var _this4 = this;
-
-      this.setCurrentValue();
-      this.store.context = this.createContext();
-      this.store.editable = this.mode !== undefined ? this.mode === 'edit' : this.editable;
-
-      if (this.mode !== undefined) {
-        console.warn('mode属性已经废弃，请使用editable属性代替');
-      }
-
-      this.$watch(function () {
-        return _this4.editable;
-      }, function (editable) {
-        _this4.store.editable = editable;
-      });
-      this.$on('SchemaForm.addSchemaField', function (field) {
-        if (field) {
-          _this4.store.fields[field.plainPath] = field;
-        }
-      });
-      this.$on('SchemaForm.removeSchemaField', function (field) {
-        if (field) {
-          delete _this4.store.fields[field.plainPath];
-        }
-      });
-    }
-  }, {
-    key: "currentValueChanged",
-    value: function currentValueChanged(v) {
-      var cloneValue = clone(v);
-      this.$emit('input', cloneValue);
-      this.$emit('change', cloneValue);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var h = arguments[0];
-      var title = this.title,
-          sticky = this.sticky,
-          prefixCls = this.prefixCls,
-          store = this.store,
-          currentValue = this.currentValue,
-          schema = this.schema;
-
-      var rootFieldDef = _extends({}, schema, {
-        type: 'object',
-        title: title,
-        props: this.schema.props
-      });
-
-      var content = [this.$slots.header, renderField(null, store, rootFieldDef, currentValue, 0, false, this.$createElement, this)];
-      var footer = [this.renderButtons(), this.$slots.footer];
-
-      if (this.sticky) {
-        content = h(LibComponents.content, [content]);
-        footer = h(LibComponents.footer, [footer]);
-      }
-
-      var classes = className(prefixCls, _defineProperty({}, "".concat(prefixCls, "-sticky"), sticky), "".concat(prefixCls, "-").concat(this.platform));
-      return h("div", {
-        "class": classes
-      }, [content, footer]);
-    }
-  }, {
-    key: "renderButtons",
-    value: function renderButtons() {
-      var _this5 = this;
+    },
+    renderButtons: function renderButtons() {
+      var _this2 = this;
 
       var h = this.$createElement;
       var props = this.store.props;
@@ -592,36 +458,36 @@ var SchemaForm = (_dec = Component({
             if (typeof action === 'string') {
               switch (action) {
                 case 'submit':
-                  buttons.push(_this5.createSubmitButton());
+                  buttons.push(_this2.createSubmitButton());
                   break;
 
                 case 'cancel':
-                  buttons.push(_this5.createCancelButton());
+                  buttons.push(_this2.createCancelButton());
                   break;
 
                 case 'reset':
-                  buttons.push(_this5.createResetButton());
+                  buttons.push(_this2.createResetButton());
                   break;
               }
-            } else if (_typeof(action) === 'object') {
+            } else if (typeof action === 'object') {
               switch (action.name) {
                 case 'submit':
-                  buttons.push(_this5.createSubmitButton(action.text, action.props, action.action));
+                  buttons.push(_this2.createSubmitButton(action.text, action.props, action.action));
                   break;
 
                 case 'cancel':
-                  buttons.push(_this5.createCancelButton(action.text, action.props, action.action));
+                  buttons.push(_this2.createCancelButton(action.text, action.props, action.action));
                   break;
 
                 case 'reset':
-                  buttons.push(_this5.createResetButton(action.text, action.props, action.action));
+                  buttons.push(_this2.createResetButton(action.text, action.props, action.action));
                   break;
 
                 default:
                   var _props = action.props || {};
 
-                  _props.disabled = _this5.disabled || _this5.loading;
-                  buttons.push(_this5.createButton(action.text, action.action, _props, null));
+                  _props.disabled = _this2.disabled || _this2.loading;
+                  buttons.push(_this2.createButton(action.text, action.action, _props, null));
                   break;
               }
             }
@@ -636,10 +502,8 @@ var SchemaForm = (_dec = Component({
           "class": "action-btns"
         }, [buttons]);
       }
-    }
-  }, {
-    key: "onOk",
-    value: function () {
+    },
+    onOk: function () {
       var _onOk = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(forceValidate, callback) {
         var errors;
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
@@ -696,28 +560,32 @@ var SchemaForm = (_dec = Component({
       }
 
       return onOk;
-    }()
-  }, {
-    key: "validate",
-    value: function validate() {
+    }(),
+    validate: function validate() {
       return runValidation(this.currentValue, this.store.fields, true);
-    }
-  }, {
-    key: "createSubmitButton",
-    value: function createSubmitButton() {
-      var _this6 = this;
+    },
+    createSubmitButton: function createSubmitButton(text, btnProps, action) {
+      var _this3 = this;
 
-      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var btnProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var action = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      if (text === void 0) {
+        text = '';
+      }
+
+      if (btnProps === void 0) {
+        btnProps = null;
+      }
+
+      if (action === void 0) {
+        action = null;
+      }
+
       var hasOkHandler = hasListener(this, 'ok');
 
       if (!hasOkHandler) {
         return null;
       }
 
-      var props = this.props;
-      var buttonProps = btnProps || props && props.okProps || {};
+      var buttonProps = btnProps || this.schema.props && this.schema.props.okProps || {};
 
       if (!buttonProps.type) {
         buttonProps.type = 'primary';
@@ -725,14 +593,12 @@ var SchemaForm = (_dec = Component({
 
       buttonProps.disabled = this.disabled;
       buttonProps.loading = this.loading;
-      return this.createButton(text || props && props.okText || '提交', action || function () {
-        _this6.onOk(true);
+      return this.createButton(text || this.schema.props && this.schema.props.okText || '提交', action || function () {
+        _this3.onOk(true);
       }, buttonProps, 'confirm-btn');
-    }
-  }, {
-    key: "createButton",
-    value: function createButton(text, action, attrs, classes) {
-      var _this7 = this;
+    },
+    createButton: function createButton(text, action, attrs, classes) {
+      var _this4 = this;
 
       var h = this.$createElement;
       var platform = this.platform;
@@ -744,7 +610,7 @@ var SchemaForm = (_dec = Component({
       }, {
         "on": {
           "click": function click() {
-            action(_this7.store.context);
+            action(_this4.store.context);
           }
         }
       }]), [text]);
@@ -754,54 +620,62 @@ var SchemaForm = (_dec = Component({
       }
 
       return Button;
-    }
-  }, {
-    key: "createCancelButton",
-    value: function createCancelButton() {
-      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var btnProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var action = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    },
+    createCancelButton: function createCancelButton(text, btnProps, action) {
+      if (text === void 0) {
+        text = '';
+      }
+
+      if (btnProps === void 0) {
+        btnProps = null;
+      }
+
+      if (action === void 0) {
+        action = null;
+      }
+
       var hasCancelHandler = hasListener(this, 'cancel');
 
       if (!hasCancelHandler) {
         return null;
       }
 
-      var props = this.props;
+      var props = this.schema.props;
       var buttonProps = btnProps || props && props.cancelProps || {};
       buttonProps.disabled = this.disabled || this.loading;
       return this.createButton(text || (props === null || props === void 0 ? void 0 : props.cancelText) || '取消', action || this.onCancel, buttonProps, 'cancel-btn');
-    }
-  }, {
-    key: "createResetButton",
-    value: function createResetButton() {
-      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var btnProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var action = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    },
+    createResetButton: function createResetButton(text, btnProps, action) {
+      if (text === void 0) {
+        text = '';
+      }
+
+      if (btnProps === void 0) {
+        btnProps = null;
+      }
+
+      if (action === void 0) {
+        action = null;
+      }
+
       var hasResetHandler = hasListener(this, 'reset');
 
       if (!hasResetHandler) {
         return null;
       }
 
-      var props = this.props;
+      var props = this.schema.props;
       var buttonProps = btnProps || props && props.cancelProps || {};
       buttonProps.disabled = this.disabled || this.loading;
       return this.createButton(text || props && props.cancelText || '重置', action || this.onReset, buttonProps, 'reset-btn');
-    }
-  }, {
-    key: "onReset",
-    value: function onReset() {
+    },
+    onReset: function onReset() {
       this.$emit('reset');
-    }
-  }, {
-    key: "onCancel",
-    value: function onCancel() {
+    },
+    onCancel: function onCancel() {
       this.$emit('cancel');
-    }
-  }, {
-    key: "setCurrentValue",
-    value: function setCurrentValue() {
+    },
+    setCurrentValue: function setCurrentValue() {
       if (!(this.currentValue && isEqual(this.value, this.currentValue))) {
         if (this.value) {
           this.currentValue = clone(this.value);
@@ -812,110 +686,73 @@ var SchemaForm = (_dec = Component({
         }
       }
     }
-  }]);
+  },
+  created: function created() {
+    var _this5 = this;
 
-  return SchemaForm;
-}(Vue), _class3.Field = void 0, _class3.install = void 0, _class3.registerAntd = registerAntd, _class3.registerAntdMobile = registerAntdMobile, _class3.registerVant = registerVant, _class3.registerElement = registerElement, _class3.registerComponent = register, _class3.register = addComponent, _class3.registerResponsiveComponent = registerResponsiveComponent, _class3.registerLayout = registerLayout, _class3.registerDisplayComponent = registerDisplay, _temp), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "prefixCls", [_dec2], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "disabled", [_dec3], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "readonly", [_dec4], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "loading", [_dec5], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "actions", [_dec6], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "platform", [_dec7], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "mode", [_dec8], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "editable", [_dec9], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "effects", [_dec10], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "schema", [_dec11], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "props", [_dec12], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "value", [_dec13], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "title", [_dec14], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "inline", [_dec15], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "sticky", [_dec16], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: null
-}), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "store", [_dec17], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return Vue.observable({
-      fields: {},
-      // @ts-ignore
-      disabled: this.disabled,
-      // @ts-ignore
-      loading: this.loading,
-      // @ts-ignore
-      readonly: this.readonly,
-      // @ts-ignore
-      platform: this.platform,
-      // @ts-ignore
-      props: this.props,
-      // @ts-ignore
-      effects: this.effects,
-      // @ts-ignore
-      inline: this.inline,
-      // @ts-ignore
-      editable: this.editable,
-      context: null,
-      root: this
+    this.setCurrentValue();
+    var store = this.store;
+    store.context = this.createContext();
+    store.editable = this.mode !== undefined ? this.mode === 'edit' : this.editable;
+
+    if (this.mode !== undefined) {
+      console.warn('mode属性已经废弃，请使用editable属性代替');
+    }
+
+    this.$watch(function () {
+      return _this5.editable;
+    }, function (editable) {
+      store.editable = editable;
     });
+    this.$on('SchemaForm.addSchemaField', function (field) {
+      if (field) {
+        store.fields[field.plainPath] = field;
+      }
+    });
+    this.$on('SchemaForm.removeSchemaField', function (field) {
+      if (field) {
+        delete store.fields[field.plainPath];
+      }
+    });
+  },
+  render: function render() {
+    var _className;
+
+    var h = arguments[0];
+    var title = this.title,
+        sticky = this.sticky,
+        prefixCls = this.prefixCls,
+        currentValue = this.currentValue,
+        schema = this.schema;
+    var store = this.store;
+
+    var rootFieldDef = _extends({}, schema, {
+      type: 'object',
+      title: title,
+      props: this.schema.props
+    });
+
+    var content = [this.$slots.header, renderField(null, store, rootFieldDef, currentValue, 0, false, this.$createElement, this)];
+    var footer = [this.renderButtons(), this.$slots.footer];
+
+    if (this.sticky) {
+      content = h(LibComponents.content, [content]);
+      footer = h(LibComponents.footer, [footer]);
+    }
+
+    var classes = className(prefixCls, (_className = {}, _className[prefixCls + "-sticky"] = sticky, _className), prefixCls + "-" + this.platform);
+    return h("div", {
+      "class": classes
+    }, [content, footer]);
   }
-}), _applyDecoratedDescriptor(_class2.prototype, "readonlyChanged", [_dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "readonlyChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "disabledChanged", [_dec19], Object.getOwnPropertyDescriptor(_class2.prototype, "disabledChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "platformChanged", [_dec20], Object.getOwnPropertyDescriptor(_class2.prototype, "platformChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "propsChanged", [_dec21], Object.getOwnPropertyDescriptor(_class2.prototype, "propsChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "modeChanged", [_dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "modeChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "loadingChanged", [_dec23], Object.getOwnPropertyDescriptor(_class2.prototype, "loadingChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "valueChanged", [_dec24], Object.getOwnPropertyDescriptor(_class2.prototype, "valueChanged"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "currentValueChanged", [_dec25], Object.getOwnPropertyDescriptor(_class2.prototype, "currentValueChanged"), _class2.prototype)), _class2)) || _class);
-export { SchemaForm as default };
+});
+Form.registerAntd = registerAntd;
+Form.registerAntdMobile = registerAntdMobile;
+Form.registerVant = registerVant;
+Form.registerElement = registerElement;
+Form.registerComponent = register;
+Form.register = addComponent;
+Form.registerResponsiveComponent = registerResponsiveComponent;
+Form.registerLayout = registerLayout;
+Form.registerDisplayComponent = registerDisplay;
+export default Form;

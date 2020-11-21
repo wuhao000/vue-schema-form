@@ -21,6 +21,7 @@
   </div>
 </template>
 <script lang="ts">
+import {SchemaForm} from '../../../main';
 import {SchemaFormField} from 'types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -110,7 +111,7 @@ export default class LoginForm extends Vue {
   };
 
   public created() {
-    window.SchemaForm.registerAntd();
+    SchemaForm.registerAntd();
   }
 
   public submit() {

@@ -16,6 +16,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import Vue from 'vue';
 
   export default Vue.extend({
@@ -54,7 +55,7 @@
       };
     },
     beforeCreate() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     },
     methods: {
       changeAge() {

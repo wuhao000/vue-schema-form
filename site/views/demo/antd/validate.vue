@@ -18,6 +18,7 @@
   </a-layout>
 </template>
 <script lang="tsx">
+  import {SchemaForm} from '../../../main';
   import Base from '../base';
   import {EffectsContext} from '../../../../types';
   import Component from 'vue-class-component';
@@ -44,7 +45,7 @@
     };
 
     public created() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
     public effects($: EffectsContext) {

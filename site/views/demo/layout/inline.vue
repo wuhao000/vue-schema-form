@@ -24,6 +24,7 @@
   </a-layout>
 </template>
 <script lang="ts">
+  import {SchemaForm} from '../../../main';
   import {isNotNull} from '../../../utils/util';
   import ShowValue from '../show-value';
   import {SchemaFormField} from '../../../../types';
@@ -117,7 +118,7 @@
     };
 
     public beforeCreate() {
-      window.SchemaForm.registerAntd();
+      SchemaForm.registerAntd();
     }
 
     public changeMode() {
