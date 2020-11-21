@@ -1,13 +1,12 @@
 {
   "name": "v-schema-form",
-  "version": "1.0.0-15",
+  "version": "1.0.0-18",
   "private": false,
-  "main": "es/index.js",
+  "main": "es/schema-form/index.js",
   "files": [
     "lib",
     "es",
-    "types",
-    "src"
+    "types"
   ],
   "scripts": {
     "dev": "vue-cli-service serve",

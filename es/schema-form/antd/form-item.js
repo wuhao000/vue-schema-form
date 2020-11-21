@@ -10,6 +10,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -166,7 +168,7 @@ var DFormItem = (_dec = Component({
           return rule.trigger === trigger;
         }
       }).map(function (rule) {
-        return Object.assign({}, rule);
+        return _extends({}, rule);
       });
     }
   }, {
@@ -200,7 +202,8 @@ var DFormItem = (_dec = Component({
     key: "render",
     value: function render() {
       var h = arguments[0];
-      var props = Object.assign({}, this.$props);
+
+      var props = _extends({}, this.$props);
 
       if (this.$slots.label) {
         props.label = this.$slots.label;

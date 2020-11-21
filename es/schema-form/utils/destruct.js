@@ -24,7 +24,7 @@ export function getStructValue(parentValue, struct, vue) {
       var destructValue = struct[key];
 
       if (typeof destructValue === 'string') {
-        value[key] = parentValue?.[destructValue];
+        value[key] = parentValue === null || parentValue === void 0 ? void 0 : parentValue[destructValue];
       } else {
         value[key] = getStructValue(parentValue, destructValue, vue);
       }

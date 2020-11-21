@@ -23,6 +23,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -308,9 +310,9 @@ var SchemaForm = (_dec = Component({
           setFieldProps: function setFieldProps(props) {
             _this3.matchFields(_paths).forEach(function (field) {
               if (typeof props === 'function') {
-                field.props = Object.assign({}, field.props, props(field));
+                field.props = _extends({}, field.props, props(field));
               } else {
-                field.props = Object.assign({}, field.props, props);
+                field.props = _extends({}, field.props, props);
               }
             });
 
@@ -549,11 +551,13 @@ var SchemaForm = (_dec = Component({
           store = this.store,
           currentValue = this.currentValue,
           schema = this.schema;
-      var rootFieldDef = Object.assign({}, schema, {
+
+      var rootFieldDef = _extends({}, schema, {
         type: 'object',
         title: title,
         props: this.schema.props
       });
+
       var content = [this.$slots.header, renderField(null, store, rootFieldDef, currentValue, 0, false, this.$createElement, this)];
       var footer = [this.renderButtons(), this.$slots.footer];
 
@@ -766,7 +770,7 @@ var SchemaForm = (_dec = Component({
       var props = this.props;
       var buttonProps = btnProps || props && props.cancelProps || {};
       buttonProps.disabled = this.disabled || this.loading;
-      return this.createButton(text || props?.cancelText || '取消', action || this.onCancel, buttonProps, 'cancel-btn');
+      return this.createButton(text || (props === null || props === void 0 ? void 0 : props.cancelText) || '取消', action || this.onCancel, buttonProps, 'cancel-btn');
     }
   }, {
     key: "createResetButton",

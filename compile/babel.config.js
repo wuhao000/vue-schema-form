@@ -31,13 +31,14 @@ module.exports = function(api) {
     ],
     plugins: [
       ['module-resolver', {
+        'root': './es',
         'alias': {
-          '@': '../es',
-          'utils': '../utils'
+          '@': './es',
+          'utils': './es/utils'
         }
       }],
       ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-      ['@babel/plugin-proposal-class-properties', { 'loose': true }]
+      ['@babel/plugin-proposal-class-properties', { 'loose': true }],
       // [
       //   '@babel/plugin-transform-runtime',
       //   {
@@ -46,9 +47,9 @@ module.exports = function(api) {
       //   }
       // ],
       // '@vue/babel-plugin-jsx',
-      // '@babel/plugin-transform-object-assign',
-      // '@babel/plugin-proposal-nullish-coalescing-operator',
-      // '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-transform-object-assign',
+      '@babel/plugin-proposal-nullish-coalescing-operator',
+      '@babel/plugin-proposal-optional-chaining',
     ]
   };
 };

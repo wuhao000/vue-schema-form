@@ -30,6 +30,8 @@ export var runValidation = /*#__PURE__*/function () {
             }
 
             each(fieldMap, function (field, name) {
+              var _field$definition$pro;
+
               var value = field.value;
 
               if (field.visible === false || field.display === false || field.editable === false) {
@@ -46,7 +48,7 @@ export var runValidation = /*#__PURE__*/function () {
                 }
               }
 
-              var title = field.definition.props?.title;
+              var title = (_field$definition$pro = field.definition.props) === null || _field$definition$pro === void 0 ? void 0 : _field$definition$pro.title;
               var rafId = setTimeout(function () {
                 field.loading = true;
                 field.dirty = true;

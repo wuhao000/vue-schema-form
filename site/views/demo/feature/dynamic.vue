@@ -1,0 +1,87 @@
+<template>
+  <div>
+    <div>
+      <v-schema-form v-model="value2"
+                     :schema="schema2"/>
+    </div>
+    <div>
+      <a-button @click="addField">添加</a-button>
+    </div>
+    <div>
+      <v-schema-form v-model="value"
+                     :schema="schema"
+                     platform="mobile"/>
+    </div>
+  </div>
+</template>
+<script lang="tsx">
+  import Vue from 'vue';
+  import {SchemaFormField} from '../../../../types';
+
+  window.SchemaForm.registerDisplayComponent(
+      {
+        props: {value: {}},
+        render() {
+          return <span>{this['value']?.toString()}</span>;
+        }
+      }, ['desktop'], ['boolean']);
+  export default Vue.extend({
+    data() {
+      return {
+        value: {},
+        value2: {},
+        count: 1,
+        dynamicFields: []
+      };
+    },
+    computed: {
+      schema2(this: any) {
+        return {
+          fields: {
+            a: {
+              title: '名称',
+              type: 'string',
+              rules: [{
+                required: true, message: '请输入', trigger: 'blur'
+              }]
+            },
+            b: {
+              title: 'b',
+              type: 'boolean',
+              editable: false,
+              default: true
+            }
+          }
+        } as SchemaFormField;
+      },
+      schema() {
+        const fields = [];
+        fields.push({
+          title: '标题',
+          property: 'title',
+          type: 'string'
+        });
+        this.dynamicFields.forEach(it => {
+          fields.push(it);
+        });
+        return {
+          fields
+        };
+      }
+    },
+    created() {
+      window.SchemaForm.registerElement();
+      window.SchemaForm.registerAntdMobile();
+    },
+    methods: {
+      addField() {
+        this.dynamicFields.push({
+          property: 'title-' + this.count,
+          title: '标题-' + this.count,
+          type: 'string'
+        });
+        this.count++;
+      }
+    }
+  });
+</script>

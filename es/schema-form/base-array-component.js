@@ -10,6 +10,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -108,6 +110,8 @@ var BaseArrayComponent = (_dec = Component({
   }, {
     key: "renderAddButton",
     value: function renderAddButton() {
+      var _this$addBtnProps;
+
       var h = this.$createElement;
 
       if (!this.store.editable) {
@@ -127,7 +131,7 @@ var BaseArrayComponent = (_dec = Component({
 
       var buttonStyle = {};
 
-      if (this.addBtnProps?.block) {
+      if ((_this$addBtnProps = this.addBtnProps) === null || _this$addBtnProps === void 0 ? void 0 : _this$addBtnProps.block) {
         buttonStyle.width = '100%';
       }
 
@@ -141,7 +145,7 @@ var BaseArrayComponent = (_dec = Component({
         },
         "style": buttonStyle
       }, {
-        "attrs": Object.assign({}, this.addBtnProps)
+        "attrs": _extends({}, this.addBtnProps)
       }]), [this.addBtnText || '添加']);
 
       if (this.component === ASchemaForm) {
@@ -174,7 +178,7 @@ var BaseArrayComponent = (_dec = Component({
       var ColComponent = getColComponent();
       var content = [this.current.map(function (v, index) {
         var input = h(InputComponent, _mergeJSXProps2([{}, {
-          "attrs": Object.assign({
+          "attrs": _extends({
             arrayIndex: index
           }, _this2.$attrs)
         }, {

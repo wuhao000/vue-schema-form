@@ -26,8 +26,7 @@ module.exports = {
   runtimeCompiler: false,
   configureWebpack: (config) => {
     config.entry = {
-      app: resolve('src/main.ts'),
-      lib: resolve('src/index.ts')
+      app: resolve('site/main.ts')
     };
     // config.entry = path.resolve('src/index.ts');
     if (config.devServer) {
@@ -85,7 +84,7 @@ module.exports = {
   },
   chainWebpack: config => {
     config.resolve.alias
-        .set('@', resolve('src'))
+        .set('@', resolve('site'))
         .set('_p', resolve('packages'))
         .set('_t', resolve('types'));
   }

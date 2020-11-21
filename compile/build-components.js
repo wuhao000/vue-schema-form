@@ -104,5 +104,4 @@ function compile(dir) {
 fs.emptyDirSync(esDir);
 fs.mkdirSync(path.join(esDir, 'schema-form'))
 fs.copySync(path.join(srcDir, 'schema-form'), path.join(esDir, 'schema-form'));
-fs.copyFileSync(path.join(srcDir, 'index.ts'), path.join(esDir, 'index.ts'))
 compile(esDir);

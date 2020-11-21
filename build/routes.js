@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const fs_1 = tslib_1.__importDefault(require("fs"));
 const tmpl_1 = require("./tmpl");
-const demoRoot = 'src/views/demo';
+const demoRoot = 'site/views/demo';
 function writeRouteFile(routes) {
     const routesStr = routes.map(route => {
         return `{
   path: '${route.group}/${route.name}',
-  component: () => import('@/views/demo/${route.group}/${route.file}'),
+  component: () => import('../views/demo/${route.group}/${route.file}'),
   meta: {tag: '${route.groupName}', name: '${route.title}'}
 }`;
     }).join(', ');
-    tmpl_1.createFromTmpl('src/templates/routes.ts.tmpl', { routesStr }, 'src/router/demo.ts');
+    tmpl_1.createFromTmpl('src/templates/routes.ts.tmpl', { routesStr }, 'site/router/demo.ts');
 }
 function createDemoRoutes() {
     const def = JSON.parse(fs_1.default.readFileSync(`${demoRoot}/index.json`).toString());
@@ -26,6 +26,9 @@ function createDemoRoutes() {
                 files.forEach(file => {
                     const nameWithoutExtension = file.substr(0, file.lastIndexOf('.'));
                     if (demos[nameWithoutExtension]) {
+                        if (file.endsWith('.ts') || file.endsWith('.tsx')) {
+                            file = file.substr(0, file.lastIndexOf('.'));
+                        }
                         routes.push({
                             group: groupdir,
                             groupName,

@@ -1,5 +1,7 @@
 import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -128,9 +130,11 @@ export function matchCondition(value, condition) {
   return true;
 }
 export function renderField(pathPrefix, store, field, currentValue, index, wrap, h, vue) {
+  var _field$property;
+
   var value = null;
 
-  if (field.property?.includes('.')) {
+  if ((_field$property = field.property) === null || _field$property === void 0 ? void 0 : _field$property.includes('.')) {
     value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue, vue);
   } else {
     value = currentValue;
@@ -218,7 +222,7 @@ export function createField(currentValue, store, pathPrefix, definition) {
       path: buildArrayPath(pathPrefix, definition),
       plainPath: plainPath,
       processor: definition.processor,
-      props: Object.assign({}, definition.props),
+      props: _extends({}, definition.props),
       required: definition.required,
       rules: getRulesFromProps(definition),
       setGetValue: null,

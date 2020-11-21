@@ -25,7 +25,7 @@ export var getSchemaNodeFromPath = function getSchemaNodeFromPath(schema, path) 
   return suc === copyPath.length ? res : undefined;
 };
 export var schemaIs = function schemaIs(schema, type) {
-  return schema?.type === type;
+  return (schema === null || schema === void 0 ? void 0 : schema.type) === type;
 };
 export var isVirtualBox = function isVirtualBox(name) {
   return !!VIRTUAL_BOXES[name];

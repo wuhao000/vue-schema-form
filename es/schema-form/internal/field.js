@@ -10,6 +10,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
@@ -80,6 +82,8 @@ var FormField = (_dec = Component({
   var _super = _createSuper(FormField);
 
   function FormField() {
+    var _this$definition;
+
     var _this;
 
     _classCallCheck(this, FormField);
@@ -112,7 +116,7 @@ var FormField = (_dec = Component({
 
     _initializerDefineProperty(_this, "store", _descriptor11, _assertThisInitialized(_this));
 
-    _this.currentValue = getCurrentValue(_this.value, _this.definition.default);
+    _this.currentValue = getCurrentValue(_this.value, (_this$definition = _this.definition) === null || _this$definition === void 0 ? void 0 : _this$definition.default);
     return _this;
   }
 
@@ -265,7 +269,7 @@ var FormField = (_dec = Component({
         }
       }
 
-      var style = Object.assign({}, props.style || {});
+      var style = _extends({}, props.style || {});
 
       if (inputFieldDef.layout) {
         props.layout = definition.layout;
@@ -374,7 +378,7 @@ var FormField = (_dec = Component({
       }, {
         "nativeOn": nativeEvents
       }, {}, {
-        "on": Object.assign({
+        "on": _extends({
           blur: this.onBlur,
           focus: this.onFocus,
           keydown: this.onKeydown,
@@ -423,7 +427,8 @@ var FormField = (_dec = Component({
         ArrayComponent = definition.arrayComponent;
       }
 
-      var arrayProps = Object.assign({}, this.props, definition.arrayProps);
+      var arrayProps = _extends({}, this.props, definition.arrayProps);
+
       var arrayClass = arrayProps.className;
       var arrayStyle = arrayProps.style;
       delete arrayProps.className;
@@ -495,13 +500,13 @@ var FormField = (_dec = Component({
           }
         }
       }]), [currentValue ? currentValue.map(function (v, index) {
-        var itemProps = Object.assign({}, props, {
+        var itemProps = _extends({}, props, {
           pathPrefix: _this4.path.concat(index),
           schemaPath: _this4.path
         });
 
         if (field.type === TYPES.object) {
-          itemProps.definition = Object.assign({}, itemProps.definition);
+          itemProps.definition = _extends({}, itemProps.definition);
           delete itemProps.definition.array;
         }
 
@@ -617,6 +622,8 @@ var FormField = (_dec = Component({
   }, {
     key: "renderDesktopComponent",
     value: function renderDesktopComponent(inputComponent, FormItemComponent, item, ColComponent) {
+      var _definition$wrapperPr;
+
       var h = this.$createElement;
       var definition = this.definition,
           field = this.field;
@@ -627,13 +634,13 @@ var FormField = (_dec = Component({
       delete formItemProps.className;
       var noWrap = isNull(field.title);
       var formItem = noWrap ? inputComponent : h(FormItemComponent, _mergeJSXProps4([{}, {
-        "attrs": Object.assign({}, formItemProps, {
+        "attrs": _extends({}, formItemProps, {
           label: null
         })
       }, {
         "class": className,
         "style": style
-      }]), [definition?.wrapperProps?.noTitle || !formItemProps.label ? '' : h("span", {
+      }]), [(definition === null || definition === void 0 ? void 0 : (_definition$wrapperPr = definition.wrapperProps) === null || _definition$wrapperPr === void 0 ? void 0 : _definition$wrapperPr.noTitle) || !formItemProps.label ? '' : h("span", {
         "slot": "label"
       }, [formItemProps.label]), inputComponent, definition.description ? h("div", [definition.description]) : null]);
 
@@ -745,7 +752,7 @@ var FormField = (_dec = Component({
       }
 
       if (definition.wrapperProps) {
-        Object.assign(props, definition.wrapperProps);
+        _extends(props, definition.wrapperProps);
 
         if (definition.wrapperProps.noTitle) {
           props.title = null;
@@ -882,7 +889,9 @@ var FormField = (_dec = Component({
           path = this.path,
           schemaPath = this.schemaPath,
           platform = this.store.platform;
-      var props = Object.assign({}, component.getProps(field));
+
+      var props = _extends({}, component.getProps(field));
+
       var type = field.type;
 
       if (type === TYPES.object) {

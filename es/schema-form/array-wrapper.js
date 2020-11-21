@@ -4,6 +4,8 @@ var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -95,6 +97,8 @@ var ArrayWrapper = (_dec = Component({
   _createClass(ArrayWrapper, [{
     key: "renderAddButton",
     value: function renderAddButton() {
+      var _this$addBtnProps;
+
       var h = this.$createElement;
 
       if (!this.store.editable || !this.showAddBtn || this.maxLength > 0 && this.$slots.default && this.$slots.default.length >= this.maxLength) {
@@ -110,11 +114,12 @@ var ArrayWrapper = (_dec = Component({
 
       var buttonStyle = {};
 
-      if (this.addBtnProps?.block) {
+      if ((_this$addBtnProps = this.addBtnProps) === null || _this$addBtnProps === void 0 ? void 0 : _this$addBtnProps.block) {
         buttonStyle.width = '100%';
       }
 
-      var props = Object.assign({}, this.addBtnProps);
+      var props = _extends({}, this.addBtnProps);
+
       props.disabled = this.store && (this.store.disabled || this.store.loading) || props.disabled;
 
       if (!props.icon) {

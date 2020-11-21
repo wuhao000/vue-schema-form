@@ -1,3 +1,5 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 import { getIn, each, globalThisPolyfill } from "./utils";
 import locales from "./locale";
 var self = globalThisPolyfill;
@@ -27,7 +29,7 @@ var getMatchLang = function getMatchLang(lang) {
 };
 
 export var setLocale = function setLocale(locale) {
-  Object.assign(LOCALE.messages, locale);
+  _extends(LOCALE.messages, locale);
 };
 export var setLanguage = function setLanguage(lang) {
   LOCALE.lang = lang;

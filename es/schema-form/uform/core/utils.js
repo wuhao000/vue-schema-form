@@ -68,7 +68,7 @@ export var resolveFieldPath = function resolveFieldPath(path) {
   }, []);
 };
 export var isChildField = function isChildField(field, parent) {
-  if (field?.path && parent?.path) {
+  if ((field === null || field === void 0 ? void 0 : field.path) && (parent === null || parent === void 0 ? void 0 : parent.path)) {
     for (var i = 0; i < parent.path.length; i++) {
       if (field.path[i] !== parent.path[i]) {
         return false;
@@ -82,7 +82,7 @@ export var isChildField = function isChildField(field, parent) {
 };
 export var hasRequired = function hasRequired(rules) {
   return toArr(rules).some(function (rule) {
-    return rule?.required;
+    return rule === null || rule === void 0 ? void 0 : rule.required;
   });
 };
 export var publishFormState = function publishFormState(state) {

@@ -4,7 +4,7 @@ import {mkdirs} from './utils';
 
 
 const generatedPath = 'generated';
-const docPath = 'src/doc';
+const docPath = 'site/doc';
 const docDemoPath = docPath + '/demo';
 const generatedDocPath = generatedPath + '/doc';
 const generatedDocDemoPath = generatedDocPath + '/demo';

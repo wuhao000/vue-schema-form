@@ -128,7 +128,9 @@ export var isEqual = function exportedEqual(a, b, filter) {
   try {
     return equal(a, b, filter);
   } catch (error) {
-    if (error.message?.match(/stack|recursion/i) || error.number === -2146828260) {
+    var _error$message;
+
+    if (((_error$message = error.message) === null || _error$message === void 0 ? void 0 : _error$message.match(/stack|recursion/i)) || error.number === -2146828260) {
       // warn on circular references, don't crash
       // browsers give this different errors name and messages:
       // chrome/safari: "RangeError", "Maximum call stack size exceeded"

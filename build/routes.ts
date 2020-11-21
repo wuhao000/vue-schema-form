@@ -1,11 +1,11 @@
 import fs from 'fs';
 import {createFromTmpl} from './tmpl';
 
-const demoRoot = 'src/views/demo';
+const demoRoot = 'site/views/demo';
 
 interface DemoGroup {
-  name: string;
   demos: { [key: string]: string };
+  name: string;
 }
 
 interface DemoDefinition {
@@ -22,11 +22,11 @@ function writeRouteFile(routes: Array<{
   const routesStr = routes.map(route => {
     return `{
   path: '${route.group}/${route.name}',
-  component: () => import('@/views/demo/${route.group}/${route.file}'),
+  component: () => import('../views/demo/${route.group}/${route.file}'),
   meta: {tag: '${route.groupName}', name: '${route.title}'}
 }`;
   }).join(', ');
-  createFromTmpl('src/templates/routes.ts.tmpl', {routesStr}, 'src/router/demo.ts');
+  createFromTmpl('src/templates/routes.ts.tmpl', {routesStr}, 'site/router/demo.ts');
 }
 
 function createDemoRoutes() {
@@ -47,6 +47,9 @@ function createDemoRoutes() {
         files.forEach(file => {
           const nameWithoutExtension = file.substr(0, file.lastIndexOf('.'));
           if (demos[nameWithoutExtension]) {
+            if (file.endsWith('.ts') || file.endsWith('.tsx')) {
+              file = file.substr(0, file.lastIndexOf('.'));
+            }
             routes.push({
               group: groupdir,
               groupName,

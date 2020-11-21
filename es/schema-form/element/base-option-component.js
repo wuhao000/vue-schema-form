@@ -1,5 +1,8 @@
 import _mergeJSXProps2 from "@vue/babel-helper-vue-jsx-merge-props";
 import _mergeJSXProps from "@vue/babel-helper-vue-jsx-merge-props";
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 import { getOptionProperty } from "../utils/utils";
 export default {
   name: 'BaseOptionComponent',
@@ -21,7 +24,8 @@ export default {
     var h = arguments[0];
     var InputComponent = this.component;
     var OptionComponent = this.optionComponent;
-    var props = Object.assign({
+
+    var props = _extends({
       value: this.value
     }, this.$attrs);
 

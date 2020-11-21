@@ -1,3 +1,5 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 import Empty, { createEmpty } from "../empty";
 import { DESKTOP, MOBILE, Mode } from "./utils";
 
@@ -74,7 +76,7 @@ export var addComponent = function addComponent(options) {
 
   if (Array.isArray(options.types)) {
     options.types.forEach(function (type) {
-      addComponent(Object.assign(finalOptions, {
+      addComponent(_extends(finalOptions, {
         types: type,
         getProps: options.getProps,
         forDisplay: options.forDisplay
@@ -82,7 +84,7 @@ export var addComponent = function addComponent(options) {
     });
   } else if (Array.isArray(options.platforms)) {
     options.platforms.forEach(function (platform) {
-      addComponent(Object.assign(finalOptions, {
+      addComponent(_extends(finalOptions, {
         platforms: platform,
         types: options.types,
         getProps: options.getProps,
@@ -94,7 +96,7 @@ export var addComponent = function addComponent(options) {
       return {};
     };
 
-    var def = Object.assign(finalOptions, {
+    var def = _extends(finalOptions, {
       type: options.types,
       platform: options.platforms,
       getProps: function getProps(field) {
@@ -105,12 +107,13 @@ export var addComponent = function addComponent(options) {
         }
 
         if (field.props) {
-          Object.assign(props, field.props);
+          _extends(props, field.props);
         }
 
         return props;
       }
     });
+
     var mode = options.forDisplay ? 'display' : 'edit';
     var typeDef = store[mode][options.platforms];
 
@@ -133,7 +136,7 @@ export var addComponent = function addComponent(options) {
     }
 
     if (options.layout && !options.forDisplay) {
-      addComponent(Object.assign({}, options, {
+      addComponent(_extends({}, options, {
         forDisplay: true
       }));
     }
@@ -153,10 +156,11 @@ export var MISSING_TYPES = [];
 
 function searchStore(mode, platform, definition) {
   var type = definition.xType || definition.type;
-  var typeDef = store[mode ?? 'edit'][platform ?? 'desktop'][type];
+  var typeDef = store[mode !== null && mode !== void 0 ? mode : 'edit'][platform !== null && platform !== void 0 ? platform : 'desktop'][type];
 
   if (!typeDef) {
     if (type && !MISSING_TYPES.includes(type)) {
+      console.log(store);
       console.warn("\u7C7B\u578B".concat(type).concat(definition.array ? '（数组）' : '', "\u6CA1\u6709\u5BF9\u5E94\u7684").concat(mode === 'display' ? '详情' : '编辑', "\u7EC4\u4EF6"));
       MISSING_TYPES.push(type);
     }

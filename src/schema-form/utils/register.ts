@@ -143,8 +143,7 @@ function searchStore(mode: Mode,
   const typeDef = store[mode ?? 'edit'][platform ?? 'desktop'][type];
   if (!typeDef) {
     if (type && !MISSING_TYPES.includes(type)) {
-      console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${mode === 'display' ? '详情' : '编辑'}组件`);
-      MISSING_TYPES.push(type);
+     MISSING_TYPES.push(type);
     }
     return getEmptyDefinition(`<不支持的类型${type}>`);
   }
