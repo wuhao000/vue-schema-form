@@ -1,5 +1,5 @@
 import Component from 'vue-class-component';
-import BaseButton from '../common/base-button';
+import BaseButton from '@/schema-form/common/base-button';
 
 @Component({
   name: 'AntdButton'

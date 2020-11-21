@@ -30,28 +30,25 @@ module.exports = function(api) {
       '@babel/preset-typescript'
     ],
     plugins: [
-      ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-      [
-        '@babel/plugin-transform-runtime',
-        {
-          corejs: false,
-          useESModules
+      ['module-resolver', {
+        'alias': {
+          '@': '../es',
+          'utils': '../utils'
         }
-      ],
-      [
-        'import',
-        {
-          libraryName: 'vant',
-          libraryDirectory: useESModules ? 'es' : 'lib',
-          style: true
-        },
-        'vant'
-      ],
-      '@vue/babel-plugin-jsx',
-      '@babel/plugin-transform-object-assign',
-      '@babel/plugin-proposal-nullish-coalescing-operator',
-      '@babel/plugin-proposal-optional-chaining',
-      'transform-class-properties'
+      }],
+      ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+      ['@babel/plugin-proposal-class-properties', { 'loose': true }]
+      // [
+      //   '@babel/plugin-transform-runtime',
+      //   {
+      //     corejs: false,
+      //     useESModules
+      //   }
+      // ],
+      // '@vue/babel-plugin-jsx',
+      // '@babel/plugin-transform-object-assign',
+      // '@babel/plugin-proposal-nullish-coalescing-operator',
+      // '@babel/plugin-proposal-optional-chaining',
     ]
   };
 };

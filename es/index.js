@@ -1,11 +1,10 @@
-import SchemaFormField from './internal/field';
-import SchemaForm from './form';
-import './styles/style.less';
-SchemaForm.Field = SchemaFormField;
+import SchemaForm from "./schema-form";
+import "./schema-form/styles/fix.less";
+import "./schema-form/display/register";
+import "./schema-form/layout/register";
 
-SchemaForm.install = function (Vue) {
-  Vue.component('VSchemaForm', SchemaForm);
-  Vue.component('VSchemaFormField', SchemaForm.Field);
-};
+if (window.Vue) {
+  window.Vue.use(SchemaForm);
+}
 
 export default SchemaForm;

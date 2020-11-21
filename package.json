@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "1.0.0-14",
+  "version": "1.0.0-15",
   "private": false,
   "main": "es/index.js",
   "files": [
@@ -17,16 +17,15 @@
     "docs": "tsc -p build && node build/docs.js",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
     "routes": "tsc -p build && node build/routes.js",
-    "build:components": "npm run check && npm run docs && node compile/build-components.js",
+    "build:components": "npm run docs && node compile/build-components.js",
     "test": "jest",
-    "check": "tsc -p build && node build/check.js",
     "release": "npm run build:components && npm publish",
     "compile": "webpack --config webpack.conf.js"
   },
   "dependencies": {
     "aegis-ui-desktop": "^1.0.6-3",
     "antd-mobile": "^2.2.14",
-    "antd-mobile-vue": "^0.3.10",
+    "antd-mobile-vue": "0.4.3",
     "async-validator": "^3.5.0",
     "classname": "0.0.0",
     "classnames": "^2.2.6",
@@ -75,6 +74,7 @@
     "axios": "^0.19.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-import": "^1.13.1",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-requirejs": "^7.7.2",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",

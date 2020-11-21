@@ -2365,58 +2365,6 @@ address@^1.0.3:
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
   integrity sha512-aT6camzM4xEA54YVJYSqxz1kv4IHnQZRtThJJHhUMRExaU5spC7jX5ugSwTaTgJliIgs4VhZOk7htClvQ/LmRA==
 
-aegis-ui-desktop@^1.0.0:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/aegis-ui-desktop/-/aegis-ui-desktop-1.0.5.tgz#f119d45611cf7658977036ca30f40baae6d907b5"
-  integrity sha512-xEWj0nb4mu9jsrl1tRwiqNIwr6JGORM9F1wApM8ZmiSbV0dO2etgGLeF75gApL0TiN6vmR5egALChu+P9sZs9w==
-  dependencies:
-    "@ant-design/icons" "^1.2.1"
-    "@ant-design/icons-vue" "^1.0.1"
-    "@types/axios" "^0.14.0"
-    aegis-ui-tools "^1.0.4"
-    ant-design-vue "^1.3.13"
-    async-validator "^1.11.0"
-    babel-helper-vue-jsx-merge-props "^2.0.3"
-    babel-polyfill "^6.26.0"
-    browser-sync "^2.26.3"
-    classnames "^2.2.6"
-    codemirror "^5.45.0"
-    component-classes "^1.2.6"
-    core-js "^2.6.5"
-    cssbeautify "^0.3.1"
-    dom-scroll-into-view "^1.2.1"
-    enquire.js "^2.1.6"
-    exenv "^1.2.2"
-    fs "0.0.1-security"
-    html "^1.0.0"
-    intersperse "^1.0.0"
-    is-negative-zero "^2.0.0"
-    ismobilejs "^0.5.1"
-    js-beautify "^1.9.1"
-    lodash.debounce "^4.0.8"
-    lodash.merge "^4.6.1"
-    marked "^0.6.1"
-    mutationobserver-shim "^0.3.3"
-    normalize.css "^8.0.1"
-    omit.js "^1.0.2"
-    portal-vue "^2.1.1"
-    raf "^3.4.1"
-    resize-observer-polyfill "^1.5.1"
-    rmc-notification "^1.0.0"
-    shallowequal "^1.1.0"
-    uuid "^3.3.2"
-    vue "^2.6.10"
-    vue-animate "0.0.4"
-    vue-class-component "^6.0.0"
-    vue-clipboard2 "^0.3.0"
-    vue-function-api "^2.0.5"
-    vue-hljs "^1.1.2"
-    vue-ref "^1.0.6"
-    vue-router "^3.0.1"
-    vue-slide-up-down "^1.7.2"
-    vuex "^3.0.1"
-    warning "^4.0.3"
-
 aegis-ui-desktop@^1.0.6-3:
   version "1.0.6-3"
   resolved "https://registry.yarnpkg.com/aegis-ui-desktop/-/aegis-ui-desktop-1.0.6-3.tgz#dffad7181ce103585347f07329137364c75a35e8"
@@ -2589,7 +2537,7 @@ ant-design-palettes@^1.1.3:
   dependencies:
     tinycolor2 "^1.4.1"
 
-ant-design-vue@^1.3.10, ant-design-vue@^1.3.13, ant-design-vue@^1.6.2, ant-design-vue@^1.7.2:
+ant-design-vue@^1.3.10, ant-design-vue@^1.6.2, ant-design-vue@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/ant-design-vue/-/ant-design-vue-1.7.2.tgz#aac7ff802205711631c8698e2a0c7b4e61dfd73e"
   integrity sha512-iVskTSG62OSiptyGQkvyhoeLlLMiqKtAOTcWZ7MmsMrj38h0TCpGtqSYS4/fwq4yYgyzloYSteBo8U8TrV99RA==
@@ -2625,61 +2573,38 @@ ant-design-vue@^1.3.10, ant-design-vue@^1.3.13, ant-design-vue@^1.6.2, ant-desig
     vue-ref "^2.0.0"
     warning "^4.0.0"
 
-antd-mobile-vue@^0.3.10:
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/antd-mobile-vue/-/antd-mobile-vue-0.3.13.tgz#aeedb1f0da53d9060b7f223a6a884fb008d874b6"
-  integrity sha512-4c26ukTz6pg8H/3kCIUK4K4lwwJUwu0UDmdETI04idyRJ/sDB2UPTs3bDCtCqnmLREn0uhvyaX6rE3j22+jhmQ==
+antd-mobile-vue@0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/antd-mobile-vue/-/antd-mobile-vue-0.4.3.tgz#9cb015b089fd91a5c72cfc4829daf8bc5afc6dd6"
+  integrity sha512-fhXk7g6ZNVvAaEbYbMJRLn2L0jovOLuVY+bgUQzY+vQyntttg8UYM1+xjmZUI+jjavQQ/uLH/kyDlDS9KoxV5w==
   dependencies:
     "@ant-design/icons" "^1.2.1"
     "@ant-design/icons-vue" "^1.0.1"
     "@antv/f2" "^3.3.9"
-    "@types/axios" "^0.14.0"
     "@vue/cli" "^3.8.4"
-    aegis-ui-desktop "^1.0.0"
     ant-design-vue "^1.3.10"
-    antd-mobile "^2.2.14"
     async-validator "^1.11.0"
-    babel-helper-vue-jsx-merge-props "^2.0.3"
-    browser-sync "^2.26.3"
+    axios "^0.19.0"
     classnames "^2.2.6"
     codemirror "^5.45.0"
-    component-classes "^1.2.6"
-    core-js "^2.6.5"
     cssbeautify "^0.3.1"
     debounce "^1.2.0"
-    dom-scroll-into-view "^1.2.1"
-    element-ui "^2.11.1"
-    enquire.js "^2.1.6"
     exenv "^1.2.2"
-    friendly-errors-webpack-plugin "^1.7.0"
     fs "0.0.1-security"
     html "^1.0.0"
-    intersperse "^1.0.0"
-    is-negative-zero "^2.0.0"
-    ismobilejs "^0.5.1"
     js-beautify "^1.9.1"
     lodash.debounce "^4.0.8"
     lodash.merge "^4.6.1"
-    marked "^0.6.1"
-    mutationobserver-shim "^0.3.3"
     normalize.css "^8.0.1"
     omit.js "^1.0.2"
-    portal-vue "^2.1.1"
     raf "^3.4.1"
-    react-dom "^16.8.6"
-    react-motion "^0.5.2"
-    resize-observer-polyfill "^1.5.1"
-    rmc-notification "^1.0.0"
     shallowequal "^1.1.0"
     uuid "^3.3.2"
     vue "^2.6.10"
-    vue-animate "0.0.4"
     vue-class-component "^6.0.0"
     vue-clipboard2 "^0.3.0"
-    vue-hljs "^1.1.2"
-    vue-ref "^1.0.6"
+    vue-property-decorator "^8.1.0"
     vue-router "^3.0.1"
-    vue-slide-up-down "^1.7.2"
     vuex "^3.0.1"
     warning "^4.0.3"
 
@@ -3440,6 +3365,17 @@ babel-plugin-module-resolver@3.2.0:
     pkg-up "^2.0.0"
     reselect "^3.0.1"
     resolve "^1.4.0"
+
+babel-plugin-module-resolver@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-module-resolver/-/babel-plugin-module-resolver-4.0.0.tgz#8f3a3d9d48287dc1d3b0d5595113adabd36a847f"
+  integrity sha512-3pdEq3PXALilSJ6dnC4wMWr0AZixHRM4utpdpBR9g5QG7B7JwWyukQv7a9hVxkbGFl+nQbrHDqqQOIBtTXTP/Q==
+  dependencies:
+    find-babel-config "^1.2.0"
+    glob "^7.1.6"
+    pkg-up "^3.1.0"
+    reselect "^4.0.0"
+    resolve "^1.13.1"
 
 babel-plugin-requirejs@^7.7.2:
   version "7.8.0"
@@ -5993,7 +5929,7 @@ electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.591:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.595.tgz#e8a9e7c6919963419f892ea981d7b3438ccb834d"
   integrity sha512-JpaBIhdBkF9FLG7x06ONfe0f5bxPrxRcq0X+Sc8vsCt+OPWIzxOD+qM71NEHLGbDfN9Q6hbtHRv4/dnvcOxo6g==
 
-element-ui@^2.11.1, element-ui@^2.12.0:
+element-ui@^2.12.0:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.14.1.tgz#8b5745c7366c1c1a603bb6c021286ea7187e2aa2"
   integrity sha512-Uje0J12dBaXdyvt/EtuDA8diFbYTdO7uI4QCfl7zmEJmE1WxgCSVKhlRRoL8MDonO8pyNVhB4n0AFAR14g56nw==
@@ -6790,7 +6726,7 @@ finalhandler@~1.1.2:
     statuses "~1.5.0"
     unpipe "~1.0.0"
 
-find-babel-config@^1.1.0:
+find-babel-config@^1.1.0, find-babel-config@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/find-babel-config/-/find-babel-config-1.2.0.tgz#a9b7b317eb5b9860cda9d54740a8c8337a2283a2"
   integrity sha512-jB2CHJeqy6a820ssiqwrKMeyC6nNdmrcgkKWJWmpoxpE8RKciYJXCcXRq1h2AzCo5I5BJeN2tkGEO3hLTuePRA==
@@ -6940,15 +6876,6 @@ fresh@0.5.2, fresh@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
-
-friendly-errors-webpack-plugin@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.7.0.tgz#efc86cbb816224565861a1be7a9d84d0aafea136"
-  integrity sha512-K27M3VK30wVoOarP651zDmb93R9zF28usW4ocaK3mfQeIEI5BPht/EzZs5E8QLLwbLRJQMwscAjDxYPb1FuNiw==
-  dependencies:
-    chalk "^1.1.3"
-    error-stack-parser "^2.0.0"
-    string-width "^2.0.0"
 
 from2@^2.1.0, from2@^2.1.1:
   version "2.3.0"
@@ -7152,7 +7079,7 @@ glob-to-regexp@^0.3.0:
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz#8c5a1494d2066c570cc3bfe4496175acc4d502ab"
   integrity sha1-jFoUlNIGbFcMw7/kSWF1rMTVAqs=
 
-glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4:
+glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
   integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
@@ -10568,11 +10495,6 @@ pend@~1.2.0:
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
   integrity sha1-elfrVQpng/kRUzH89GY9XI4AelA=
 
-performance-now@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
-  integrity sha1-M+8wxcd9TqIcWlOGnZG1bY8lVeU=
-
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -10651,6 +10573,13 @@ pkg-up@^2.0.0:
   integrity sha1-yBmscoBZpGHKscOImivjxJoATX8=
   dependencies:
     find-up "^2.1.0"
+
+pkg-up@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/pkg-up/-/pkg-up-3.1.0.tgz#100ec235cc150e4fd42519412596a28512a0def5"
+  integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
+  dependencies:
+    find-up "^3.0.0"
 
 pn@^1.1.0:
   version "1.1.0"
@@ -11118,7 +11047,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.2:
+prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -11434,16 +11363,6 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^16.8.6:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
-  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.19.1"
-
 react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -11453,15 +11372,6 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-motion@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.5.2.tgz#0dd3a69e411316567927917c6626551ba0607316"
-  integrity sha512-9q3YAvHoUiWlP3cK0v+w1N5Z23HXMj4IF4YuvjvWegWqNPfLXsOBE/V7UvQGpXxHFKRQQcNcVQE31g9SB/6qgQ==
-  dependencies:
-    performance-now "^0.2.0"
-    prop-types "^15.5.8"
-    raf "^3.1.0"
 
 react-native-swipeout@^2.2.2:
   version "2.3.6"
@@ -11806,6 +11716,11 @@ reselect@^3.0.1:
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
   integrity sha1-79qpjqdFEyTQkrKyFjpqHXqaIUc=
 
+reselect@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
+  integrity sha512-qUgANli03jjAyGlnbYVAV5vvnOmJnODyABz51RdBN7M4WaVu8mecZWgyQNkG8Yqe3KRGRt0l4K4B3XVEULC4CA==
+
 resize-observer-polyfill@^1.5.0, resize-observer-polyfill@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
@@ -11845,7 +11760,7 @@ resolve@1.1.7:
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
   integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6Xs=
 
-resolve@1.x, resolve@^1.10.0, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1, resolve@^1.9.0:
+resolve@1.x, resolve@^1.10.0, resolve@^1.13.1, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1, resolve@^1.9.0:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.19.0.tgz#1af5bf630409734a067cae29318aac7fa29a267c"
   integrity sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==
@@ -12158,14 +12073,6 @@ scheduler@^0.15.0:
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.15.0.tgz#6bfcf80ff850b280fed4aeecc6513bc0b4f17f8e"
   integrity sha512-xAefmSfN6jqAa7Kuq7LIJY0bwAPG3xlCj0HMEBQk1lxYiDKZscY2xJ5U/61ZTrYbmNQbXa+gc7czPkVo11tnCg==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-
-scheduler@^0.19.1:
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
-  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -13974,7 +13881,7 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-property-decorator@^8.2.2:
+vue-property-decorator@^8.1.0, vue-property-decorator@^8.2.2:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.5.1.tgz#571a91cf8d2b507f537d79bf8275af3184572fff"
   integrity sha512-O6OUN2OMsYTGPvgFtXeBU3jPnX5ffQ9V4I1WfxFQ6dqz6cOUbR3Usou7kgFpfiXDvV7dJQSFcJ5yUPgOtPPm1Q==

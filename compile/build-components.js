@@ -8,7 +8,7 @@ const vueCompiler = require('vue-template-compiler');
 
 const esDir = path.join(__dirname, '../es');
 const libDir = path.join(__dirname, '../lib');
-const srcDir = path.join(__dirname, '../src/schema-form');
+const srcDir = path.join(__dirname, '../src');
 const babelConfig = {
   configFile: path.join(__dirname, './babel.config.js')
 };
@@ -102,7 +102,7 @@ function compile(dir) {
 
 // clear dir
 fs.emptyDirSync(esDir);
-
-// compile es dir
-fs.copySync(srcDir, esDir);
+fs.mkdirSync(path.join(esDir, 'schema-form'))
+fs.copySync(path.join(srcDir, 'schema-form'), path.join(esDir, 'schema-form'));
+fs.copyFileSync(path.join(srcDir, 'index.ts'), path.join(esDir, 'index.ts'))
 compile(esDir);
