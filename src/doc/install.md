@@ -23,9 +23,6 @@ SchemaForm 具有以下方法：
 
 ### registerAntd
 
-> 使用<code>aegis-ui-desktop</code>组件库
-
-推荐使用cdn引入组件库
 
 ### registerAntdMobile
 

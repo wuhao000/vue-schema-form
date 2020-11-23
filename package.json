@@ -1,8 +1,8 @@
 {
   "name": "v-schema-form",
-  "version": "0.2.3-3",
+  "version": "0.2.4",
   "private": false,
-  "main": "lib/v-schema-form.umd.min.js",
+  "main": "src/index.ts",
   "files": [
     "lib",
     "types",
@@ -22,7 +22,6 @@
     "publish": "npm run check"
   },
   "dependencies": {
-    "aegis-ui-desktop": "^1.0.6-3",
     "antd-mobile": "^2.2.14",
     "antd-mobile-vue": "^0.3.10",
     "async-validator": "^3.5.0",
