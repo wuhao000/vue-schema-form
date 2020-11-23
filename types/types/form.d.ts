@@ -119,6 +119,7 @@ export interface SchemaFormComponent {
   platform: Platform;
   type: string;
   wrap?: WrapType;
+  modelProp?: string;
   modelEvent?: string;
 }
 
@@ -227,6 +228,7 @@ export interface SchemaFormComponentOptions {
   forArray?: boolean;
   getProps?: (definition: IField, platform: Platform) => object;
   wrap?: WrapType;
+  modelProp?: string;
   modelEvent?: string;
 }
 

@@ -97,6 +97,7 @@ export function registerAntd(options?: AntdRegisterOptions) {
       platforms: 'desktop',
       types: TYPES.boolean,
       forArray: false,
+      modelProp: 'checked',
       modelEvent: 'change'
     });
     registerDesktop('a-checkbox-group', TYPES.expandSelect, true, field => {

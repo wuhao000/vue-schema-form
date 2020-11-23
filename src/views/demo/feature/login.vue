@@ -3,6 +3,8 @@
     <div style="width: 400px">
       <h2>用户登录</h2>
       <form :action="$route.path">
+        {{testValue}}
+        <v-schema-form v-model="testValue" :schema="testSchema"/>
         <v-schema-form :schema="schema">
           <a-icon slot="usernamePrefix"
                   type="user"/>
@@ -28,6 +30,28 @@ import Component from 'vue-class-component';
 
 @Component
 export default class LoginForm extends Vue {
+  public testValue = {
+    validateRules: {
+      required: true
+    }
+  }
+  public testSchema: SchemaFormField = {
+    fields: {
+      'validateRules.required': {
+        type: 'boolean',
+        xType: 'checkbox',
+        title: '开关'
+      }
+    }
+  }
+
+  public onChange(v) {
+    console.log('changed: ' + v);
+  }
+
+  public onInput(v) {
+    console.log('input: ' + v)
+  }
   public schema2: SchemaFormField = {
     props: {
       size: 'large'

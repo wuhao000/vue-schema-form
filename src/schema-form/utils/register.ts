@@ -60,7 +60,8 @@ export const addComponent = (options: SchemaFormComponentOptions) => {
     layout: options.layout,
     forArray: options.forArray !== undefined ? options.forArray : null,
     platforms: options.platforms,
-    modelEvent: options.modelEvent
+    modelEvent: options.modelEvent,
+    modelProp: options.modelProp
   };
   if (Array.isArray(options.types)) {
     options.types.forEach(type => {

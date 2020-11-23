@@ -283,11 +283,15 @@ export default class FormField extends mixins(Emitter) {
         }
       });
     }
+    if (this.component.modelProp) {
+      props[this.component.modelProp] = currentValue;
+    } else {
+      props.value = currentValue;
+    }
     // @ts-ignore
     return <InputFieldComponent
       props={props}
       scopedSlots={scopedSlots}
-      value={currentValue}
       class={className}
       attrs={props}
       style={style}
