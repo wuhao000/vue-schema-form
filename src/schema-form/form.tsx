@@ -32,7 +32,7 @@ import {
   takePath
 } from './utils/path';
 import {register, addComponent, registerResponsiveComponent, registerDisplay} from './utils/register';
-import {ASchemaForm, LibComponents} from './utils/utils';
+import {ASchemaForm, LibComponents, MobileLibComponents} from './utils/utils';
 import { registerVant } from './vant';
 
 
@@ -525,7 +525,7 @@ export default class SchemaForm extends Vue {
 
   private createButton(text, action, attrs, classes) {
     const {platform} = this;
-    const ButtonComponent = platform === 'mobile' ? 'm-button' : LibComponents.button;
+    const ButtonComponent = platform === 'mobile' ? MobileLibComponents.button : LibComponents.button;
     const Button = <ButtonComponent class={classes}
                                     props={attrs}
                                     onClick={() => {

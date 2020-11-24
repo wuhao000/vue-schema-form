@@ -3,7 +3,14 @@ import {SchemaFormStore} from '../../types';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Inject, Prop} from 'vue-property-decorator';
-import {getButtonComponent, getColComponent, getRowComponent, LibComponents, MOBILE} from './utils/utils';
+import {
+  getButtonComponent,
+  getColComponent,
+  getRowComponent,
+  LibComponents,
+  MOBILE,
+  MobileLibComponents
+} from './utils/utils';
 
 @Component({
   name: 'ArrayWrapper'
@@ -15,8 +22,16 @@ export default class ArrayWrapper extends Vue {
   public addBtnText: string;
   @Prop(Object)
   public addBtnProps: any;
-  @Prop({type: Number, default: 20})
+  @Prop()
+  public deleteBtnProps: any;
+  @Prop()
+  public deleteBtnWrapperProps: any;
+  @Prop()
+  public itemProps: any;
+  @Prop({type: Number, default: 0})
   public gutter: number;
+  @Prop(String)
+  public type: srting;
   @Prop({type: Boolean, default: true})
   public showRemoveBtn: boolean;
   @Prop({type: Boolean, default: true})
@@ -36,7 +51,7 @@ export default class ArrayWrapper extends Vue {
     const ColComponent = getColComponent();
     let ButtonComponent = getButtonComponent();
     if (this.store.platform === 'mobile') {
-      ButtonComponent = 'm-button';
+      ButtonComponent = MobileLibComponents.button;
     }
     const buttonStyle: any = {};
     if (this.addBtnProps?.block) {
@@ -69,12 +84,12 @@ export default class ArrayWrapper extends Vue {
     if (this.subForm) {
       return <div>{content}</div>;
     }
-
-    if (this.$attrs.platform === 'mobile') {
+    if (this.store.platform === 'mobile') {
       return content;
     } else {
       return <RowComponent gutter={this.gutter}
-                           type="flex">
+                           type={this.type}
+                           props={this.$attrs}>
         {content}
       </RowComponent>;
     }
@@ -89,12 +104,12 @@ export default class ArrayWrapper extends Vue {
       });
     }
     return this.$slots.default && this.$slots.default.map((it, index) => {
-      return <LibComponents.col span={this.cellSpan}>
+      return <LibComponents.col span={this.cellSpan} props={this.itemProps}>
         <LibComponents.layout>
           <LibComponents.content>
             {it}
           </LibComponents.content>
-          <LibComponents.sider>
+          <LibComponents.sider style={this.deleteBtnWrapperProps?.style} props={this.deleteBtnWrapperProps}>
             {this.renderDesktopDeleteBtn(index)}
           </LibComponents.sider>
         </LibComponents.layout>
@@ -126,8 +141,7 @@ export default class ArrayWrapper extends Vue {
     if (!this.store.editable || !this.showRemoveBtn) {
       return null;
     }
-    return <div style={{textAlign: 'right'}}
-                class="d-image-picker">
+    return <div style={{textAlign: 'right'}}>
       <a
         style={{
           color: '#e94721',

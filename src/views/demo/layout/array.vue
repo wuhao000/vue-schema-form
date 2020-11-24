@@ -18,6 +18,7 @@
 <script lang="ts">
   import SchemaForm from '@/schema-form';
   import Vue from 'vue';
+  import {SchemaFormField} from '../../../../types';
 
   export default Vue.extend({
     data() {
@@ -36,6 +37,20 @@
               type: 'string',
               array: true,
               title: '标题',
+              arrayProps: {
+                gutter: 0,
+                deleteBtnWrapperProps: {
+                  width: '80px',
+                  style: {
+                    marginBottom: '10px'
+                  }
+                },
+                itemProps: {
+                  style: {
+                    marginBottom: '10px'
+                  }
+                }
+              },
               props: {
                 addBtnProps: {
                   text: true
@@ -51,11 +66,11 @@
               title: '性别'
             }
           }
-        }
+        } as SchemaFormField
       };
     },
     beforeCreate() {
-      SchemaForm.registerAntd();
+      SchemaForm.registerElement();
     },
     methods: {
       changeAge() {

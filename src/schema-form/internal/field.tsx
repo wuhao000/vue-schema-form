@@ -341,19 +341,17 @@ export default class FormField extends mixins(Emitter) {
     delete arrayProps.className;
     delete arrayProps.style;
     // @ts-ignore
-    return <ArrayComponent
-      props={arrayProps}
-      class={arrayClass}
-      style={arrayStyle}
-      disabled={isDisabled}
-      subForm={field.type === TYPES.object}
-      addBtnText={props.addBtnText}
-      ref="array"
-      key={field.plainPath}
-      platform={platform}
-      addBtnProps={props.addBtnProps}
-      cellSpan={props.cellSpan}
-      onRemove={async (index) => {
+    Object.assign(arrayProps, {
+      disabled: isDisabled,
+      subForm: field.type === TYPES.object,
+      addBtnText: props.addBtnText,
+      platform,
+      addBtnProps: props.addBtnProps,
+      cellSpan: props.cellSpan,
+      key: field.plainPath
+    });
+    const events = {
+      remove: async (index) => {
         try {
           const confirmFunc = getConfirmFunction(platform);
           await confirmFunc('确定删除该条吗？', '提示');
@@ -361,20 +359,27 @@ export default class FormField extends mixins(Emitter) {
         } catch (e) {
           console.error(e);
         }
-      }}
-      onMoveDown={(index) => {
+      },
+      moveDown: (index) => {
         if (index <= currentValue.length - 1) {
           swap(currentValue, index, index + 1);
         }
-      }}
-      onMoveUp={(index) => {
+      },
+      moveUp: (index) => {
         if (index > 0) {
           swap(currentValue, index, index - 1);
         }
-      }}
-      onAdd={() => {
+      },
+      add: () => {
         this.addArrayItem();
-      }}>
+      }
+    };
+    return <ArrayComponent
+      props={arrayProps}
+      class={arrayClass}
+      style={arrayStyle}
+      ref="array"
+      on={events}>
       {
         currentValue ? currentValue.map((v, index) => {
           const itemProps = Object.assign({}, props, {

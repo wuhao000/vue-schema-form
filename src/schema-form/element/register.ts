@@ -1,6 +1,6 @@
-import Plain from '../common/plain.vue';
-import {IField} from '../../../types';
 import Vue from 'vue';
+import {IField} from '../../../types';
+import Plain from '../common/plain.vue';
 import ElExtCheckbox from '../element/checkbox-group';
 import ElExtIcon from '../element/el-ext-icon';
 import ElExtRadio from '../element/radio-group';
@@ -8,6 +8,7 @@ import ElExtSelect from '../element/select';
 import {registerDesktop} from '../utils/register';
 import {ComponentMap, getOptions, LibComponents, LibName, TYPES} from '../utils/utils';
 import ElButton from './button';
+import './style/fix.less';
 import ElementUpload from './upload.vue';
 import ElUrlInput from './url.vue';
 
