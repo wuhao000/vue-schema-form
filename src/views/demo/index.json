@@ -52,7 +52,9 @@
       "inline": "线性布局",
       "text-box": "文本插值",
       "nested": "组合布局",
-      "array": "数组"
+      "array": "数组",
+      "fieldset": "折叠",
+      "card": "卡片"
     }
   },
   "subform": {

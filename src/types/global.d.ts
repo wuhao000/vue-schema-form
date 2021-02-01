@@ -15,5 +15,4 @@ declare global {
 
   export const ELEMENT: any;
 
-  export const hljs: any;
 }

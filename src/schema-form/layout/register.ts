@@ -1,10 +1,11 @@
+import Fieldset from './fieldset';
+import {IField, Platform} from '../../../types';
+import {addComponent} from '../utils/register';
+import {DESKTOP, MOBILE} from '../utils/utils';
 import Card from './card';
 import FormBlock from './form-block';
 import GridLayout from './grid';
 import TextBox from './text-box';
-import {addComponent} from '../utils/register';
-import {DESKTOP, MOBILE} from '../utils/utils';
-import {IField, Platform} from '../../../types';
 
 /**
  *
@@ -23,6 +24,9 @@ export const registerLayout = (options: {
   });
 };
 
+registerLayout({
+  component: Fieldset, platforms: DESKTOP, types: 'fieldset'
+});
 
 registerLayout({
   component: GridLayout, platforms: [DESKTOP, MOBILE], types: 'grid'

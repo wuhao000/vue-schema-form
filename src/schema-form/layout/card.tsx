@@ -3,7 +3,7 @@ import Component, {mixins} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 
 @Component({
-  name: 'Card'
+  name: 'CardLayout'
 })
 export default class LayoutCard extends mixins(BaseLayout) {
 

@@ -11,13 +11,6 @@ import App from './views/index.vue';
 Vue.use(Vant);
 Vue.use(SchemaForm);
 
-Vue.directive('hljs', el => {
-  const blocks = el.querySelectorAll('pre code');
-  blocks.forEach(block => {
-    hljs.highlightBlock(block);
-  });
-});
-
 SchemaForm.registerAntdMobile();
 new Vue({
   store,

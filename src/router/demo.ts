@@ -109,6 +109,14 @@ export default [{
   component: () => import('@/views/demo/layout/array.vue'),
   meta: {tag: '布局', name: '数组'}
 }, {
+  path: 'layout/card',
+  component: () => import('@/views/demo/layout/card.vue'),
+  meta: {tag: '布局', name: '卡片'}
+}, {
+  path: 'layout/fieldset',
+  component: () => import('@/views/demo/layout/fieldset.vue'),
+  meta: {tag: '布局', name: '折叠'}
+}, {
   path: 'layout/inline',
   component: () => import('@/views/demo/layout/inline.vue'),
   meta: {tag: '布局', name: '线性布局'}

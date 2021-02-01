@@ -15,8 +15,7 @@
       </div>
     </div>
     <div style="padding: 10px 20px;">
-      <pre v-hljs
-           v-show="showCode"
+      <pre v-show="showCode"
            class="code-box-code markdown-body clearfix">
         <code v-text="code"></code>
       </pre>
