@@ -1,4 +1,4 @@
-import {LibComponents} from '@/schema-form/utils/utils';
+import {LibComponents} from '../utils/utils';
 import Component, {mixins} from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 import BaseLayout from './base-layout';
