@@ -134,6 +134,7 @@ export default class FormField extends mixins(Emitter) {
   @Watch('value', {immediate: true})
   public valueChanged(value: any) {
     if (!isEqual(this.currentValue, value)) {
+      this.field.value = value;
       this.currentValue = getCurrentValue(value, this.definition.default);
     }
   }

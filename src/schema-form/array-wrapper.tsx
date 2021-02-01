@@ -31,7 +31,7 @@ export default class ArrayWrapper extends Vue {
   @Prop({type: Number, default: 0})
   public gutter: number;
   @Prop(String)
-  public type: srting;
+  public type: string;
   @Prop({type: Boolean, default: true})
   public showRemoveBtn: boolean;
   @Prop({type: Boolean, default: true})

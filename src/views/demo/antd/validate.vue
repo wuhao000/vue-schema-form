@@ -20,8 +20,8 @@
 <script lang="tsx">
   import SchemaForm from '@/index';
   import Base from '@/views/demo/base';
-  import {EffectsContext} from '../../../../types';
   import Component from 'vue-class-component';
+  import {EffectsContext} from '../../../../types';
 
   SchemaForm.registerAntd();
   @Component({
@@ -58,5 +58,28 @@
         }
       });
     }
+
+    public value3 = {};
+
+    public schema3 = {
+      fields: [{
+        title: '项目编号',
+        property: 'item.id',
+        type: 'string',
+        required: true,
+        placeholder: '2位行业编码+6位年月+3位数字编号',
+        props: {
+          textAlign: 'right'
+        }
+      }, {
+        title: '项目名称',
+        property: 'item.name',
+        type: 'string',
+        required: true,
+        placeholder: '请输入项目名称',
+        props: {textAlign: 'right'}
+      }]
+    };
+
   }
 </script>
