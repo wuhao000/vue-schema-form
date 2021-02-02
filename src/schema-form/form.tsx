@@ -1,4 +1,4 @@
-import {SCHEMA_FORM_STORE_INJECT_KEY} from '@/schema-form/config';
+import {SCHEMA_FORM_STORE_INJECT_KEY} from './config';
 import className from 'classname';
 import {Subject} from 'rxjs';
 import {
