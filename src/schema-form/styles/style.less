@@ -1,0 +1,35 @@
+@gray-7: #8c8c8c;
+@gray-8: #595959;
+
+.schema-form {
+  &&-sticky {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  &.schema-form-desktop {
+    .action-btns {
+      text-align: center;
+
+      .ant-btn + .ant-btn, .el-button + .el-button {
+        margin-left: 20px;
+      }
+
+      .confirm-btn, .cancel-btn, .reset-btn {
+        width: 102px;
+      }
+    }
+  }
+  &.schema-form-mobile {
+    background: #f5f4f9;
+    padding: 0 5px;
+  }
+  .schema-form-field-description {
+    margin-top: 8px;
+    color: @gray-7;
+  }
+}
+
+.flip-list-move {
+  transition: transform 1s;
+}

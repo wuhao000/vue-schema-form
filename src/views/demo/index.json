@@ -1,0 +1,96 @@
+{
+  "antd": {
+    "name": "Ant Design Vue",
+    "demos": {
+      "simple": "简单场景",
+      "display": "表单详情",
+      "list": "表单列表",
+      "validate": "表单校验",
+      "destruct": "解构字段数据",
+      "effects": "表单联动",
+      "dynamic": "动态表单"
+    }
+  },
+  "element": {
+    "name": "Element Plus",
+    "demos": {
+      "simple": "简单场景",
+      "display": "表单详情",
+      "list": "表单列表",
+      "validate": "表单校验",
+      "destruct": "解构字段数据",
+      "effects": "表单联动",
+      "dynamic": "动态表单"
+    }
+  },
+  "antdm": {
+    "name": "Ant Design Mobile",
+    "demos": {
+      "display": "详情",
+      "edit": "编辑",
+      "effects": "副作用函数",
+      "destruct": "解构"
+    }
+  },
+  "vant": {
+    "name": "Vant",
+    "demos": {
+      "display": "详情",
+      "edit": "编辑",
+      "effects": "副作用函数",
+      "destruct": "解构"
+    }
+  },
+  "layout": {
+    "name": "布局",
+    "demos": {
+      "array": "数组布局",
+      "card": "卡片布局",
+      "grid": "网格布局",
+      "steps": "分步布局",
+      "simple": "简单布局",
+      "inline": "线性布局",
+      "text-box": "文本插值",
+      "nested": "组合布局"
+    }
+  },
+  "subform": {
+    "name": "子表单",
+    "demos": {
+      "display": "详情",
+      "edit": "编辑",
+      "mobile": "移动端"
+    }
+  },
+  "feature": {
+    "name": "特性",
+    "demos": {
+      "disable": "禁用",
+      "depends": "关联显示",
+      "event": "事件处理",
+      "events": "表单项事件处理",
+      "validate": "校验",
+      "title": "修改标题",
+      "dynamic": "动态表单",
+      "complex": "复杂对象",
+      "array": "数组",
+      "button": "自定义按钮",
+      "default-value": "默认值",
+      "login": "登录框",
+      "custom": "自定义组件"
+    }
+  },
+  "components": {
+    "name": "组件",
+    "demos": {
+      "picture": "图片",
+      "file": "文件",
+      "checkbox": "复选框",
+      "button": "按钮",
+      "select": "选择",
+      "time-picker": "时间选择器",
+      "form": "表单",
+      "grid": "栅格"
+    }
+  }
+}

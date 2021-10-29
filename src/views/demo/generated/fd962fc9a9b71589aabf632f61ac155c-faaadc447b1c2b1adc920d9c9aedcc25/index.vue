@@ -1,0 +1,49 @@
+<template>
+  <div class="markdown-body">
+    <h1 id="表单项添加序号">表单项添加序号</h1>
+<blockquote>
+<p>给表单项的标题前面加上序号，如果存在隐藏表单项，则显示的序号不连续</p>
+</blockquote>
+<pre><demo-wrapper>
+<comp0></comp0>
+<template #code><code-container>
+
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;v-schema-form :schema="schema"/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script lang="ts" setup&gt;
+  import {registerAntd} from '../../../schema-form/antd';
+  // noinspection ES6UnusedImports
+  import SimpleEditDemo from '../common/simple.vue';
+  import {SchemaFormField} from '../../../types';
+
+  registerAntd();
+
+  const schema: SchemaFormField = {
+    props: {index: true},
+    fields: [{
+      property: 'a',
+      title: '字符串1',
+      type: 'string'
+    }, {
+      property: 'b',
+      title: '字符串2',
+      type: 'string'
+    }, {
+      property: 'c',
+      title: '字符串3',
+      type: 'string'
+    }]
+  }
+
+&lt;/script&gt;
+</code-container></template>
+</demo-wrapper></pre>
+
+  </div>
+</template>
+<script lang="ts" setup>
+  import  comp0 from './comp0.vue';
+</script>

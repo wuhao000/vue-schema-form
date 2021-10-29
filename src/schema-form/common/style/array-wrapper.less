@@ -1,0 +1,32 @@
+.schema-form {
+  .schema-form-array-wrapper {
+    & > .ant-col {
+      margin-bottom: 8px;
+    }
+    &-del-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e94721;
+      cursor: pointer;
+      height: 100%;
+      & > span {
+        display: inline-block;
+        height: 16px;
+        line-height: 16px;
+      }
+      &-wrapper {
+        display: flex;
+        text-align: right;
+        width: 100%;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+      }
+      &-disabled {
+        color: rgba(0, 0, 0, 0.25);
+        cursor: not-allowed;
+      }
+    }
+  }
+}

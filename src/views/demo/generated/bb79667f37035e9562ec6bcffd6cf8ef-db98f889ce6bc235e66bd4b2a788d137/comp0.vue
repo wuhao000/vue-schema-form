@@ -1,0 +1,43 @@
+<template>
+  <div>
+    <v-schema-form
+        v-model:value="value"
+        :schema="schema"/>
+    <show-value name="bool1" :value="value?.bool"/>
+    <show-value name="bool2" :value="value?.bool2"/>
+  </div>
+</template>
+<script lang="ts">
+  import {defineComponent, ref} from 'vue';
+  import {SchemaFormField} from '../../../../../types';
+  import {registerAntd} from '../../../../schema-form';
+  import ShowValue from '../../show-value';
+
+  registerAntd();
+  export default defineComponent({
+    name: 'CheckboxDemo',
+    components: {ShowValue},
+    setup() {
+      const value = ref();
+      return {
+        value,
+        schema: {
+          fields: {
+            bool: {
+              type: 'boolean',
+              title: 'bool1',
+              default: true,
+              description: '这是一段描述信息'
+            },
+            bool2: {
+              type: 'boolean',
+              xType: 'checkbox',
+              title: 'bool2',
+              default: false
+            }
+          }
+        } as SchemaFormField
+      };
+    }
+  });
+</script>

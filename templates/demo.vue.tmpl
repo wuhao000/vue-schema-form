@@ -1,0 +1,40 @@
+<template>
+  <a-layout class="bg-white" style="padding-bottom: 20px;">
+    <a-layout-content>
+      <a-layout-content class="demo-wrapper">
+        <code class="markdown-body">
+          {{{md}}}</code>
+      </a-layout-content>
+      <h4 class="demo-h4">Demo 示例</h4>
+      <div class="demo-wrapper">
+        <demo/>
+      </div>
+    </a-layout-content>
+  </a-layout>
+</template>
+<script lang="ts">
+  import {defineComponent} from 'vue';
+  import demo from '../../../views/demo/{{{group}}}/{{{file}}}';
+
+  export default defineComponent({
+    name: 'DocEffects',
+    components: {demo},
+    setup() {
+      return {};
+    }
+  });
+</script>
+<style lang="less" scoped>
+.demo-h4 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+.demo-wrapper {
+  border: 1px solid rgb(238, 238, 238);
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+</style>
