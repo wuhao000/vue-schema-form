@@ -1,4 +1,4 @@
-import {ILibComponents, Platform, SchemaFormComponentOptions} from '../../../types';
+import {ILibComponents, Platform, SchemaFormComponent, SchemaFormComponentOptions} from '../../../types';
 import {FieldDefinition} from '../internal/utils';
 
 export const ASchemaForm = 'ASchemaForm';
@@ -281,7 +281,8 @@ export const isNotNull = (value: any) => {
 };
 
 
-export const fixComponentDefinition = (value: SchemaFormComponentOptions | SchemaFormComponentOptions[], forDisplay: boolean) => {
+export const fixComponentDefinition = (value: SchemaFormComponentOptions | SchemaFormComponentOptions[],
+                                       forDisplay: boolean): SchemaFormComponent => {
   let options = null;
   if (Array.isArray(value)) {
     options = value.find(it => it.forDisplay === forDisplay);

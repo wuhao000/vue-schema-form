@@ -53,7 +53,7 @@ const SchemaForm = defineComponent({
     onSubmit: Function
   },
 emits: ['update:value'],
-  setup(props, {attrs, emit, slots}) {
+  setup(props, {emit, slots}) {
     const instance = getCurrentInstance();
     const currentValue = ref(props.value || {});
     const componentStore = new ComponentStore();
@@ -109,7 +109,7 @@ emits: ['update:value'],
     }, {deep: true});
 
     const hasSubmitHandler = computed(() => {
-      return attrs.onOk !== undefined || attrs.onSubmit || attrs.onSubmit !== undefined;
+      return props.onOk !== undefined || props.onSubmit || props.onSubmit !== undefined;
     });
 
     const localOnOk = async (forceValidate: boolean, callback?: (value) => any) => {
@@ -198,7 +198,7 @@ emits: ['update:value'],
       return runValidation(currentValue.value, store.fields, true);
     };
     const createCancelButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
-      const hasCancelHandler = attrs.onCancel !== undefined || action !== undefined;
+      const hasCancelHandler = props.onCancel !== undefined || action !== undefined;
       if (!hasCancelHandler) {
         return null;
       }
@@ -215,7 +215,7 @@ emits: ['update:value'],
       );
     };
     const createResetButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
-      const hasResetHandler = attrs.onReset !== undefined || action !== undefined;
+      const hasResetHandler = props.onReset !== undefined || action !== undefined;
       if (!hasResetHandler) {
         return null;
       }

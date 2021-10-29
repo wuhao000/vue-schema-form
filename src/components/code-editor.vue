@@ -65,7 +65,8 @@
       width: String
     },
     emits: ['update:value'],
-    setup(props) {
+    setup(props, {slots}) {
+
       const getRealMode = () => types[props.mode] || props.mode || 'application/ld+json';
       /*
        * 如果这里使用了ref，将导致代码提示框无法正常关闭
@@ -74,6 +75,22 @@
        */
       const viewer = shallowRef<CodeMirror.EditorFromTextArea>(null);
       const elRef = ref(null);
+
+      const getValue = () => {
+        if (props.value) {
+          if (props.beautify) {
+            return beautify(props.value, {format: props.mode || 'json'});
+          }
+          return props.value.trim();
+        }
+        if (slots.default) {
+          const content = slots.default()[0].children;
+          if (typeof content === 'string') {
+            return content.trim();
+          }
+        }
+        return '';
+      }
       const create = () => {
         let config = {
           size: [props.width || 'auto', props.height || 'auto']
@@ -81,10 +98,7 @@
         if (props.config) {
           config = Object.assign({}, config, props.config);
         }
-        let text = props.value || '';
-        if (props.beautify) {
-          text = beautify(text, {format: props.mode || 'json'});
-        }
+        const text = getValue();
         const defaultConfig: EditorConfiguration = {
           extraKeys: {Alt: 'autocomplete'},
           indentWithTabs: false,
@@ -103,7 +117,7 @@
         if (config.size) {
           viewer.value.setSize(config.size[0], config.size[1]);
         }
-        viewer.value.setValue(props.value);
+        viewer.value.setValue(text);
         viewer.value.refresh();
       };
       onMounted(() => {

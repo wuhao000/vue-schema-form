@@ -23,7 +23,7 @@ import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';
 import {globalComponentStore} from '../utils/register';
-import {FieldTypes, fixComponentDefinition, isNotNull, LibComponents, MOBILE, Mode} from '../utils/utils';
+import {FieldTypes, fixComponentDefinition, isNotNull, LibComponents, Mode} from '../utils/utils';
 import FormField from './field';
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -44,8 +44,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -55,18 +55,18 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => {
-          const field = fields[key];
-          if (!field.id) {
-            field.id = uuid.v4();
-          }
-          return {
-            id: field.id,
-            property: key,
-            ...fields[key]
-          };
-        });
+      .filter(key => fields[key])
+      .map(key => {
+        const field = fields[key];
+        if (!field.id) {
+          field.id = uuid.v4();
+        }
+        return {
+          id: field.id,
+          property: key,
+          ...fields[key]
+        };
+      });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -88,7 +88,7 @@ export function getComponentType(store: SchemaFormStore,
   const type = definition.type;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, definition.array)
-      || globalComponentStore.search(mode, store.platform, type, definition.array) || EmptyDefinition;
+    || globalComponentStore.search(mode, store.platform, type, definition.array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + definition.array;
     if (!missingTypes.includes(typeStr)) {
@@ -157,11 +157,11 @@ export function renderField(pathPrefix: string[] | null,
   const newField = createField(currentValue, store, pathPrefix, field);
   const type = field.xType || field.type;
   const component = field.slot ? undefined : (
-      typeof type === 'string' ? getComponentType(store, {
-        type,
-        editable: field.editable,
-        array: field.array
-      }) : fixComponentDefinition(type, !field.editable)
+    typeof type === 'string' ? getComponentType(store, {
+      type,
+      editable: field.editable,
+      array: field.array
+    }) : fixComponentDefinition(type, !field.editable)
   );
   const props: any = {
     wrap,
@@ -217,6 +217,7 @@ export class FieldDefinition<V = any> {
   public editable = true;
   public effectErrors?: string[] = null;
   public errors?: string[] = null;
+  public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields = null;
   public focus?: (event?: boolean) => any = null;
   public hiddenFromParent?: boolean = null;
@@ -245,7 +246,7 @@ export class FieldDefinition<V = any> {
   public store?: SchemaFormStore = null;
   public updateState?: (fn: (state: IFieldState) => void) => void = null;
   public valid = true;
-  public validate?: () => (boolean | Promise<unknown>) = null;
+  public validate?: (trigger?: string) => (boolean | Promise<unknown>) = null;
   public inputRef?: any;
   public value: V = null;
   public visible = true;
@@ -268,6 +269,7 @@ export class FieldDefinition<V = any> {
     this.title = definition.title;
     this.type = definition.type;
     this.xType = definition.xType;
+    this.events = definition.events;
     this.editable = definition.editable === undefined ? true : definition.editable;
     this.name = definition.property;
     this.path = buildArrayPath(pathPrefix, definition);
@@ -298,6 +300,83 @@ export class FieldDefinition<V = any> {
     return getRulesFromProps(this.definition, this.required);
   }
 
+
+  public generateEvents(): { [key: string]: (...args: any[]) => any } {
+
+    const getEventMetadata = (event) => {
+      return {event, path: this.plainPath, field: this};
+    };
+
+    const onFocus = (event, ...args) => {
+      if (this.events?.onFocus) {
+        this.events?.onFocus?.(this.store.context, event, ...args);
+      } else if (this.props?.onBlur) {
+        this.props?.onFocus?.(event, ...args);
+      }
+      const input = this.inputRef;
+      let el: any;
+      if (isVNode(input)) {
+        el = input.el;
+      } else {
+        el = input;
+      }
+      if (el) {
+        if (el.focus) {
+          el.focus({preventScroll: false});
+          if (event === true) {
+            el.scrollIntoView({behavior: 'smooth'});
+          }
+        }
+        this.store.context.trigger(SchemaFormEvents.fieldFocus, getEventMetadata(event));
+      }
+    };
+
+    const onKeydown = (event, ...args) => {
+      if (this.events?.onKeydown) {
+        this.events?.onKeydown?.(this.store.context, event, ...args);
+      } else if (this.props?.onKeydown) {
+        this.props?.onKeydown?.(event, ...args);
+      }
+      this.store.context.trigger(SchemaFormEvents.fieldKeydown, getEventMetadata(event));
+    };
+
+    const onKeyup = (event, ...args) => {
+      if (this.events?.onKeyup) {
+        this.events?.onKeyup?.(this.store.context, event, ...args);
+      } else if (this.props?.onKeyup) {
+        this.props?.onKeyup?.(event, ...args);
+      }
+      this.store.context.trigger(SchemaFormEvents.fieldKeyup, getEventMetadata(event));
+    };
+
+    const onBlur = (event, ...args) => {
+      if (this.events?.onBlur) {
+        this.events?.onBlur?.(this.store.context, event, ...args);
+      } else if (this.props?.onBlur) {
+        this.props?.onBlur?.(event, ...args);
+      }
+      if (this.valid) {
+        this.validate('blur');
+      } else {
+        this.validate();
+      }
+      this.store.context.trigger(SchemaFormEvents.fieldBlur, getEventMetadata(event));
+    };
+
+    const fieldEvents = {
+      onBlur, onFocus, onKeydown, onKeyup
+    };
+    if (this.events) {
+      const keys = Object.keys(fieldEvents);
+      Object.keys(this.events).filter(it => !keys.includes(it)).forEach(eventKey => {
+        fieldEvents[eventKey] = (...args) => {
+          this.events[eventKey](this.store.context, ...args);
+        };
+      });
+    }
+    return fieldEvents;
+  }
+
   public getComponent(forDisplay = false, platform: Platform = 'desktop'): SchemaFormComponent {
     const type = this.xType || this.type;
     if (typeof type === 'string') {
@@ -325,6 +404,7 @@ export class FieldDefinition<V = any> {
     }
     return fixComponentDefinition(type, forDisplay);
   }
+
 }
 
 

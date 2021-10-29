@@ -127,6 +127,8 @@ export interface EffectsHandlers {
    */
   enable(enable?: boolean): EffectsHandlers;
 
+  isEnabled(): boolean;
+
   /**
    * 设置表单项是否为只读
    *

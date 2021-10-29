@@ -16,7 +16,7 @@
   import {registerAntdMobile} from '../../../../schema-form/antdm/register';
   import {defineProps, defineEmits} from 'vue';
   import {useBaseDemo} from '../../base';
-
+  
   registerAntdMobile();
   const props = defineProps();
   const emits = defineEmits();

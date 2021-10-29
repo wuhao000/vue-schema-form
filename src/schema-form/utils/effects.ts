@@ -24,13 +24,13 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             pathsOrHandler(v);
           } else {
             const patterns = typeof pathsOrHandler === 'string' ? [pathsOrHandler]
-                : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
-                  if (typeof item === 'string') {
-                    return item;
-                  } else {
-                    return findFieldPath(item, store.fields as any);
-                  }
-                }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
+              : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
+                if (typeof item === 'string') {
+                  return item;
+                } else {
+                  return findFieldPath(item, store.fields as any);
+                }
+              }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
             if (isPathMatchPatterns(v.field, patterns)) {
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
                 handler(v.value, v.path);
@@ -154,7 +154,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
       },
       onFieldCreateOrChange: (callback): EffectsHandlers => {
         return context(...paths).onFieldCreate(callback)
-            .onFieldChange(callback);
+          .onFieldChange(callback);
       },
       onFieldChange: (callback): EffectsHandlers => {
         subscribe(SchemaFormEvents.fieldChange, paths, callback);
@@ -182,7 +182,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-                it, store.fields as any
+              it, store.fields as any
             )), number));
           }
         }
@@ -219,6 +219,9 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
           field.editable = !value;
         });
         return context(...paths);
+      },
+      isEnabled: (): boolean => {
+        return !matchFields(paths).some(it => it.disabled);
       },
       enable: (enable?: boolean) => {
         matchFields(paths).forEach(field => {

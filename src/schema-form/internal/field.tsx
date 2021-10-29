@@ -6,7 +6,6 @@ import {
   inject,
   isProxy,
   isRef,
-  isVNode,
   onBeforeUnmount,
   PropType,
   ref,
@@ -178,36 +177,6 @@ export default defineComponent({
       return rules;
     };
 
-    const getEventMetadata = (event) => {
-      return {event, path: field.value.plainPath, field: field.value};
-    };
-
-    const onFocus = (event) => {
-      const input = inputRef.value;
-      let el: any;
-      if (isVNode(input)) {
-        el = input.el;
-      } else {
-        el = input;
-      }
-      if (el) {
-        if (el.focus) {
-          el.focus({preventScroll: false});
-          if (event === true) {
-            el.scrollIntoView({behavior: 'smooth'});
-          }
-        }
-        store.context.trigger(SchemaFormEvents.fieldFocus, getEventMetadata(event));
-      }
-    };
-
-    const onKeydown = (event) => {
-      store.context.trigger(SchemaFormEvents.fieldKeydown, getEventMetadata(event));
-    };
-
-    const onKeyup = (event) => {
-      store.context.trigger(SchemaFormEvents.fieldKeyup, getEventMetadata(event));
-    };
     const type = computed(() => {
       return field.value.type;
     });
@@ -310,14 +279,6 @@ export default defineComponent({
         setCurrentValue(val);
       }
     }, 10);
-    const onBlur = (event) => {
-      if (field.value.valid) {
-        validate('blur');
-      } else {
-        validate();
-      }
-      store.context.trigger(SchemaFormEvents.fieldBlur, getEventMetadata(event));
-    };
 
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
@@ -343,11 +304,14 @@ export default defineComponent({
           itemProps.definition = Object.assign({}, itemProps.definition);
           delete itemProps.definition.array;
         }
+        const events = field.value.generateEvents();
+
         const className = itemProps.className;
         const style = itemProps.style;
         delete itemProps.className;
         delete itemProps.style;
         Object.assign(itemProps, {
+          ...events,
           class: className,
           style,
           arrayIndex: index,
@@ -355,8 +319,6 @@ export default defineComponent({
           key: field.value.plainPath + '-' + index,
           [valueProp]: v,
           title: store.platform === 'mobile' ? field.value.title : null,
-          onBlur,
-          onFocus,
           ['onUpdate:' + valueProp]: _.debounce((val) => {
             const oldValue = currentValue.value[index];
             if (!isEqual(val, oldValue)) {
@@ -481,18 +443,10 @@ export default defineComponent({
       const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
-      if (definition.events) {
-        Object.keys(definition.events).forEach(eventName => {
-          propsTmp[eventName] = (...args: any[]) => {
-            definition.events[eventName].call(store.context($props.field), store.context, ...args);
-          };
-        });
-      }
+
+      const events = field.value.generateEvents();
       Object.assign(propsTmp, {
-        onBlur,
-        onFocus,
-        onKeydown,
-        onKeyup,
+        ...events,
         [`onUpdate:${valueProp}`]: onValueUpdate
       });
       const slots = {};
@@ -531,7 +485,6 @@ export default defineComponent({
       Object.assign(field.value, {
         validate,
         value: currentValue.value,
-        focus: onFocus,
         setGetValue: (value: any) => {
           if (value === undefined) {
             return currentValue.value;

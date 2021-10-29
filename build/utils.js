@@ -38,10 +38,19 @@ const createDoc = (path) => {
     mkdirs(generatedDirPath);
     const html = (0, marked_1.default)(content);
     const $ = cheerio_1.default.load(html);
-    const a = $('code.language-vue');
+    const javascripts = $('code.language-typescript');
+    for (let i = 0; i < javascripts.length; i++) {
+        const v = javascripts[i];
+        const typescript = (0, html_escaper_1.unescape)($.html(v.childNodes)).trim();
+        $(`<code-editor>
+  ${typescript}
+</code-editor>`).insertBefore($(v));
+        $(v).remove();
+    }
+    const demos = $('code.language-vue');
     const compNames = [];
-    for (let i = 0; i < a.length; i++) {
-        const v = a[i];
+    for (let i = 0; i < demos.length; i++) {
+        const v = demos[i];
         const demoCode = $(v).html();
         const n = `comp${i}`;
         compNames.push(n);
@@ -55,20 +64,21 @@ const createDoc = (path) => {
         $(`<demo-wrapper>
 <${n}></${n}>
 <code-container>
-${demoCode}
+  ${demoCode}
 </code-container>
 </demo-wrapper>`).insertBefore($(v));
         $(v).remove();
     }
-    const template = (0, beautify_1.default)(`<template>
+    const originTemplate = `<template>
   <div class="markdown-body">
     ${$('body').html()}</div>
-</template>`, {
+</template>`;
+    const template = (0, beautify_1.default)(originTemplate, {
         format: 'html',
         unformatted: ['a', 'span', 'bdo', 'em', 'strong', 'dfn', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike', 'font', 'ins', 'del', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         indent_size: 2
     });
-    const generatedContent = `${template}
+    const generatedContent = `${originTemplate}
 <script lang="ts" setup>
 ${compNames.map(it => `  import  ${it} from './${it}.vue';`).join('\n')}
 </script>`.replace(/<code-container>/g, '<template #code><code-container>')

@@ -15,6 +15,7 @@ export class FieldDefinition<V = any> {
   public title: any;
   public default?: V;
   public array: boolean;
+  public events?: { [key: string]: (...args: any[]) => any };
   public type: string | SchemaFormComponentOptions | SchemaFormComponentOptions[];
   public processor: ValueProcessor;
   public changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
@@ -58,7 +59,7 @@ export class FieldDefinition<V = any> {
   public store?: SchemaFormStore;
   public updateState?: (fn: (state: IFieldState) => void) => void;
   public valid: boolean;
-  public validate?: () => (boolean | Promise<unknown>);
+  public validate?: (trigger?: string) => (boolean | Promise<unknown>);
   public value: V;
   public visible: boolean;
   public xType: string | SchemaFormComponentOptions;
@@ -71,6 +72,8 @@ export class FieldDefinition<V = any> {
   public getComponent(): SchemaFormComponent;
 
   public getRules(): IRuleDescription[];
+
+  public generateEvents(): { [key: string]: (...args: any[]) => any }
 }
 
 export class ComponentStore {
