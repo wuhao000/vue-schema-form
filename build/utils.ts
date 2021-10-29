@@ -1,7 +1,9 @@
 import cheerio from 'cheerio';
 import fs from 'fs';
+import {unescape} from 'html-escaper';
 import marked from 'marked';
 import md5 from 'md5';
+import beautify from './beautify';
 
 marked.setOptions({
   xhtml: true
@@ -15,8 +17,6 @@ export function mkdirs(string) {
     fs.mkdirSync(string);
   }
 }
-
-import {unescape} from 'html-escaper';
 
 export const createDoc = (path) => {
   const content = fs.readFileSync(path).toString();
@@ -33,10 +33,10 @@ export const createDoc = (path) => {
   const grandParent = getParentPath(parentPath);
 
   // 生成的文件夹
-  const generatedDirPath = grandParent + '/generated/' + parentId + '-'+ id;
+  const generatedDirPath = grandParent + '/generated/' + parentId + '-' + id;
 
   mkdirs(grandParent + '/generated');
-  mkdirs(generatedDirPath)
+  mkdirs(generatedDirPath);
 
   const html = marked(content);
   const $ = cheerio.load(html);
@@ -63,27 +63,31 @@ ${demoCode}
     $(v).remove();
   }
 
-  const generatedContent = `<template>
+  const template = beautify(`<template>
   <div class="markdown-body">
-    ${$('body').html()}
-  </div>
-</template>
+    ${$('body').html()}</div>
+</template>`, {
+    format: 'html',
+    unformatted: ['a', 'span', 'bdo', 'em', 'strong', 'dfn', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike', 'font', 'ins', 'del', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    indent_size: 2
+  });
+  const generatedContent = `${template}
 <script lang="ts" setup>
 ${compNames.map(it => `  import  ${it} from './${it}.vue';`).join('\n')}
-</script>`.replace(/<code-container>/g,'<template #code><code-container>')
+</script>`.replace(/<code-container>/g, '<template #code><code-container>')
     .replace(/<\/code-container>/g, '</code-container></template>');
 
   fs.writeFileSync(`${generatedDirPath}/index.vue`, generatedContent);
-}
+};
 
 
 export const getParentPath = (path: string) => {
   const paths = path.split(/[\\/]/);
   return paths.slice(0, paths.length - 1).join('/');
-}
+};
 
 
 export const getName = (path) => {
   const paths = path.split(/[\\/]/);
   return paths[paths.length - 1];
-}
+};

@@ -1,6 +1,6 @@
 import {isEqual} from '../uform/utils';
 
-export function getStructValue(parentValue: object, struct: string | any[] | object) {
+export function getStructValue(parentValue: { [key: string]: unknown }, struct: string | any[] | { [key: string]: string | any[] }) {
   if (Array.isArray(struct)) {
     return struct.map(key => getStructValue(parentValue, key));
   } else if (typeof struct === 'string') {
@@ -25,7 +25,7 @@ export function getStructValue(parentValue: object, struct: string | any[] | obj
 }
 
 
-export function setStructValue(parentValue: object, struct: string | any[] | object,
+export function setStructValue(parentValue: { [key: string]: unknown }, struct: string | any[] | { [key: string]: string | any[] },
                                structValue: any) {
   if (typeof struct === 'string') {
     const oldValue = parentValue[struct];

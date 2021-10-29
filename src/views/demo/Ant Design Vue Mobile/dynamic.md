@@ -3,10 +3,10 @@
   <a-layout>
     <a-layout-content>
       <a-button @click="loadData">加载</a-button>
-      <v-schema-form v-model:value="model"
-                     :effects="effects"
-                     :schema="formDefinition"/>
-      <show-value :value="model"/>
+      <v-schema-form
+          v-model:value="model"
+          :effects="effects"
+          :schema="formDefinition"/>
     </a-layout-content>
   </a-layout>
 </template>
@@ -14,13 +14,10 @@
   import {defineComponent, ref} from 'vue';
   import {EffectsContext} from '../../../../types';
   import {registerAntd} from '../../../schema-form/antd';
-  import ShowValue from '../show-value';
 
   registerAntd();
   export default defineComponent({
-    components: {
-      ShowValue
-    },
+    name: 'Demo',
     setup() {
       const getDefaultBean = () => {
         return {

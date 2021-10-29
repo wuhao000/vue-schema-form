@@ -26,9 +26,9 @@
     setup() {
       const router = useRouter();
       const openKeys = ref([]);
-      const groups = {};
+      const groups: any = {};
       demoRoutes.forEach(route => {
-        const key = route.meta && route.meta.tag || '其他';
+        const key = route.meta && route.meta.tag as string || '其他';
         groups[key] = groups[key] || [];
         groups[key].push(route);
       });

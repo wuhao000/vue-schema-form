@@ -24,12 +24,12 @@
 <script lang="tsx" type="text/tsx">
   import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
   import {defineComponent, ref} from 'vue';
-  import {DButton} from '../schema-form';
   import AppBanner from './banner.vue';
 
   export default defineComponent({
+    name: 'HomePage',
     components: {
-      AppBanner, DButton
+      AppBanner
     },
     setup() {
       const mobile = ref(false);

@@ -122,8 +122,8 @@ export interface SchemaFormField {
    */
   fields?: FormFields;
   id?: string;
-  layoutType?: string | { [key: string]: undefined };
-  layoutProps?: { [key: string]: undefined };
+  layoutType?: string | { [key: string]: unknown };
+  layoutProps?: { [key: string]: unknown };
   layout?: any;
   /**
    * 数值输入组件的最小值

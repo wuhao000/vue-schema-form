@@ -1,14 +1,17 @@
 ```vue
+
 <template>
   <div>
-    <v-schema-form :schema="editSchema"
-                   :effects="editFormEffects"
-                   v-model:value="editForm">
+    <v-schema-form
+        :schema="editSchema"
+        :effects="editFormEffects"
+        v-model:value="editForm">
     </v-schema-form>
     <a-button @click="edit">编辑</a-button>
-    <v-schema-form v-model:value="value"
-                   :effects="effects"
-                   :schema="schema"/>
+    <v-schema-form
+        v-model:value="value"
+        :effects="effects"
+        :schema="schema"/>
     <pre>{{ value }}</pre>
   </div>
 </template>

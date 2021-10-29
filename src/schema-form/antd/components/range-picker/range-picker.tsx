@@ -22,7 +22,9 @@ const convertValueBack = (value: Moment[] | undefined): Date[] => {
 export default defineComponent({
   name: 'DRangePicker',
   props: {
-    value: {},
+    value: {
+      type: Array
+    },
     mode: {type: String, default: 'date'}
   },
   setup(props, ctx) {
@@ -35,6 +37,7 @@ export default defineComponent({
         case 'datetime':
           return 'YYYY-MM-DD HH:mm:ss';
       }
+      return undefined;
     });
     watch(() => props.value, (value: any) => {
       const convertedValue = convertValue(value, format.value);
@@ -70,7 +73,6 @@ export default defineComponent({
     return {getProps};
   },
   render() {
-    // @ts-ignore
-    return <DatePicker.RangePicker {...this.getProps()}/>;
+    return <DatePicker.RangePicker {...this.getProps() as any}/>;
   }
 });

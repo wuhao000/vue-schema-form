@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  name: 'SwitchDisplay',
   props: {
     value: Boolean,
     onLabel: [String, Object],

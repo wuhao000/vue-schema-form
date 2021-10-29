@@ -9,10 +9,12 @@
   ],
   "main": "es/index.js",
   "scripts": {
-    "serve": "vite",
+    "dev": "vite",
+    "dev-webpack": "npm run docs && node compile/build-components.js && vue-cli-service serve",
     "compile": "npm run docs && node compile/build-components.js",
     "build": "npm run docs && node compile/build-components.js && vue-cli-service build",
     "docs": "tsc -p build && node build/routes.js",
+    "lint": "vue-cli-service lint",
     "cdn": "tsc -p build && npm run lib && node build/cdn.js",
     "check": "tsc -p build && node build/check.js",
     "version": "tsc -p  build && node build/version.js",

@@ -247,10 +247,10 @@ const parseDestruct = (str: PathNode) => {
       } else {
         destruct = [];
       }
-      const tail = stack[stack.length - 1];
+      const tail: any[] = stack[stack.length - 1];
       if (isPlainObj(tail)) {
         tail[token] = destruct;
-      } else if (isArr(tail)) {
+      } else if (Array.isArray(tail)) {
         tail.push(destruct);
       }
       stack.push(destruct);
@@ -265,7 +265,7 @@ const parseDestruct = (str: PathNode) => {
       const tail = stack[stack.length - 1];
       if (isPlainObj(tail)) {
         tail[token] = destruct;
-      } else if (isArr(tail)) {
+      } else if (Array.isArray(tail)) {
         tail.push(destruct);
       }
       stack.push(destruct);
@@ -390,10 +390,7 @@ const resolveUpdateIn = (update: Setter, internalGetIn: Getter) => {
       return update(obj, path, value, getSchema);
     }
     if (paths && paths.length) {
-      paths.forEach(() => {
-
-      })
-      each(paths, ({mapPath, key, startPath, endPath}: any) => {
+      each(paths, ({key, startPath, endPath}: any) => {
         update(
             obj,
             startPath.concat(key),

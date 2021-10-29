@@ -1,5 +1,7 @@
 <template>
-  <a-layout class="bg-white" style="padding-bottom: 20px;">
+  <a-layout
+class="bg-white"
+style="padding-bottom: 20px;">
     <a-layout-content>
       <a-layout-content class="demo-wrapper">
         <code class="markdown-body">

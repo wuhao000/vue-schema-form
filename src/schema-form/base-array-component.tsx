@@ -1,5 +1,5 @@
-import {SchemaFormStore} from '../../types';
 import {defineComponent, inject, ref, watch} from 'vue';
+import {SchemaFormStore} from '../../types';
 import {SchemaFormStoreKey} from './utils/key';
 import {ASchemaForm, getButtonComponent, getColComponent, getRowComponent, MOBILE} from './utils/utils';
 
@@ -14,12 +14,13 @@ export default defineComponent({
     component: String,
     disabled: {type: Boolean, default: false}
   },
+  emits: ['change', 'update:value'],
   setup(props, {emit}) {
     const current = ref(props.value ?? []);
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const onAddClick = () => {
       (current.value as any[]).push(null);
-    }
+    };
     watch(() => props.value, (value) => {
       current.value = value ?? [];
     });
@@ -52,15 +53,15 @@ export default defineComponent({
         return <div style={{margin: '10px 15px'}}>{button}</div>;
       }
       return <ColComponent span={props.cellSpan}>{button}</ColComponent>;
-    }
+    };
 
     return {
       validate: () => {
-        return true
+        return true;
       },
       renderAddButton,
       current, store
-    }
+    };
   },
   render() {
     const {store, current} = this;

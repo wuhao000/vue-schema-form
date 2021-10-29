@@ -1,12 +1,14 @@
 ```vue
+
 <template>
   <a-layout>
     <a-layout-content class="demo-wrapper">
-      <v-schema-form v-model:value="value"
-                     :props="props"
-                     :schema="schema"
-                     class="demo-form"
-                     @ok="onOk"></v-schema-form>
+      <v-schema-form
+          v-model:value="value"
+          :props="props"
+          :schema="schema"
+          class="demo-form"
+          @ok="onOk"></v-schema-form>
     </a-layout-content>
   </a-layout>
 </template>
@@ -16,6 +18,7 @@
 
   registerAntdMobile();
   export default defineComponent({
+    name: 'Demo',
     setup() {
       const value = ref([{
         basic: {

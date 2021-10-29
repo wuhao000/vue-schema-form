@@ -1,7 +1,8 @@
 <template>
   <a-layout class="demo-wrapper">
     <a-layout-content>
-      <v-schema-form :effects="effects"
+      <v-schema-form
+:effects="effects"
                      :schema="schema">
       </v-schema-form>
     </a-layout-content>

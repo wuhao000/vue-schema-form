@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const formatTime = (value: Date | number | string, fmt?: string, pretty: boolean = false): string => {
+export const formatTime = (value: Date | number | string, fmt?: string, pretty = false): string => {
   let text = '';
   const format = 'YYYY-MM-DD HH:mm:ss';
   let date: Date;
@@ -23,7 +23,6 @@ export const formatTime = (value: Date | number | string, fmt?: string, pretty: 
       }
     }
   }
-  // @ts-ignore
   if (pretty && date) {
     const now = new Date();
     const nowTime = now.getTime();

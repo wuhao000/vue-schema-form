@@ -3,8 +3,12 @@ import {defineComponent} from 'vue';
 export const MobileDisplayField = defineComponent({
   name: 'DisplayField',
   props: {
-    value: {},
-    title: {}
+    value: {
+      type: [Object, String, Number, Boolean, Array]
+    },
+    title: {
+      type: [String, Object]
+    }
   },
   render() {
     const {value} = this;

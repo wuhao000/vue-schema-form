@@ -1,5 +1,5 @@
 import {Subject} from 'rxjs';
-import {App, VNode} from 'vue';
+import {App, Component, VNode} from 'vue';
 import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFieldOptions, IFieldState, IFormPathMatcher, IRuleDescription, Path} from './uform';
 
@@ -42,18 +42,18 @@ export function registerDesktopLib(map: Record<keyof ILibComponents, any>): void
 
 export function registerMobileLib(map: Record<keyof ILibComponents, any>): void;
 
-export function registerDesktop(component: string | object,
+export function registerDesktop(component: string | Component,
                                 types: string | string[],
                                 forArray?: boolean,
-                                getProps?: ((definition: FieldDefinition, platform: Platform) => object)): void;
+                                getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
 
 export function registerDisplay(options: DisplayComponentOptions): void;
 
-export function register(component: string | object,
+export function register(component: string | Component,
                          platforms: Platform | Platform[],
                          types: string | string[],
                          forArray?: boolean,
-                         getProps?: ((definition: FieldDefinition, platform: Platform) => object)): void;
+                         getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
 
 export function registerComponent(options: SchemaFormComponentOptions): void;
 
@@ -66,21 +66,21 @@ export const DSelect;
 
 export class SchemaForm {
   public static install: (app: App) => void;
-  public static registerComponent: (component: string | object,
+  public static registerComponent: (component: string | Component,
                                     platforms: Platform | Platform[],
                                     types: string | string[],
                                     forArray?: boolean,
-                                    getProps?: ((definition: IField, platform: Platform) => object)) => void;
+                                    getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})) => void;
   public static registerLayout: (options: {
-    component: string | object,
+    component: string | Component,
     platforms: Platform | Platform[],
     types: string | string[],
-    getProps?: ((definition: IField, platform: Platform) => object)
+    getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})
   }) => void;
-  public static registerResponsiveComponent: (component: string | object,
+  public static registerResponsiveComponent: (component: string | Component,
                                               types: string | string[],
                                               forArray?: boolean,
-                                              getProps?: ((definition: IField, platform: Platform) => object)) => void;
+                                              getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})) => void;
 }
 
 export type ValidateHandler = (response: IValidateResponse[]) => void;
@@ -98,7 +98,7 @@ export interface EffectsHandlers {
   paths: () => string[];
   setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
   setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers;
-  setFieldProps: (props: object | ((field: IField) => object)) => EffectsHandlers;
+  setFieldProps: (props: {[key: string]: unknown} | ((field: IField) => {[key: string]: unknown})) => EffectsHandlers;
   setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers;
   show: (show?: boolean) => EffectsHandlers;
   subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
@@ -154,7 +154,7 @@ export interface SchemaFormComponent {
   forInput: boolean;
   layoutOptions: LayoutOptions;
   getDefaultValue?: (field: FieldDefinition) => any;
-  getProps: (field: FieldDefinition) => object;
+  getProps: (field: FieldDefinition) => {[key: string]: unknown};
   layout: boolean;
   platform: Platform;
   type: string;
@@ -197,7 +197,7 @@ type BuiltInActions = 'submit' | 'cancel' | 'reset';
 type Action = BuiltInActions | {
   name: BuiltInActions | string;
   text: string;
-  props?: object;
+  props?: {[key: string]: unknown};
   action?: () => any;
 };
 
@@ -242,8 +242,8 @@ export interface IField<V = any> {
   plainPath?: string;
   pristine?: boolean;
   processor?: {
-    getValue: (parentValue: object, field: IField) => any;
-    setValue: (parentValue: object, field: IField, fieldValue: any) => any;
+    getValue: (parentValue: {[key: string]: unknown}, field: IField) => any;
+    setValue: (parentValue: {[key: string]: unknown}, field: IField, fieldValue: any) => any;
   };
   props?: any;
   publishState?: () => IFieldState;
@@ -268,14 +268,14 @@ export interface LayoutOptions {
 }
 
 export interface SchemaFormComponentOptions {
-  component: string | object;
+  component: string | Component;
   forArray?: boolean;
   forDisplay: boolean;
   /**
    * 是否输入组件，默认true
    */
   forInput?: boolean;
-  getProps?: (definition: FieldDefinition, platform: Platform) => object;
+  getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
   layout?: boolean;
   platforms: Platform | Platform[];
   types: string | string[];
@@ -288,9 +288,9 @@ export type Actions = Action[];
 
 
 export interface DisplayComponentOptions {
-  component: string | object;
+  component: string | Component;
   forArray?: boolean;
-  getProps?: (definition: FieldDefinition, platform: Platform) => object;
+  getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
   layout?: boolean;
   platforms: Platform | Platform[];
   types: string | string[];
@@ -309,7 +309,7 @@ export interface CommonFormProps {
 }
 
 interface Transformers {
-  formProps: (props: CommonFormProps) => object;
+  formProps: (props: CommonFormProps) => {[key: string]: unknown};
 }
 
 export type PropsTransformer = {

@@ -58,9 +58,12 @@ export default defineComponent({
     validateStatus: {
       type: String as PropType<string>
     },
-    value: {}
+    value: {
+      type: [Object, String, Number, Array, Boolean]
+    }
   },
-  setup(props, {emit, slots, attrs}) {
+  emits: ['validate'],
+  setup(props, {emit, attrs}) {
     const control = ref(null);
     const currentHelp = ref('');
     const currentValidateStatus = ref('');
@@ -163,7 +166,7 @@ export default defineComponent({
       formRules = formRules ? (prop.o[props.name as string || ''] || prop.v) : [];
       return [].concat(selfRules || formRules || []).concat(requiredRule);
     };
-    const onFieldBlur = (e) => {
+    const onFieldBlur = () => {
       validate('blur');
     };
     const onFieldChange = () => {
@@ -174,7 +177,7 @@ export default defineComponent({
       validate('change');
     };
     const validate = debounce((trigger, callback = noop) => {
-      nextTick(() => {
+      nextTick().then(() => {
         validateDisabled.value = false;
         const rules = getFilteredRule(trigger);
         if ((!rules || rules.length === 0) && props.required === undefined) {

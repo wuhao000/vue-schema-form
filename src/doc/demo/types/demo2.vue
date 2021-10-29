@@ -1,5 +1,6 @@
 <template>
-  <v-schema-form :schema="schema"
+  <v-schema-form
+:schema="schema"
                  :value="value"></v-schema-form>
 </template>
 <script lang="ts">

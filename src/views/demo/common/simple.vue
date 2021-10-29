@@ -37,6 +37,7 @@ v-model:value="value"
   import ShowValue from '../show-value';
 
   export default defineComponent({
+    name: 'Demo',
     components: {ShowValue},
     props: baseDemoProps,
     setup(props, ctx) {

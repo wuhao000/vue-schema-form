@@ -1,5 +1,7 @@
 <template>
-  <a-layout class="bg-white" style="padding-bottom: 20px;">
+  <a-layout
+class="bg-white"
+style="padding-bottom: 20px;">
     <a-layout-content>
       <a-layout-content class="demo-wrapper">
         <code class="markdown-body">
@@ -92,21 +94,6 @@
 
         </code>
       </a-layout-content>
-      
-    </a-layout-content>
+</a-layout-content>
   </a-layout>
 </template>
-<script lang="ts">
-  import {defineComponent} from 'vue';
-  import CodeWrapper from '../../components/code-wrapper.vue';
-  
-  
-
-  export default defineComponent({
-    name: 'DocEffects',
-    components: {CodeWrapper},
-    setup() {
-      return {};
-    }
-  });
-</script>

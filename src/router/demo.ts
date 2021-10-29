@@ -181,55 +181,45 @@ export default [{
   meta: {tag: '子表单',
   name: 'mobile'}
 }, {
-  path: '5aefca559c5a41d10078e21e6d616825-f1f713c9e000f5d3f280adbd124df4f5',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-f1f713c9e000f5d3f280adbd124df4f5/index.vue'),
-  meta: {tag: '布局',
-  name: 'array'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-5dd2199ad68327cc76d583b057aee7d5',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-5dd2199ad68327cc76d583b057aee7d5/index.vue'),
-  meta: {tag: '布局',
-  name: 'card'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-ff4a008470319a22d9cf3d14af485977',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-ff4a008470319a22d9cf3d14af485977/index.vue'),
-  meta: {tag: '布局',
-  name: 'grid'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-03fdad155b7548884584c7c39b0c5cd2',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-03fdad155b7548884584c7c39b0c5cd2/index.vue'),
-  meta: {tag: '布局',
-  name: 'inline'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-83d3784ea62518eafc60e98d84f877ad',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-83d3784ea62518eafc60e98d84f877ad/index.vue'),
-  meta: {tag: '布局',
-  name: 'nested'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-8dbdda48fb8748d6746f1965824e966a',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-8dbdda48fb8748d6746f1965824e966a/index.vue'),
-  meta: {tag: '布局',
-  name: 'simple'}
-}, {
-  path: '5aefca559c5a41d10078e21e6d616825-fca3ffea6534176432f58b5a22ed22e1',
-  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-fca3ffea6534176432f58b5a22ed22e1/index.vue'),
-  meta: {tag: '布局',
-  name: 'steps'}
-}, {
   path: '5aefca559c5a41d10078e21e6d616825-9f7f9c739a8b146cedada5a3cc96fa45',
   component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-9f7f9c739a8b146cedada5a3cc96fa45/index.vue'),
   meta: {tag: '布局',
   name: 'text-box'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-f1f713c9e000f5d3f280adbd124df4f5',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-f1f713c9e000f5d3f280adbd124df4f5/index.vue'),
-  meta: {tag: '特性',
-  name: 'array'}
+  path: '5aefca559c5a41d10078e21e6d616825-29d627353affda5732bd0fbed5fa3ae0',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-29d627353affda5732bd0fbed5fa3ae0/index.vue'),
+  meta: {tag: '布局',
+  name: '分步'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-ce50a09343724eb82df11390e2c1de18',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-ce50a09343724eb82df11390e2c1de18/index.vue'),
-  meta: {tag: '特性',
-  name: 'button'}
+  path: '5aefca559c5a41d10078e21e6d616825-d87f215d9ac688b1d3399bf575a0ef6f',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-d87f215d9ac688b1d3399bf575a0ef6f/index.vue'),
+  meta: {tag: '布局',
+  name: '卡片'}
+}, {
+  path: '5aefca559c5a41d10078e21e6d616825-ce8b05cc08acbf522e2aec916b38e707',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-ce8b05cc08acbf522e2aec916b38e707/index.vue'),
+  meta: {tag: '布局',
+  name: '嵌套'}
+}, {
+  path: '5aefca559c5a41d10078e21e6d616825-0e67d4b0e351b00f4bea9840aa6b99d7',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-0e67d4b0e351b00f4bea9840aa6b99d7/index.vue'),
+  meta: {tag: '布局',
+  name: '数组'}
+}, {
+  path: '5aefca559c5a41d10078e21e6d616825-14ecb952b60884314ef65171f0cce870',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-14ecb952b60884314ef65171f0cce870/index.vue'),
+  meta: {tag: '布局',
+  name: '栅格'}
+}, {
+  path: '5aefca559c5a41d10078e21e6d616825-d517acb68fbed2331b57d1a11ca21dcc',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-d517acb68fbed2331b57d1a11ca21dcc/index.vue'),
+  meta: {tag: '布局',
+  name: '简单'}
+}, {
+  path: '5aefca559c5a41d10078e21e6d616825-9b6cb33b41b9324c0210e13ab3f12f68',
+  component: () => import('../views/demo/generated/5aefca559c5a41d10078e21e6d616825-9b6cb33b41b9324c0210e13ab3f12f68/index.vue'),
+  meta: {tag: '布局',
+  name: '线性'}
 }, {
   path: 'c666ad11eadc4919c73d8735e9f02ce1-8b9035807842a4e4dbe009f3f1478127',
   component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-8b9035807842a4e4dbe009f3f1478127/index.vue'),
@@ -241,40 +231,45 @@ export default [{
   meta: {tag: '特性',
   name: 'default-value'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-0aaa87422396fdd678498793b6d5250e',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-0aaa87422396fdd678498793b6d5250e/index.vue'),
-  meta: {tag: '特性',
-  name: 'disable'}
-}, {
   path: 'c666ad11eadc4919c73d8735e9f02ce1-4119639092e62c55ea8be348e4d9260d',
   component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-4119639092e62c55ea8be348e4d9260d/index.vue'),
   meta: {tag: '特性',
   name: 'event'}
-}, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-16908b0605f2645dfcb4c3a8d248cef3',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-16908b0605f2645dfcb4c3a8d248cef3/index.vue'),
-  meta: {tag: '特性',
-  name: 'events'}
 }, {
   path: 'c666ad11eadc4919c73d8735e9f02ce1-caf9b6b99962bf5c2264824231d7a40c',
   component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-caf9b6b99962bf5c2264824231d7a40c/index.vue'),
   meta: {tag: '特性',
   name: 'info'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-d56b699830e77ba53855679cb1d252da',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-d56b699830e77ba53855679cb1d252da/index.vue'),
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-10b2761db5a8e089049df39675abc550',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-10b2761db5a8e089049df39675abc550/index.vue'),
   meta: {tag: '特性',
-  name: 'login'}
+  name: '事件'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-1f1d133e015daf272fef65569a3a2096',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-1f1d133e015daf272fef65569a3a2096/index.vue'),
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-fa966345577ba81af19408f203db968f',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-fa966345577ba81af19408f203db968f/index.vue'),
   meta: {tag: '特性',
-  name: 'select-cfg'}
+  name: '按钮'}
 }, {
-  path: 'c666ad11eadc4919c73d8735e9f02ce1-f9ab05454998236921a6b0e281fae632',
-  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-f9ab05454998236921a6b0e281fae632/index.vue'),
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-0e67d4b0e351b00f4bea9840aa6b99d7',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-0e67d4b0e351b00f4bea9840aa6b99d7/index.vue'),
   meta: {tag: '特性',
-  name: 'validate'}
+  name: '数组'}
+}, {
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-b7579706a363e5f23b1040fecfbcb677',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-b7579706a363e5f23b1040fecfbcb677/index.vue'),
+  meta: {tag: '特性',
+  name: '校验'}
+}, {
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-402d19e50fff44c827a4f3b608bd5812',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-402d19e50fff44c827a4f3b608bd5812/index.vue'),
+  meta: {tag: '特性',
+  name: '登录'}
+}, {
+  path: 'c666ad11eadc4919c73d8735e9f02ce1-710ad08b11419332713360d2750cd707',
+  component: () => import('../views/demo/generated/c666ad11eadc4919c73d8735e9f02ce1-710ad08b11419332713360d2750cd707/index.vue'),
+  meta: {tag: '特性',
+  name: '禁用'}
 }, {
   path: 'bb79667f37035e9562ec6bcffd6cf8ef-006ded9fa277cf030592021f595a07d5',
   component: () => import('../views/demo/generated/bb79667f37035e9562ec6bcffd6cf8ef-006ded9fa277cf030592021f595a07d5/index.vue'),

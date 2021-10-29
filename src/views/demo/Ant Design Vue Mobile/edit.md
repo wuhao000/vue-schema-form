@@ -1,4 +1,5 @@
 ```vue
+
 <template>
   <a-layout class="demo-wrapper">
     <a-layout-content>
@@ -8,18 +9,20 @@
         <m-input/>
         <m-input/>
       </m-list>
-      <v-schema-form v-model:value="options"
-                     :schema="optionFormDefinition" inline
-                     platform="mobile"></v-schema-form>
-      <v-schema-form v-model:value="value"
-                     :disabled="options.disabled"
-                     :editable="!options.displayMode"
-                     :loading="options.loading"
-                     :readonly="options.readonly"
-                     :schema="definition"
-                     :sticky="options.sticky"
-                     class="demo-form"
-                     platform="mobile"/>
+      <v-schema-form
+          v-model:value="options"
+          :schema="optionFormDefinition" inline
+          platform="mobile"></v-schema-form>
+      <v-schema-form
+          v-model:value="value"
+          :disabled="options.disabled"
+          :editable="!options.displayMode"
+          :loading="options.loading"
+          :readonly="options.readonly"
+          :schema="definition"
+          :sticky="options.sticky"
+          class="demo-form"
+          platform="mobile"/>
     </a-layout-content>
   </a-layout>
 </template>
@@ -31,6 +34,7 @@
   registerAntdMobile();
 
   export default {
+    name: 'Demo',
     props: {
       ...baseDemoProps
     },

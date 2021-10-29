@@ -4,11 +4,11 @@ import DTimePicker from './time-picker';
 import './time-range-picker.less';
 
 export default defineComponent({
-  inheritAttrs: false,
   name: 'DTimeRangePicker',
   components: {
     DTimePicker
   },
+  inheritAttrs: false,
   props: {
     ...baseTimeRangePickerProps
   },

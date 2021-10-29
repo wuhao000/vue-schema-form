@@ -1,5 +1,7 @@
 <template>
-  <a-layout class="bg-white" style="padding-bottom: 20px;">
+  <a-layout
+class="bg-white"
+style="padding-bottom: 20px;">
     <a-layout-content>
       <a-layout-content class="demo-wrapper">
         <code class="markdown-body">
@@ -9,7 +11,9 @@
 
         </code>
       </a-layout-content>
-      <code-wrapper :code="code0" :md="md0">
+      <code-wrapper
+:code="code0"
+:md="md0">
         <demo0/>
       </code-wrapper>
     </a-layout-content>

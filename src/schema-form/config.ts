@@ -1,5 +1,5 @@
-import {CommonFormProps, Platform, PropsTransformer, SchemaFormComponentOptions} from '../../types';
 import {Component} from 'vue';
+import {CommonFormProps, Platform, PropsTransformer, SchemaFormComponentOptions} from '../../types';
 import {FieldDefinition} from './internal/utils';
 import {ComponentStore, globalComponentStore} from './utils/register';
 
@@ -56,7 +56,9 @@ export const transformFormProps = (props: CommonFormProps, platform: Platform) =
   return formPropsTransformer(props);
 };
 
-export const registerComponent = (options: SchemaFormComponentOptions, store?: ComponentStore) => {
+export const registerComponent = (
+  options: SchemaFormComponentOptions,
+  store?: ComponentStore) => {
   const baseOptions = Object.assign({}, options);
   if (Array.isArray(options.types)) {
     options.types.forEach(types => {

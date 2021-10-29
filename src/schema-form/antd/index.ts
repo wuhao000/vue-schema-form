@@ -172,7 +172,9 @@ export function registerAntd() {
       return {multiple: definition.array, mode: 'picture'};
     }
   });
-  registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerDesktop(createComponentProxy(TimePicker),
+    [FieldTypes.Time],
+    false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerComponent({
     component: AutoComplete,
     forDisplay: false,

@@ -15,6 +15,7 @@
   import {registerAntd} from '../../../schema-form';
 
   export default defineComponent({
+    name: 'Demo',
     setup() {
       const schema = reactive({
         props: {

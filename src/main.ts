@@ -15,7 +15,7 @@ import CodeContainer from './components/code-container.vue';
 
 const app = createApp(App);
 app.config.warnHandler = () => {
-
+  // do not show
 };
 app.use(Antdm as any);
 app.use(router);

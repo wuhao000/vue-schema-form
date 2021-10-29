@@ -1,11 +1,12 @@
 import {IRuleDescription} from '../../../../../types';
 import {getMessage} from '../message';
 import {format, isEmpty} from '../utils';
+const has = Object.prototype.hasOwnProperty;
 
 export const isValidateEmpty = (value: any) => {
   if (typeof value === 'object' && !(value instanceof Date)) {
     for (const key in value) {
-      if (value.hasOwnProperty(key)) {
+      if (has(key)) {
         if (!isValidateEmpty(value[key])) {
           return false;
         }

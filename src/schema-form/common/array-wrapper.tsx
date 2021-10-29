@@ -38,6 +38,7 @@ export default defineComponent({
     clsPrefix: {type: String, default: 'schema-form-array-wrapper'},
     ...baseArrayComponentProps
   },
+emits: ['add', 'remove'],
   setup(props, {slots, emit}) {
     const field: ComputedRef<FieldDefinition> = computed(() => {
       return props.field as FieldDefinition;

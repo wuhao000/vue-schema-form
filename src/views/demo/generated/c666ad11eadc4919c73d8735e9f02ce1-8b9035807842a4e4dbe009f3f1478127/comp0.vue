@@ -1,3 +1,4 @@
+
 <template>
   <v-schema-form
       v-model:value="value"
@@ -6,9 +7,8 @@
 </template>
 <script lang="tsx">
   import {defineComponent, ref, watch} from 'vue';
-  import {EffectsContext, SchemaFormComponent, SchemaFormField} from '../../../../../types';
+  import {EffectsContext, SchemaFormField} from '../../../../../types';
   import {registerAntd} from '../../../../schema-form';
-  import SelectCfgComponent from '../select-cfg.vue';
 
   export default defineComponent({
     name: 'Demo',
@@ -37,18 +37,6 @@
               type: 'text'
             },
             {
-              property: 'selectCfg',
-              type: {
-                component: SelectCfgComponent,
-                forInput: true,
-                forArray: false,
-                platform: 'desktop'
-              } as SchemaFormComponent,
-              props: {
-                componentName: 'SelectField'
-              }
-            },
-            {
               property: 'string3',
               title: 'string3',
               type: {
@@ -70,7 +58,7 @@
                     };
                   },
                   render() {
-                    return <a-input v-model={[this.localValue, 'value']}/>;
+                    return <a-input v-model={[this['localValue'], 'value']}/>;
                   }
                 },
                 getProps: () => {

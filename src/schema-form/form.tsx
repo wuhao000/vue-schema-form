@@ -45,8 +45,14 @@ const SchemaForm = defineComponent({
     title: [String, Object],
     inline: {type: Boolean as PropType<boolean>},
     sticky: {type: Boolean as PropType<boolean>, default: false},
-    components: {type: Array as PropType<SchemaFormComponentOptions[]>, default: () => []}
+    components: {type: Array as PropType<SchemaFormComponentOptions[]>, default: () => []},
+    onChange: Function,
+    onReset: Function,
+    onCancel: Function,
+    onOk: Function,
+    onSubmit: Function
   },
+emits: ['update:value'],
   setup(props, {attrs, emit, slots}) {
     const instance = getCurrentInstance();
     const currentValue = ref(props.value || {});
@@ -106,7 +112,7 @@ const SchemaForm = defineComponent({
       return attrs.onOk !== undefined || attrs.onSubmit || attrs.onSubmit !== undefined;
     });
 
-    const onOk = async (forceValidate: boolean, callback?: (value) => any) => {
+    const localOnOk = async (forceValidate: boolean, callback?: (value) => any) => {
       if (hasSubmitHandler.value) {
         if (forceValidate) {
           const errors = await validate();
@@ -117,16 +123,16 @@ const SchemaForm = defineComponent({
             if (callback) {
               callback(currentValue.value);
             } else {
-              emit('ok', currentValue.value);
-              emit('submit', currentValue.value);
+              props.onOk?.(currentValue.value);
+              props.onSubmit?.(currentValue.value);
             }
           }
         } else {
           if (callback) {
             callback(currentValue.value);
           } else {
-            emit('ok', currentValue.value);
-            emit('submit', currentValue.value);
+            props.onOk?.(currentValue.value);
+            props.onSubmit?.(currentValue.value);
           }
         }
       }
@@ -166,7 +172,7 @@ const SchemaForm = defineComponent({
       return createButton(
         text || btnProps && btnProps.okText || '提交',
         action || (() => {
-          onOk(true);
+          localOnOk(true);
         }), buttonProps, 'confirm-btn'
       );
     };
@@ -204,7 +210,7 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
         text || btnProps?.cancelText || '取消',
-        action || onCancel, buttonProps,
+        action || localOnCancel, buttonProps,
         'cancel-btn'
       );
     };
@@ -221,14 +227,14 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
         text || btnProps && btnProps.cancelText || '重置',
-        action || onReset, buttonProps, 'reset-btn'
+        action || localOnReset, buttonProps, 'reset-btn'
       );
     };
-    const onReset = () => {
-      emit('reset');
+    const localOnReset = () => {
+      props.onReset?.();
     };
-    const onCancel = () => {
-      emit('cancel');
+    const localOnCancel = () => {
+      props.onCancel?.();
     };
     const renderButtons = () => {
       const {actions} = props;
@@ -287,7 +293,7 @@ const SchemaForm = defineComponent({
       if (!isEqual(currentValue.value, props.value)) {
         const cloneValue = clone(v);
         emit('update:value', cloneValue);
-        emit('change', cloneValue);
+        props.onChange?.(cloneValue);
       }
     }, {deep: true});
 
@@ -298,7 +304,7 @@ const SchemaForm = defineComponent({
     });
 
     setCurrentValue();
-    store.context = createContext(store, onOk, currentValue);
+    store.context = createContext(store, localOnOk, currentValue);
     store.editable = props.editable as boolean;
 
     return {
@@ -307,10 +313,7 @@ const SchemaForm = defineComponent({
       createButton,
       createSubmitButton,
       validate,
-      onOk,
       store,
-      onCancel,
-      onReset,
       renderButtons,
       currentValue
     };

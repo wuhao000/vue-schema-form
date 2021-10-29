@@ -1,6 +1,7 @@
 import {FieldDefinition} from '../internal/utils';
 import {SchemaFormField} from '../../../types';
 import {Paths} from '../../../types';
+import {flat} from './array';
 
 const CACHE = {};
 
@@ -15,14 +16,14 @@ export const splitPath = (path: string): string[] => {
 };
 
 export function match(paths: Paths, fields: { [key: string]: FieldDefinition }): string[] {
-  return paths.map(it => {
+  return flat(paths.map(it => {
     if (typeof it === 'string') {
       return matchSinglePath(it, fields);
     } else {
       const field = findFieldPath(it, fields);
       return field ? [field] : [];
     }
-  }).flat();
+  }));
 }
 
 export function findFieldPath(def: SchemaFormField, fields: { [key: string]: FieldDefinition }): string {
@@ -83,7 +84,7 @@ export function matchSinglePath(path: string, fields: { [key: string]: FieldDefi
       const id = path.substr(1);
       return Object.keys(fields).filter(p => fields[p].id === id);
     }
-    if (!!fields[path]) {
+    if (fields[path]) {
       return [path];
     }
     return [];

@@ -1,5 +1,5 @@
 import moment, {Moment} from 'moment';
-import {defineComponent, ref, watch} from 'vue';
+import {defineComponent} from 'vue';
 import {baseTimePickerProps, useBaseTimePicker} from '../../../common/base-time-picker';
 import {isNotNull} from '../../../utils/utils';
 
@@ -29,7 +29,7 @@ export default defineComponent({
     const {
       getProps,
       stateValue
-    } = useBaseTimePicker(props, {emit, attrs, convertValue, convertValueBack, valueProp: 'value'})
+    } = useBaseTimePicker(props, {emit, attrs, convertValue, convertValueBack, valueProp: 'value'});
     return {
       getProps,
       stateValue

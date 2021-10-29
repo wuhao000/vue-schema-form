@@ -2,6 +2,7 @@ import {defineComponent, PropType} from 'vue';
 import {getDefaultEmptyText} from '../../';
 
 export default defineComponent({
+  name: 'TransferDisplay',
   props: {
     value: Array as PropType<Array<any>>,
     dataSource: {type: Array as PropType<Array<any>>, default: () => ([])}

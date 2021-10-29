@@ -3,8 +3,8 @@ import {computed, defineComponent, PropType, provide, ref, Ref} from 'vue';
 import {ValidateRules} from '../../../../../types';
 
 export default defineComponent({
-  inheritAttrs: false,
   name: 'DForm',
+  inheritAttrs: false,
   props: {
     /**
      * 显示取消确认按钮，分别产生cancel和ok事件，cancel和ok没有默认操作，完全由用户定义
@@ -26,7 +26,7 @@ export default defineComponent({
       default: false
     },
     labelCol: {
-      type: [Number, Object] as PropType<number | object>
+      type: [Number, Object] as PropType<number | { [key: string]: unknown }>
     },
     okText: {
       type: String as PropType<string>,
@@ -56,22 +56,19 @@ export default defineComponent({
       default: 'horizontal'
     },
     model: {
-      type: Object as PropType<object>
+      type: Object as PropType<any>
     },
     rules: {
       type: Object as PropType<ValidateRules>
     },
     onSubmit: {
-      type: Function as PropType<any>,
-      default() {
-        return () => {
-        };
-      }
+      type: Function as PropType<any>
     },
     wrapperCol: {
-      type: [Number, Object] as PropType<number | object>
+      type: [Number, Object] as PropType<number | any>
     }
   },
+emits: ['ok', 'cancel'],
   setup(props: any, {emit}) {
     const prefixCls = ref('ant-form');
     const fields: Ref<any[]> = ref([]);

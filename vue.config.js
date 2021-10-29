@@ -2,10 +2,19 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const analyze = false;
 
 module.exports = {
+  css: {
+    loaderOptions: {
+      less: {
+        lessOptions: {
+          javascriptEnabled: true
+        }
+      }
+    }
+  },
   configureWebpack: (config) => {
     config.externals = {
       'vue': 'Vue',
-      'moment': 'moment',
+      'moment': 'moment'
       // 'highlight': 'hljs',
       // 'codemirror': 'CodeMirror',
       // 'vue-router': 'VueRouter',

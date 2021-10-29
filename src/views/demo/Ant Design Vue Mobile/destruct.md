@@ -1,10 +1,12 @@
 ```vue
+
 <template>
-  <v-schema-form v-model:value="value"
-                 :props="props"
-                 :schema="definition"
-                 class="demo-form"
-                 platform="mobile"></v-schema-form>
+  <v-schema-form
+      v-model:value="value"
+      :props="props"
+      :schema="definition"
+      class="demo-form"
+      platform="mobile"></v-schema-form>
   <van-button block
               @click="dialogVisible = true">查看数据
   </van-button>
@@ -18,9 +20,11 @@
   import {registerAntdMobile} from '../../../schema-form';
   import {computed, ref} from 'vue';
   import {getProps} from '../utils';
+
   registerAntdMobile();
 
   export default {
+    name: 'Demo',
     setup() {
       const options = [
         {

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 25px;">
+  <div class="wrapper">
     <div v-if="md">
       <code
           class="markdown-body"
@@ -17,7 +17,7 @@
             @click="toggleCode"/>
       </div>
     </div>
-    <div style="padding: 10px 20px;">
+    <div class="p-t-b-sm pt-l-r">
       <pre
           v-show="showCode"
           class="clearfix code-box-code markdown-body">

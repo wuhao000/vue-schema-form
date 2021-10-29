@@ -1,3 +1,4 @@
+import {Component} from '@vue/runtime-core';
 import {
   DisplayComponentOptions,
   FieldDefinition,
@@ -72,33 +73,36 @@ export const registerDisplay = ({
  * @param {boolean | null} forArray 是否为数组类型的数据组件（可选）,为null表示同时支持数组和非数组的数据格式
  * @param {(definition: FieldDefinition, platform: Platform) => object} getProps 组件属性转换器（可选）
  */
-export const register = (component: string | object,
+export const register = (component: string | Component,
                          platforms: Platform | Platform[],
                          types: string | string[],
                          forArray: boolean = null,
-                         getProps: ((definition: FieldDefinition, platform: Platform) => object) = () => ({})) => {
+                         getProps: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown}) = () => ({})) => {
   registerComponent({
     component, platforms, types, forArray, getProps, forDisplay: false, layout: false
   });
 };
 
-export const registerDesktop = (component: string | object,
-                                types: string | string[],
-                                forArray: boolean = null,
-                                getProps: ((definition: FieldDefinition, platform: Platform) => object) = null) => {
+export const registerDesktop = (
+  component: string | Component,
+  types: string | string[],
+  forArray: boolean = null,
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, DESKTOP, types, forArray, getProps);
 };
 
-export const registerMobile = (component: string | object,
-                               types: string | string[],
-                               forArray: boolean = null,
-                               getProps: ((definition: FieldDefinition, platform: Platform) => object) = null) => {
+export const registerMobile = (
+  component: string | Component,
+  types: string | string[],
+  forArray: boolean = null,
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, MOBILE, types, forArray, getProps);
 };
 
-export const registerResponsiveComponent = (component: string | object,
-                                            types: string | string[],
-                                            forArray: boolean = null,
-                                            getProps: ((definition: FieldDefinition, platform: Platform) => object) = null) => {
+export const registerResponsiveComponent = (
+  component: string | Component,
+  types: string | string[],
+  forArray: boolean = null,
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, [MOBILE, DESKTOP], types, forArray, getProps);
 };

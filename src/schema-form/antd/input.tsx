@@ -2,9 +2,11 @@ import {defineComponent, ref, watch} from 'vue';
 import {useBaseInput} from '../mixins';
 
 export default defineComponent({
+  name: 'InputComp',
   props: {
     value: {type: [String, Number]}
   },
+  emits: ['update:value'],
   setup(props, ctx) {
     const {size} = useBaseInput(props, ctx);
     const localValue = ref(props.value);

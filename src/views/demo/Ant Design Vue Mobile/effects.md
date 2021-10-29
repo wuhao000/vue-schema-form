@@ -1,30 +1,27 @@
 ```vue
+
 <template>
   <a-layout class="demo-wrapper">
     <a-layout-content>
-      <v-schema-form v-model:value="value3"
-                     :effects="effects3"
-                     :schema="definition3"
-                     platform="mobile"/>
-      <v-schema-form v-model:value="value"
-                     :actions="actions"
-                     :effects="effects"
-                     :schema="definition"
-                     class="demo-form"
-                     platform="mobile"></v-schema-form>
-      <!--      <v-schema-form v-model:value="value2"-->
-      <!--                     :actions="actions"-->
-      <!--                     :effects="effects2"-->
-      <!--                     :schema="schema2"-->
-      <!--                     style="width:800px"-->
-      <!--                     title="Block1"/>-->
+      <v-schema-form
+          v-model:value="value3"
+          :effects="effects3"
+          :schema="definition3"
+          platform="mobile"/>
+      <v-schema-form
+          v-model:value="value"
+          :actions="actions"
+          :effects="effects"
+          :schema="definition"
+          class="demo-form"
+          platform="mobile"></v-schema-form>
     </a-layout-content>
   </a-layout>
 </template>
 <script lang="ts">
   import {message} from 'ant-design-vue';
-  import {EffectsContext} from 'types';
   import {defineComponent, ref} from 'vue';
+  import {EffectsContext} from '../../../../types';
   import {registerAntdMobile} from '../../../schema-form';
   import {SchemaFormEvents} from '../../../schema-form/internal/utils';
   import effects1 from '../schema/effects1';
@@ -33,6 +30,7 @@
   registerAntdMobile();
 
   export default defineComponent({
+    name: 'Demo',
     setup() {
       const value3 = ref({});
       const value2 = ref([{
@@ -81,7 +79,6 @@
         text: '校验',
         action: ($: EffectsContext) => {
           $.validate((errors) => {
-            // @ts-ignore
             message.error(errors);
           });
         }

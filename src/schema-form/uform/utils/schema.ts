@@ -24,7 +24,7 @@ interface IPathInfo {
 type RuleHandler = (
     value: any,
     rule: IRuleDescription,
-    values: object,
+    values: any,
     name: string
 ) => string | null;
 

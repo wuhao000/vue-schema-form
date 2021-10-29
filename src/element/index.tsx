@@ -41,7 +41,6 @@ import DUrl from '../schema-form/common/url';
 import CheckboxGroup from './components/checkbox-group';
 import RadioGroup from './components/radio-group';
 import Select from './components/select';
-import TimePicker from './components/time-picker';
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
   card: ElCard,

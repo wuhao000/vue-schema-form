@@ -34,12 +34,12 @@ export function each<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): void;
-export function each<T extends object>(
+export function each<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
 ): void;
-export function each(val: any, iterator: any, revert?: boolean): object {
+export function each(val: any, iterator: any, revert?: boolean): any {
   if (isArr(val) || isStr(val)) {
     if (revert) {
       for (let i: number = val.length - 1; i >= 0; i--) {
@@ -76,11 +76,11 @@ export function map<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): T[];
-export function map<T extends object>(
+export function map<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
-): object;
+): any;
 export function map(val: any, iterator: any, revert?: boolean): any {
   const res = isArr(val) || isStr(val) ? [] : {};
   each(
@@ -110,7 +110,7 @@ export function reduce<T>(
     accumulator?: T,
     revert?: boolean
 ): T;
-export function reduce<T extends object, U>(
+export function reduce<T extends any, U>(
     val: T,
     iterator: MemoObjectIterator<T, U>,
     accumulator?: U,
@@ -143,7 +143,7 @@ export function every<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): boolean;
-export function every<T extends object>(
+export function every<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -173,7 +173,7 @@ export function some<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): boolean;
-export function some<T extends object>(
+export function some<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -203,7 +203,7 @@ export function findIndex<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): number;
-export function findIndex<T extends object>(
+export function findIndex<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -237,7 +237,7 @@ export function find<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): T;
-export function find<T extends object>(
+export function find<T extends any>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean

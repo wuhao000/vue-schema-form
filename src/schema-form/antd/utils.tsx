@@ -39,4 +39,5 @@ export const getPropByPath = function getPropByPath(obj, path, strict?) {
 };
 
 export const noop = function noop(a?, b?) {
+  // do nothing
 };

@@ -1,8 +1,8 @@
-import {SchemaFormStoreKey} from '../utils/key';
-import {baseLayoutProps} from './base-layout';
-import {SchemaFormStore} from '../../../types';
 import {computed, defineComponent, inject} from 'vue';
+import {SchemaFormStore} from '../../../types';
+import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
+import {baseLayoutProps} from './base-layout';
 import './form-block.less';
 
 
@@ -11,10 +11,13 @@ export default defineComponent({
   props: {
     maxItems: Number,
     addText: String,
-    title: {},
+    title: {
+      type: [String, Object]
+    },
     removeText: String,
     fields: baseLayoutProps.fields
   },
+  emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const localFields = computed(() => props.fields as any[]);
@@ -43,13 +46,13 @@ export default defineComponent({
         index !== localFields.value.length - 1
           ? <div class="circle-btn"
                  onClick={() => {
-                   emit('moveDown', index);
+                   emit('move-down', index);
                  }}>
             <DownIcon/>
             <span class="op-name"/>
           </div> : null,
         index !== 0 ? <div class="circle-btn" onClick={() => {
-          emit('moveUp', index);
+          emit('move-up', index);
         }}>
           <UpIcon/>
           <span class="op-name"/>
@@ -64,8 +67,8 @@ export default defineComponent({
         <div class="schema-form-block-main">
           <div class="schema-form-block-title">{props.title}</div>
         </div>
-      </div>
-    }
+      </div>;
+    };
     return {
       store,
       renderAddBtn,

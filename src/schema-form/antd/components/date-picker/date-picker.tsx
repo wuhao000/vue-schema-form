@@ -26,9 +26,12 @@ const convertValueBack = (value: Moment | undefined): Date => {
 export default defineComponent({
   name: 'DDatePicker',
   props: {
-    value: {},
+    value: {
+      type: [String, Object]
+    },
     mode: {type: String, default: 'date'}
   },
+  emits: ['update:value', 'change'],
   setup(props, {emit}) {
     const currentValue = ref<Moment>(null);
 
@@ -39,6 +42,7 @@ export default defineComponent({
         case 'datetime':
           return 'YYYY-MM-DD HH:mm:ss';
       }
+      return undefined;
     });
     watch(() => props.value, (value: any) => {
       const convertedValue = convertValue(value, format.value);
@@ -60,8 +64,7 @@ export default defineComponent({
     return {
       currentValue, updateCurrentValue(value) {
         currentValue.value = value;
-      },
-      mode: props.mode
+      }
     };
   },
   render() {
@@ -74,12 +77,11 @@ export default defineComponent({
       'onUpdate:value': this.updateCurrentValue
     };
     if (mode === 'week') {
-      return <DatePicker.WeekPicker {...props}/>
+      return <DatePicker.WeekPicker {...props}/>;
     }
     if (mode === 'month') {
       return <DatePicker.MonthPicker {...props}/>;
     }
-    // @ts-ignore
-    return <DatePicker {...props}/>;
+    return <DatePicker {...props as any}/>;
   }
 });

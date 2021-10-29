@@ -1,18 +1,20 @@
 ```vue
+
 <template>
   <a-layout class="demo-wrapper">
     <a-layout-content>
       <a-row>
         <a-col :span="12">
-          <v-schema-form v-model:value="value2"
-                         :actions="actions"
-                         :effects="effects"
-                         :props="props"
-                         :schema="definition"
-                         class="demo-form"
-                         @cancel="onCancel"
-                         @ok="onOk"
-                         @reset="onReset"></v-schema-form>
+          <v-schema-form
+              v-model:value="value2"
+              :actions="actions"
+              :effects="effects"
+              :props="props"
+              :schema="definition"
+              class="demo-form"
+              @cancel="onCancel"
+              @ok="onOk"
+              @reset="onReset"></v-schema-form>
         </a-col>
       </a-row>
     </a-layout-content>
@@ -27,6 +29,7 @@
   registerAntdMobile();
 
   export default {
+    name: 'Demo',
     setup(props, ctx) {
       const {definition, value} = useBaseDemo(props, ctx);
       return {
@@ -38,7 +41,6 @@
           action: async ($: EffectsContext) => {
             const res = await $.validate();
             if (res.length) {
-              // @ts-ignore
               message.error(res[0].errors.join('、'));
               res[0].field.focus(true);
             }
@@ -50,7 +52,6 @@
         effects($) {
           $.onValidate((errors) => {
             if (errors.length) {
-              // @ts-ignore
               message.error('表单内容有错误，请检查');
               errors[0].field.focus();
             }

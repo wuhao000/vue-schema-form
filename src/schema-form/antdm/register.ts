@@ -16,8 +16,8 @@ import {
   Switch,
   Textarea
 } from 'antd-mobile-vue-next';
-import {ILibComponents, SchemaFormField} from '../../../types';
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib, resolveOptions} from '../';
+import {ILibComponents} from '../../../types';
 
 export const ComponentMap: Record<keyof ILibComponents, any> = {
   alert: null,
@@ -85,9 +85,10 @@ export function registerAntdMobile() {
     () => ({type: 'password'}));
   registerMobile(Range, [FieldTypes.Range], false);
   registerMobile(Textarea, [FieldTypes.Text], false);
-  registerMobile(DatePicker.Item, [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime], false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerMobile(Calendar.Item, [FieldTypes.DateRange], false, def => ({type: 'range'}));
-  registerMobile(Calendar.Item, [FieldTypes.DateTimeRange], false, def => ({type: 'range', pickTime: true}));
+  registerMobile(DatePicker.Item, [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
+    false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerMobile(Calendar.Item, [FieldTypes.DateRange], false, () => ({type: 'range'}));
+  registerMobile(Calendar.Item, [FieldTypes.DateTimeRange], false, () => ({type: 'range', pickTime: true}));
   registerMobile(Checkbox, FieldTypes.Checkbox, false);
 
   registerComponent({

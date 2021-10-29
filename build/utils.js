@@ -4,8 +4,10 @@ exports.getName = exports.getParentPath = exports.createDoc = exports.mkdirs = e
 const tslib_1 = require("tslib");
 const cheerio_1 = (0, tslib_1.__importDefault)(require("cheerio"));
 const fs_1 = (0, tslib_1.__importDefault)(require("fs"));
+const html_escaper_1 = require("html-escaper");
 const marked_1 = (0, tslib_1.__importDefault)(require("marked"));
 const md5_1 = (0, tslib_1.__importDefault)(require("md5"));
+const beautify_1 = (0, tslib_1.__importDefault)(require("./beautify"));
 marked_1.default.setOptions({
     xhtml: true
 });
@@ -19,7 +21,6 @@ function mkdirs(string) {
     }
 }
 exports.mkdirs = mkdirs;
-const html_escaper_1 = require("html-escaper");
 const createDoc = (path) => {
     const content = fs_1.default.readFileSync(path).toString();
     // 文件名（含后缀）
@@ -59,11 +60,15 @@ ${demoCode}
 </demo-wrapper>`).insertBefore($(v));
         $(v).remove();
     }
-    const generatedContent = `<template>
+    const template = (0, beautify_1.default)(`<template>
   <div class="markdown-body">
-    ${$('body').html()}
-  </div>
-</template>
+    ${$('body').html()}</div>
+</template>`, {
+        format: 'html',
+        unformatted: ['a', 'span', 'bdo', 'em', 'strong', 'dfn', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike', 'font', 'ins', 'del', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        indent_size: 2
+    });
+    const generatedContent = `${template}
 <script lang="ts" setup>
 ${compNames.map(it => `  import  ${it} from './${it}.vue';`).join('\n')}
 </script>`.replace(/<code-container>/g, '<template #code><code-container>')

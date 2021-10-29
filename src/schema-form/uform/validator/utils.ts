@@ -7,7 +7,7 @@ export function format(...args: any[]) {
   const f = args[0];
   const len = args.length;
   if (typeof f === 'function') {
-    return f.apply(null, args.slice(1));
+    return f(args.slice(1));
   }
   if (typeof f === 'string') {
     const str = String(f).replace(formatRegExp, (x: string) => {

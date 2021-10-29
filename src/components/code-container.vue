@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 25px;">
+  <div class="wrapper">
     <code-editor
         :value="code"
         height="auto"/>

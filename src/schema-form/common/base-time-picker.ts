@@ -8,7 +8,7 @@ export const baseTimePickerProps = {
     type: String
   },
   locale: {
-    type: Object as PropType<object>,
+    type: Object as PropType<any>,
     default: () => locale
   },
   localeCode: {
