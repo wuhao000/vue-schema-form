@@ -7,8 +7,9 @@
       :schema="definition"
       class="demo-form"
       platform="mobile"></v-schema-form>
-  <van-button block
-              @click="dialogVisible = true">查看数据
+  <van-button
+      block
+      @click="dialogVisible = true">查看数据
   </van-button>
   <van-popup v-model:show="dialogVisible">
     <div style="padding: 20px;">

@@ -3,7 +3,6 @@ export * from './array';
 export * from './compare';
 export * from './broadcast';
 export * from '../types';
-export * from './clone';
 export * from './schema';
 export * from './lru';
 export * from './isEmpty';

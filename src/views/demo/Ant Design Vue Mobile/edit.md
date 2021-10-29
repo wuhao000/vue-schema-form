@@ -11,8 +11,9 @@
       </m-list>
       <v-schema-form
           v-model:value="options"
-          :schema="optionFormDefinition" inline
-          platform="mobile"></v-schema-form>
+          :schema="optionFormDefinition"
+          inline
+          platform="mobile"/>
       <v-schema-form
           v-model:value="value"
           :disabled="options.disabled"
@@ -38,8 +39,8 @@
     props: {
       ...baseDemoProps
     },
-    setup(props, ctx) {
-      const {definition, value} = useBaseDemo(props, ctx);
+    setup(props) {
+      const {definition, value} = useBaseDemo(props);
       const options = ref({
         disabled: false,
         loading: false,

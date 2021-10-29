@@ -15,11 +15,11 @@
   </a-layout>
 </template>
 <script lang="tsx">
-  // import {registerVant} from 'v-schema-form-vant';
   import {getSubFormDefinition, getSubFormValue} from '../utils/utils';
   import {computed} from 'vue';
+  import {registerAntdMobile} from '../../../schema-form/antdm/register';
 
-  // registerVant();
+  registerAntdMobile();
   export default {
     name: "Demo",
     setup() {

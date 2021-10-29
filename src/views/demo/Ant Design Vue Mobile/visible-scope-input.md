@@ -10,25 +10,25 @@
           v-else-if="$attrs.title"
           :label="$attrs.title">
         <d-input
-            readOnly
             v-if="selectType === 'input'"
+            read-only
             style="cursor:pointer"
             :placeholder="$attrs.placeholder"
             :value="content"
             @click="showMemberSelect = true"/>
       </a-form-item>
       <d-input
-          readOnly
           v-else-if="selectType === 'input'"
+          read-only
           style="cursor:pointer"
           :placeholder="$attrs.placeholder"
           :value="content"
           @click="showMemberSelect = true"/>
       <template v-else-if="selectType === 'button'">
         <a-button
-            v-text="btnText"
             type="primary"
-            @click="showMemberSelect = true">
+            @click="showMemberSelect = true"
+            v-text="btnText">
         </a-button>
         <div>
           <ul class="member-list">

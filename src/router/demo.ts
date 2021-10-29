@@ -126,46 +126,6 @@ export default [{
   meta: {tag: 'Element',
   name: '详情'}
 }, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-3712972d84adf48acbd6ad24b4d75ad0',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-3712972d84adf48acbd6ad24b4d75ad0/index.vue'),
-  meta: {tag: 'Vant',
-  name: '列表'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-e1e315d1a93fa6860e358259b42f2036',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-e1e315d1a93fa6860e358259b42f2036/index.vue'),
-  meta: {tag: 'Vant',
-  name: '动态表单'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-b7579706a363e5f23b1040fecfbcb677',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-b7579706a363e5f23b1040fecfbcb677/index.vue'),
-  meta: {tag: 'Vant',
-  name: '校验'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-81246d3dbbb4a7a08133fdb593661364',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-81246d3dbbb4a7a08133fdb593661364/index.vue'),
-  meta: {tag: 'Vant',
-  name: '简单场景'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-95b351c86267f3aedf89520959bce689',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-95b351c86267f3aedf89520959bce689/index.vue'),
-  meta: {tag: 'Vant',
-  name: '编辑'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-39ce6dc664fefd33fb0026ece5c7fcfa',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-39ce6dc664fefd33fb0026ece5c7fcfa/index.vue'),
-  meta: {tag: 'Vant',
-  name: '联动'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-67dae8e22b9b88c2c0530a71a9b13b0e',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-67dae8e22b9b88c2c0530a71a9b13b0e/index.vue'),
-  meta: {tag: 'Vant',
-  name: '解构赋值'}
-}, {
-  path: '98ef3ce875c5604a250aab9be3887dfd-f26225bde6a250894a04db4c53ea03d0',
-  component: () => import('../views/demo/generated/98ef3ce875c5604a250aab9be3887dfd-f26225bde6a250894a04db4c53ea03d0/index.vue'),
-  meta: {tag: 'Vant',
-  name: '详情'}
-}, {
   path: '32f6f7f8164c7f78e4b46eb50c158ab9-ebf78b512222fe4dcd14e7d5060a15b0',
   component: () => import('../views/demo/generated/32f6f7f8164c7f78e4b46eb50c158ab9-ebf78b512222fe4dcd14e7d5060a15b0/index.vue'),
   meta: {tag: '子表单',

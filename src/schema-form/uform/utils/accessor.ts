@@ -247,11 +247,11 @@ const parseDestruct = (str: PathNode) => {
       } else {
         destruct = [];
       }
-      const tail: any[] = stack[stack.length - 1];
+      const tail = stack[stack.length - 1];
       if (isPlainObj(tail)) {
         tail[token] = destruct;
       } else if (Array.isArray(tail)) {
-        tail.push(destruct);
+        (tail as any[]).push(destruct);
       }
       stack.push(destruct);
     },
@@ -266,7 +266,7 @@ const parseDestruct = (str: PathNode) => {
       if (isPlainObj(tail)) {
         tail[token] = destruct;
       } else if (Array.isArray(tail)) {
-        tail.push(destruct);
+        (tail as any[]).push(destruct);
       }
       stack.push(destruct);
     },

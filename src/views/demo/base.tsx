@@ -7,7 +7,7 @@ export const baseDemoProps = {
   init: null
 };
 
-export const useBaseDemo = ($props, ctx) => {
+export const useBaseDemo = ($props) => {
   const props = getProps();
   const value = ref(getValue());
   const options = ref({

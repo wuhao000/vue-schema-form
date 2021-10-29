@@ -30,8 +30,8 @@
 
   export default {
     name: 'Demo',
-    setup(props, ctx) {
-      const {definition, value} = useBaseDemo(props, ctx);
+    setup(props) {
+      const {definition, value} = useBaseDemo(props);
       return {
         definition,
         value,
@@ -58,10 +58,10 @@
           });
         },
         onCancel() {
-
+          console.log('cancel');
         },
         onReset() {
-
+          console.log('reset');
         }
       };
     }

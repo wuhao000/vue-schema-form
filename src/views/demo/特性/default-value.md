@@ -1,11 +1,10 @@
 ```vue
-
 <template>
   <div>
     <v-schema-form
+        v-model:value="editForm"
         :schema="editSchema"
-        :effects="editFormEffects"
-        v-model:value="editForm">
+        :effects="editFormEffects">
     </v-schema-form>
     <a-button @click="edit">编辑</a-button>
     <v-schema-form
@@ -18,7 +17,7 @@
 <script lang="ts">
   import {defineComponent, reactive, ref} from 'vue';
   import {SchemaFormField} from '../../../../types';
-  import {DForm, DFormItem, FieldTypes, registerAntd} from '../../../schema-form';
+  import {FieldTypes, registerAntd} from '../../../schema-form';
 
   export const familyInfoFields: SchemaFormField[] = [{
     property: 'name',
@@ -72,16 +71,10 @@
     };
   }
 
+  registerAntd();
   export default defineComponent({
-    components: {
-      DForm,
-      DFormItem
-    },
-    created() {
-      registerAntd();
-    },
-    methods: {},
-    setup(props, {emit, slots}) {
+    name: 'Demo',
+    setup() {
       const editSchema = {
         props: {
           labelWidth: 140

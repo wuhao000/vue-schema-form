@@ -68,7 +68,7 @@
       }, {
         text: '重置',
         action: () => {
-
+          console.log('reset')
         }
       }, {
         text: '切换MM',

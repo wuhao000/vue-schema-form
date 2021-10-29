@@ -41,7 +41,7 @@ v-model:value="value"
     components: {ShowValue},
     props: baseDemoProps,
     setup(props, ctx) {
-      const {definition, value, options, onOk, optionFormDefinition, onReset, onCancel} = useBaseDemo(props, ctx);
+      const {definition, value, options, onOk, optionFormDefinition, onReset, onCancel} = useBaseDemo(props);
       return {
         definition, onOk, onCancel, onReset, optionFormDefinition, options, value
       };
