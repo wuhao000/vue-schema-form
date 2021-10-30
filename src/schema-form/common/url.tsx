@@ -1,5 +1,4 @@
 import {defineComponent} from 'vue';
-import {LibComponents} from '../utils/utils';
 import {baseUrlProps, useBaseUrl} from './base-url';
 import './url.less';
 import {getInputComponent, getSelectComponent} from '../internal/utils';

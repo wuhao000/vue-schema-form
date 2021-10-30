@@ -1,0 +1,48 @@
+
+<template>
+  <div>
+    <v-schema-form :schema="schema"/>
+  </div>
+</template>
+<script lang="ts">
+  import {registerAntd} from '../../../../schema-form';
+
+  registerAntd();
+  export default {
+    name: 'GridLayoutDemo',
+    data() {
+      return {
+        schema: {
+          props: {
+            labelWidth: 120,
+            labelPosition: 'left'
+          },
+          fields: {
+            name: {
+              title: '名称',
+              type: 'string'
+            },
+            $grid: {
+              title: '高级选项',
+              type: 'grid',
+              layout: [12, 12],
+              props: {
+                title: '高级选项'
+              },
+              fields: {
+                other: {
+                  title: '其他',
+                  type: 'string'
+                },
+                other2: {
+                  title: '其他2',
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      };
+    }
+  };
+</script>

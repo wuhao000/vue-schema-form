@@ -16,7 +16,7 @@
 <script lang="tsx">
   import {computed, reactive, ref} from 'vue';
   import {registerAntd} from '../../../schema-form/antd';
-  import {getProps} from '../../../views/demo/utils';
+  import {getProps} from '../../../docs/demo/utils';
 
   registerAntd();
   export default {

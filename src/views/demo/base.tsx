@@ -1,13 +1,13 @@
 import {message} from 'ant-design-vue';
 import {ref} from 'vue';
-import {getFormDefinition, getProps, getValue} from './utils';
+import {getFormDefinition, getProps, getValue} from '../utils';
 
 export const baseDemoProps = {
   platform: {type: String, default: 'desktop'},
   init: null
 };
 
-export const useBaseDemo = ($props) => {
+export const useBaseDemo = () => {
   const props = getProps();
   const value = ref(getValue());
   const options = ref({
@@ -18,9 +18,6 @@ export const useBaseDemo = ($props) => {
     sticky: false,
     mobile: false
   });
-  if ($props.init) {
-    $props.init();
-  }
   const optionFormDefinition = {
     props: {
       inline: true
@@ -37,7 +34,11 @@ export const useBaseDemo = ($props) => {
   };
   const definition = getFormDefinition();
   return {
-    options, props, value, definition, optionFormDefinition,
+    options,
+    props,
+    value,
+    definition,
+    optionFormDefinition,
     onOk: () => {
       message.success('ok clicked');
     },

@@ -1,16 +1,14 @@
 import cheerio from 'cheerio';
 import fs from 'fs';
-import {unescape} from 'html-escaper';
+import {unescape, escape} from 'html-escaper';
 import marked from 'marked';
-import md5 from 'md5';
+import pinyin from 'pinyin';
 import beautify from './beautify';
 
 marked.setOptions({
   xhtml: true
 });
-export const md2Html = (content: string) => {
-  return marked(content);
-};
+export const md2Html = (content: string) => marked(content);
 
 export function mkdirs(string) {
   if (!fs.existsSync(string)) {
@@ -19,37 +17,31 @@ export function mkdirs(string) {
 }
 
 export const createDoc = (path) => {
+  if (!isDocPath(path)) {
+    return;
+  }
+
   const content = fs.readFileSync(path).toString();
 
-  // 文件名（含后缀）
-  const name = getName(path);
-
-  // 文件名（不含后缀）
-  const nameWithoutExt = name.substr(0, name.lastIndexOf('.'));
-  const id = md5(nameWithoutExt);
-  // 所在文件夹
-  const parentPath = getParentPath(path);
-  const parentId = md5(getName(parentPath));
-  const grandParent = getParentPath(parentPath);
-
-  // 生成的文件夹
-  const generatedDirPath = grandParent + '/generated/' + parentId + '-' + id;
-
-  mkdirs(grandParent + '/generated');
-  mkdirs(generatedDirPath);
+  const dirPath = mkDocDir(path);
 
   const html = marked(content);
   const $ = cheerio.load(html);
 
-  const javascripts = $('code.language-typescript');
-  for (let i = 0; i < javascripts.length; i++) {
-    const v = javascripts[i];
-    const typescript = unescape($.html(v.childNodes)).trim();
-    $(`<code-editor>
-  ${typescript}
+  function renderLanguage(lang) {
+    const codes = $(`code.language-${lang}`);
+    for (const v of codes) {
+      const code = unescape($.html(v.childNodes)).trim();
+      $(`<code-editor>
+  ${escape(code)}
 </code-editor>`).insertBefore($(v));
-    $(v).remove();
+      $(v).remove();
+    }
   }
+
+  renderLanguage('typescript');
+  renderLanguage('html');
+  renderLanguage('bash');
 
 
   const demos = $('code.language-vue');
@@ -59,12 +51,12 @@ export const createDoc = (path) => {
     const demoCode = $(v).html();
     const n = `comp${i}`;
     compNames.push(n);
-    const compPath = `${generatedDirPath}/${n}.vue`;
+    const compPath = `${dirPath}/${n}.vue`;
     const compHtml = unescape($.html(v.childNodes))
-      .replace(/'\.\.\//g, '\'../../')
-      .replace(/"\.\.\//, '"../../')
-      .replace(/'\.\//g, '\'../')
-      .replace(/"\.\//g, '"../');
+        .replace(/'\.\.\//g, '\'../../')
+        .replace(/"\.\.\//, '"../../')
+        .replace(/'\.\//g, '\'../')
+        .replace(/"\.\//g, '"../');
     fs.writeFileSync(compPath, compHtml);
     $(`<demo-wrapper>
 <${n}></${n}>
@@ -84,13 +76,16 @@ export const createDoc = (path) => {
     unformatted: ['a', 'span', 'bdo', 'em', 'strong', 'dfn', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike', 'font', 'ins', 'del', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     indent_size: 2
   });
-  const generatedContent = `${originTemplate}
+  if (compNames.length === 0) {
+    fs.writeFileSync(`${dirPath}/index.vue`, originTemplate);
+  } else {
+    const generatedContent = `${originTemplate}
 <script lang="ts" setup>
 ${compNames.map(it => `  import  ${it} from './${it}.vue';`).join('\n')}
 </script>`.replace(/<code-container>/g, '<template #code><code-container>')
-    .replace(/<\/code-container>/g, '</code-container></template>');
-
-  fs.writeFileSync(`${generatedDirPath}/index.vue`, generatedContent);
+        .replace(/<\/code-container>/g, '</code-container></template>');
+    fs.writeFileSync(`${dirPath}/index.vue`, generatedContent);
+  }
 };
 
 
@@ -103,4 +98,51 @@ export const getParentPath = (path: string) => {
 export const getName = (path) => {
   const paths = path.split(/[\\/]/);
   return paths[paths.length - 1];
+};
+
+export const isDocPath = (path: string) => {
+  const paths = path.split(/[\\/]/);
+  const srcIndex = paths.findIndex(it => it === 'src');
+  const docsIndex = paths.findIndex(it => it === 'docs');
+  return docsIndex - srcIndex === 1;
+};
+
+export const getRelativeDocPaths = (path) => {
+  const isDirectory = fs.statSync(path).isDirectory();
+  const paths = path.split(/[\\/]/);
+  const fileName = paths[paths.length - 1];
+  const fileNameNoExt = isDirectory ? fileName : fileName.substr(0, fileName.lastIndexOf('.'));
+  paths[paths.length - 1] = fileNameNoExt.replace(/^\d+\./, '');
+  const srcIndex = paths.findIndex(it => it === 'src');
+  const docsIndex = paths.findIndex(it => it === 'docs');
+  const projectPath = paths.slice(0, srcIndex).join('/');
+  const relativePaths = paths.slice(docsIndex + 1);
+  const generatedPath = [];
+  const groupPaths = [];
+  relativePaths.forEach(it => {
+    groupPaths.push(it);
+    if (/^\w+$/.test(it)) {
+      generatedPath.push(it);
+    } else {
+      generatedPath.push(pinyin(it.replace(/\s+/g, ''), {
+        style: pinyin.STYLE_NORMAL
+      }).join(''));
+    }
+  });
+  return {
+    generatedPath,
+    projectPath,
+    groupPaths
+  };
+};
+
+export const mkDocDir = (path): string => {
+  const {generatedPath, projectPath} = getRelativeDocPaths(path);
+  for (let i = 1; i <= generatedPath.length; i++) {
+    const finalPath = projectPath + '/src/generated/' + generatedPath.slice(0, i).join('/');
+    if (!fs.existsSync(finalPath)) {
+      fs.mkdirSync(finalPath);
+    }
+  }
+  return projectPath + '/src/generated/' + generatedPath.join('/');
 };

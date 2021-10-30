@@ -1,0 +1,35 @@
+
+<template>
+  <div>
+    <v-schema-form
+        :schema="schema"
+        :actions="actions"
+        @ok="onOk"/>
+  </div>
+</template>
+<script lang="ts">
+  import {defineComponent} from 'vue';
+  import {registerAntd} from '../../../../schema-form';
+
+  registerAntd();
+  export default defineComponent({
+    name: 'Demo',
+    setup() {
+      return {
+        actions: ['submit'],
+        onOk: (v) => {
+          console.log('aaa', v);
+        },
+        schema: {
+          fields: {
+            name: {
+              type: 'string',
+              title: '名称',
+              required: true
+            }
+          }
+        }
+      };
+    }
+  });
+</script>

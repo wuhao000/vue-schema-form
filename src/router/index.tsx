@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import DemoIndex from '../views/demo/index.vue';
-import DemoNav from '../views/demo/nav.vue';
+import DemoIndex from '../docs/demo/index.vue';
+import createNav from '../views/nav';
 import demoRoutes from './demo';
 import docRoutes from './doc';
 import components from './components';
@@ -9,12 +9,13 @@ export default createRouter({
   history: createWebHistory(),
   routes: [{
     path: '/',
-    redirect: '/doc/readme'
+    redirect: docRoutes[0].path
   }, {
     path: '/doc',
+    redirect: docRoutes[0].path,
     components: {
       default: DemoIndex,
-      nav: () => import('../doc/nav.vue')
+      nav: createNav(docRoutes)
     },
     children: docRoutes
   }, {
@@ -22,16 +23,16 @@ export default createRouter({
     name: 'demo',
     components: {
       default: DemoIndex,
-      nav: DemoNav
+      nav: createNav(demoRoutes)
     },
-    redirect: '/demo/' + demoRoutes[0].path,
+    redirect: demoRoutes[0].path,
     children: demoRoutes
   }, {
     path: '/components',
     name: 'components',
     components: {
       default: DemoIndex,
-      nav: DemoNav
+      nav: createNav(components)
     },
     redirect: '/components/grid',
     children: components

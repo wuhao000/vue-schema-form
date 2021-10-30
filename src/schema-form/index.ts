@@ -8,8 +8,6 @@ import SchemaFormField from './internal/field';
 import './layout/register';
 import './styles/fix.less';
 import './styles/style.less';
-import {registerDesktop} from './utils/register';
-import {FieldTypes} from './utils/utils';
 
 SchemaForm.Field = SchemaFormField;
 
@@ -27,6 +25,7 @@ export {
   TimePicker as DTimePicker,
   RangePicker as DRangePicker,
   DatePicker as DDatePicker,
+  TimeRangePicker as DTimeRangePicker,
   Form as DForm,
   FormItem as DFormItem,
   Select as DSelect
@@ -47,6 +46,7 @@ export * from './common/base-url';
 export * from './common/base-upload';
 export * from './config';
 export * from './mixins';
+export {SchemaFormEvents} from './internal/utils';
 
 SchemaForm.install = (app: App) => {
   app.component(Form.name, Form);

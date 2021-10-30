@@ -1,22 +1,74 @@
+import {RouteRecordRaw} from 'vue-router';
+import RootComponent from '../components/root.vue';
+
 export default [{
-  path: 'api',
-  component: () => import('../generated/doc/api.vue')
+  path: '/doc/jieshao',
+  component: () => import('../generated/doc/jieshao/index.vue'),
+  meta: {
+    tags: [],
+    name: '介绍'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'changelog',
-  component: () => import('../generated/doc/change-log.vue')
+  path: '/doc/anzhuangshiyong',
+  component: () => import('../generated/doc/anzhuangshiyong/index.vue'),
+  meta: {
+    tags: [],
+    name: '安装使用'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'readme',
-  component: () => import('../generated/doc/readme.vue')
+  path: '/doc/fuzuoyonghanshu',
+  component: () => import('../generated/doc/fuzuoyonghanshu/index.vue'),
+  meta: {
+    tags: [],
+    name: '副作用函数'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'effects',
-  component: () => import('../generated/doc/effects.vue')
+  path: '/doc/biangengjilu',
+  component: () => import('../generated/doc/biangengjilu/index.vue'),
+  meta: {
+    tags: [],
+    name: '变更记录'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'install',
-  component: () => import('../generated/doc/install.vue')
+  path: '/doc/neizhileixing',
+  component: () => import('../generated/doc/neizhileixing/index.vue'),
+  meta: {
+    tags: [],
+    name: '内置类型'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'destruct',
-  component: () => import('../generated/doc/destruct.vue')
+  path: '/doc/jiegoufuzhi',
+  component: () => import('../generated/doc/jiegoufuzhi/index.vue'),
+  meta: {
+    tags: [],
+    name: '解构赋值'
+  },
+  children: [
+    
+  ]
 }, {
-  path: 'types',
-  component: () => import('../generated/doc/types.vue')
-}];
+  path: '/doc/jiekou',
+  component: () => import('../generated/doc/jiekou/index.vue'),
+  meta: {
+    tags: [],
+    name: '接口'
+  },
+  children: [
+    
+  ]
+}] as RouteRecordRaw[];

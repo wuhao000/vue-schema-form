@@ -86,34 +86,12 @@ export class SchemaForm {
 export type ValidateHandler = (response: IValidateResponse[]) => void;
 
 export interface EffectsHandlers {
-  fields: () => FieldDefinition[];
-  field: () => FieldDefinition;
-  hide: (hide?: boolean) => EffectsHandlers;
-  onFieldBlur: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
-  onFieldChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  onFieldCreate: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  onFieldCreateOrChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  required: (required: boolean) => EffectsHandlers;
-  onFieldFocus: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
-  paths: () => string[];
-  setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
-  setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers;
-  setFieldProps: (props: {[key: string]: unknown} | ((field: IField) => {[key: string]: unknown})) => EffectsHandlers;
-  setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers;
-  show: (show?: boolean) => EffectsHandlers;
-  subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
-  trigger: (event: string, value: any) => EffectsHandlers;
-  toggle: () => EffectsHandlers;
-  value: (value?: any | ((field: IField) => any)) => any;
-
   appendPath(path: string): EffectsHandlers;
-
   /**
    * 禁用
    * @returns {EffectsHandlers}
    */
   disable(disable?: boolean): EffectsHandlers;
-
   /**
    * 设置表单项是否可编辑
    *
@@ -121,14 +99,20 @@ export interface EffectsHandlers {
    * @returns {EffectsHandlers}
    */
   editable(editable: boolean): EffectsHandlers;
-
   /**
    * 启用
    */
   enable(enable?: boolean): EffectsHandlers;
-
+  fields: () => FieldDefinition[];
+  field: () => FieldDefinition;
+  hide: (hide?: boolean) => EffectsHandlers;
   isEnabled(): boolean;
-
+  onFieldBlur: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
+  onFieldChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldCreate: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldCreateOrChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldFocus: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
+  paths: () => string[];
   /**
    * 设置表单项是否为只读
    *
@@ -136,11 +120,18 @@ export interface EffectsHandlers {
    * @returns {EffectsHandlers}
    */
   readonly(readonly: boolean): EffectsHandlers;
-
-
   replaceLastPath(...path: string[]): EffectsHandlers;
-
+  required: (required: boolean) => EffectsHandlers;
+  setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
+  setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers;
+  setFieldProps: (props: {[key: string]: unknown} | ((field: IField) => {[key: string]: unknown})) => EffectsHandlers;
+  setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers;
+  show: (show?: boolean) => EffectsHandlers;
+  subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
+  trigger: (event: string, value: any) => EffectsHandlers;
   takePath(number: number): EffectsHandlers;
+  toggle: () => EffectsHandlers;
+  value: (value?: any | ((field: IField) => any)) => any;
 }
 
 export type Effects = (context: EffectsContext) => any;

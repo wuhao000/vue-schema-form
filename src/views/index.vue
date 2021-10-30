@@ -12,7 +12,7 @@
         <a-layout-sider width="200px">
           <router-view name="nav"/>
         </a-layout-sider>
-        <a-layout-content style="background: white">
+        <a-layout-content class="bg-white">
           <div style="height:100%;">
             <router-view/>
           </div>

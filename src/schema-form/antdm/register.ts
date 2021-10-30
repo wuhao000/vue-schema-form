@@ -5,7 +5,6 @@ import {
   Card,
   Checkbox,
   DatePicker,
-  ImagePicker,
   Input,
   List,
   Modal,
@@ -74,7 +73,8 @@ export function registerAntdMobile() {
     }
     return props;
   };
-  registerMobile(ImagePicker, [FieldTypes.Picture, FieldTypes.File]);
+  // todo
+  // registerMobile(ImagePicker, [FieldTypes.Picture, FieldTypes.File]);
   registerMobile(Input, [FieldTypes.String, FieldTypes.Url], false,
     () => ({textAlign: 'right'}));
   registerMobile(Input, [FieldTypes.Number, FieldTypes.Integer], false,

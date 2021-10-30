@@ -1,63 +1,95 @@
+import {children} from 'cheerio/lib/api/traversing';
 import fs from 'fs';
-import {generatedPath, demoRoot} from './path';
+import {docsRoot, generatedPath} from './path';
 import {createFromTmpl} from './tmpl';
-import {createDoc, getParentPath, md2Html, mkdirs} from './utils';
-import md5 from 'md5';
+import {createDoc, getRelativeDocPaths, mkdirs} from './utils';
+
 const generatedDemoPath = generatedPath + '/demo';
 mkdirs(generatedPath);
 mkdirs(generatedDemoPath);
 
-interface DemoGroup {
-  name: string;
-  demos: { [key: string]: string };
+function toRouteStr(route: RouteInfo) {
+  return `{
+  path: '${route.path}',
+  ${route.children.length ? `redirect: '${route.children[0].path}',
+  component: RootComponent,` : `component: () => import('../generated/${route.file}'),`}
+  meta: {
+    tags: [${route.groups.map(it => `'${it}'`).join(',')}],
+    name: '${route.name}'
+  },
+  ${children.length ? `children: [
+    ${route.children.map(child => toRouteStr(child)).join(',\n')}
+  ]` : ''}
+}`;
 }
 
-function writeRouteFile(routes: Array<RouteInfo>) {
+function writeRouteFile(routes: Array<RouteInfo>, name) {
   const routesStr = routes.map(route => {
-    return `{
-  path: '${route.file}',
-  component: () => import('../views/demo/generated/${route.file}/index.vue'),
-  meta: {tag: '${route.groupName}',
-  name: '${route.title}'}
-}`;
+    return toRouteStr(route);
   }).join(', ');
-  createFromTmpl('templates/routes.ts.tmpl', {routesStr}, 'src/router/demo.ts');
+  createFromTmpl('templates/routes.ts.tmpl', {routesStr}, `src/router/${name}.ts`);
 }
 
 interface RouteInfo {
+  children: RouteInfo[];
+  file?: string;
   group: string;
-  groupName: string;
-  title: string;
+  groups: string[];
   name: string;
-  file: string;
-  markdown: boolean;
+  path: string;
+}
+
+
+function crateRoute(path: string): RouteInfo {
+  const {groupPaths, generatedPath} = getRelativeDocPaths(path);
+  return {
+    group: groupPaths[0],
+    file: generatedPath.join('/') + '/index.vue',
+    path: '/' + generatedPath.join('/'),
+    groups: groupPaths.length > 1 ? groupPaths.slice(0, groupPaths.length - 1).slice(1) : [],
+    name: groupPaths[groupPaths.length - 1],
+    children: []
+  };
+}
+
+function crateRouteParent(path: string): RouteInfo {
+  const {groupPaths, generatedPath} = getRelativeDocPaths(path);
+  return {
+    group: groupPaths[0],
+    path: '/' + generatedPath.join('/'),
+    groups: groupPaths.length > 1 ? groupPaths.slice(0, groupPaths.length - 1).slice(1) : [],
+    name: groupPaths[groupPaths.length - 1],
+    children: []
+  };
+}
+
+function resolveRoute(path: string, routes: RouteInfo[]) {
+  routes.push(crateRoute(path));
+}
+
+function scan(dir: string) {
+  const demoDirs = fs.readdirSync(dir);
+  const routes = [];
+  demoDirs.map(it => `${dir}/${it}`).forEach(path => {
+    if (fs.statSync(path).isDirectory()) {
+      const route = crateRouteParent(path);
+      route.children = scan(path);
+      routes.push(route);
+    } else {
+      if (path.toLowerCase().endsWith('.md')) {
+        createDoc(path);
+        resolveRoute(path, routes);
+      }
+    }
+  });
+  return routes;
 }
 
 function createDemoRoutes() {
-  const routes: Array<RouteInfo> = [];
-  const demoDirs = fs.readdirSync(demoRoot);
-  demoDirs.forEach(dir => {
-    if (fs.statSync(demoRoot + '/' + dir).isDirectory()) {
-      const demoFiles = fs.readdirSync(`${demoRoot}/${dir}`);
-      demoFiles.forEach(f => {
-        if (f.toLowerCase().endsWith(".md")) {
-          const pf = f.substr(0, f.lastIndexOf('.'));
-          const parentId = md5(dir);
-          createDoc(demoRoot + '/' + dir + '/' + f)
-          routes.push({
-            group: dir,
-            file: parentId + '-' +md5(pf),
-            groupName: dir,
-            title: pf,
-            markdown: false,
-            name: pf
-          })
-        }
-      })
-    }
+  fs.readdirSync(`${process.env.PWD}/${docsRoot}`).forEach(name => {
+    const routes: Array<RouteInfo> = scan(`${process.env.PWD}/${docsRoot}/${name}`);
+    writeRouteFile(routes, name);
   });
-
-  writeRouteFile(routes);
 }
 
 createDemoRoutes();

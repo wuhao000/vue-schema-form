@@ -1,0 +1,15 @@
+
+<template>
+  <div>
+    <simple-edit-demo 
+        platform="mobile"
+        :init="register"/>
+  </div>
+</template>
+<script lang="ts" setup>
+  import {registerAntdMobile} from '../../../../schema-form';
+  // noinspection ES6UnusedImports
+  import SimpleEditDemo from '../../../../views/common/simple.vue';
+
+  registerAntdMobile();
+</script>

@@ -111,7 +111,6 @@ export default defineComponent({
           </a-button>
         );
       }
-      console.log(this.fileList);
       return (
         <>
           <a-upload {...this.uploadProps}

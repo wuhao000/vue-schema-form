@@ -182,7 +182,6 @@ export default defineComponent({
     });
 
     const getFormItemProps = () => {
-      const InfoIcon = LibComponents.icons[store.platform].info;
       const {definition} = $props;
       const {platform} = store;
       const component = getFormItemComponent(platform);
@@ -193,6 +192,7 @@ export default defineComponent({
       };
       if (platform === DESKTOP) {
         if (definition.tip) {
+          const InfoIcon = LibComponents.icons[store.platform].info;
           const LibComponentsPopover: any = LibComponents.popover[DESKTOP];
           const slots = {
             default: () => <span>
@@ -436,7 +436,7 @@ export default defineComponent({
         }
         Object.keys(definition.props).forEach(key => {
           if (key !== 'props') {
-            definition.props!.props[key] = definition.props[key];
+            definition.props.props[key] = definition.props[key];
           }
         });
       }
