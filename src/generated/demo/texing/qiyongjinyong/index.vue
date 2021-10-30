@@ -4,7 +4,7 @@
 <h2 id="使用说明">使用说明</h2>
 <p>启用禁用属于逻辑操作，因此使用副作用函数来实现</p>
 <p>使用副作用函数的enable和disable方法可以达到启用/禁用效果</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   // 启用name字段
 $('name').enable();
 

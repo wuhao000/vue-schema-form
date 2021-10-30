@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import DemoIndex from '../docs/demo/index.vue';
 import createNav from '../views/nav';
+import components from './components';
 import demoRoutes from './demo';
 import docRoutes from './doc';
-import components from './components';
 
 export default createRouter({
   history: createWebHistory(),
@@ -12,7 +12,7 @@ export default createRouter({
     redirect: docRoutes[0].path
   }, {
     path: '/doc',
-    redirect: docRoutes[0].path,
+    redirect: docRoutes[0]?.path,
     components: {
       default: DemoIndex,
       nav: createNav(docRoutes)
@@ -25,7 +25,7 @@ export default createRouter({
       default: DemoIndex,
       nav: createNav(demoRoutes)
     },
-    redirect: demoRoutes[0].path,
+    redirect: demoRoutes[0]?.path,
     children: demoRoutes
   }, {
     path: '/components',
@@ -34,7 +34,7 @@ export default createRouter({
       default: DemoIndex,
       nav: createNav(components)
     },
-    redirect: '/components/grid',
+    redirect: components[0]?.path,
     children: components
   }]
 });

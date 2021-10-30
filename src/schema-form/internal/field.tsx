@@ -230,7 +230,7 @@ export default defineComponent({
         const validateFields = array.props.fields.filter(it => it.validate);
         return new Promise(resolve => {
           Promise.all(validateFields.map(it => it.validate()))
-            .then((values) => {
+            .then(values => {
               resolve(flat(values.filter(it => !!it)));
             });
         });
@@ -247,7 +247,7 @@ export default defineComponent({
         const model = {
           [field.value.plainPath]: value
         };
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           validator.validate(model, {firstFields: true}, (errors) => {
             if (errors) {
               field.value.valid = false;
@@ -360,12 +360,12 @@ export default defineComponent({
             console.error(e);
           }
         },
-        onMoveDown: (index) => {
+        onMoveDown: index => {
           if (index <= (currentValue.value as any[]).length - 1) {
             swap(currentValue.value, index, index + 1);
           }
         },
-        onMoveUp: (index) => {
+        onMoveUp: index => {
           if (index > 0) {
             swap(currentValue.value, index, index - 1);
           }
@@ -387,8 +387,6 @@ export default defineComponent({
       return relatedSubFields.value.map((localField, index) =>
         renderFormField(localField, currentValue.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
     });
-
-
     const renderInputComponent = () => {
       const propsTmp = inputProps.value;
       const {content, definition} = $props;
@@ -468,7 +466,7 @@ export default defineComponent({
         class={className}
         style={style}
         key={field.value.plainPath}
-        ref={(el) => {
+        ref={el => {
           inputRef.value = el;
           field.value.inputRef = el;
         }}/>;
@@ -547,7 +545,6 @@ export default defineComponent({
         return formItem;
       }
     };
-
     return {
       inputProps,
       type,
@@ -561,7 +558,7 @@ export default defineComponent({
     };
   },
   render() {
-    const field = this.field as FieldDefinition;
+    const field = this.field;
     const {inputProps, definition, editable, store: {platform}} = this;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];

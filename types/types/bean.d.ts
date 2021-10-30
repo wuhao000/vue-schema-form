@@ -260,6 +260,7 @@ export interface SchemaFormStore {
   context?: EffectsContext | null;
   root: ComponentInternalInstance;
   components: ComponentStore;
+  value?: any;
 }
 
 export type FormFields = SchemaFormField[] | { [key: string]: SchemaFormField };

@@ -26,11 +26,6 @@
           @click="to('/components')">
         组件
       </a-menu-item>
-      <a-menu-item
-          key="changelog"
-          @click="to('/doc/changelog')">
-        更新记录
-      </a-menu-item>
       <a-menu-item @click="toGithub">
         GitHub
         <svg

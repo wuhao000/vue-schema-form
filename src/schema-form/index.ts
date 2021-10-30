@@ -19,6 +19,10 @@ SchemaForm.install = (app) => {
 SchemaForm.config = config;
 
 export {
+  DUrl
+};
+
+export {
   Button as DButton,
   CheckboxGroup,
   RadioGroup,
@@ -53,8 +57,10 @@ SchemaForm.install = (app: App) => {
   app.component(FormItem.name, FormItem);
   app.component(CheckboxGroup.name, CheckboxGroup);
   app.component(RadioGroup.name, RadioGroup);
-  app.component(SchemaForm.name, SchemaForm);
   app.component(DUrl.name, DUrl);
+  app.component(SchemaForm.name, SchemaForm);
 };
 
-export default SchemaForm;
+export default SchemaForm as typeof SchemaForm & {
+  install: (app) => void;
+};

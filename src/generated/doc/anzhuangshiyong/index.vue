@@ -2,17 +2,16 @@
   <div class="markdown-body">
     <h1 id="安装使用">安装使用</h1>
 <h2 id="cdn引入">CDN引入</h2>
-<pre><code-editor>
+<pre><code-editor mode="html">
   &lt;link ref="stylesheet" href="https://public-file.aegis-info.com/schema-form/&lt;version&gt;/SchemaForm.css"&gt;
 &lt;script src="https://public-file.aegis-info.com/schema-form/&lt;version&gt;/SchemaForm.umd.min.js.gz"&gt;&lt;/script&gt;
 </code-editor></pre>
 <p>当前最新版本为<code>0.1.2</code></p>
 <h2 id="npm-安装">npm 安装</h2>
-<pre><code-editor>
-  npm install v-schema-form
-</code-editor></pre>
+<pre><code class="language-bash">npm install v-schema-form
+</code></pre>
 <p>在main.ts中引入</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   import SchemaForm from 'v-shema-form';
 </code-editor></pre>
 <p>SchemaForm 具有以下方法：</p>
@@ -26,7 +25,7 @@
 <p>注册自定义组件</p>
 </blockquote>
 <p>方法签名如下</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   /**
  * 注册表单组件
  * @param {string | object} component 组件对象或组件名称
@@ -58,7 +57,7 @@
 <p>注册布局组件</p>
 </blockquote>
 <p>方法签名如下:</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   /**
  * 
  * @param {component: string | object; platforms: Platform | Platform[]; types: string | string[]; getProps

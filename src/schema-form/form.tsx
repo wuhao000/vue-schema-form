@@ -25,7 +25,6 @@ import {LibComponents} from './utils/utils';
 
 const SchemaForm = defineComponent({
   field: null,
-  install: null,
   registerComponent: register,
   registerDisplayComponent: registerDisplay,
   name: 'VSchemaForm',
@@ -359,8 +358,7 @@ emits: ['update:value'],
     </div>;
   }
 });
-SchemaForm.install = (app) => {
+SchemaForm.install = app => {
   app.component(SchemaForm.name, SchemaForm);
-  app.component(SchemaFormField.name, SchemaFormField);
 };
 export default SchemaForm;

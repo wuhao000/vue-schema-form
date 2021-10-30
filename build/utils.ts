@@ -1,9 +1,10 @@
 import cheerio from 'cheerio';
 import fs from 'fs';
-import {unescape, escape} from 'html-escaper';
+import {escape, unescape} from 'html-escaper';
 import marked from 'marked';
 import pinyin from 'pinyin';
 import beautify from './beautify';
+import {DocPluginOptions} from './doc-plugin';
 
 marked.setOptions({
   xhtml: true
@@ -16,7 +17,7 @@ export function mkdirs(string) {
   }
 }
 
-export const createDoc = (path) => {
+export const createDoc = (path, options: DocPluginOptions) => {
   if (!isDocPath(path)) {
     return;
   }
@@ -32,16 +33,18 @@ export const createDoc = (path) => {
     const codes = $(`code.language-${lang}`);
     for (const v of codes) {
       const code = unescape($.html(v.childNodes)).trim();
-      $(`<code-editor>
+      $(`<code-editor mode="${lang}">
   ${escape(code)}
 </code-editor>`).insertBefore($(v));
       $(v).remove();
     }
   }
 
-  renderLanguage('typescript');
-  renderLanguage('html');
-  renderLanguage('bash');
+  if (options.highLightLanguages) {
+    options.highLightLanguages.forEach(lang => {
+      renderLanguage(lang);
+    });
+  }
 
 
   const demos = $('code.language-vue');

@@ -126,7 +126,6 @@ export default defineComponent({
                    footer={() => {
                      return <Button type="primary"
                                     onClick={() => {
-                                      console.log('cliock');
                                       this.cancelPreview();
                                     }}>确定</Button>;
                    }}

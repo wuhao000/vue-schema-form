@@ -4,32 +4,19 @@ import {defineConfig, Plugin} from 'vite';
 import Markdown from 'vite-plugin-md';
 import vitePluginString from 'vite-plugin-string';
 import {createDoc} from './build/utils';
+import {createDemoRoutes} from './build/routes-util';
+import docPlugin from './build/doc-plugin';
 
 const proxyTarget = 'http://localhost:9210';
 
-const docPlugin = (): Plugin => {
-  return {
-    enforce: 'pre',
-    name: 'Doc',
-    transform(source, id) {
-      if (id.toLowerCase().endsWith('.md')) {
-        createDoc(id);
-      }
-      return source;
-    },
-    async handleHotUpdate(ctx) {
-      if (ctx.file.toLowerCase().endsWith('.md')) {
-        createDoc(ctx.file);
-      }
-      return;
-    }
-  };
-};
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    docPlugin(),
+    docPlugin({
+      highLightLanguages: ['json', 'html', 'javascript', 'typescript']
+    }),
     vitePluginString(
         {
           include: [

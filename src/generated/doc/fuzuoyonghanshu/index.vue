@@ -9,7 +9,7 @@
 对其做状态修改，即便存在异步逻辑，也是可以很方便的在各种异步环境下对字段的状态做修改，
 所以，我们的表单联动，是不限于时空的。</p>
 <p>effects示例</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   const effects = ($: EffectsContext) =&gt; {
   $('s1').onFieldChange(value =&gt; {
      $('s2').value(value);

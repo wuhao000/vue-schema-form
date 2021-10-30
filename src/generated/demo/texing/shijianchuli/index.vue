@@ -3,7 +3,7 @@
     <h1 id="事件处理">事件处理</h1>
 <h2 id="配置说明">配置说明</h2>
 <p>在vue3.0中，事件的传递和普通属性是一样的，因此在props直接使用onXx（例如onClick）的属性既可配置事件处理函数，例如：</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   const field: SchemaFormField = {
   type: 'string',
   property: 'name',
@@ -16,7 +16,7 @@
 </code-editor></pre>
 <p>但在v-schema-form中，如果想要在事件中获得副作用处理函数来与其他字段产生联动，就要按如下方式配置：</p>
 <p>在字段配置的events属性上声明事件处理函数，例如：</p>
-<pre><code-editor>
+<pre><code-editor mode="typescript">
   const field: SchemaFormField = {
   type: 'string',
   property: 'name',
