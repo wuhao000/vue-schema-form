@@ -56,9 +56,16 @@ export const transformFormProps = (props: CommonFormProps, platform: Platform) =
   return formPropsTransformer(props);
 };
 
+function fixMode(options: SchemaFormComponentOptions) {
+  if (!options.mode.includes('array') && !options.mode.includes('single')) {
+    options.mode.push('singleOrArray');
+  }
+}
+
 export const registerComponent = (
-  options: SchemaFormComponentOptions,
-  store?: ComponentStore) => {
+    options: SchemaFormComponentOptions,
+    store?: ComponentStore) => {
+  fixMode(options);
   const baseOptions = Object.assign({}, options);
   if (Array.isArray(options.types)) {
     options.types.forEach(types => {
@@ -71,8 +78,5 @@ export const registerComponent = (
   } else {
     const finalStore: ComponentStore = store || globalComponentStore;
     finalStore.addComponent(options);
-    if (options.layout && !options.forDisplay) {
-      registerComponent(Object.assign({}, options, {forDisplay: true}));
-    }
   }
 };

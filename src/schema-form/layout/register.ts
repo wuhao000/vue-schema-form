@@ -22,10 +22,9 @@ export const registerLayout = (options: {
   registerComponent({
     component: options.component, platforms: options.platforms,
     types: options.types,
-    forArray: null,
+    mode: ['layout'],
     layoutOptions: options.layoutOptions,
-    getProps: options.getProps,
-    forDisplay: null, layout: true
+    getProps: options.getProps
   });
 };
 

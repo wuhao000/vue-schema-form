@@ -35,8 +35,8 @@ export const createDoc = (path, options: DocPluginOptions) => {
       const code = unescape($.html(v.childNodes)).trim();
       $(`<code-editor mode="${lang}">
   ${escape(code)}
-</code-editor>`).insertBefore($(v));
-      $(v).remove();
+</code-editor>`).insertBefore($(v).parent());
+      $(v).parent().remove();
     }
   }
 
@@ -66,19 +66,14 @@ export const createDoc = (path, options: DocPluginOptions) => {
 <code-container>
   ${demoCode}
 </code-container>
-</demo-wrapper>`).insertBefore($(v));
-    $(v).remove();
+</demo-wrapper>`).insertBefore($(v).parent());
+    $(v).parent().remove();
   }
 
   const originTemplate = `<template>
   <div class="markdown-body">
     ${$('body').html()}</div>
 </template>`;
-  const template = beautify(originTemplate, {
-    format: 'html',
-    unformatted: ['a', 'span', 'bdo', 'em', 'strong', 'dfn', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike', 'font', 'ins', 'del', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-    indent_size: 2
-  });
   if (compNames.length === 0) {
     fs.writeFileSync(`${dirPath}/index.vue`, originTemplate);
   } else {

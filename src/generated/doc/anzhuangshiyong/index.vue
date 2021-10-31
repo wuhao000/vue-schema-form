@@ -2,18 +2,18 @@
   <div class="markdown-body">
     <h1 id="安装使用">安装使用</h1>
 <h2 id="cdn引入">CDN引入</h2>
-<pre><code-editor mode="html">
+<code-editor mode="html">
   &lt;link ref="stylesheet" href="https://public-file.aegis-info.com/schema-form/&lt;version&gt;/SchemaForm.css"&gt;
 &lt;script src="https://public-file.aegis-info.com/schema-form/&lt;version&gt;/SchemaForm.umd.min.js.gz"&gt;&lt;/script&gt;
-</code-editor></pre>
+</code-editor>
 <p>当前最新版本为<code>0.1.2</code></p>
 <h2 id="npm-安装">npm 安装</h2>
 <pre><code class="language-bash">npm install v-schema-form
 </code></pre>
 <p>在main.ts中引入</p>
-<pre><code-editor mode="typescript">
+<code-editor mode="typescript">
   import SchemaForm from 'v-shema-form';
-</code-editor></pre>
+</code-editor>
 <p>SchemaForm 具有以下方法：</p>
 <h3 id="registerantd">registerAntd</h3>
 <blockquote>
@@ -25,22 +25,33 @@
 <p>注册自定义组件</p>
 </blockquote>
 <p>方法签名如下</p>
-<pre><code-editor mode="typescript">
-  /**
+<code-editor mode="typescript">
+  import {ArrayMode} from './form';
+
+/**
  * 注册表单组件
  * @param {string | object} component 组件对象或组件名称
  * @param {Platform | Platform[]} platforms 支持的平台 desktop,mobile
  * @param {string | string[]} types 组件的类型
- * @param {boolean | null} forArray 是否为数组类型的数据组件（可选）,为null表示同时支持数组和非数组的数据格式
  * @param {(definition: FieldDefinition, platform: Platform) =&gt; object} getProps 组件属性转换器（可选）
  */
-(component: string | object,
- platforms: Platform | Platform[],
- types: string | string[],
- forArray: boolean = null,
- getProps: ((definition: FieldDefinition, platform: Platform) =&gt; object) = () =&gt; ({})) =&gt; void {
-}
-</code-editor></pre>
+(options: {
+  component: string | object,
+  platforms: Platform | Platform[],
+  types: string | string[],
+  /**
+   * display: 该组件可用于详情模式
+   * input 该组件可用于输入模式
+   * array 该组件支持数组 （代替原来的array=true）
+   * single 该组件不支持数组，仅支持单值输入，默认input仅支持single
+   * render 仅用于渲染，不影响表单值, 例如button类型组件
+   * layout 该组件为布局组件，为布局组件时，以上值均无效
+   *
+   */
+  mode: Array&lt;'display' | 'input' | ArrayMode | 'layout' | 'render'&gt;,
+  getProps: ((definition: FieldDefinition, platform: Platform) =&gt; object)
+}) =&gt; void {}
+</code-editor>
 <ul>
 <li>注意：注册的组件必须使用value来接收数据，并使用$emit('input', newValue)来触发数据更改</li>
 </ul>
@@ -57,7 +68,7 @@
 <p>注册布局组件</p>
 </blockquote>
 <p>方法签名如下:</p>
-<pre><code-editor mode="typescript">
+<code-editor mode="typescript">
   /**
  * 
  * @param {component: string | object; platforms: Platform | Platform[]; types: string | string[]; getProps
@@ -69,7 +80,7 @@
   types: string | string[],
   getProps?: ((definition: FieldDefinition, platform: Platform) =&gt; object)
 }) =&gt; void {}
-</code-editor></pre>
+</code-editor>
 <p>选项对象的属性说明如下</p>
 <table>
 <thead>

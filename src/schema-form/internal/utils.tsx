@@ -44,8 +44,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-        .map(condition => matchCondition(currentValue, condition))
-        .some(it => !it);
+          .map(condition => matchCondition(currentValue, condition))
+          .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -55,18 +55,18 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-      .filter(key => fields[key])
-      .map(key => {
-        const field = fields[key];
-        if (!field.id) {
-          field.id = uuid.v4();
-        }
-        return {
-          id: field.id,
-          property: key,
-          ...fields[key]
-        };
-      });
+        .filter(key => fields[key])
+        .map(key => {
+          const field = fields[key];
+          if (!field.id) {
+            field.id = uuid.v4();
+          }
+          return {
+            id: field.id,
+            property: key,
+            ...fields[key]
+          };
+        });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -74,7 +74,7 @@ export function getRealFields(fields: FormFields) {
 
 const EmptyDefinition = {
   component: Empty,
-  getProps: (_) => ({})
+  getProps: () => ({})
 } as SchemaFormComponent;
 
 const missingTypes = [];
@@ -86,13 +86,14 @@ export function getComponentType(store: SchemaFormStore,
                                    array?: boolean
                                  }): SchemaFormComponent {
   const type = definition.type;
+  const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
-  const component: SchemaFormComponent = store.components.search(mode, store.platform, type, definition.array)
-    || globalComponentStore.search(mode, store.platform, type, definition.array) || EmptyDefinition;
+  const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
+      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
-    const typeStr = type + mode + store.platform + definition.array;
+    const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {
-      console.warn(`类型${type}${definition.array ? '（数组）' : ''}没有对应的${store.platform}${mode === 'display' ? '详情' : '编辑'}组件`);
+      console.warn(`类型${type}${array ? '（数组）' : ''}没有对应的${store.platform}${mode === 'display' ? '详情' : '编辑'}组件`);
       missingTypes.push(typeStr);
     }
   }
@@ -135,6 +136,38 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   return true;
 }
 
+function getComponent(field: SchemaFormField,
+                      store: SchemaFormStore,
+                      forDisplay = false,
+                      platform: Platform = 'desktop') {
+  const type = field.xType || field.type;
+  if (field.slot) {
+    return undefined;
+  }
+  if (typeof type === 'string') {
+    return getComponentType(store, {
+      type,
+      editable: field.editable,
+      array: field.array
+    });
+  }
+  if (typeof type === 'function' || isVNode(type)) {
+    return {
+      component: type,
+      platform,
+      type: '',
+      mode: ['single', forDisplay ? 'display' : 'input'],
+      layoutOptions: null,
+      valueProp: 'value',
+      wrap: true,
+      getProps: () => {
+        return {};
+      }
+    };
+  }
+  return fixComponentDefinition(type, !field.editable);
+}
+let i = 0;
 export function renderField(pathPrefix: string[] | null,
                             store: SchemaFormStore,
                             field: SchemaFormField,
@@ -155,14 +188,7 @@ export function renderField(pathPrefix: string[] | null,
     field.props.effects = store.effects;
   }
   const newField = createField(currentValue, store, pathPrefix, field);
-  const type = field.xType || field.type;
-  const component = field.slot ? undefined : (
-    typeof type === 'string' ? getComponentType(store, {
-      type,
-      editable: field.editable,
-      array: field.array
-    }) : fixComponentDefinition(type, !field.editable)
-  );
+  const component = getComponent(field, store);
   const props: any = {
     wrap,
     field: newField,
@@ -170,15 +196,13 @@ export function renderField(pathPrefix: string[] | null,
     disabled: newField.disabled || store.disabled || store.loading,
     definition: field,
     formValue: currentValue,
-    'onUpdate:value': (v) => {
+    'onUpdate:value': v => {
       setFieldValue(value, newField, v, emit);
     },
     key: `field-${field.property}-${index}`,
     index
   };
-  if (!component || component.forInput) {
-    props.value = getFieldValue(value, newField, component);
-  }
+  props.value = getFieldValue(value, newField, component);
   return <FormField {...props}/>;
 }
 
@@ -252,7 +276,6 @@ export class FieldDefinition<V = any> {
   public visible = true;
   public xType: string | SchemaFormComponentOptions = null;
   public slot?: string = null;
-  public forInput? = true;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,
@@ -378,31 +401,7 @@ export class FieldDefinition<V = any> {
   }
 
   public getComponent(forDisplay = false, platform: Platform = 'desktop'): SchemaFormComponent {
-    const type = this.xType || this.type;
-    if (typeof type === 'string') {
-      return getComponentType(this.store, {
-        type,
-        editable: this.editable,
-        array: this.array
-      });
-    }
-    if (typeof type === 'function' || isVNode(type)) {
-      return {
-        component: type,
-        platform: platform,
-        type: '',
-        forArray: false,
-        forInput: !forDisplay,
-        layoutOptions: null,
-        valueProp: 'value',
-        wrap: true,
-        layout: null,
-        getProps: () => {
-          return {};
-        }
-      };
-    }
-    return fixComponentDefinition(type, forDisplay);
+    return getComponent(this, this.store, forDisplay, platform);
   }
 
 }
@@ -463,8 +462,10 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
   return clone(rules);
 
 };
-export const getFieldValue = (value: any, field: FieldDefinition, component: SchemaFormComponent) => {
-  if (component?.layout) {
+export const getFieldValue = (value: any,
+                              field: FieldDefinition,
+                              component: SchemaFormComponent) => {
+  if (component?.mode?.includes('layout')) {
     return value;
   }
   if (field.processor) {

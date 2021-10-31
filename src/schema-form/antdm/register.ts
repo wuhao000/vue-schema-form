@@ -75,56 +75,53 @@ export function registerAntdMobile() {
   };
   // todo
   // registerMobile(ImagePicker, [FieldTypes.Picture, FieldTypes.File]);
-  registerMobile(Input, [FieldTypes.String, FieldTypes.Url], false,
+  registerMobile(Input, [FieldTypes.String, FieldTypes.Url], 'single',
     () => ({textAlign: 'right'}));
-  registerMobile(Input, [FieldTypes.Number, FieldTypes.Integer], false,
+  registerMobile(Input, [FieldTypes.Number, FieldTypes.Integer], 'single',
     () => ({type: 'number', textAlign: 'right'}));
-  registerMobile(Input, [FieldTypes.Double], false,
+  registerMobile(Input, [FieldTypes.Double], 'single',
     () => ({type: 'digit', textAlign: 'right'}));
-  registerMobile(Input, [FieldTypes.Password], false,
+  registerMobile(Input, [FieldTypes.Password], 'single',
     () => ({type: 'password'}));
-  registerMobile(Range, [FieldTypes.Range], false);
-  registerMobile(Textarea, [FieldTypes.Text], false);
+  registerMobile(Range, [FieldTypes.Range], 'single');
+  registerMobile(Textarea, [FieldTypes.Text], 'single');
   registerMobile(DatePicker.Item, [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
-    false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerMobile(Calendar.Item, [FieldTypes.DateRange], false, () => ({type: 'range'}));
-  registerMobile(Calendar.Item, [FieldTypes.DateTimeRange], false, () => ({type: 'range', pickTime: true}));
-  registerMobile(Checkbox, FieldTypes.Checkbox, false);
+      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerMobile(Calendar.Item, [FieldTypes.DateRange], 'single', () => ({type: 'range'}));
+  registerMobile(Calendar.Item, [FieldTypes.DateTimeRange], 'single', () => ({type: 'range', pickTime: true}));
+  registerMobile(Checkbox, FieldTypes.Checkbox, 'single');
 
   registerComponent({
     component: Switch.Item,
     types: FieldTypes.Boolean,
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'mobile',
     valueProp: 'checked'
   });
   registerComponent({
     component: Button,
     types: FieldTypes.Button,
+    mode: ['render'],
     platforms: 'mobile',
-    forDisplay: false,
-    forInput: false,
-    forArray: null,
     getProps: field => {
       return {title: field.title};
     },
     wrap: false
   });
-  registerMobile(Checkbox.List, FieldTypes.ExpandSelect, true, field => {
+  registerMobile(Checkbox.List, FieldTypes.ExpandSelect, 'array', field => {
     return {options: resolveOptions(field), multiple: true};
   });
-  registerMobile(Radio.List, FieldTypes.ExpandSelect, false, field => {
+  registerMobile(Radio.List, FieldTypes.ExpandSelect, 'single', field => {
     return {options: resolveOptions(field)};
   });
-  registerMobile(Picker.Item, FieldTypes.Transfer, false);
-  registerMobile(Checkbox.PopupList, FieldTypes.Select, true, field => {
+  registerMobile(Picker.Item, FieldTypes.Transfer, 'single');
+  registerMobile(Checkbox.PopupList, FieldTypes.Select, 'array', field => {
     return {options: resolveOptions(field), multiple: true};
   });
-  registerMobile(Radio.PopupList, FieldTypes.Select, false, field => {
+  registerMobile(Radio.PopupList, FieldTypes.Select, 'single', field => {
     return {options: resolveOptions(field)};
   });
-  register(Slider, 'mobile', FieldTypes.Range, false, () => {
+  register(Slider, 'mobile', FieldTypes.Range, 'single', () => {
     return {range: true};
   });
 }

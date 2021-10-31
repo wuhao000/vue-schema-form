@@ -2,12 +2,12 @@
   <div class="markdown-body">
     <h1 id="字段解构">字段解构</h1>
 <p>字段解构是一个非常强大的特性，它可以对组件生产的值做解构转换，使得快速贴合服务端数据结构要求，无需再做二次转换 字段解构主要是对 property 用 ES Deconstruction 语法做解构，需要注意的是，不支持...语法</p>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
 &lt;template&gt;
-  &lt;a-layout class="demo-wrapper"&gt;
+  &lt;a-layout&gt;
     &lt;a-layout-content&gt;
       &lt;v-schema-form
           v-model:value="value"
@@ -81,8 +81,7 @@
         components: [{
           component: complex,
           platforms: 'desktop',
-          forArray: false,
-          forDisplay: false,
+          mode: ['render'],
           types: 'complex'
         } as SchemaFormComponentOptions],
         options,
@@ -145,7 +144,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

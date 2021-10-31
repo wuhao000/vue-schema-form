@@ -1,4 +1,5 @@
 import AsyncValidator from 'async-validator';
+import classNames from 'classnames';
 import _ from 'lodash';
 import {
   computed,
@@ -95,9 +96,9 @@ export default defineComponent({
         field: field.value
       });
     }, {deep: true});
-    const setCurrentValue = (value) => {
-      const component = getComponent();
-      if ((!component || component.forInput) && !isEqual(currentValue.value, value)) {
+    const setCurrentValue = value => {
+      const component = fieldComponent.value;
+      if ((!component || component.mode.includes('input')) && !isEqual(currentValue.value, value)) {
         currentValue.value = value;
       }
     };
@@ -116,16 +117,16 @@ export default defineComponent({
       return renderField($props.pathPrefix as string[], store, localField, localValue, index, wrap, emit);
     };
     const editable = computed(() => store.editable && field.value.editable);
-    const getComponent = () => {
+    const fieldComponent = computed(() => {
       if (field.value.slot) {
         return undefined;
       }
       return field.value.getComponent(!editable.value, store.platform);
-    };
+    });
     const inputProps = computed(() => {
       const {definition, path, schemaPath} = $props;
       const {platform} = store;
-      const renderComponent = getComponent();
+      const renderComponent = fieldComponent.value;
       const localProps: any = renderComponent === undefined ? {} : Object.assign({}, renderComponent.getProps(field.value));
       const localType = field.value.type;
       if (localType === FieldTypes.Object) {
@@ -222,7 +223,7 @@ export default defineComponent({
       if (!field.value.visible) {
         return true;
       }
-      if (getComponent()?.layout) {
+      if (fieldComponent.value?.mode?.includes('layout')) {
         return true;
       }
       if (type.value === FieldTypes.Object && arrayRef.value) {
@@ -390,7 +391,7 @@ export default defineComponent({
     const renderInputComponent = () => {
       const propsTmp = inputProps.value;
       const {content, definition} = $props;
-      const inputFieldDef = getComponent();
+      const inputFieldDef = fieldComponent.value;
       let InputFieldComponent = inputFieldDef.component;
       if (isProxy(InputFieldComponent)) {
         InputFieldComponent = toRaw(InputFieldComponent);
@@ -412,19 +413,19 @@ export default defineComponent({
         }
       }
       const style: any = Object.assign({}, inputProps.value.style || {});
-      if (inputFieldDef.layout) {
+      if (inputFieldDef.mode.includes('layout')) {
         propsTmp.layout = definition.layout;
         propsTmp.fields = subFields.value;
         propsTmp.fieldDefinitions = relatedSubFields.value;
       }
       const valueProp = inputFieldDef.valueProp;
       propsTmp.disabled = isDisabled.value;
-      if (inputFieldDef.forInput) {
+      if (inputFieldDef.mode.includes('input')) {
         propsTmp[valueProp] = currentValue.value;
       }
-      propsTmp.title = propsTmp.title || ((store.platform === 'mobile' || inputFieldDef.layout) ? field.value.title : null);
+      propsTmp.title = propsTmp.title || ((store.platform === 'mobile' || inputFieldDef.mode.includes('layout')) ? field.value.title : null);
       // 渲染数组
-      if (field.value.array && inputFieldDef.forArray === false) {
+      if (field.value.array && inputFieldDef.mode.includes('single')) {
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
       if (definition.type === FieldTypes.Object
@@ -483,7 +484,7 @@ export default defineComponent({
       Object.assign(field.value, {
         validate,
         value: currentValue.value,
-        setGetValue: (value: any) => {
+        setGetValue: value => {
           if (value === undefined) {
             return currentValue.value;
           } else {
@@ -507,10 +508,13 @@ export default defineComponent({
       const ColComponent: any = getColComponent(store.platform);
       const formItemProps = getFormItemProps();
       const style = formItemProps.style;
-      const className = formItemProps.className;
-      const inputFieldDef = getComponent();
+      const inputFieldDef = fieldComponent.value;
+      const className = classNames(formItemProps.className || formItemProps.class, {
+        'is-layout': inputFieldDef.mode.includes('layout')
+      });
       delete formItemProps.style;
       delete formItemProps.className;
+      delete formItemProps.class;
       // 是否使用form-item组件包裹
       const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) || isNull(definition.title);
       // 是否使用form-item组件的title

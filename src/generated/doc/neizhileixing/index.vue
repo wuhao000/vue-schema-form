@@ -1,6 +1,7 @@
 <template>
   <div class="markdown-body">
-    <h1 id="内置的表单项类型">内置的表单项类型</h1>
+    <h1 id="内置的输入类型">内置的输入类型</h1>
+<h2 id="输入类型">输入类型</h2>
 <table>
 <thead>
 <tr>
@@ -107,10 +108,5 @@
 <td>内置</td>
 </tr>
 </tbody></table>
-<h2 id="内置布局组件">内置布局组件</h2>
-<h3 id="grid">grid</h3>
-<p>栅格布局</p>
-<h3 id="block">block</h3>
-<p>数组布局</p>
 </div>
 </template>

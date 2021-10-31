@@ -4,19 +4,19 @@
 <h2 id="使用说明">使用说明</h2>
 <p>启用禁用属于逻辑操作，因此使用副作用函数来实现</p>
 <p>使用副作用函数的enable和disable方法可以达到启用/禁用效果</p>
-<pre><code-editor mode="typescript">
+<code-editor mode="typescript">
   // 启用name字段
 $('name').enable();
 
 // 禁用name字段
 $('name').disable();
-</code-editor></pre>
+</code-editor>
 <br>
 
 <blockquote>
 <p>仅使用enable或disable中的一个也可以启用禁用, 例如 enable(true) 为启用，enable(false)为禁用，disable的参数值相反</p>
 </blockquote>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -126,7 +126,7 @@ $('name').disable();
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

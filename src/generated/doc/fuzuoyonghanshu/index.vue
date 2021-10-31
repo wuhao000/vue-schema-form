@@ -9,20 +9,56 @@
 对其做状态修改，即便存在异步逻辑，也是可以很方便的在各种异步环境下对字段的状态做修改，
 所以，我们的表单联动，是不限于时空的。</p>
 <p>effects示例</p>
-<pre><code-editor mode="typescript">
-  const effects = ($: EffectsContext) =&gt; {
-  $('s1').onFieldChange(value =&gt; {
-     $('s2').value(value);
-  });
-  $('s1').onFieldChange(value =&gt; {
-    if (value !== '3') {
-      $('s3', 's4'). hide();
-    } else {
-      $('s3', 's4').show();
+<blockquote>
+<p>下面的例子是实现aa在值改变的时候将bb的值设置为aa的值。</p>
+</blockquote>
+<demo-wrapper>
+<comp0></comp0>
+<template #code><code-container>
+  &lt;template&gt;
+  &lt;a-layout&gt;
+    &lt;a-layout-content&gt;
+      &lt;v-schema-form
+          :effects="effects"
+          :schema="schema"&gt;
+      &lt;/v-schema-form&gt;
+    &lt;/a-layout-content&gt;
+  &lt;/a-layout&gt;
+&lt;/template&gt;
+&lt;script lang="ts" setup&gt;
+  import {EffectsContext} from '../../../types';
+  import {registerAntd} from '../../schema-form';
+
+  registerAntd();
+  
+  const schema = {
+    props: {inline: true},
+    fields: {
+      layout: {
+        type: 'grid',
+        layout: [6, 6],
+        fields: {
+          s1: {
+            type: 'string',
+            title: 'aa'
+          },
+          s2: {
+            type: 'string',
+            title: 'bb'
+          }
+        }
+      }
     }
-  });
-}
-</code-editor></pre>
+  };
+  const effects = ($: EffectsContext) =&gt; {
+    $('s1').onFieldChange(value =&gt; {
+      $('s2').value(value);
+    });
+  }
+&lt;/script&gt;
+
+</code-container></template>
+</demo-wrapper>
 <h2 id="选择器操作">选择器操作</h2>
 <p>$函数接收一个或多个路径作为参数,返回一个 EffectsHandlers 对象，
 EffectsHandlers 对象具有以下方法，对匹配到的表单项进行操作：</p>
@@ -282,3 +318,6 @@ EffectsHandlers 对象具有以下方法，对匹配到的表单项进行操作�
 </tbody></table>
 </div>
 </template>
+<script lang="ts" setup>
+  import  comp0 from './comp0.vue';
+</script>

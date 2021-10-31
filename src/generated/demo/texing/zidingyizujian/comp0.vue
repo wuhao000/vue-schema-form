@@ -41,8 +41,7 @@
               property: 'string3',
               title: 'string3',
               type: {
-                forArray: false,
-                forInput: true,
+                mode: ['single', 'input'],
                 platform: 'desktop',
                 component: {
                   name: 'CustomField',

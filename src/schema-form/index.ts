@@ -42,7 +42,11 @@ export {registerAntd} from './antd';
 export {registerDesktopLib, resolveOptions, FieldTypes, registerMobileLib} from './utils/utils';
 export {MobileDisplayField} from './display/mobile-display-field';
 export {
-  registerDesktop, register, registerDisplay, registerMobile, registerResponsiveComponent
+  registerDesktop,
+  register,
+  registerDisplay,
+  registerMobile,
+  registerResponsiveComponent
 } from './utils/register';
 export {registerComponent} from './config';
 export * from './common/base-button';

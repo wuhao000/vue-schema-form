@@ -1,6 +1,6 @@
 <template>
   <div class="markdown-body">
-    <pre><demo-wrapper>
+    <demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -46,8 +46,7 @@
               property: 'string3',
               title: 'string3',
               type: {
-                forArray: false,
-                forInput: true,
+                mode: ['single', 'input'],
                 platform: 'desktop',
                 component: {
                   name: 'CustomField',
@@ -81,7 +80,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

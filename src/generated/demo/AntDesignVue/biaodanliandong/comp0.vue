@@ -1,17 +1,13 @@
 
 <template>
-  <a-layout class="demo-wrapper">
+  <a-layout>
     <a-layout-content>
-      <v-schema-form
-          v-model:value="value3"
-          :effects="effects3"
-          :schema="definition3"/>
       <v-schema-form
           v-model:value="value"
           :actions="actions"
           :effects="effects"
           :schema="definition"
-          class="demo-form"></v-schema-form>
+          class="demo-form"/>
     </a-layout-content>
   </a-layout>
 </template>
@@ -80,22 +76,6 @@
         }
       }];
       return {
-        value3,
-        effects3: ($: EffectsContext) => {
-          $('text').subscribe(SchemaFormEvents.fieldKeydown, (e) => {
-            console.log(e);
-          }).onFieldCreateOrChange((v) => {
-            console.log(v);
-          });
-        },
-        definition3: {
-          fields: {
-            text: {
-              type: 'string',
-              title: 'abc'
-            }
-          }
-        },
         value2,
         value,
         actions,

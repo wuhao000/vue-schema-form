@@ -1,6 +1,6 @@
 
 <template>
-  <a-layout class="demo-wrapper">
+  <a-layout>
     <a-layout-content>
       <v-schema-form
           v-model:value="value"
@@ -74,9 +74,8 @@
         components: [{
           component: complex,
           platforms: 'desktop',
-          forArray: false,
+          mode: ['render'],
           types: 'complex',
-          forDisplay: false
         } as SchemaFormComponentOptions],
         options,
         dialogVisible,

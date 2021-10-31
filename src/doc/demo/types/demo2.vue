@@ -1,11 +1,11 @@
 <template>
   <v-schema-form
-:schema="schema"
-                 :value="value"></v-schema-form>
+      :schema="schema"
+      :value="value"/>
 </template>
 <script lang="ts">
+  import {defineComponent} from 'vue';
   import {registerAntd} from '../../../schema-form/antd/';
-  import { defineComponent } from 'vue';
 
   registerAntd();
   export default defineComponent({

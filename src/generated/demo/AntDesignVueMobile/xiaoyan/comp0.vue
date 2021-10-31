@@ -1,6 +1,6 @@
 
 <template>
-  <a-layout class="demo-wrapper">
+  <a-layout>
     <a-layout-content>
       <a-row>
         <a-col :span="12">

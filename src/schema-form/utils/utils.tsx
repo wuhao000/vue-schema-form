@@ -200,37 +200,21 @@ export const getDefaultValue = (field: FieldDefinition) => {
 };
 
 
-export const getFormComponent = (platform: Platform) => {
-  return LibComponents.form[platform];
-};
+export const getFormComponent = (platform: Platform) => LibComponents.form[platform];
 
-export const getRowComponent = (platform: Platform) => {
-  return LibComponents.row[platform];
-};
+export const getRowComponent = (platform: Platform) => LibComponents.row[platform];
 
-export const getColComponent = (platform: Platform) => {
-  return LibComponents.col[platform];
-};
+export const getColComponent = (platform: Platform) => LibComponents.col[platform];
 
-export const getLayoutComponent = (platform: Platform) => {
-  return LibComponents.layout[platform];
-};
+export const getLayoutComponent = (platform: Platform) => LibComponents.layout[platform];
 
-export const getSiderComponent = (platform: Platform) => {
-  return LibComponents.sider[platform];
-};
+export const getSiderComponent = (platform: Platform) => LibComponents.sider[platform];
 
-export const getContentComponent = (platform: Platform) => {
-  return LibComponents.content[platform];
-};
+export const getContentComponent = (platform: Platform) => LibComponents.content[platform];
 
-export const getButtonComponent = (platform: Platform) => {
-  return LibComponents.button[platform];
-};
+export const getButtonComponent = (platform: Platform) => LibComponents.button[platform];
 
-export const getAlertComponent = (platform: Platform) => {
-  return LibComponents.alert[platform];
-};
+export const getAlertComponent = (platform: Platform) => LibComponents.alert[platform];
 
 export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {
   if (typeof option === 'string') {
@@ -272,37 +256,33 @@ export function addRule(rules: any, field: FieldDefinition, rule: any) {
   rules.push(rule);
 }
 
-export const isNull = (value: any) => {
-  return value === undefined || value === null;
-};
+export const isNull = (value: any) => value === undefined || value === null;
 
-export const isNotNull = (value: any) => {
-  return !isNull(value);
-};
-
+export const isNotNull = (value: any) => !isNull(value);
 
 export const fixComponentDefinition = (value: SchemaFormComponentOptions | SchemaFormComponentOptions[],
                                        forDisplay: boolean): SchemaFormComponent => {
-  let options = null;
+  let options: SchemaFormComponentOptions = null;
   if (Array.isArray(value)) {
-    options = value.find(it => it.forDisplay === forDisplay);
+    if (forDisplay) {
+      options = value.find(it => it.mode.includes('display'));
+    } else {
+      options = value.find(it => !it.mode.includes('display'));
+    }
   } else {
     options = value;
   }
-  const forArray = options.forArray !== undefined ? options.forArray : null;
   const getProps = options.getProps || (() => ({}));
   return {
     component: options.component,
     platform: options.platforms as Platform,
     type: options.types as string,
-    forArray,
-    forInput: options.forInput ?? true,
+    mode: options.mode,
     layoutOptions: options.layoutOptions,
     valueProp: options.valueProp || 'value',
     wrap: options.wrap,
-    layout: options.layout,
     getProps: (definition: FieldDefinition) => {
-      const props: any = getProps(definition, options.platforms) || {};
+      const props: any = getProps(definition, options.platforms as Platform) || {};
       if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
         props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;
       }

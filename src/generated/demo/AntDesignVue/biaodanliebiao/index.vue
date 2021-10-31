@@ -1,13 +1,13 @@
 <template>
   <div class="markdown-body">
     <h1 id="表单列表">表单列表</h1>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
 &lt;template&gt;
   &lt;a-layout&gt;
-    &lt;a-layout-content class="demo-wrapper"&gt;
+    &lt;a-layout-content&gt;
       &lt;v-schema-form
           v-model:value="value"
           :schema="schema"
@@ -153,7 +153,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

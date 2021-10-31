@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-content class="demo-wrapper">
+    <a-layout-content>
       <v-schema-form
           v-model:value="value"
           :schema="schema"

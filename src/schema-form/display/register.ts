@@ -27,25 +27,25 @@ registerDisplay({
 registerDisplay({
   component: PlainDisplayField,
   platforms: DESKTOP,
+  mode: 'single',
   types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number],
-  forArray: false
 });
 registerDisplay({
   component: MobileDisplayField,
   platforms: MOBILE,
+  mode: 'single',
   types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number],
-  forArray: false
 });
 registerDisplay({
   component: SelectDisplayField,
   platforms: [DESKTOP, MOBILE],
   types: [FieldTypes.Select, FieldTypes.ExpandSelect],
-  forArray: null,
+  arrayMode: 'singleOrArray',
   getProps: field => {
     return {options: resolveOptions(field), field};
   }
 });
-register(InternalForm, [DESKTOP, MOBILE], FieldTypes.Object, false, (definition, platform) => {
+register(InternalForm, [DESKTOP, MOBILE], FieldTypes.Object, 'single', (definition, platform) => {
   return {
     platform,
     definition: {fields: definition.fields}
@@ -55,7 +55,7 @@ registerDisplay({
   component: InternalForm,
   platforms: [DESKTOP, MOBILE],
   types: FieldTypes.Object,
-  forArray: false,
+  mode: 'single',
   getProps: (definition, platform) => {
     return {
       platform,

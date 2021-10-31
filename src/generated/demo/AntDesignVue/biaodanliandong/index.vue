@@ -1,23 +1,19 @@
 <template>
   <div class="markdown-body">
     <h1 id="表单联动">表单联动</h1>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
 &lt;template&gt;
-  &lt;a-layout class="demo-wrapper"&gt;
+  &lt;a-layout&gt;
     &lt;a-layout-content&gt;
-      &lt;v-schema-form
-          v-model:value="value3"
-          :effects="effects3"
-          :schema="definition3"/&gt;
       &lt;v-schema-form
           v-model:value="value"
           :actions="actions"
           :effects="effects"
           :schema="definition"
-          class="demo-form"&gt;&lt;/v-schema-form&gt;
+          class="demo-form"/&gt;
     &lt;/a-layout-content&gt;
   &lt;/a-layout&gt;
 &lt;/template&gt;
@@ -86,22 +82,6 @@
         }
       }];
       return {
-        value3,
-        effects3: ($: EffectsContext) =&gt; {
-          $('text').subscribe(SchemaFormEvents.fieldKeydown, (e) =&gt; {
-            console.log(e);
-          }).onFieldCreateOrChange((v) =&gt; {
-            console.log(v);
-          });
-        },
-        definition3: {
-          fields: {
-            text: {
-              type: 'string',
-              title: 'abc'
-            }
-          }
-        },
         value2,
         value,
         actions,
@@ -168,7 +148,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

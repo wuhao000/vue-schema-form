@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-schema-form

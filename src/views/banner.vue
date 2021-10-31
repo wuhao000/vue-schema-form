@@ -72,7 +72,7 @@ export default {
     return {
       activeKey,
       toGithub() {
-        window.open('https://github.com/wuhao000/vue-schema-form');
+        window.open('https://gitee.com/wuhao000/v-schema-form-next');
       },
       to(path) {
         router.push({

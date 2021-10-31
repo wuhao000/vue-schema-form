@@ -72,6 +72,16 @@ export default [{
     
   ]
 }, {
+  path: '/doc/neizhibujuleixing',
+  component: () => import('../generated/doc/neizhibujuleixing/index.vue'),
+  meta: {
+    tags: [],
+    name: '内置布局类型'
+  },
+  children: [
+    
+  ]
+}, {
   path: '/doc/jiegoufuzhi',
   component: () => import('../generated/doc/jiegoufuzhi/index.vue'),
   meta: {

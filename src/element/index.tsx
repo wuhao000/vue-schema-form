@@ -83,16 +83,14 @@ export function registerElement() {
   registerComponent({
     component: ElInput,
     types: [FieldTypes.String],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElSwitch,
     types: FieldTypes.Boolean,
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -100,16 +98,13 @@ export function registerElement() {
     component: ElButton,
     types: FieldTypes.Button,
     platforms: 'desktop',
-    forInput: false,
-    forDisplay: false,
-    forArray: null,
+    mode: ['render'],
     wrap: false
   });
   registerComponent({
     component: Select,
     types: FieldTypes.Select,
-    forArray: null,
-    forDisplay: false,
+    mode: ['input', 'singleOrArray'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -122,8 +117,7 @@ export function registerElement() {
   registerComponent({
     component: CheckboxGroup,
     types: FieldTypes.ExpandSelect,
-    forArray: true,
-    forDisplay: false,
+    mode: ['array', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -133,8 +127,7 @@ export function registerElement() {
   registerComponent({
     component: RadioGroup,
     types: FieldTypes.ExpandSelect,
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -144,8 +137,7 @@ export function registerElement() {
   registerComponent({
     component: ElInputNumber,
     types: [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -154,45 +146,26 @@ export function registerElement() {
     types: [FieldTypes.Date,
       FieldTypes.DateRange,
       FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: definition => ({type: (definition.type as string).toLowerCase()})
   });
-  // registerComponent({
-  //   component: TimePicker,
-  //   types: [FieldTypes.Time],
-  //   forArray: false,
-  //   forDisplay: false,
-  //   platforms: 'desktop',
-  //   valueProp: 'modelValue'
-  // });
-  // registerComponent({
-  //   component: TimePicker.RangePicker,
-  //   types: [FieldTypes.TimeRange],
-  //   forArray: false,
-  //   forDisplay: false,
-  //   platforms: 'desktop',
-  //   valueProp: 'modelValue'
-  // });
   registerComponent({
     component: ElRate,
     types: [FieldTypes.Rate],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElSlider,
     types: [FieldTypes.Range],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
-  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, false, (def, platform) => {
+  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, 'single', (def, platform) => {
     return {
       platform, valueProp: 'modelValue'
     };
@@ -200,16 +173,14 @@ export function registerElement() {
   registerComponent({
     component: ElTransfer,
     types: [FieldTypes.Transfer],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElUpload,
     types: [FieldTypes.Picture],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {
@@ -221,8 +192,7 @@ export function registerElement() {
   registerComponent({
     component: ElUpload,
     types: [FieldTypes.File],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {
@@ -234,8 +204,7 @@ export function registerElement() {
   registerComponent({
     component: ElInput,
     types: [FieldTypes.Text],
-    forArray: false,
-    forDisplay: false,
+    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {

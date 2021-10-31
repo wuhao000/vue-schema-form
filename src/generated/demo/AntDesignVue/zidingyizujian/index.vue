@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-body">
     <h1 id="自定义组件">自定义组件</h1>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -83,7 +83,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

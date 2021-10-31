@@ -162,70 +162,69 @@ export function registerAntd() {
     platforms: 'desktop',
     types: FieldTypes.Rate
   });
-  registerDesktop(createComponentProxy(Input.Password), [FieldTypes.Password], false);
+  registerDesktop(createComponentProxy(Input.Password), [FieldTypes.Password], 'single');
   registerComponent({
     component: AntdUpload,
+    mode: ['singleOrArray', 'input'],
     types: FieldTypes.Picture,
     platforms: 'desktop',
-    forDisplay: false,
     getProps: definition => {
       return {multiple: definition.array, mode: 'picture'};
     }
   });
   registerDesktop(createComponentProxy(TimePicker),
-    [FieldTypes.Time],
-    false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
+      [FieldTypes.Time],
+      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerComponent({
     component: AutoComplete,
-    forDisplay: false,
+    mode: ['input', 'single'],
     platforms: 'desktop',
-    types: [FieldTypes.AutoComplete],
-    forArray: false
+    types: [FieldTypes.AutoComplete]
   });
   registerComponent({
     component: TimePicker.RangePicker,
-    forDisplay: false,
+    mode: ['input', 'single'],
     platforms: 'desktop',
-    types: [FieldTypes.TimeRange],
-    forArray: false
+    types: [FieldTypes.TimeRange]
   });
   registerComponent({
     component: AntdUpload,
+    mode: ['input', 'singleOrArray'],
     types: FieldTypes.File,
     platforms: 'desktop',
-    forDisplay: false,
     getProps: definition => {
       return {multiple: definition.array};
     }
   });
-  registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateRange], false);
-  registerDesktop(createComponentProxy(InputField), [FieldTypes.String], false);
-  registerDesktop(createComponentProxy(Input.TextArea), [FieldTypes.Text], false);
-  registerDesktop(createComponentProxy(DatePicker), [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime], false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], false, (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerDesktop(createComponentProxy(InputNumber), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], false);
+  registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateRange], 'single');
+  registerDesktop(createComponentProxy(InputField), [FieldTypes.String], 'single');
+  registerDesktop(createComponentProxy(Input.TextArea), [FieldTypes.Text], 'single');
+  registerDesktop(createComponentProxy(DatePicker),
+      [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
+      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], 'single',
+      (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerDesktop(createComponentProxy(InputNumber), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single');
   registerComponent({
     component: createComponentProxy(Checkbox),
     types: FieldTypes.Checkbox,
-    forArray: false,
-    forDisplay: false,
+    mode: ['input', 'single'],
     platforms: 'desktop',
     valueProp: 'checked'
   });
   registerComponent({
     component: createComponentProxy(Switch),
     types: FieldTypes.Boolean,
-    forArray: false,
-    forDisplay: false,
+    mode: ['input', 'single'],
     platforms: 'desktop',
     valueProp: 'checked'
   });
-  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, false, (def, platform) => {
+  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, 'single', (def, platform) => {
     return {
       platform
     };
   });
-  registerDesktop(createComponentProxy(Select), FieldTypes.Select, null, field => {
+  registerDesktop(createComponentProxy(Select), FieldTypes.Select, 'singleOrArray', field => {
     return {
       dropdownMatchSelectWidth: false,
       mode: field.array ? 'multiple' : field.props?.mode,
@@ -236,27 +235,26 @@ export function registerAntd() {
     component: createComponentProxy(Button),
     types: FieldTypes.Button,
     platforms: 'desktop',
-    forInput: false,
-    forDisplay: false,
-    forArray: null,
+    mode: ['render'],
     getProps: field => {
       return {title: field.title};
     },
     wrap: false
   });
 
-  registerDesktop(createComponentProxy(Cascader), FieldTypes.Cascader, false, field => {
+  registerDesktop(createComponentProxy(Cascader), FieldTypes.Cascader, 'single', field => {
     return {options: resolveOptions(field)};
   });
-  registerDesktop(createComponentProxy(CheckboxGroup), FieldTypes.ExpandSelect, true, field => {
-    return {options: resolveOptions(field), multiple: true};
+  registerDesktop(createComponentProxy(CheckboxGroup), FieldTypes.ExpandSelect, 'array', field => {
+    return {options: resolveOptions(field)};
   });
-  registerDesktop(createComponentProxy(RadioGroup), FieldTypes.ExpandSelect, false, field => {
+  registerDesktop(createComponentProxy(RadioGroup), FieldTypes.ExpandSelect, 'single', field => {
     return {options: resolveOptions(field)};
   });
   registerDesktop(createComponentProxy(Rate), FieldTypes.Rate);
-  registerDesktop(createComponentProxy(Transfer), FieldTypes.Transfer, false, transferPropsTransform);
-  register(createComponentProxy(Slider), 'desktop', FieldTypes.Range, false, () => {
+  registerDesktop(createComponentProxy(Transfer), FieldTypes.Transfer, 'single', transferPropsTransform);
+  register(createComponentProxy(Slider), 'desktop',
+      FieldTypes.Range, 'single', () => {
     return {range: true};
   });
 }

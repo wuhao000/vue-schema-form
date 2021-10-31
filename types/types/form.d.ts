@@ -44,7 +44,7 @@ export function registerMobileLib(map: Record<keyof ILibComponents, any>): void;
 
 export function registerDesktop(component: string | Component,
                                 types: string | string[],
-                                forArray?: boolean,
+                                mode: ArrayMode,
                                 getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
 
 export function registerDisplay(options: DisplayComponentOptions): void;
@@ -52,7 +52,7 @@ export function registerDisplay(options: DisplayComponentOptions): void;
 export function register(component: string | Component,
                          platforms: Platform | Platform[],
                          types: string | string[],
-                         forArray?: boolean,
+                         mode: ArrayMode,
                          getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
 
 export function registerComponent(options: SchemaFormComponentOptions): void;
@@ -66,21 +66,6 @@ export const DSelect;
 
 export class SchemaForm {
   public static install: (app: App) => void;
-  public static registerComponent: (component: string | Component,
-                                    platforms: Platform | Platform[],
-                                    types: string | string[],
-                                    forArray?: boolean,
-                                    getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})) => void;
-  public static registerLayout: (options: {
-    component: string | Component,
-    platforms: Platform | Platform[],
-    types: string | string[],
-    getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})
-  }) => void;
-  public static registerResponsiveComponent: (component: string | Component,
-                                              types: string | string[],
-                                              forArray?: boolean,
-                                              getProps?: ((definition: IField, platform: Platform) => {[key: string]: unknown})) => void;
 }
 
 export type ValidateHandler = (response: IValidateResponse[]) => void;
@@ -143,12 +128,19 @@ export type WrapType = boolean | {
 
 export interface SchemaFormComponent {
   component: string | any;
-  forArray: boolean | null;
-  forInput: boolean;
+  /**
+   * display: 该组件可用于详情模式
+   * input 该组件可用于输入模式
+   * array 该组件支持数组 （代替原来的array=true）
+   * single 该组件不支持数组，仅支持单值输入，默认input仅支持single
+   * render 仅用于渲染，不影响表单值, 例如button类型组件
+   * layout 该组件为布局组件，为布局组件时，以上值均无效
+   *
+   */
+  mode: Array<'display' | 'input' | ArrayMode | 'layout' | 'render'>;
   layoutOptions: LayoutOptions;
   getDefaultValue?: (field: FieldDefinition) => any;
   getProps: (field: FieldDefinition) => {[key: string]: unknown};
-  layout: boolean;
   platform: Platform;
   type: string;
   valueProp: string;
@@ -256,33 +248,67 @@ export interface IField<V = any> {
 }
 
 export interface LayoutOptions {
+  /**
+   * 布局组件忽略标题
+   */
   noTitle?: boolean;
+  /**
+   * 布局组件不适用form-item组件包裹
+   */
   noWrap?: boolean;
 }
 
 export interface SchemaFormComponentOptions {
-  component: string | Component;
-  forArray?: boolean;
-  forDisplay: boolean;
   /**
-   * 是否输入组件，默认true
+   * vue组件名称或vue组件对象
    */
-  forInput?: boolean;
+  component: string | Component;
+  /**
+   * display: 该组件可用于详情模式
+   * input 该组件可用于输入模式
+   * array 该组件支持数组 （代替原来的array=true）
+   * single 该组件不支持数组，仅支持单值输入，默认input仅支持single
+   * render 仅用于渲染，不影响表单值, 例如button类型组件
+   * layout 该组件为布局组件，为布局组件时，以上值均无效
+   *
+   */
+  mode: Array<'display' | 'input' | ArrayMode | 'layout' | 'render'>;
+  /**
+   * 获取组件props
+   * @param {FieldDefinition} definition
+   * @param {Platform} platform
+   * @return {{[p: string]: unknown}}
+   */
   getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
-  layout?: boolean;
+  /**
+   * 支持的平台，desktop表示pc端，mobile表示移动端
+   */
   platforms: Platform | Platform[];
+  /**
+   * 组件的类型
+   */
   types: string | string[];
+  /**
+   * 布局选项
+   */
   layoutOptions?: LayoutOptions;
+  /**
+   * 输入值的属性名称，默认为value
+   */
   valueProp?: string;
+  /**
+   * 是否使用form-item包裹，可以按平台配置
+   */
   wrap?: WrapType;
 }
 
 export type Actions = Action[];
 
+export type ArrayMode = 'array' | 'single' | 'singleOrArray';
 
 export interface DisplayComponentOptions {
   component: string | Component;
-  forArray?: boolean;
+  arrayMode?: ArrayMode;
   getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
   layout?: boolean;
   platforms: Platform | Platform[];

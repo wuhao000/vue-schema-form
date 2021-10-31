@@ -13,6 +13,7 @@ import SchemaForm from './schema-form';
 import './styles';
 import './styles/github-markdown.less';
 import App from './views/index.vue';
+import ShowValue from './views/show-value.vue';
 
 const app = createApp(App);
 app.config.warnHandler = () => {
@@ -26,4 +27,5 @@ app.use(SchemaForm);
 app.component('DemoWrapper', DemoWrapper);
 app.component('CodeContainer', CodeContainer);
 app.component('CodeEditor', CodeEditor);
+app.component('ShowValue', ShowValue);
 app.mount('#app');

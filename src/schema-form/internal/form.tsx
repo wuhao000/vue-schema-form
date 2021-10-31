@@ -25,21 +25,11 @@ export default defineComponent({
     const slots = ctx.slots;
     const attrs = ctx.attrs;
     const {currentValue, store, renderFormField} = useBaseFieldComponent(props, ctx);
-    const isMobile = computed(() => {
-      return store.platform === MOBILE;
-    });
-    const isDesktop = computed(() => {
-      return store.platform === DESKTOP;
-    });
-    const isDisabled = computed(() => {
-      return store.disabled;
-    });
-    const isLoading = computed(() => {
-      return store.loading;
-    });
-    const isFormDisabled = computed(() => {
-      return isDisabled.value || isLoading.value;
-    });
+    const isMobile = computed(() => store.platform === MOBILE);
+    const isDesktop = computed(() => store.platform === DESKTOP);
+    const isDisabled = computed(() => store.disabled);
+    const isLoading = computed(() => store.loading);
+    const isFormDisabled = computed(() => isDisabled.value || isLoading.value);
     watch(() => currentValue.value, (value) => {
       emit('update:value', value);
       emit('change', value);
@@ -64,33 +54,33 @@ export default defineComponent({
       }
     };
 
-    const getGroups = (currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) => {
-      const groups = [];
+    const groups = computed(() => {
+      const array = [];
       const spanGroups = [];
       let lastHasSpan = false;
       getRealFields(props.definition.fields).forEach((field, index) => {
-        const vnode = renderFormField(field, currentValue, index, true);
+        const vnode = renderFormField(field, currentValue.value, index, true);
         if (field.span) {
           if (lastHasSpan) {
             spanGroups[spanGroups.length - 1].push(field.span);
-            groups[groups.length - 1].push(vnode);
+            array[array.length - 1].push(vnode);
           } else {
             spanGroups.push([field.span]);
-            groups.push([vnode]);
+            array.push([vnode]);
           }
           lastHasSpan = true;
         } else {
           lastHasSpan = false;
           spanGroups.push([]);
-          groups.push([vnode]);
+          array.push([vnode]);
         }
       });
-      return groups;
-    };
+      return array;
+    });
+
     const renderSingleFields = () => {
       const FormComponent: any = getFormComponent(store.platform);
       const {definition, layoutProps, layoutType, inline} = props;
-      const groups = getGroups(currentValue.value);
       const formProps: any = getFormProps();
       formProps.onSubmit = e => {
         e.preventDefault();
@@ -101,7 +91,7 @@ export default defineComponent({
         <FormComponent {...formProps}>
           {definition.array ? renderTitle() : null}
           {!definition.array && isDesktop.value ? renderTitle() : null}
-          {inline ? groups.reduce((a, b) => a.concat(b)) : groups.map(group => wrapGroup(group))}
+          {inline ? groups.value.reduce((a, b) => a.concat(b)) : groups.value.map(group => wrapGroup(group))}
         </FormComponent>
       );
       if (layoutType) {

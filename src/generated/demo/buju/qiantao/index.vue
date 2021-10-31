@@ -1,11 +1,11 @@
 <template>
   <div class="markdown-body">
-    <pre><demo-wrapper>
+    <demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
 &lt;template&gt;
-  &lt;a-layout class="demo-wrapper"&gt;
+  &lt;a-layout&gt;
     &lt;a-layout-content&gt;
       &lt;v-schema-form
           v-model:value="value"
@@ -159,7 +159,7 @@ export default defineComponent({
 &lt;/style&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

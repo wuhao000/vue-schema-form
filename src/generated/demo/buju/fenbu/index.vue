@@ -1,10 +1,9 @@
 <template>
   <div class="markdown-body">
-    <pre><demo-wrapper>
+    <demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;div&gt;
     &lt;v-schema-form
         :schema="schema"
@@ -196,7 +195,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

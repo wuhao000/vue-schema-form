@@ -161,7 +161,8 @@ export default defineComponent({
       </FormItemComponent>;
     }
     return this.isMixed ? <LibComponentsRow
+            class={'grid-layout'}
             gutter={this.gutter}>{layoutFields}</LibComponentsRow> :
-        <div>{layoutFields}</div>;
+        <div class={'grid-layout'}>{layoutFields}</div>;
   }
 });

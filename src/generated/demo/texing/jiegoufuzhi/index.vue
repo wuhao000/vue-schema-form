@@ -8,11 +8,11 @@
 <blockquote>
 <p>通常，我们使用日期范围组件的时候组件生产的值是一个数组，但是往往服务端都是以 startDate,endDate 的方式做存储，如果每次前端都花大量精力去转换的话，其实成本还是很高的。所以，我们可以借助字段解构，轻松解决该问题.</p>
 </blockquote>
-<pre><demo-wrapper>
+<demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   &lt;template&gt;
-  &lt;a-layout class="demo-wrapper"&gt;
+  &lt;a-layout&gt;
     &lt;a-layout-content&gt;
       &lt;v-schema-form
           v-model:value="value"
@@ -83,8 +83,7 @@
         components: [{
           component: complex,
           platforms: 'desktop',
-          forArray: false,
-          forDisplay: false,
+          mode: ['render'],
           types: 'complex'
         } as SchemaFormComponentOptions],
         options,
@@ -150,7 +149,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper></pre>
+</demo-wrapper>
 </div>
 </template>
 <script lang="ts" setup>

@@ -63,7 +63,6 @@ export class FieldDefinition<V = any> {
   public value: V;
   public visible: boolean;
   public xType: string | SchemaFormComponentOptions;
-  public forInput?: boolean;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,
