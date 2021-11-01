@@ -1,7 +1,8 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
-import {computed, defineComponent, watch} from 'vue';
-import {isEqual} from '../uform/utils';
+import {computed, defineComponent, inject, PropType, provide, watch} from 'vue';
 import {transformFormProps} from '../config';
+import {isEqual} from '../uform/utils';
+import {SchemaFormObjectStoreKey} from '../utils/key';
 import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
 import {baseFieldComponentProps, useBaseFieldComponent} from './field-based-component';
 import {getComponentType, getRealFields} from './utils';
@@ -13,6 +14,7 @@ export default defineComponent({
     title: [Object, String],
     arrayIndex: Number,
     pathPrefix: Array,
+    index: {type: Boolean as PropType<boolean>, default: false},
     definition: {type: Object, required: true},
     schemaPath: Array,
     inline: {type: Boolean, default: false},
@@ -20,11 +22,9 @@ export default defineComponent({
     layoutProps: Object,
     ...baseFieldComponentProps
   },
-  setup(props, ctx) {
-    const emit = ctx.emit;
-    const slots = ctx.slots;
-    const attrs = ctx.attrs;
-    const {currentValue, store, renderFormField} = useBaseFieldComponent(props, ctx);
+  emits: ['update:value', 'change'],
+  setup(props, {emit, slots, attrs}) {
+    const {currentValue, store, renderFormField} = useBaseFieldComponent(props, {emit});
     const isMobile = computed(() => store.platform === MOBILE);
     const isDesktop = computed(() => store.platform === DESKTOP);
     const isDisabled = computed(() => store.disabled);
@@ -45,7 +45,10 @@ export default defineComponent({
         currentValue.value = {};
       }
     }, {immediate: true, deep: true});
-
+    const objectStore = inject(SchemaFormObjectStoreKey, undefined);
+    provide(SchemaFormObjectStoreKey, {
+      index: props.index ?? objectStore?.index ?? store.props?.index
+    });
     const renderTitle = () => {
       if (slots.title) {
         return slots.title();
@@ -88,11 +91,11 @@ export default defineComponent({
       const path = [].concat(...props.pathPrefix as string[]);
       path.pop();
       const form = (
-        <FormComponent {...formProps}>
-          {definition.array ? renderTitle() : null}
-          {!definition.array && isDesktop.value ? renderTitle() : null}
-          {inline ? groups.value.reduce((a, b) => a.concat(b)) : groups.value.map(group => wrapGroup(group))}
-        </FormComponent>
+          <FormComponent {...formProps}>
+            {definition.array ? renderTitle() : null}
+            {!definition.array && isDesktop.value ? renderTitle() : null}
+            {inline ? groups.value.reduce((a, b) => a.concat(b)) : groups.value.map(group => wrapGroup(group))}
+          </FormComponent>
       );
       if (layoutType) {
         const LayoutComponentDef = getComponentType(store, {
@@ -111,15 +114,15 @@ export default defineComponent({
       const ButtonComponent: any = getButtonComponent(store.platform);
       if (definition.array && store.editable) {
         return <ButtonComponent
-          {...{
-            block: true,
-            icon: <PlusOutlined/>,
-            disabled: isDisabled.value,
-            class: 'm-b',
-            onClick: () => {
-              addSubItem();
-            }
-          }}>新增一条</ButtonComponent>;
+            {...{
+              block: true,
+              icon: <PlusOutlined/>,
+              disabled: isDisabled.value,
+              class: 'm-b',
+              onClick: () => {
+                addSubItem();
+              }
+            }}>新增一条</ButtonComponent>;
       }
     };
     const addSubItem = () => {
@@ -150,7 +153,7 @@ export default defineComponent({
       if (attrs.labelPosition) {
         obj.labelPosition = attrs.labelPosition;
       }
-       return transformFormProps(obj, store.platform);
+      return transformFormProps(obj, store.platform);
     };
     return {
       renderSingleFields,

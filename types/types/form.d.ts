@@ -7,8 +7,6 @@ export interface IValidateResponse {
   errors: string[];
   field: FieldDefinition;
   invalid: boolean;
-  name: string;
-  valid: boolean;
   value: any;
 }
 

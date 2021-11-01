@@ -1,2 +1,3 @@
 export const SchemaFormStoreKey = 'schemaFormStore';
-export const SchemaFormFieldOperationStoreKey = 'SchemaFormFieldOperationStore';
+export const SchemaFormFieldOperationStoreKey = Symbol('SchemaFormFieldOperationStore');
+export const SchemaFormObjectStoreKey = Symbol('SchemaFormObjectStoreKey');

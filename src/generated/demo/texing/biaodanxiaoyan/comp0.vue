@@ -37,28 +37,28 @@
           }, {
             property: 'string2',
             required: true,
-            title: '长度校验',
+            title: '字符串最小长度',
             type: 'string',
             min: 10,
             default: 'abcde'
           }, {
-            property: 'string2',
+            property: 'string3',
             required: true,
-            title: '长度校验',
+            title: '字符串最大长度',
             type: 'string',
             max: 5,
             default: 'abcdeefg'
           }, {
-            property: 'number',
+            property: 'number1',
             required: true,
-            title: '最小值校验',
+            title: '最小数值',
             type: 'number',
             min: 10,
             default: 3
           }, {
-            property: 'number',
+            property: 'number2',
             required: true,
-            title: '最大值校验',
+            title: '最大数值',
             type: 'number',
             max: 5,
             default: 10

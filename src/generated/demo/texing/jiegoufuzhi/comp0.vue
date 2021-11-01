@@ -70,7 +70,7 @@
         components: [{
           component: complex,
           platforms: 'desktop',
-          mode: ['render'],
+          mode: 'render',
           types: 'complex'
         } as SchemaFormComponentOptions],
         options,

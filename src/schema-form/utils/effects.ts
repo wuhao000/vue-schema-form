@@ -243,7 +243,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
     onOk(forceValidate, callback);
   };
   context.validate = async (handler) => {
-    const errors = await runValidation(currentValue.value, store.fields as any, true);
+    const errors = await runValidation(store.fields);
     if (handler) {
       handler(errors, context);
     } else {

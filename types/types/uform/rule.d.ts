@@ -1,5 +1,7 @@
 export interface IRuleDescription {
   required?: boolean;
+  type?: 'boolean' | 'date' | 'enum' | 'float' | 'function' | 'array'
+      | 'integer' | 'null' | 'number' | 'object' | 'regexp' | 'string'
   message?: string;
   pattern?: RegExp | string;
   validator?: Validator;
@@ -32,7 +34,6 @@ export type DefaultPatternRule =
   | 'zip';
 
 export type Rule =
-  | Validator
-  | Array<Validator | IRuleDescription | DefaultPatternRule>
+  | Array<IRuleDescription | DefaultPatternRule>
   | DefaultPatternRule
   | IRuleDescription;

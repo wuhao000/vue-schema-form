@@ -5,19 +5,12 @@ import {
   FieldDefinition,
   Platform,
   SchemaFormComponent,
-  SchemaFormComponentOptions
+  SchemaFormComponentOptions,
+  StorePlatformComponents
 } from '../../../types';
 import {registerComponent} from '../config';
 import {DESKTOP, fixComponentDefinition, MOBILE, Mode} from './utils';
 
-interface StorePlatformComponents {
-  desktop: {
-    [key: string]: SchemaFormComponent[]
-  };
-  mobile: {
-    [key: string]: SchemaFormComponent[]
-  };
-}
 
 export class ComponentStore {
 

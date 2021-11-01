@@ -9,11 +9,10 @@ import {
   PropType,
   provide,
   reactive,
-  readonly,
   ref,
   watch
 } from 'vue';
-import {Action, IValidateResponse, Platform, SchemaFormComponentOptions, SchemaFormStore} from '../../types';
+import {Action, Effects, IValidateResponse, Platform, SchemaFormComponentOptions, SchemaFormStore} from '../../types';
 import {registerComponent} from './config';
 import {renderField, SchemaFormEvents} from './internal/utils';
 import {isEqual} from './uform/utils';
@@ -33,9 +32,9 @@ const SchemaForm = defineComponent({
     readonly: {type: Boolean as PropType<boolean>, default: false},
     loading: {type: Boolean as PropType<boolean>, default: false},
     actions: {type: Array as PropType<Action[]>},
-    platform: {type: String as PropType<string>, default: 'desktop'},
+    platform: {type: String as PropType<Platform>, default: 'desktop'},
     editable: {type: Boolean as PropType<boolean>, default: true},
-    effects: {type: Function},
+    effects: {type: Function as PropType<Effects>},
     schema: {type: Object, required: true},
     props: {type: Object},
     value: [Object, Array],
@@ -54,21 +53,21 @@ const SchemaForm = defineComponent({
     const instance = getCurrentInstance();
     const currentValue = ref(props.value || {});
     const componentStore = new ComponentStore();
-    (props.components as SchemaFormComponentOptions[]).forEach((comp: any) => {
+    props.components.forEach((comp: SchemaFormComponentOptions) => {
       registerComponent(comp, componentStore);
     });
     const store: SchemaFormStore = reactive({
       fields: {},
-      disabled: props.disabled as boolean,
-      loading: props.loading as boolean,
-      readonly: props.readonly as boolean,
-      platform: props.platform as Platform,
+      disabled: props.disabled,
+      loading: props.loading,
+      readonly: props.readonly,
+      platform: props.platform,
       props: props.props || props.schema.props || {},
-      effects: props.effects as any,
-      inline: props.inline as boolean,
-      editable: props.editable as boolean,
+      effects: props.effects,
+      inline: props.inline,
+      editable: props.editable,
       context: null,
-      root: instance as any,
+      root: instance,
       components: componentStore
     });
     watch(() => props, () => {
@@ -76,9 +75,9 @@ const SchemaForm = defineComponent({
         disabled: props.disabled,
         loading: props.loading,
         readonly: props.readonly,
-        platform: props.platform as Platform,
+        platform: props.platform,
         props: props.props,
-        effects: props.effects as any,
+        effects: props.effects,
         inline: props.inline,
         editable: props.editable
       });
@@ -105,9 +104,10 @@ const SchemaForm = defineComponent({
       store.editable = val.editable;
     }, {deep: true});
 
-    const hasSubmitHandler = computed(() => {
-      return props.onOk !== undefined || props.onSubmit || props.onSubmit !== undefined;
-    });
+    const hasSubmitHandler = computed(() =>
+        props.onOk !== undefined
+        || props.onSubmit
+        || props.onSubmit !== undefined);
 
     const localOnOk = async (forceValidate: boolean, callback?: (value) => any) => {
       if (hasSubmitHandler.value) {
@@ -150,15 +150,15 @@ const SchemaForm = defineComponent({
         }
       }
     };
-    const createSubmitButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
+    const createSubmitButton = (text = '', customBtnProps: { [key: string]: unknown } = undefined, action: () => any = undefined) => {
       const hasOkHandler = hasSubmitHandler.value || action !== undefined;
       if (!hasOkHandler) {
         return null;
       }
       const btnProps: {
-        okProps?: any;
-        cancelProps?: any;
-        okText?: any;
+        okProps?: { [key: string]: unknown };
+        cancelProps?: { [key: string]: unknown };
+        okText?: { [key: string]: unknown };
       } = props.props;
       const buttonProps = customBtnProps || (btnProps && btnProps.okProps) || {};
       if (!buttonProps.type) {
@@ -167,10 +167,10 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled;
       buttonProps.loading = props.loading;
       return createButton(
-        text || btnProps && btnProps.okText || '提交',
-        action || (() => {
-          localOnOk(true);
-        }), buttonProps, 'confirm-btn'
+          text || btnProps && btnProps.okText || '提交',
+          action || (() => {
+            localOnOk(true);
+          }), buttonProps, 'confirm-btn'
       );
     };
     const createButton = (text, action, btnAttrs, classes) => {
@@ -191,9 +191,8 @@ const SchemaForm = defineComponent({
       }
       return Button;
     };
-    const validate = (): Promise<IValidateResponse[]> | [] => {
-      return runValidation(currentValue.value, store.fields, true);
-    };
+    const validate = (): Promise<IValidateResponse[]> | [] =>
+        runValidation(store.fields);
     const createCancelButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
       const hasCancelHandler = props.onCancel !== undefined || action !== undefined;
       if (!hasCancelHandler) {
@@ -206,9 +205,9 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-        text || btnProps?.cancelText || '取消',
-        action || localOnCancel, buttonProps,
-        'cancel-btn'
+          text || btnProps?.cancelText || '取消',
+          action || localOnCancel, buttonProps,
+          'cancel-btn'
       );
     };
     const createResetButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
@@ -223,8 +222,8 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-        text || btnProps && btnProps.cancelText || '重置',
-        action || localOnReset, buttonProps, 'reset-btn'
+          text || btnProps && btnProps.cancelText || '重置',
+          action || localOnReset, buttonProps, 'reset-btn'
       );
     };
     const localOnReset = () => {
@@ -296,7 +295,7 @@ const SchemaForm = defineComponent({
 
     onMounted(() => {
       if (props.effects) {
-        (props.effects as any)(store.context);
+        props.effects(store.context);
       }
     });
 
@@ -326,13 +325,13 @@ const SchemaForm = defineComponent({
     let content: any = [
       this.$slots.header?.(),
       renderField(
-        null,
-        store,
-        rootFieldDef,
-        currentValue,
-        0,
-        false,
-        this.$emit
+          null,
+          store,
+          rootFieldDef,
+          currentValue,
+          0,
+          false,
+          this.$emit
       )
     ];
     let footer: any = [

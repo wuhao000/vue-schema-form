@@ -14,10 +14,6 @@ export function isSame(first: any[], second: any[], ignoreOrder = true): boolean
 }
 
 export const flat = (array) => {
-  const result = [];
-  array.forEach(item => {
-    result.push(...item);
-  });
-  return result;
+  return array.flat(Infinity);
 };
 

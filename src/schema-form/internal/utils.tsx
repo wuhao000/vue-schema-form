@@ -3,6 +3,7 @@ import get from 'lodash.get';
 import uuid from 'uuid';
 import {isVNode, reactive, VNode} from 'vue';
 import {
+  DefaultPatternRule,
   FormFields,
   IFieldOptions,
   IFieldState,
@@ -15,10 +16,12 @@ import {
   SchemaFormField,
   SchemaFormStore,
   ShowFieldCondition,
+  Validator,
   ValueProcessor
 } from '../../../types';
 import Empty from '../empty';
-import {parseDestructPath, toArr} from '../uform/utils';
+import {isArr, parseDestructPath} from '../uform/utils';
+import regexp, {errorMessages} from '../uform/validator/regexp';
 import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';
@@ -44,8 +47,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-        .map(condition => matchCondition(currentValue, condition))
-        .some(it => !it);
+          .map(condition => matchCondition(currentValue, condition))
+          .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -55,17 +58,17 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-      .filter(key => fields[key])
-      .map(key => {
-        const field = fields[key];
-        if (!field.id) {
-          field.id = uuid.v4();
-        }
-        if (!field.property) {
-          field.property = key;
-        }
-        return field;
-      });
+        .filter(key => fields[key])
+        .map(key => {
+          const field = fields[key];
+          if (!field.id) {
+            field.id = uuid.v4();
+          }
+          if (!field.property) {
+            field.property = key;
+          }
+          return field;
+        });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -91,7 +94,7 @@ export function getComponentType(store: SchemaFormStore,
   const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
-    || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
+      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {
@@ -252,7 +255,7 @@ export class FieldDefinition<V = any> {
   public pathEqual?: (path: Path | IFormPathMatcher) => boolean = null;
   public plainPath?: string = null;
   public pristine?: boolean = null;
-  public props?: any = null;
+  public props?: { [key: string]: any } = null;
   public publishState?: () => IFieldState = null;
   public required = false;
   public min?: number;
@@ -415,8 +418,26 @@ export function createField(currentValue: any,
   }
 }
 
+const resolveRule = (rule: IRuleDescription | DefaultPatternRule): IRuleDescription => {
+  if (typeof rule === 'string') {
+    return {
+      pattern: regexp[rule],
+      message: errorMessages[rule]
+    };
+  } else {
+    return rule;
+  }
+};
+
 const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
-  const rules: IRuleDescription[] = toArr(field.rules);
+  const rules: IRuleDescription[] = [];
+  if (isArr(field.rules)) {
+    field.rules.forEach(rule => {
+      rules.push(resolveRule(rule));
+    });
+  } else {
+    resolveRule(field.rules);
+  }
   if (required && !rules.some(rule => rule.required)) {
     rules.push({required: true, message: `${field.title ?? '该字段'}为必填项`});
   }
@@ -424,10 +445,18 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     rules.push({format: field.format, message: `${field.title ?? '字段'}格式不正确`});
   }
   if (isNotNull(field.min)) {
-    rules.push({min: field.min});
+    if (['integer', 'double', 'number'].includes(field.type as string)) {
+      rules.push({type: 'number', min: field.min, message: `${field.title}不能小于${field.min}`});
+    } else if (['string', 'html', 'code', 'text'].includes(field.type as string)) {
+      rules.push({type: 'string', min: field.min, message: `${field.title}长度不能小于${field.min}`});
+    }
   }
   if (isNotNull(field.max)) {
-    rules.push({max: field.max});
+    if (['integer', 'double', 'number'].includes(field.type as string)) {
+      rules.push({type: 'number', max: field.max, message: `${field.title}不能大于${field.max}`});
+    } else if (['string', 'text'].includes(field.type as string)) {
+      rules.push({type: 'string', max: field.max, message: `${field.title}长度不能大于${field.max}`});
+    }
   }
   return clone(rules);
 
