@@ -21,22 +21,17 @@ interface StorePlatformComponents {
 
 export class ComponentStore {
 
-  public display: StorePlatformComponents = {
-    desktop: {},
-    mobile: {}
-  };
-  public edit: StorePlatformComponents = {
+  public store: StorePlatformComponents = {
     desktop: {},
     mobile: {}
   };
 
   public addComponent(options: SchemaFormComponentOptions) {
-    const mode = options.mode.includes('display') ? this.display : this.edit;
-    const typeDef = mode[options.platforms as Platform];
+    const typeDef = this.store[options.platforms as Platform];
     if (!typeDef[options.types as string]) {
       typeDef[options.types as string] = [];
     }
-    const def: SchemaFormComponent = fixComponentDefinition(options, options.mode.includes('display'));
+    const def: SchemaFormComponent = fixComponentDefinition(options, options.mode === 'display');
     typeDef[options.types as string].push(def);
   }
 
@@ -44,18 +39,27 @@ export class ComponentStore {
                 platform: Platform,
                 type: string,
                 array?: boolean) {
-    const typeDef = (mode === Mode.Display ? this.display : this.edit)[platform][type] as SchemaFormComponent[];
+    const typeDef = this.store[platform][type] as SchemaFormComponent[];
     if (!typeDef || typeDef.length === 0) {
       return;
     }
+    let filteredComponents = [];
+    if (mode === 'edit') {
+      filteredComponents = typeDef.filter(it => it.mode === 'input' || it.mode === 'both');
+    } else if (mode === 'display') {
+      filteredComponents = typeDef.filter(it => it.mode === 'display' || it.mode === 'both');
+    }
     let component = null;
     if (array) {
-      component = typeDef.find(it => it.mode.includes('array') || it.mode.includes('singleOrArray'));
+      component = filteredComponents.find(it => ['array', 'both'].includes(it.arrayMode));
     } else if (array === false) {
-      component = typeDef.find(it => it.mode.includes('single') || it.mode.includes('singleOrArray'));
+      component = filteredComponents.find(it => ['single', 'both'].includes(it.arrayMode));
     }
     if (!component) {
-      component = typeDef[0];
+      if (filteredComponents.length === 0) {
+        return typeDef.find(it => ['layout', 'render'].includes(it.mode));
+      }
+      return filteredComponents[0];
     }
     return component;
   }
@@ -74,7 +78,8 @@ export const registerDisplay = ({
     component,
     platforms,
     types,
-    mode: [arrayMode ?? 'singleOrArray', 'display'],
+    mode: 'display',
+    arrayMode: arrayMode || 'single',
     getProps
   });
 };
@@ -90,38 +95,38 @@ export const registerDisplay = ({
 export const register = (component: string | Component,
                          platforms: Platform | Platform[],
                          types: string | string[],
-                         arrayMode: ArrayMode = 'singleOrArray',
+                         arrayMode: ArrayMode = 'both',
                          getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = () => ({})) => {
   registerComponent({
     component,
     platforms,
     types,
-    mode: [arrayMode, 'input'],
+    arrayMode: arrayMode,
     getProps
   });
 };
 
 export const registerDesktop = (
-    component: string | Component,
-    types: string | string[],
-    arrayMode: ArrayMode = 'singleOrArray',
-    getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
+  component: string | Component,
+  types: string | string[],
+  arrayMode: ArrayMode = 'both',
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, DESKTOP, types, arrayMode, getProps);
 };
 
 export const registerMobile = (
-    component: string | Component,
-    types: string | string[],
-    arrayMode: ArrayMode = 'singleOrArray',
-    getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
+  component: string | Component,
+  types: string | string[],
+  arrayMode: ArrayMode = 'both',
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, MOBILE, types, arrayMode, getProps);
 };
 
-const ALL_PLATFORMS = [MOBILE, DESKTOP];
+const ALL_PLATFORMS: Platform[] = [MOBILE, DESKTOP];
 export const registerResponsiveComponent = (
-    component: string | Component,
-    types: string | string[],
-    arrayMode: ArrayMode = ['singleOrArray'],
-    getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
+  component: string | Component,
+  types: string | string[],
+  arrayMode: ArrayMode = 'both',
+  getProps: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown }) = null) => {
   register(component, ALL_PLATFORMS, types, arrayMode, getProps);
 };

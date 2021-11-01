@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-body">
     <h1 id="表单详情">表单详情</h1>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -25,7 +25,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

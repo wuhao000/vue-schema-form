@@ -88,8 +88,9 @@ function scan(dir: string) {
 }
 
 export function createDemoRoutes() {
-  fs.readdirSync(`${process.env.PWD}/${docsRoot}`).forEach(name => {
-    const routes: Array<RouteInfo> = scan(`${process.env.PWD}/${docsRoot}/${name}`);
+  const projectRoot = process.env.PWD || process.env.INIT_CWD
+  fs.readdirSync(`${projectRoot}/${docsRoot}`).forEach(name => {
+    const routes: Array<RouteInfo> = scan(`${projectRoot}/${docsRoot}/${name}`);
     writeRouteFile(routes, name);
   });
 }

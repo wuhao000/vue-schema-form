@@ -83,14 +83,12 @@ export function registerElement() {
   registerComponent({
     component: ElInput,
     types: [FieldTypes.String],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElSwitch,
     types: FieldTypes.Boolean,
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -98,13 +96,13 @@ export function registerElement() {
     component: ElButton,
     types: FieldTypes.Button,
     platforms: 'desktop',
-    mode: ['render'],
+    mode: 'render',
     wrap: false
   });
   registerComponent({
     component: Select,
     types: FieldTypes.Select,
-    mode: ['input', 'singleOrArray'],
+    arrayMode: 'both',
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -117,7 +115,7 @@ export function registerElement() {
   registerComponent({
     component: CheckboxGroup,
     types: FieldTypes.ExpandSelect,
-    mode: ['array', 'input'],
+    arrayMode: 'array',
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -127,7 +125,6 @@ export function registerElement() {
   registerComponent({
     component: RadioGroup,
     types: FieldTypes.ExpandSelect,
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
@@ -137,7 +134,6 @@ export function registerElement() {
   registerComponent({
     component: ElInputNumber,
     types: [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -146,7 +142,6 @@ export function registerElement() {
     types: [FieldTypes.Date,
       FieldTypes.DateRange,
       FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: definition => ({type: (definition.type as string).toLowerCase()})
@@ -154,14 +149,12 @@ export function registerElement() {
   registerComponent({
     component: ElRate,
     types: [FieldTypes.Rate],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElSlider,
     types: [FieldTypes.Range],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -173,14 +166,12 @@ export function registerElement() {
   registerComponent({
     component: ElTransfer,
     types: [FieldTypes.Transfer],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
   registerComponent({
     component: ElUpload,
     types: [FieldTypes.Picture],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {
@@ -192,7 +183,6 @@ export function registerElement() {
   registerComponent({
     component: ElUpload,
     types: [FieldTypes.File],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {
@@ -204,7 +194,6 @@ export function registerElement() {
   registerComponent({
     component: ElInput,
     types: [FieldTypes.Text],
-    mode: ['single', 'input'],
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: () => {

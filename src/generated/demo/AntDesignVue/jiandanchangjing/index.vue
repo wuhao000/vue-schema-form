@@ -4,7 +4,7 @@
 <blockquote>
 <p>最简单的表单使用场景，只需要定义描述表单结构的schema即可</p>
 </blockquote>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -22,7 +22,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

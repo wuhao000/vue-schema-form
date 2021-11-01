@@ -165,7 +165,7 @@ export function registerAntd() {
   registerDesktop(createComponentProxy(Input.Password), [FieldTypes.Password], 'single');
   registerComponent({
     component: AntdUpload,
-    mode: ['singleOrArray', 'input'],
+    arrayMode: 'both',
     types: FieldTypes.Picture,
     platforms: 'desktop',
     getProps: definition => {
@@ -177,19 +177,17 @@ export function registerAntd() {
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerComponent({
     component: AutoComplete,
-    mode: ['input', 'single'],
     platforms: 'desktop',
     types: [FieldTypes.AutoComplete]
   });
   registerComponent({
     component: TimePicker.RangePicker,
-    mode: ['input', 'single'],
     platforms: 'desktop',
     types: [FieldTypes.TimeRange]
   });
   registerComponent({
     component: AntdUpload,
-    mode: ['input', 'singleOrArray'],
+    arrayMode: 'both',
     types: FieldTypes.File,
     platforms: 'desktop',
     getProps: definition => {
@@ -208,14 +206,12 @@ export function registerAntd() {
   registerComponent({
     component: createComponentProxy(Checkbox),
     types: FieldTypes.Checkbox,
-    mode: ['input', 'single'],
     platforms: 'desktop',
     valueProp: 'checked'
   });
   registerComponent({
     component: createComponentProxy(Switch),
     types: FieldTypes.Boolean,
-    mode: ['input', 'single'],
     platforms: 'desktop',
     valueProp: 'checked'
   });
@@ -224,7 +220,7 @@ export function registerAntd() {
       platform
     };
   });
-  registerDesktop(createComponentProxy(Select), FieldTypes.Select, 'singleOrArray', field => {
+  registerDesktop(createComponentProxy(Select), FieldTypes.Select, 'both', field => {
     return {
       dropdownMatchSelectWidth: false,
       mode: field.array ? 'multiple' : field.props?.mode,
@@ -235,7 +231,7 @@ export function registerAntd() {
     component: createComponentProxy(Button),
     types: FieldTypes.Button,
     platforms: 'desktop',
-    mode: ['render'],
+    mode: 'render',
     getProps: field => {
       return {title: field.title};
     },

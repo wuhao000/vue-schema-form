@@ -1,4 +1,3 @@
-
 <template>
   <v-schema-form
       v-model:value="value"

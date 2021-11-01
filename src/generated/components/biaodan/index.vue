@@ -24,7 +24,7 @@
 <td>无</td>
 </tr>
 </tbody></table>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   &lt;template&gt;
@@ -113,7 +113,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

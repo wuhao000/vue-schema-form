@@ -1,19 +1,22 @@
-```vue
-
 <template>
-  <a-layout>
-    <a-layout-content class="demo-wrapper">
-      <v-schema-form
+  <div class="markdown-body">
+    <pre><demo-wrapper>
+<comp0></comp0>
+<template #code><code-container>
+  
+&lt;template&gt;
+  &lt;a-layout&gt;
+    &lt;a-layout-content class="demo-wrapper"&gt;
+      &lt;v-schema-form
           v-model:value="value"
           platform="mobile"
-          :props="props"
           :schema="schema"
           class="demo-form"
-          @ok="onOk"></v-schema-form>
-    </a-layout-content>
-  </a-layout>
-</template>
-<script lang="ts">
+          @ok="onOk"/&gt;
+    &lt;/a-layout-content&gt;
+  &lt;/a-layout&gt;
+&lt;/template&gt;
+&lt;script lang="ts"&gt;
   import {defineComponent, ref} from 'vue';
   import {registerAntdMobile, SchemaFormEvents} from '../../../schema-form';
 
@@ -60,19 +63,13 @@
                     gutter: 10
                   },
                   fields: {
-                    grid: {
-                      type: 'grid',
-                      layout: [[8, 8]],
+                    cc: {
+                      type: 'string',
                       title: '字段3',
-                      props: {gutter: 10},
-                      fields: {
-                        cc: {
-                          type: 'string'
-                        },
-                        dd: {
-                          type: 'string'
-                        }
-                      }
+                    },
+                    dd: {
+                      type: 'string',
+                      title: '字段4',
                     }
                   }
                 }
@@ -88,5 +85,12 @@
       };
     }
   });
+&lt;/script&gt;
+
+</code-container></template>
+</demo-wrapper></pre>
+</div>
+</template>
+<script lang="ts" setup>
+  import  comp0 from './comp0.vue';
 </script>
-```

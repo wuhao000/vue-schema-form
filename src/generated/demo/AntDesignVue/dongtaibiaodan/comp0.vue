@@ -1,12 +1,11 @@
-
 <template>
   <a-layout>
     <a-layout-content>
-      <a-button @click="loadData">加载</a-button>
       <v-schema-form
           v-model:value="model"
           :effects="effects"
-          :schema="formDefinition"/>
+          :schema="schema"/>
+      <show-value :value="model"/>
     </a-layout-content>
   </a-layout>
 </template>
@@ -21,29 +20,10 @@
     setup() {
       const getDefaultBean = () => {
         return {
-          id: '',
           name: '',
-          extras: {
-            requirements: ''
-          }
         };
       };
       const model = ref<any>(getDefaultBean());
-      const loadData = () => {
-        model.value = {
-          id: 'd3cfdf4426eb4fb59bc1db906365e0f2',
-          name: '前端开发工程师',
-          type: 'post',
-          code: '002',
-          order: 0,
-          color: '',
-          extras: {
-            usersToInterview: [],
-            userToChooseResume: [],
-            requirements: 'aaaaaaaaaaaa'
-          }
-        };
-      };
       const quickAddMode = ref(false);
       const effects = ($: EffectsContext) => {
         if (!quickAddMode.value) {
@@ -56,36 +36,54 @@
           }
         });
       };
+      const schema = {
+        props: {
+          labelWidth: '150px',
+          labelCol: {span: 4},
+          wrapperCol: {span: 12},
+          rules: {
+            name: [{required: true, message: '请输入名称'}],
+            code: [{required: true, message: '请输入编码'}]
+          }
+        },
+        fields: [{
+          type: 'string',
+          property: 'name',
+          title: '名称'
+        }, {
+          type: 'integer',
+          property: 'age',
+          title: '年龄'
+        }, {
+          type: 'button',
+          title: '',
+          events: {
+            onClick: () => {
+              loadData();
+            }
+          },
+          props: {
+            title: '加载数据并添加一个字段'
+          }
+        }]
+      };
+      const loadData = () => {
+        model.value = {
+          name: '前端开发工程师',
+          age: 22
+        };
+        schema.fields.push({
+          type: 'date',
+          property: 'birthday',
+          title: '生日'
+        })
+      };
       return {
         quickAddMode,
         effects,
         model,
         loadData,
-        formDefinition: {
-          props: {
-            labelWidth: '150px',
-            labelCol: {span: 4},
-            wrapperCol: {span: 12},
-            rules: {
-              name: [{required: true, message: '请输入名称'}],
-              code: [{required: true, message: '请输入编码'}]
-            }
-          },
-          fields: [{
-            type: 'string',
-            property: 'name',
-            title: '名称'
-          }, {
-            type: 'button',
-            title: 'abc',
-            props: {
-              action: () => {
-                console.log(1);
-                model.value.name = 'abc';
-              }
-            }
-          }]
-        }
+        schema
       };
     }
   });

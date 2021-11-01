@@ -9,6 +9,7 @@ import {
   PropType,
   provide,
   reactive,
+  readonly,
   ref,
   watch
 } from 'vue';
@@ -166,10 +167,10 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled;
       buttonProps.loading = props.loading;
       return createButton(
-          text || btnProps && btnProps.okText || '提交',
-          action || (() => {
-            localOnOk(true);
-          }), buttonProps, 'confirm-btn'
+        text || btnProps && btnProps.okText || '提交',
+        action || (() => {
+          localOnOk(true);
+        }), buttonProps, 'confirm-btn'
       );
     };
     const createButton = (text, action, btnAttrs, classes) => {
@@ -205,9 +206,9 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-          text || btnProps?.cancelText || '取消',
-          action || localOnCancel, buttonProps,
-          'cancel-btn'
+        text || btnProps?.cancelText || '取消',
+        action || localOnCancel, buttonProps,
+        'cancel-btn'
       );
     };
     const createResetButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
@@ -222,8 +223,8 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-          text || btnProps && btnProps.cancelText || '重置',
-          action || localOnReset, buttonProps, 'reset-btn'
+        text || btnProps && btnProps.cancelText || '重置',
+        action || localOnReset, buttonProps, 'reset-btn'
       );
     };
     const localOnReset = () => {
@@ -320,13 +321,18 @@ const SchemaForm = defineComponent({
     const {title, sticky, prefixCls, store, currentValue, schema} = this;
     const rootFieldDef: any = Object.assign({}, schema, {
       type: 'object',
-      title,
-      props: this.schema.props
+      title
     });
     let content: any = [
       this.$slots.header?.(),
-      renderField(null, store,
-          rootFieldDef, currentValue, 0, false, this.$emit
+      renderField(
+        null,
+        store,
+        rootFieldDef,
+        currentValue,
+        0,
+        false,
+        this.$emit
       )
     ];
     let footer: any = [

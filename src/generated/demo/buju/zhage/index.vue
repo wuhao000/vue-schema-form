@@ -1,10 +1,9 @@
 <template>
   <div class="markdown-body">
-    <demo-wrapper>
+    <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;div&gt;
     &lt;v-schema-form :schema="schema"/&gt;
   &lt;/div&gt;
@@ -19,7 +18,7 @@
       return {
         schema: {
           props: {
-            labelWidth: 120,
+            labelWidth: 100,
             labelPosition: 'left'
           },
           fields: {
@@ -28,11 +27,10 @@
               type: 'string'
             },
             $grid: {
-              title: '高级选项',
               type: 'grid',
               layout: [12, 12],
               props: {
-                title: '高级选项'
+                gutter: 20
               },
               fields: {
                 other: {
@@ -53,7 +51,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

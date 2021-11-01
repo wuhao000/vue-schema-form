@@ -9,7 +9,6 @@
 </template>
 <script lang="ts">
   import {registerAntd} from '../../../schema-form';
-  import {EffectsContext} from '../../../../types';
 
   registerAntd();
   export default {

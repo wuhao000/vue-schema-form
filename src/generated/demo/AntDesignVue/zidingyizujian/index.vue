@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-body">
     <h1 id="自定义组件">自定义组件</h1>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -26,64 +26,20 @@
   const schema: SchemaFormField = {
     fields: [{
       property: 'a',
-      title: '字符串1',
+      title: '我是自定义组件',
       type: (props) =&gt; {
         return &lt;a-input {...props}/&gt;;
       }
     }, {
       property: 'b',
-      title: '',
+      title: '我也是自定义组件',
       type: &lt;div&gt;111111111&lt;/div&gt;
-    }, {
-      property: 'c',
-      title: '字符串3',
-      type: 'select',
-      enum: [
-        {label: 'a', value: 1},
-        {label: 'b', value: 2},
-        {label: 'c', value: 3},
-      ]
-    }, {
-      property: 'd',
-      title: '选择2',
-      type: 'select',
-      enum: () =&gt; {
-        return [
-          {label: 'a', value: 1},
-          {label: 'b', value: 2},
-          {label: 'c', value: 3},
-        ]
-      }
-    }, {
-      property: 'e',
-      title: '选择3',
-      type: 'select',
-      enum: () =&gt; {
-        return new Promise(resolve =&gt; {
-          resolve([
-            {label: 'a', value: 1},
-            {label: 'b', value: 2},
-            {label: 'c', value: 3},
-          ]);
-        })
-      }
-    }, {
-      property: 'f',
-      title: '选择4',
-      type: 'select',
-      enum: new Promise(resolve =&gt; {
-        resolve([
-          {label: 'a', value: 1},
-          {label: 'b', value: 2},
-          {label: 'c', value: 3},
-        ]);
-      })
     }]
   }
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

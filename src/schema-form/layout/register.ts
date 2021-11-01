@@ -1,3 +1,4 @@
+import {Component} from 'vue';
 import {FieldDefinition, LayoutOptions, Platform} from '../../../types';
 import {registerComponent} from '../config';
 import {DESKTOP, MOBILE} from '../utils/utils';
@@ -13,16 +14,17 @@ import TextBox from './text-box';
  * @param options
  */
 export const registerLayout = (options: {
-  component: string | any,
+  component: string | Component,
   platforms: Platform | Platform[],
   types: string | string[],
   layoutOptions?: LayoutOptions,
   getProps?: ((definition: FieldDefinition, platform: Platform) => any)
 }) => {
   registerComponent({
-    component: options.component, platforms: options.platforms,
+    component: options.component,
+    platforms: options.platforms,
+    mode: 'layout',
     types: options.types,
-    mode: ['layout'],
     layoutOptions: options.layoutOptions,
     getProps: options.getProps
   });

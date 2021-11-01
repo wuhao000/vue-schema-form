@@ -1,6 +1,7 @@
+import {registerComponent} from '../config';
 import InternalForm from '../internal/form';
-import {register, registerDisplay} from '../utils/register';
-import {DESKTOP, resolveOptions, MOBILE, FieldTypes} from '../utils/utils';
+import {registerDisplay} from '../utils/register';
+import {DESKTOP, FieldTypes, MOBILE, resolveOptions} from '../utils/utils';
 import MobileDisplayField from './mobile-display-field';
 import PlainDisplayField from './plain-display-field';
 import RangeDisplayField from './range-display-field';
@@ -27,35 +28,39 @@ registerDisplay({
 registerDisplay({
   component: PlainDisplayField,
   platforms: DESKTOP,
-  mode: 'single',
-  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number],
+  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number]
 });
 registerDisplay({
   component: MobileDisplayField,
   platforms: MOBILE,
-  mode: 'single',
-  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number],
+  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number]
 });
 registerDisplay({
   component: SelectDisplayField,
   platforms: [DESKTOP, MOBILE],
   types: [FieldTypes.Select, FieldTypes.ExpandSelect],
-  arrayMode: 'singleOrArray',
+  arrayMode: 'both',
   getProps: field => {
     return {options: resolveOptions(field), field};
   }
 });
-register(InternalForm, [DESKTOP, MOBILE], FieldTypes.Object, 'single', (definition, platform) => {
-  return {
-    platform,
-    definition: {fields: definition.fields}
-  };
+registerComponent({
+  component: InternalForm,
+  platforms: [DESKTOP, MOBILE],
+  types: FieldTypes.Object,
+  arrayMode: 'single',
+  getProps: (definition, platform) => {
+    return {
+      platform,
+      definition: {fields: definition.fields}
+    };
+  }
 });
 registerDisplay({
   component: InternalForm,
   platforms: [DESKTOP, MOBILE],
   types: FieldTypes.Object,
-  mode: 'single',
+  arrayMode: 'single',
   getProps: (definition, platform) => {
     return {
       platform,

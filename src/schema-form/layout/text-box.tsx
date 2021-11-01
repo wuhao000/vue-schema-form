@@ -12,7 +12,7 @@ export default defineComponent({
       const layout = props.layout as any;
       let array = [];
       const fields = props.fields as any;
-      const copyFields = [].concat(fields);
+      const copyFields = [...fields];
       if (layout) {
         const split = layout.split('%s');
         split.forEach((item) => {

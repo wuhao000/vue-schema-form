@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+      class="code-editor"
+      :class="'code-editor-' + mode">
     <textarea
         ref="elRef"
         :style="textAreaStyle"
@@ -9,15 +11,17 @@
 <script lang="ts">
   import CodeMirror, {EditorConfiguration} from 'codemirror';
   import 'codemirror/addon/hint/show-hint';
+  import 'codemirror/lib/codemirror.css';
   import 'codemirror/mode/javascript/javascript';
+  import 'codemirror/mode/htmlmixed/htmlmixed';
+  import 'codemirror/theme/blackboard.css';
   import {defineComponent, nextTick, onMounted, PropType, ref, shallowRef} from 'vue';
   import beautify from '../utils/beautify';
-  import 'codemirror/lib/codemirror.css';
-  import 'codemirror/theme/blackboard.css';
 
   const types = {
     html: 'text/html',
     javascript: 'text/javascript',
+    typescript: 'text/typescript',
     json: 'application/ld+json',
     kotlin: 'text/x-kotlin',
     nginx: 'text/x-nginx-conf',
@@ -90,7 +94,7 @@
           }
         }
         return '';
-      }
+      };
       const create = () => {
         let config = {
           size: [props.width || 'auto', props.height || 'auto']

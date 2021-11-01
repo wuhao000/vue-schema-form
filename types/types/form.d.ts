@@ -129,21 +129,15 @@ export type WrapType = boolean | {
 export interface SchemaFormComponent {
   component: string | any;
   /**
-   * display: 该组件可用于详情模式
-   * input 该组件可用于输入模式
-   * array 该组件支持数组 （代替原来的array=true）
-   * single 该组件不支持数组，仅支持单值输入，默认input仅支持single
-   * render 仅用于渲染，不影响表单值, 例如button类型组件
-   * layout 该组件为布局组件，为布局组件时，以上值均无效
-   *
+   * 默认值 input
    */
-  mode: Array<'display' | 'input' | ArrayMode | 'layout' | 'render'>;
-  layoutOptions: LayoutOptions;
+  mode: ComponentMode;
+  arrayMode: ArrayMode;
+  layoutOptions?: LayoutOptions;
   getDefaultValue?: (field: FieldDefinition) => any;
   getProps: (field: FieldDefinition) => {[key: string]: unknown};
   platform: Platform;
-  type: string;
-  valueProp: string;
+  valueProp?: string;
   wrap?: WrapType;
 }
 
@@ -258,21 +252,42 @@ export interface LayoutOptions {
   noWrap?: boolean;
 }
 
+/**
+ * display: 该组件可用于详情模式
+ * input 该组件可用于输入模式
+ * both 同时支持输入和详情显示
+ * render 仅用于渲染，不影响表单值, 例如button类型组件
+ * layout 该组件为布局组件，为布局组件时，以上值均无效
+ *
+ */
+export type ComponentMode = 'display' | 'input' | 'both' | 'layout' | 'render';
+
 export interface SchemaFormComponentOptions {
   /**
    * vue组件名称或vue组件对象
    */
   component: string | Component;
   /**
+   * 组件模式
    * display: 该组件可用于详情模式
    * input 该组件可用于输入模式
-   * array 该组件支持数组 （代替原来的array=true）
-   * single 该组件不支持数组，仅支持单值输入，默认input仅支持single
+   * both 同时支持输入和详情显示
    * render 仅用于渲染，不影响表单值, 例如button类型组件
    * layout 该组件为布局组件，为布局组件时，以上值均无效
    *
+   * @default 默认值input
    */
-  mode: Array<'display' | 'input' | ArrayMode | 'layout' | 'render'>;
+  mode?: ComponentMode;
+  /**
+   * 是否支持数组输入
+   *
+   * array 仅支持数组 (例如CheckboxGroup)
+   * single 仅支持单个值 (例如RadioGroup)
+   * both 同时支持数组或者单个值 (例如Select)
+   *
+   * @default 默认值single
+   */
+  arrayMode?: ArrayMode;
   /**
    * 获取组件props
    * @param {FieldDefinition} definition
@@ -304,7 +319,7 @@ export interface SchemaFormComponentOptions {
 
 export type Actions = Action[];
 
-export type ArrayMode = 'array' | 'single' | 'singleOrArray';
+export type ArrayMode = 'array' | 'single' | 'both';
 
 export interface DisplayComponentOptions {
   component: string | Component;

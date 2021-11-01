@@ -6,7 +6,7 @@
 </blockquote>
 <h2 id="配置说明">配置说明</h2>
 <p>设置schema的props属性inline的值为<strong>true</strong></p>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -42,7 +42,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

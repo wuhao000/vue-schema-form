@@ -12,7 +12,7 @@
         <v-schema-form
             v-model:value="value2"
             :components="components"
-            :schema="definition2"></v-schema-form>
+            :schema="definition2"/>
       </div>
     </a-layout-content>
   </a-layout>

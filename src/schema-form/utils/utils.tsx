@@ -265,23 +265,23 @@ export const fixComponentDefinition = (value: SchemaFormComponentOptions | Schem
   let options: SchemaFormComponentOptions = null;
   if (Array.isArray(value)) {
     if (forDisplay) {
-      options = value.find(it => it.mode.includes('display'));
+      options = value.find(it => it.mode === 'display' || it.mode === 'both');
     } else {
-      options = value.find(it => !it.mode.includes('display'));
+      options = value.find(it => it.mode === 'input');
     }
   } else {
     options = value;
   }
-  const getProps = options.getProps || (() => ({}));
   return {
     component: options.component,
     platform: options.platforms as Platform,
-    type: options.types as string,
-    mode: options.mode,
+    mode: options.mode || 'input',
+    arrayMode: options.arrayMode,
     layoutOptions: options.layoutOptions,
     valueProp: options.valueProp || 'value',
     wrap: options.wrap,
     getProps: (definition: FieldDefinition) => {
+      const  getProps = options.getProps || (() => ({}));
       const props: any = getProps(definition, options.platforms as Platform) || {};
       if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
         props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;

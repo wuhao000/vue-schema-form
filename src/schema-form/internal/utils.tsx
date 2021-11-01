@@ -23,7 +23,7 @@ import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';
 import {globalComponentStore} from '../utils/register';
-import {FieldTypes, fixComponentDefinition, isNotNull, LibComponents, Mode} from '../utils/utils';
+import {fixComponentDefinition, isNotNull, LibComponents, Mode} from '../utils/utils';
 import FormField from './field';
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -44,8 +44,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -55,18 +55,17 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => {
-          const field = fields[key];
-          if (!field.id) {
-            field.id = uuid.v4();
-          }
-          return {
-            id: field.id,
-            property: key,
-            ...fields[key]
-          };
-        });
+      .filter(key => fields[key])
+      .map(key => {
+        const field = fields[key];
+        if (!field.id) {
+          field.id = uuid.v4();
+        }
+        if (!field.property) {
+          field.property = key;
+        }
+        return field;
+      });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -74,6 +73,9 @@ export function getRealFields(fields: FormFields) {
 
 const EmptyDefinition = {
   component: Empty,
+  mode: 'both',
+  arrayMode: 'both',
+  platform: 'desktop',
   getProps: () => ({})
 } as SchemaFormComponent;
 
@@ -89,7 +91,7 @@ export function getComponentType(store: SchemaFormStore,
   const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
-      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
+    || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {
@@ -139,7 +141,7 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
 function getComponent(field: SchemaFormField,
                       store: SchemaFormStore,
                       forDisplay = false,
-                      platform: Platform = 'desktop') {
+                      platform: Platform = 'desktop'): SchemaFormComponent {
   const type = field.xType || field.type;
   if (field.slot) {
     return undefined;
@@ -155,8 +157,8 @@ function getComponent(field: SchemaFormField,
     return {
       component: type,
       platform,
-      type: '',
-      mode: ['single', forDisplay ? 'display' : 'input'],
+      mode: forDisplay ? 'display' : 'input',
+      arrayMode: 'single',
       layoutOptions: null,
       valueProp: 'value',
       wrap: true,
@@ -167,39 +169,31 @@ function getComponent(field: SchemaFormField,
   }
   return fixComponentDefinition(type, !field.editable);
 }
-let i = 0;
+
 export function renderField(pathPrefix: string[] | null,
                             store: SchemaFormStore,
-                            field: SchemaFormField,
+                            fieldDefinition: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                             index: number, wrap: boolean, emit) {
   let value = null;
-  if (field.property?.includes('.')) {
-    value = getPropertyValueByPath(field.property.substr(0, field.property.lastIndexOf('.')), currentValue);
+  if (fieldDefinition.property?.includes('.')) {
+    value = getPropertyValueByPath(fieldDefinition.property.substr(0, fieldDefinition.property.lastIndexOf('.')), currentValue);
   } else {
     value = currentValue;
   }
-  if (field.type === FieldTypes.Object) {
-    if (field.props) {
-      field.props.props = store.props;
-    } else {
-      field.props = {props: store.props};
-    }
-    field.props.effects = store.effects;
-  }
-  const newField = createField(currentValue, store, pathPrefix, field);
-  const component = getComponent(field, store);
+  const newField = createField(currentValue, store, pathPrefix, fieldDefinition);
+  const component = getComponent(fieldDefinition, store);
   const props: any = {
     wrap,
     field: newField,
-    path: buildArrayPath(pathPrefix, field),
+    path: newField.path,
     disabled: newField.disabled || store.disabled || store.loading,
-    definition: field,
+    definition: fieldDefinition,
     formValue: currentValue,
     'onUpdate:value': v => {
       setFieldValue(value, newField, v, emit);
     },
-    key: `field-${field.property}-${index}`,
+    key: `field-${fieldDefinition.property}-${index}`,
     index
   };
   props.value = getFieldValue(value, newField, component);
@@ -305,7 +299,7 @@ export class FieldDefinition<V = any> {
     this.required = definition.required;
     this.min = definition.min;
     this.max = definition.max;
-    this.fields = proxyFields(definition.fields);
+    this.fields = definition.fields;
     this.effectErrors = [];
     this.description = definition.description;
     this.errors = [];
@@ -420,30 +414,6 @@ export function createField(currentValue: any,
     return reactive(field) as FieldDefinition;
   }
 }
-
-const proxyFields = (fields: FormFields): FormFields => {
-  if (fields) {
-    if (Array.isArray(fields)) {
-      fields.forEach((field, index) => {
-        fields[index] = proxyField(field);
-      });
-    } else {
-      Object.keys(fields).forEach(key => {
-        fields[key] = proxyField(fields[key]);
-      });
-    }
-  }
-  return fields;
-};
-
-const proxyField = (field: SchemaFormField): SchemaFormField => {
-  // return new Proxy(field, {
-  //   get: (target, property) => {
-  //     return target[property];
-  //   }
-  // });
-  return field;
-};
 
 const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
   const rules: IRuleDescription[] = toArr(field.rules);

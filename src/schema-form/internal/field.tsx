@@ -75,12 +75,12 @@ export default defineComponent({
     pathPrefix: {type: Array as PropType<string[]>}
   },
   emits: ['change', 'update:value'],
-  setup($props, {emit}) {
+  setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const arrayRef = ref<VNode>(null);
     const inputRef = ref<any>(null);
-    const currentValue = ref($props.value || null);
-    const field = computed(() => $props.field as FieldDefinition);
+    const currentValue = ref(props.value || null);
+    const field = computed(() => props.field as FieldDefinition);
     watch(() => currentValue.value, (val) => {
       field.value.value = val;
       if (store.editable && field.value.editable) {
@@ -98,7 +98,7 @@ export default defineComponent({
     }, {deep: true});
     const setCurrentValue = value => {
       const component = fieldComponent.value;
-      if ((!component || component.mode.includes('input')) && !isEqual(currentValue.value, value)) {
+      if ((!component || component.mode === 'input') && !isEqual(currentValue.value, value)) {
         currentValue.value = value;
       }
     };
@@ -106,7 +106,7 @@ export default defineComponent({
     watch(() => field.value, localField => {
       fieldOperations.addField(localField);
     }, {immediate: true});
-    watch(() => $props.value, value => {
+    watch(() => props.value, value => {
       if (!isEqual(currentValue.value, value)) {
         setCurrentValue(value);
       }
@@ -114,7 +114,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: any } | Array<{ [p: string]: any }>,
                              index: number, wrap: boolean) => {
-      return renderField($props.pathPrefix as string[], store, localField, localValue, index, wrap, emit);
+      return renderField(props.pathPrefix as string[], store, localField, localValue, index, wrap, emit);
     };
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
@@ -123,20 +123,29 @@ export default defineComponent({
       }
       return field.value.getComponent(!editable.value, store.platform);
     });
-    const inputProps = computed(() => {
-      const {definition, path, schemaPath} = $props;
-      const {platform} = store;
+    const preProps = computed<{ [key: string]: unknown }>(() => {
+      const localProps: { [key: string]: unknown } = {};
       const renderComponent = fieldComponent.value;
-      const localProps: any = renderComponent === undefined ? {} : Object.assign({}, renderComponent.getProps(field.value));
-      const localType = field.value.type;
-      if (localType === FieldTypes.Object) {
+      if (renderComponent !== undefined) {
+        Object.assign(localProps, renderComponent.getProps(field.value));
+      }
+      const {platform} = store;
+      const {definition, path, schemaPath} = props;
+      if (field.value.type === FieldTypes.Object) {
         localProps.platform = platform;
         localProps.editable = editable.value;
-        localProps.pathPrefix = path;
-        localProps.schemaPath = schemaPath;
         localProps.layoutType = definition.layoutType;
         localProps.layoutProps = definition.layoutProps;
+        localProps.pathPrefix = path;
+        localProps.schemaPath = schemaPath;
       }
+      return localProps;
+    });
+    const inputProps = computed(() => {
+      const localProps = preProps.value;
+      const {definition} = props;
+      const {platform} = store;
+      const renderComponent = fieldComponent.value;
       if (isNotNull(definition.placeholder)) {
         localProps.placeholder = definition.placeholder;
       }
@@ -144,10 +153,34 @@ export default defineComponent({
       if (isNull(editable.value) || platform === DESKTOP) {
         delete localProps.required;
       }
+      if (!editable.value) {
+        localProps.definition = definition;
+        localProps.field = field.value;
+      }
+      if (renderComponent.mode === 'layout') {
+        localProps.layout = definition.layout;
+        localProps.fields = subFields.value;
+        localProps.fieldDefinitions = relatedSubFields.value;
+      }
+      localProps.disabled = isDisabled.value;
+      if (['input', 'display', 'both'].includes(renderComponent.mode)) {
+        localProps[renderComponent.valueProp] = currentValue.value;
+      }
+      if (!localProps.title && (store.platform === 'mobile' || renderComponent.mode === 'layout')) {
+        localProps.title = field.value.title;
+      }
+      const events = field.value.generateEvents();
+      Object.keys(events).forEach(eventKey => {
+        localProps[eventKey] = events[eventKey];
+      });
+      if (editable.value) {
+        localProps[`onUpdate:${renderComponent.valueProp}`] = onValueUpdate;
+      }
       return localProps;
     });
+
     const isDisabled = computed(() => {
-      return $props.disabled || field.value.disabled || (field.value.props && field.value.props.disabled);
+      return props.disabled || field.value.disabled || (field.value.props && field.value.props.disabled);
     });
     const removeArrayItem = (index: number) => {
       (currentValue.value as any[]).splice(index, 1);
@@ -183,10 +216,10 @@ export default defineComponent({
     });
 
     const getFormItemProps = () => {
-      const {definition} = $props;
+      const {definition} = props;
       const {platform} = store;
       const component = getFormItemComponent(platform);
-      const props: any = {
+      const formItemProps: any = {
         required: editable.value ? field.value.required : null,
         title: definition.title,
         label: definition.title
@@ -201,29 +234,29 @@ export default defineComponent({
               <InfoIcon style={{marginLeft: '5px', color: '#247dc5'}}/>
             </span>
           };
-          props.label = <LibComponentsPopover
+          formItemProps.label = <LibComponentsPopover
             content={definition.tip}
             v-slots={slots}
             trigger="hover"/>;
         } else {
-          props.label = definition.title;
+          formItemProps.label = definition.title;
         }
       }
       if (definition.wrapperProps) {
-        Object.assign(props, definition.wrapperProps);
+        Object.assign(formItemProps, definition.wrapperProps);
         if (definition.wrapperProps.noTitle) {
-          props.title = null;
-          props.label = null;
+          formItemProps.title = null;
+          formItemProps.label = null;
         }
       }
-      Object.assign(props, config.getFormItemProps(component, field.value, platform));
-      return props;
+      Object.assign(formItemProps, config.getFormItemProps(component, field.value, platform));
+      return formItemProps;
     };
     const validate = (trigger?: string) => {
       if (!field.value.visible) {
         return true;
       }
-      if (fieldComponent.value?.mode?.includes('layout')) {
+      if (fieldComponent.value?.mode === 'layout') {
         return true;
       }
       if (type.value === FieldTypes.Object && arrayRef.value) {
@@ -283,7 +316,7 @@ export default defineComponent({
 
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
-      const {definition} = $props;
+      const {definition} = props;
       let ArrayComponent: any = ArrayWrapper;
       if (typeof definition.arrayComponent === 'string') {
         const componentDef = getComponentType(store, {
@@ -298,8 +331,8 @@ export default defineComponent({
       const valueProp = inputFieldDef.valueProp;
       const arrayContent = currentValue.value ? (currentValue.value as any[]).map((v, index) => {
         const itemProps: any = Object.assign({}, propsTmp, {
-          pathPrefix: ($props.path as Array<string | number>).concat(index),
-          schemaPath: $props.path
+          pathPrefix: (props.path as Array<string | number>).concat(index),
+          schemaPath: props.path
         });
         if (field.value.type === FieldTypes.Object) {
           itemProps.definition = Object.assign({}, itemProps.definition);
@@ -379,18 +412,18 @@ export default defineComponent({
       return <ArrayComponent {...arrayProps}/>;
     };
     const relatedSubFields = computed(() => {
-      const definition = $props.definition;
+      const definition = props.definition;
       return getRealFields(definition.fields);
     });
     const subFields = computed(() => {
-      const definition = $props.definition;
+      const definition = props.definition;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
         renderFormField(localField, currentValue.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
     });
     const renderInputComponent = () => {
-      const propsTmp = inputProps.value;
-      const {content, definition} = $props;
+      const propsTmp = {...(inputProps.value)};
+      const {content, definition} = props;
       const inputFieldDef = fieldComponent.value;
       let InputFieldComponent = inputFieldDef.component;
       if (isProxy(InputFieldComponent)) {
@@ -413,41 +446,13 @@ export default defineComponent({
         }
       }
       const style: any = Object.assign({}, inputProps.value.style || {});
-      if (inputFieldDef.mode.includes('layout')) {
-        propsTmp.layout = definition.layout;
-        propsTmp.fields = subFields.value;
-        propsTmp.fieldDefinitions = relatedSubFields.value;
-      }
-      const valueProp = inputFieldDef.valueProp;
-      propsTmp.disabled = isDisabled.value;
-      if (inputFieldDef.mode.includes('input')) {
-        propsTmp[valueProp] = currentValue.value;
-      }
-      propsTmp.title = propsTmp.title || ((store.platform === 'mobile' || inputFieldDef.mode.includes('layout')) ? field.value.title : null);
       // 渲染数组
-      if (field.value.array && inputFieldDef.mode.includes('single')) {
+      if (field.value.array && inputFieldDef.arrayMode === 'single') {
         return renderArrayInputComponent(propsTmp, inputFieldDef);
-      }
-      if (definition.type === FieldTypes.Object
-        && definition.props) {
-        if (!definition.props.props) {
-          definition.props.props = {};
-        }
-        Object.keys(definition.props).forEach(key => {
-          if (key !== 'props') {
-            definition.props.props[key] = definition.props[key];
-          }
-        });
       }
       const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
-
-      const events = field.value.generateEvents();
-      Object.assign(propsTmp, {
-        ...events,
-        [`onUpdate:${valueProp}`]: onValueUpdate
-      });
       const slots = {};
       if (definition.slots) {
         const slotsDef = definition.slots;
@@ -502,7 +507,7 @@ export default defineComponent({
     onCreated();
     const renderDesktopComponent = () => {
       const inputComponent = renderInputComponent();
-      const {definition} = $props;
+      const {definition} = props;
       const {platform} = store;
       const FormItemComponent: any = getFormItemComponent(platform);
       const ColComponent: any = getColComponent(store.platform);
@@ -510,7 +515,7 @@ export default defineComponent({
       const style = formItemProps.style;
       const inputFieldDef = fieldComponent.value;
       const className = classNames(formItemProps.className || formItemProps.class, {
-        'is-layout': inputFieldDef.mode.includes('layout')
+        'is-layout': inputFieldDef.mode === 'layout'
       });
       delete formItemProps.style;
       delete formItemProps.className;
@@ -524,7 +529,7 @@ export default defineComponent({
         label.push(<span/>);
       } else {
         if (store.props?.index) {
-          label.push(<span class="form-item-index">{$props.index + 1}. </span>);
+          label.push(<span class="form-item-index">{props.index + 1}. </span>);
         }
         label.push(formItemProps.title);
       }
@@ -550,20 +555,15 @@ export default defineComponent({
       }
     };
     return {
-      inputProps,
-      type,
       editable,
       store,
       renderInputComponent,
-      getFormItemProps,
-      currentValue,
-      renderDesktopComponent,
-      subFields
+      renderDesktopComponent
     };
   },
   render() {
     const field = this.field;
-    const {inputProps, definition, editable, store: {platform}} = this;
+    const {definition, editable, store: {platform}} = this;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];
       const content = slot ? slot() : undefined;
@@ -579,10 +579,6 @@ export default defineComponent({
         });
       }
       return content;
-    }
-    if (!editable) {
-      inputProps.definition = definition;
-      inputProps.field = field;
     }
     let item = null;
     if (platform === DESKTOP) {

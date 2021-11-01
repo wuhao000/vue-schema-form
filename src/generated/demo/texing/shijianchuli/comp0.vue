@@ -5,8 +5,8 @@
         v-model:value="value"
         :schema="schema"
         :effects="effects"/>
-    <a-button @click="focus">焦点</a-button>
-    <a-button @click="addContent">添加内容</a-button>
+    <a-button @click="focus">获得焦点</a-button>
+    <a-button @click="addContent">在光标处添加内容</a-button>
   </div>
 </template>
 <script lang="ts">
@@ -46,7 +46,7 @@
             title: '点击事件监听',
             type: 'string',
             events: {
-              onKeydown: ($, e) => {
+              onKeydown: () => {
                 message.info('触发keydown事件');
               }
             }
@@ -59,7 +59,7 @@
       const value = reactive({});
       const context = ref(null);
       const focus = () => {
-        const field = context.value('name').fields()[0];
+        const field = context.value('click').field();
         field.inputRef.focus();
       };
       const effects = ($: EffectsContext) => {
@@ -73,11 +73,11 @@
       };
       const addContent = () => {
         focus();
-        const field = context.value('name').fields()[0];
+        const field = context.value('click').field();
         const input = field.inputRef as HTMLInputElement;
         const caretIndex = input.selectionEnd;
         const content = 'abc';
-        context.value('name').value(
+        context.value('click').value(
             input.value.substr(0, caretIndex) + content + input.value.substr(caretIndex)
         );
         setTimeout(() => {

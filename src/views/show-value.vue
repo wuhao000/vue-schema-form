@@ -1,5 +1,5 @@
 <template>
-  <a-button @click="show">{{ title || '查看' }}</a-button>
+  <a-button @click="show">{{ title || '查看数据' }}</a-button>
   <a-modal
       v-model:visible="visible"
       destroy-on-close>
@@ -18,7 +18,7 @@
   import {ref} from 'vue';
 
   // eslint-disable-next-line no-undef
-  const props = defineProps({
+  defineProps({
     value: Object,
     title: String
   });

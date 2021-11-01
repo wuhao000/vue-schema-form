@@ -18,7 +18,10 @@ export default defineComponent({
         return [null, null];
       }
       if (props.valueType === 'string') {
-        return (value as string).split(props.separator as string).map(it => it);
+        if (typeof value === 'string') {
+          return (value as string).split(props.separator as string).map(it => it);
+        }
+        throw new Error('TimeRangePicker输入值格式应为string');
       }
       return (value as string[]).map(it => it);
     };

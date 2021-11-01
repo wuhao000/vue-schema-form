@@ -4,19 +4,19 @@
 <h2 id="使用说明">使用说明</h2>
 <p>启用禁用属于逻辑操作，因此使用副作用函数来实现</p>
 <p>使用副作用函数的enable和disable方法可以达到启用/禁用效果</p>
-<code-editor mode="typescript">
+<pre><code-editor mode="typescript">
   // 启用name字段
 $('name').enable();
 
 // 禁用name字段
 $('name').disable();
-</code-editor>
+</code-editor></pre>
 <br>
 
 <blockquote>
 <p>仅使用enable或disable中的一个也可以启用禁用, 例如 enable(true) 为启用，enable(false)为禁用，disable的参数值相反</p>
 </blockquote>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -47,29 +47,12 @@ $('name').disable();
         fields: {
           name: {
             type: 'string',
-            title: '中文名称',
+            title: '名称',
             required: true
           },
           name2: {
-            type: 'string',
-            title: '中文名称2',
-          },
-          persistent: {
-            type: 'boolean',
-            title: '是否持久化'
-          },
-          modules: {
-            title: '启用模块',
             type: 'select',
-            array: true,
-            enum: [
-              {label: '团队', value: 'team'},
-              {label: '文件', value: 'file'}
-            ]
-          },
-          notes: {
-            type: 'text',
-            title: '备注'
+            title: '选择',
           }
         }
       };
@@ -82,7 +65,7 @@ $('name').disable();
       const effects = ($: EffectsContext) =&gt; {
         context.value = $;
         $('name').onFieldCreateOrChange((v) =&gt; {
-          if (v.length &gt; 1) {
+          if (v.length &gt; 2) {
             $('name2').required(true);
           } else {
             $('name2').required(false);
@@ -94,16 +77,15 @@ $('name').disable();
 
       const editableOrReadonly = () =&gt; {
         editable.value = !editable.value;
-        context.value('name').editable(editable.value);
+        context.value('*').editable(editable.value);
       };
       const disableOrEnable = () =&gt; {
         enable.value = !enable.value;
-        context.value('name').enable(enable.value);
+        context.value('*').enable(enable.value);
       };
       const form = ref()
       const validate = async () =&gt; {
-        const a = await form.value.validate();
-        console.log(a);
+        return context.value.validate();
       }
       return {
         schema,
@@ -126,7 +108,7 @@ $('name').disable();
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

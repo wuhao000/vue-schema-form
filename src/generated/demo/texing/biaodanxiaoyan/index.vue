@@ -1,6 +1,7 @@
 <template>
   <div class="markdown-body">
-    <demo-wrapper>
+    <h1 id="表单校验">表单校验</h1>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -132,7 +133,7 @@
 &lt;/style&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

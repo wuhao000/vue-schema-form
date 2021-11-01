@@ -58,14 +58,14 @@ export default defineComponent({
       const array = [];
       const spanGroups = [];
       let lastHasSpan = false;
-      getRealFields(props.definition.fields).forEach((field, index) => {
-        const vnode = renderFormField(field, currentValue.value, index, true);
-        if (field.span) {
+      getRealFields(props.definition.fields).forEach((fieldDefinition, index) => {
+        const vnode = renderFormField(fieldDefinition, currentValue.value, index, true);
+        if (fieldDefinition.span) {
           if (lastHasSpan) {
-            spanGroups[spanGroups.length - 1].push(field.span);
+            spanGroups[spanGroups.length - 1].push(fieldDefinition.span);
             array[array.length - 1].push(vnode);
           } else {
-            spanGroups.push([field.span]);
+            spanGroups.push([fieldDefinition.span]);
             array.push([vnode]);
           }
           lastHasSpan = true;

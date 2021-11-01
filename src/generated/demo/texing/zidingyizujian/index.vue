@@ -1,10 +1,10 @@
 <template>
   <div class="markdown-body">
-    <demo-wrapper>
+    <h1 id="自定义组件">自定义组件</h1>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;v-schema-form
       v-model:value="value"
       :effects="effects"
@@ -80,7 +80,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

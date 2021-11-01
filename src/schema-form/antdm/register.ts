@@ -83,10 +83,14 @@ export function registerAntdMobile() {
     () => ({type: 'digit', textAlign: 'right'}));
   registerMobile(Input, [FieldTypes.Password], 'single',
     () => ({type: 'password'}));
-  registerMobile(Range, [FieldTypes.Range], 'single');
+  // registerMobile(Range, [FieldTypes.Range], 'single');
   registerMobile(Textarea, [FieldTypes.Text], 'single');
-  registerMobile(DatePicker.Item, [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
-      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerMobile(DatePicker.Item, [
+      FieldTypes.Date,
+      FieldTypes.Year,
+      FieldTypes.Month,
+      FieldTypes.Datetime],
+    'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerMobile(Calendar.Item, [FieldTypes.DateRange], 'single', () => ({type: 'range'}));
   registerMobile(Calendar.Item, [FieldTypes.DateTimeRange], 'single', () => ({type: 'range', pickTime: true}));
   registerMobile(Checkbox, FieldTypes.Checkbox, 'single');
@@ -94,14 +98,13 @@ export function registerAntdMobile() {
   registerComponent({
     component: Switch.Item,
     types: FieldTypes.Boolean,
-    mode: ['single', 'input'],
     platforms: 'mobile',
     valueProp: 'checked'
   });
   registerComponent({
     component: Button,
     types: FieldTypes.Button,
-    mode: ['render'],
+    mode: 'render',
     platforms: 'mobile',
     getProps: field => {
       return {title: field.title};

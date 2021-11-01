@@ -1,18 +1,17 @@
 <template>
   <div class="markdown-body">
     <h1 id="动态表单">动态表单</h1>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;a-layout&gt;
     &lt;a-layout-content&gt;
-      &lt;a-button @click="loadData"&gt;加载&lt;/a-button&gt;
       &lt;v-schema-form
           v-model:value="model"
           :effects="effects"
-          :schema="formDefinition"/&gt;
+          :schema="schema"/&gt;
+      &lt;show-value :value="model"/&gt;
     &lt;/a-layout-content&gt;
   &lt;/a-layout&gt;
 &lt;/template&gt;
@@ -27,29 +26,10 @@
     setup() {
       const getDefaultBean = () =&gt; {
         return {
-          id: '',
           name: '',
-          extras: {
-            requirements: ''
-          }
         };
       };
       const model = ref&lt;any&gt;(getDefaultBean());
-      const loadData = () =&gt; {
-        model.value = {
-          id: 'd3cfdf4426eb4fb59bc1db906365e0f2',
-          name: '前端开发工程师',
-          type: 'post',
-          code: '002',
-          order: 0,
-          color: '',
-          extras: {
-            usersToInterview: [],
-            userToChooseResume: [],
-            requirements: 'aaaaaaaaaaaa'
-          }
-        };
-      };
       const quickAddMode = ref(false);
       const effects = ($: EffectsContext) =&gt; {
         if (!quickAddMode.value) {
@@ -62,43 +42,61 @@
           }
         });
       };
+      const schema = {
+        props: {
+          labelWidth: '150px',
+          labelCol: {span: 4},
+          wrapperCol: {span: 12},
+          rules: {
+            name: [{required: true, message: '请输入名称'}],
+            code: [{required: true, message: '请输入编码'}]
+          }
+        },
+        fields: [{
+          type: 'string',
+          property: 'name',
+          title: '名称'
+        }, {
+          type: 'integer',
+          property: 'age',
+          title: '年龄'
+        }, {
+          type: 'button',
+          title: '',
+          events: {
+            onClick: () =&gt; {
+              loadData();
+            }
+          },
+          props: {
+            title: '加载数据并添加一个字段'
+          }
+        }]
+      };
+      const loadData = () =&gt; {
+        model.value = {
+          name: '前端开发工程师',
+          age: 22
+        };
+        schema.fields.push({
+          type: 'date',
+          property: 'birthday',
+          title: '生日'
+        })
+      };
       return {
         quickAddMode,
         effects,
         model,
         loadData,
-        formDefinition: {
-          props: {
-            labelWidth: '150px',
-            labelCol: {span: 4},
-            wrapperCol: {span: 12},
-            rules: {
-              name: [{required: true, message: '请输入名称'}],
-              code: [{required: true, message: '请输入编码'}]
-            }
-          },
-          fields: [{
-            type: 'string',
-            property: 'name',
-            title: '名称'
-          }, {
-            type: 'button',
-            title: 'abc',
-            props: {
-              action: () =&gt; {
-                console.log(1);
-                model.value.name = 'abc';
-              }
-            }
-          }]
-        }
+        schema
       };
     }
   });
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

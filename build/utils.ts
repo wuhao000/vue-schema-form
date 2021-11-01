@@ -35,8 +35,8 @@ export const createDoc = (path, options: DocPluginOptions) => {
       const code = unescape($.html(v.childNodes)).trim();
       $(`<code-editor mode="${lang}">
   ${escape(code)}
-</code-editor>`).insertBefore($(v).parent());
-      $(v).parent().remove();
+</code-editor>`).insertBefore($(v));
+      $(v).remove();
     }
   }
 
@@ -66,8 +66,8 @@ export const createDoc = (path, options: DocPluginOptions) => {
 <code-container>
   ${demoCode}
 </code-container>
-</demo-wrapper>`).insertBefore($(v).parent());
-    $(v).parent().remove();
+</demo-wrapper>`).insertBefore($(v));
+    $(v).remove();
   }
 
   const originTemplate = `<template>
@@ -86,17 +86,6 @@ ${compNames.map(it => `  import  ${it} from './${it}.vue';`).join('\n')}
   }
 };
 
-
-export const getParentPath = (path: string) => {
-  const paths = path.split(/[\\/]/);
-  return paths.slice(0, paths.length - 1).join('/');
-};
-
-
-export const getName = (path) => {
-  const paths = path.split(/[\\/]/);
-  return paths[paths.length - 1];
-};
 
 export const isDocPath = (path: string) => {
   const paths = path.split(/[\\/]/);

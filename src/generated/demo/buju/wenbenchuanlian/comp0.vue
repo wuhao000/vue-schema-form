@@ -16,6 +16,7 @@
   import {registerAntd} from '../../../../schema-form';
   import {defineComponent, ref} from 'vue';
 
+  
   registerAntd();
 
   export default defineComponent({

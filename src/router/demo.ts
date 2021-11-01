@@ -86,22 +86,11 @@ export default [{
   children: [
     
   ]
-},
-{
-  path: '/demo/AntDesignVue/xuhao',
-  component: () => import('../generated/demo/AntDesignVue/xuhao/index.vue'),
-  meta: {
-    tags: ['Ant Design Vue'],
-    name: '序号'
-  },
-  children: [
-    
-  ]
 }
   ]
 }, {
   path: '/demo/AntDesignVueMobile',
-  redirect: '/demo/AntDesignVueMobile/liebiao',
+  redirect: '/demo/AntDesignVueMobile/jiandanbuju',
   component: RootComponent,
   meta: {
     tags: [],
@@ -109,11 +98,33 @@ export default [{
   },
   children: [
     {
-  path: '/demo/AntDesignVueMobile/liebiao',
-  component: () => import('../generated/demo/AntDesignVueMobile/liebiao/index.vue'),
+  path: '/demo/AntDesignVueMobile/jiandanbuju',
+  component: () => import('../generated/demo/AntDesignVueMobile/jiandanbuju/index.vue'),
   meta: {
     tags: ['Ant Design Vue Mobile'],
-    name: '列表'
+    name: '简单布局'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/AntDesignVueMobile/xiangqingmoshi',
+  component: () => import('../generated/demo/AntDesignVueMobile/xiangqingmoshi/index.vue'),
+  meta: {
+    tags: ['Ant Design Vue Mobile'],
+    name: '详情模式'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/AntDesignVueMobile/shujuxiaoyan',
+  component: () => import('../generated/demo/AntDesignVueMobile/shujuxiaoyan/index.vue'),
+  meta: {
+    tags: ['Ant Design Vue Mobile'],
+    name: '数据校验'
   },
   children: [
     
@@ -142,39 +153,6 @@ export default [{
   ]
 },
 {
-  path: '/demo/AntDesignVueMobile/xiaoyan',
-  component: () => import('../generated/demo/AntDesignVueMobile/xiaoyan/index.vue'),
-  meta: {
-    tags: ['Ant Design Vue Mobile'],
-    name: '校验'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/AntDesignVueMobile/jiandanbuju',
-  component: () => import('../generated/demo/AntDesignVueMobile/jiandanbuju/index.vue'),
-  meta: {
-    tags: ['Ant Design Vue Mobile'],
-    name: '简单布局'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/AntDesignVueMobile/bianji',
-  component: () => import('../generated/demo/AntDesignVueMobile/bianji/index.vue'),
-  meta: {
-    tags: ['Ant Design Vue Mobile'],
-    name: '编辑'
-  },
-  children: [
-    
-  ]
-},
-{
   path: '/demo/AntDesignVueMobile/jiegoufuzhi',
   component: () => import('../generated/demo/AntDesignVueMobile/jiegoufuzhi/index.vue'),
   meta: {
@@ -186,11 +164,11 @@ export default [{
   ]
 },
 {
-  path: '/demo/AntDesignVueMobile/xiangqing',
-  component: () => import('../generated/demo/AntDesignVueMobile/xiangqing/index.vue'),
+  path: '/demo/AntDesignVueMobile/duixiangliebiao',
+  component: () => import('../generated/demo/AntDesignVueMobile/duixiangliebiao/index.vue'),
   meta: {
     tags: ['Ant Design Vue Mobile'],
-    name: '详情'
+    name: '对象列表'
   },
   children: [
     
@@ -468,33 +446,11 @@ export default [{
   ]
 },
 {
-  path: '/demo/texing/duixiangshuzu',
-  component: () => import('../generated/demo/texing/duixiangshuzu/index.vue'),
+  path: '/demo/texing/xiangqingmoshi',
+  component: () => import('../generated/demo/texing/xiangqingmoshi/index.vue'),
   meta: {
     tags: ['特性'],
-    name: '对象数组'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/texing/anniu',
-  component: () => import('../generated/demo/texing/anniu/index.vue'),
-  meta: {
-    tags: ['特性'],
-    name: '按钮'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/texing/zidingyizujian',
-  component: () => import('../generated/demo/texing/zidingyizujian/index.vue'),
-  meta: {
-    tags: ['特性'],
-    name: '自定义组件'
+    name: '详情模式'
   },
   children: [
     
@@ -512,6 +468,17 @@ export default [{
   ]
 },
 {
+  path: '/demo/texing/zidingyizujian',
+  component: () => import('../generated/demo/texing/zidingyizujian/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '自定义组件'
+  },
+  children: [
+    
+  ]
+},
+{
   path: '/demo/texing/jiegoufuzhi',
   component: () => import('../generated/demo/texing/jiegoufuzhi/index.vue'),
   meta: {
@@ -523,11 +490,33 @@ export default [{
   ]
 },
 {
+  path: '/demo/texing/yibujiazaixuanxiang',
+  component: () => import('../generated/demo/texing/yibujiazaixuanxiang/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '异步加载选项'
+  },
+  children: [
+    
+  ]
+},
+{
   path: '/demo/texing/morenzhi',
   component: () => import('../generated/demo/texing/morenzhi/index.vue'),
   meta: {
     tags: ['特性'],
     name: '默认值'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/texing/xuhao',
+  component: () => import('../generated/demo/texing/xuhao/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '序号'
   },
   children: [
     

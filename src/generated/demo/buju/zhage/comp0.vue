@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-schema-form :schema="schema"/>
@@ -14,7 +13,7 @@
       return {
         schema: {
           props: {
-            labelWidth: 120,
+            labelWidth: 100,
             labelPosition: 'left'
           },
           fields: {
@@ -23,11 +22,10 @@
               type: 'string'
             },
             $grid: {
-              title: '高级选项',
               type: 'grid',
               layout: [12, 12],
               props: {
-                title: '高级选项'
+                gutter: 20
               },
               fields: {
                 other: {

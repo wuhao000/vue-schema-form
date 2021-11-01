@@ -1,10 +1,9 @@
 import {computed, PropType, ref, watch} from 'vue';
-import {ArrayMode} from '../../../types';
 
 export const baseTimeRangePickerProps = {
   value: Array,
   valueType: {
-    type: String as PropType<ArrayMode>,
+    type: String as PropType<'string' | 'array'>,
     default: 'array'
   },
   separator: {

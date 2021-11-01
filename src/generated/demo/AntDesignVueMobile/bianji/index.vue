@@ -1,6 +1,6 @@
 <template>
   <div class="markdown-body">
-    <demo-wrapper>
+    <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   
@@ -79,7 +79,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

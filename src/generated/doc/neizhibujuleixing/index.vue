@@ -6,7 +6,7 @@
 使用<code>layout</code>属性（非必须）指定布局格式</p>
 </blockquote>
 <h2 id="grid-栅格布局">grid 栅格布局</h2>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
   &lt;template&gt;
@@ -68,7 +68,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 <h2 id="steps-分步组件">steps 分步组件</h2>
 <h3 id="组件属性">组件属性</h3>
 <table>
@@ -95,7 +95,7 @@
 <td>string[]</td>
 </tr>
 </tbody></table>
-<demo-wrapper>
+<pre><demo-wrapper>
 <comp1></comp1>
 <template #code><code-container>
   &lt;template&gt;
@@ -109,7 +109,6 @@
 &lt;/template&gt;
 &lt;script lang="ts"&gt;
   import {registerAntd} from '../../schema-form';
-  import {EffectsContext} from '../../../types';
 
   registerAntd();
   export default {
@@ -159,7 +158,7 @@
 &lt;/script&gt;
 
 </code-container></template>
-</demo-wrapper>
+</demo-wrapper></pre>
 </div>
 </template>
 <script lang="ts" setup>

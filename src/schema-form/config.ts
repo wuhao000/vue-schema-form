@@ -57,8 +57,11 @@ export const transformFormProps = (props: CommonFormProps, platform: Platform) =
 };
 
 function fixMode(options: SchemaFormComponentOptions) {
-  if (!options.mode.includes('array') && !options.mode.includes('single')) {
-    options.mode.push('singleOrArray');
+  if (!options.arrayMode) {
+    options.arrayMode = 'single';
+  }
+  if (!options.mode) {
+    options.mode = 'input';
   }
 }
 
