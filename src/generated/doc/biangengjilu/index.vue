@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-body">
     <h2 id="更新日志">更新日志</h2>
-<h3 id="v310">v3.1.0</h3>
+<h3 id="v311">v3.1.1</h3>
 <p><code>2021.11.1</code>
 🌟 表单项选项去除forDisplay,forArray,forInput,layout等属性，使用mode和arrayMode代替
 🌟 副作用函数增加setStates用于代替enable,disable,editable,show,hide,readonly,required等方法，简化api</p>
