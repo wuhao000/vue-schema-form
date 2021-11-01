@@ -35,7 +35,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            style="margin-left: 4px; font-size: 10px;"
+            class="github-icon"
             viewBox="0 0 24 24"
             width="1em"
             xmlns="http://www.w3.org/2000/svg">
@@ -52,82 +52,87 @@
   </div>
 </template>
 <script lang="ts">
-import {computed} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+  import {computed} from 'vue';
+  import {useRoute, useRouter} from 'vue-router';
 
-export default {
-  name: 'AppBanner',
-  setup() {
-    const route = useRoute();
-    const activeKey = computed(() => {
-      if (route.path === '/doc/changelog') {
-        return 'changelog';
-      }
-      if (route.path) {
-        return route.path.split('/').filter(it => it.length > 0)[0];
-      }
-      return 'doc';
-    });
-    const router = useRouter();
-    return {
-      activeKey,
-      toGithub() {
-        window.open('https://gitee.com/wuhao000/v-schema-form-next');
-      },
-      to(path) {
-        router.push({
-          path
-        });
-      }
-    };
-  }
-};
+  export default {
+    name: 'AppBanner',
+    setup() {
+      const route = useRoute();
+      const activeKey = computed(() => {
+        if (route.path === '/doc/changelog') {
+          return 'changelog';
+        }
+        if (route.path) {
+          return route.path.split('/').filter(it => it.length > 0)[0];
+        }
+        return 'doc';
+      });
+      const router = useRouter();
+      return {
+        activeKey,
+        toGithub() {
+          window.open('https://gitee.com/wuhao000/v-schema-form-next');
+        },
+        to(path) {
+          router.push({
+            path
+          });
+        }
+      };
+    }
+  };
 </script>
 <style lang="less" scoped>
-.header-content {
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
-  height: 60px;
-  margin: 0 30px;
-  background: white;
+  .header-content {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    height: 60px;
+    margin: 0 30px;
+    background: white;
 
-  .logo-wrapper {
-    font-size: 20px;
-    font-weight: 300;
-    text-transform: uppercase;
-    text-decoration: none;
-  }
+    .logo-wrapper {
+      font-size: 20px;
+      font-weight: 300;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
 
-  .top-nav {
-    height: 100%;
-
-    & > li {
+    .top-nav {
       height: 100%;
-      width: 86px;
-      line-height: 60px;
-      font-size: 16px;
-      text-align: center;
-      padding: 0;
+
+      & > li {
+        height: 100%;
+        width: 86px;
+        line-height: 60px;
+        font-size: 16px;
+        text-align: center;
+        padding: 0;
+      }
     }
   }
-}
 
-.ant-menu-item {
-  &.ant-menu-item-active, &.ant-menu-item-selected {
-    color: blue;
-  }
+  .ant-menu-item {
+    &.ant-menu-item-active, &.ant-menu-item-selected {
+      color: blue;
+    }
 
-  &.ant-menu-item-selected {
-    border-bottom-width: 3px;
-  }
+    &.ant-menu-item-selected {
+      border-bottom-width: 3px;
+    }
 
-  &.ant-menu-item-active:not(.ant-menu-item-selected) {
-    &:hover {
-      border-bottom: 0;
+    &.ant-menu-item-active:not(.ant-menu-item-selected) {
+      &:hover {
+        border-bottom: 0;
+      }
     }
   }
-}
+
+  .github-icon {
+    margin-left: 4px;
+    font-size: 10px;
+  }
 </style>

@@ -68,11 +68,20 @@ export class SchemaForm {
 
 export type ValidateHandler = (response: IValidateResponse[]) => void;
 
+export interface SchemaFormFieldStates {
+  enable?: boolean;
+  editable?: boolean;
+  visible?: boolean;
+  required?: boolean;
+  readonly?: boolean;
+}
+
 export interface EffectsHandlers {
   appendPath(path: string): EffectsHandlers;
   /**
    * 禁用
    * @returns {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
    */
   disable(disable?: boolean): EffectsHandlers;
   /**
@@ -80,14 +89,21 @@ export interface EffectsHandlers {
    *
    * @param {boolean} editable
    * @returns {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
    */
   editable(editable: boolean): EffectsHandlers;
   /**
    * 启用
+   * @deprecated 使用 setStates 代替
    */
   enable(enable?: boolean): EffectsHandlers;
   fields: () => FieldDefinition[];
   field: () => FieldDefinition;
+  /**
+   * @param {boolean} hide
+   * @return {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
+   */
   hide: (hide?: boolean) => EffectsHandlers;
   isEnabled(): boolean;
   onFieldBlur: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
@@ -101,20 +117,35 @@ export interface EffectsHandlers {
    *
    * @param {boolean} readonly
    * @returns {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
    */
   readonly(readonly: boolean): EffectsHandlers;
   replaceLastPath(...path: string[]): EffectsHandlers;
+
+  /**
+   *
+   * @param {boolean} required
+   * @return {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
+   */
   required: (required: boolean) => EffectsHandlers;
   setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
   setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers;
   setFieldProps: (props: {[key: string]: unknown} | ((field: IField) => {[key: string]: unknown})) => EffectsHandlers;
   setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers;
+  setStates: (states: SchemaFormFieldStates) => EffectsHandlers;
+  /**
+   *
+   * @param {boolean} show
+   * @return {EffectsHandlers}
+   * @deprecated 使用 setStates 代替
+   */
   show: (show?: boolean) => EffectsHandlers;
   subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
   trigger: (event: string, value: any) => EffectsHandlers;
   takePath(number: number): EffectsHandlers;
   toggle: () => EffectsHandlers;
-  value: (value?: any | ((field: IField) => any)) => any;
+  value: (value?: unknown | ((field: IField) => any)) => any;
 }
 
 export type Effects = (context: EffectsContext) => any;

@@ -185,7 +185,7 @@ class DestructTokenizer {
     }
   }
 
-  private processName(char: string, prev: string) {
+  private processName(char: string) {
     if (whitespace(char)) {
       this.declareNameEnd = this.index;
       this.handlers.name(this.getName());

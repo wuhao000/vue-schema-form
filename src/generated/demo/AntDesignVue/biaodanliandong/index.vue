@@ -18,7 +18,7 @@
   &lt;/a-layout&gt;
 &lt;/template&gt;
 &lt;script lang="ts"&gt;
-  import {registerAntd, SchemaFormEvents} from '../../../schema-form';
+  import {registerAntd} from '../../../schema-form';
   import {EffectsContext} from '../../../../types';
   import {message} from 'ant-design-vue';
   import {defineComponent, ref} from 'vue';
@@ -30,7 +30,6 @@
   export default defineComponent({
     name: 'Demo',
     setup() {
-      const value3 = ref({});
       const value2 = ref([{
         basic: {
           bb: 'a',

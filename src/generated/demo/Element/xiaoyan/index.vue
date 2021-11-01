@@ -34,7 +34,7 @@
 
   export default {
     name: 'Demo',
-    setup(props, ctx) {
+    setup() {
       const {definition, value} = useBaseDemo();
       return {
         definition,

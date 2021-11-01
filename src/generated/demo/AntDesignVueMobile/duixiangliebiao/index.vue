@@ -18,7 +18,7 @@
 &lt;/template&gt;
 &lt;script lang="ts"&gt;
   import {defineComponent, ref} from 'vue';
-  import {registerAntdMobile, SchemaFormEvents} from '../../../schema-form';
+  import {registerAntdMobile} from '../../../schema-form';
 
   registerAntdMobile();
   export default defineComponent({

@@ -16,13 +16,11 @@
   &lt;/a-layout&gt;
 &lt;/template&gt;
 &lt;script lang="ts" setup&gt;
-  import {defineProps} from 'vue';
   import {registerElement} from '../../../element';
   import {useBaseDemo} from '../../../views/demo/base';
 
   registerElement();
 
-  const props = defineProps();
   const {definition, value} = useBaseDemo();
 &lt;/script&gt;
 

@@ -29,7 +29,7 @@
   export default defineComponent({
     name: 'Demo',
     props: baseDemoProps,
-    setup(props) {
+    setup() {
       const {definition, value, options, onOk, optionFormDefinition, onReset, onCancel} = useBaseDemo();
       return {
         definition, onOk, onCancel, onReset, optionFormDefinition, options, value

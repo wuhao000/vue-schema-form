@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <div style="width: 400px">
+    <div class="login-form">
       <h2>用户登录</h2>
       <a-tabs>
         <a-tab-pane
@@ -152,3 +152,8 @@
     }
   });
 </script>
+<style lang="less" scoped>
+  .login-form {
+    width: 400px;
+  }
+</style>

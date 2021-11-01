@@ -11,12 +11,10 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
-  import {defineProps} from 'vue';
   import {registerElement} from '../../../../element';
   import {useBaseDemo} from '../../../../views/demo/base';
 
   registerElement();
 
-  const props = defineProps();
   const {definition, value} = useBaseDemo();
 </script>

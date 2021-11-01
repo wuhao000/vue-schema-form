@@ -6,7 +6,7 @@
   
 &lt;template&gt;
   &lt;div&gt;
-    &lt;div style="width: 400px"&gt;
+    &lt;div class="login-form"&gt;
       &lt;h2&gt;用户登录&lt;/h2&gt;
       &lt;a-tabs&gt;
         &lt;a-tab-pane
@@ -157,6 +157,11 @@
     }
   });
 &lt;/script&gt;
+&lt;style lang="less" scoped&gt;
+  .login-form {
+    width: 400px;
+  }
+&lt;/style&gt;
 
 </code-container></template>
 </demo-wrapper></pre>

@@ -19,13 +19,10 @@
 &lt;/template&gt;
 &lt;script lang="ts" setup&gt;
   import {registerAntdMobile} from '../../../schema-form';
-  import {defineProps, defineEmits} from 'vue';
   import {useBaseDemo} from '../../../views/demo/base';
 
   registerAntdMobile();
-  const props = defineProps();
-  const emits = defineEmits();
-  const {definition, value} = useBaseDemo();
+  const {definition, value, props} = useBaseDemo();
 &lt;/script&gt;
 
 </code-container></template>

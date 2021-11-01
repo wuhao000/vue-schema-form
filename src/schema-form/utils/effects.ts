@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
 import {nextTick} from 'vue';
-import {EffectsContext, EffectsHandlers, Paths, SchemaFormStore} from '../../../types';
+import {EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore} from '../../../types';
 import {FieldDefinition, SchemaFormEvents} from '../internal/utils';
 import runValidation from '../uform/validator';
 import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
@@ -24,13 +24,13 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             pathsOrHandler(v);
           } else {
             const patterns = typeof pathsOrHandler === 'string' ? [pathsOrHandler]
-              : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
-                if (typeof item === 'string') {
-                  return item;
-                } else {
-                  return findFieldPath(item, store.fields as any);
-                }
-              }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
+                : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
+                  if (typeof item === 'string') {
+                    return item;
+                  } else {
+                    return findFieldPath(item, store.fields as any);
+                  }
+                }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
             if (isPathMatchPatterns(v.field, patterns)) {
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
                 handler(v.value, v.path);
@@ -54,6 +54,66 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
     });
   };
   const context: EffectsContext = (...paths) => {
+    const required = (required: boolean) => {
+      if (typeof required === 'boolean') {
+        matchFields(paths).forEach(field => {
+          field.required = required;
+        });
+      }
+      return context(...paths);
+    };
+    const hide = (hide?: boolean): EffectsHandlers => {
+      matchFields(paths).forEach(field => {
+        if (typeof hide === 'boolean') {
+          field.visible = !hide;
+        } else {
+          field.visible = false;
+        }
+      });
+      return context(...paths);
+    };
+    const show = (show?: boolean): EffectsHandlers => {
+      matchFields(paths).forEach(field => {
+        if (typeof show === 'boolean') {
+          field.visible = show;
+        } else {
+          field.visible = true;
+        }
+      });
+      return context(...paths);
+    };
+    const disable = (disable?: boolean) => {
+      matchFields(paths).forEach(field => {
+        if (typeof disable === 'boolean') {
+          field.disabled = disable;
+        } else {
+          field.disabled = true;
+        }
+      });
+      return context(...paths);
+    };
+    const editable = (value = true) => {
+      matchFields(paths).forEach(field => {
+        field.editable = value;
+      });
+      return context(...paths);
+    };
+    const readonly = (value = true) => {
+      matchFields(paths).forEach(field => {
+        field.editable = !value;
+      });
+      return context(...paths);
+    };
+    const enable = (enable?: boolean) => {
+      matchFields(paths).forEach(field => {
+        if (typeof enable === 'boolean') {
+          field.disabled = !enable;
+        } else {
+          field.disabled = false;
+        }
+      });
+      return context(...paths);
+    };
     return {
       setTitle: (title) => {
         matchFields(paths).forEach(field => {
@@ -65,12 +125,26 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
         });
         return context(...paths);
       },
-      paths: () => {
-        return context(...paths).fields().map(it => it.plainPath);
+      setStates: (states: SchemaFormFieldStates) => {
+        if (states.required !== undefined) {
+          required(states.required);
+        }
+        if (states.visible !== undefined) {
+          show(states.visible);
+        }
+        if (states.editable !== undefined) {
+          editable(states.editable);
+        }
+        if (states.readonly !== undefined) {
+          readonly(states.readonly);
+        }
+        if (states.enable !== undefined) {
+          enable(states.enable);
+        }
+        return context(...paths);
       },
-      fields: () => {
-        return matchFields(paths);
-      },
+      paths: () => context(...paths).fields().map(it => it.plainPath),
+      fields: () => matchFields(paths),
       field: () => {
         const fields = matchFields(paths);
         if (fields.length >= 2) {
@@ -84,8 +158,14 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
         });
         return context(...paths);
       },
-      value: (value: any) => {
-        const res = matchFields(paths).map(it => it.setGetValue(value));
+      value: (value: unknown) => {
+        const res = matchFields(paths).map(it => {
+          if (typeof value === 'function') {
+            it.setGetValue(value(it));
+          } else {
+            it.setGetValue(value);
+          }
+        });
         if (value === undefined) {
           if (paths.length === 1 && !isFuzzyPath(paths[0])) {
             return res[0];
@@ -94,26 +174,13 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
           }
         }
       },
-      hide: (hide?: boolean): EffectsHandlers => {
-        matchFields(paths).forEach(field => {
-          if (typeof hide === 'boolean') {
-            field.visible = !hide;
-          } else {
-            field.visible = false;
-          }
-        });
-        return context(...paths);
-      },
-      show: (show?: boolean): EffectsHandlers => {
-        matchFields(paths).forEach(field => {
-          if (typeof show === 'boolean') {
-            field.visible = show;
-          } else {
-            field.visible = true;
-          }
-        });
-        return context(...paths);
-      },
+      hide,
+      show,
+      required,
+      disable,
+      editable,
+      readonly,
+      enable,
       setEnum: (options: any): EffectsHandlers => {
         matchFields(paths).forEach(field => {
           field.enum = options;
@@ -144,18 +211,9 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
         subscribe(SchemaFormEvents.fieldFocus, paths, callback);
         return context(...paths);
       },
-      required: (required: boolean) => {
-        if (typeof required === 'boolean') {
-          matchFields(paths).forEach(field => {
-            field.required = required;
-          });
-        }
-        return context(...paths);
-      },
-      onFieldCreateOrChange: (callback): EffectsHandlers => {
-        return context(...paths).onFieldCreate(callback)
-          .onFieldChange(callback);
-      },
+      onFieldCreateOrChange: (callback): EffectsHandlers =>
+          context(...paths).onFieldCreate(callback)
+              .onFieldChange(callback),
       onFieldChange: (callback): EffectsHandlers => {
         subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
@@ -182,7 +240,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-              it, store.fields as any
+                it, store.fields as any
             )), number));
           }
         }
@@ -198,44 +256,9 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
           }
         }
       },
-      disable: (disable?: boolean) => {
-        matchFields(paths).forEach(field => {
-          if (typeof disable === 'boolean') {
-            field.disabled = disable;
-          } else {
-            field.disabled = true;
-          }
-        });
-        return context(...paths);
-      },
-      editable: (value = true) => {
-        matchFields(paths).forEach(field => {
-          field.editable = value;
-        });
-        return context(...paths);
-      },
-      readonly: (value = true) => {
-        matchFields(paths).forEach(field => {
-          field.editable = !value;
-        });
-        return context(...paths);
-      },
-      isEnabled: (): boolean => {
-        return !matchFields(paths).some(it => it.disabled);
-      },
-      enable: (enable?: boolean) => {
-        matchFields(paths).forEach(field => {
-          if (typeof enable === 'boolean') {
-            field.disabled = !enable;
-          } else {
-            field.disabled = false;
-          }
-        });
-        return context(...paths);
-      },
-      replaceLastPath: (...last: string[]): EffectsHandlers => {
-        return context(...replaceLastPath(paths as string[], last));
-      }
+      isEnabled: (): boolean => !matchFields(paths).some(it => it.disabled),
+      replaceLastPath: (...last: string[]): EffectsHandlers =>
+          context(...replaceLastPath(paths as string[], last))
     } as EffectsHandlers;
   };
   context.subscribe = subscribe;

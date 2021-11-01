@@ -5,16 +5,8 @@
       :props="props"
       :schema="definition"
       class="demo-form"
-      platform="mobile"></v-schema-form>
-  <van-button
-      block
-      @click="dialogVisible = true">查看数据
-  </van-button>
-  <van-popup v-model:show="dialogVisible">
-    <div style="padding: 20px;">
-      <pre>{{ value }}</pre>
-    </div>
-  </van-popup>
+      platform="mobile"/>
+  <show-value :value="value"/>
 </template>
 <script lang="tsx">
   import {registerAntdMobile} from '../../../../schema-form';
@@ -53,7 +45,6 @@
             label: '苏州', value: 'sz'
           }]
         }];
-      const dialogVisible = ref(false);
       const date1 = ref(new Date());
       return {
         date1,
@@ -61,7 +52,6 @@
           date1.value = v;
         },
         options,
-        dialogVisible,
         props: getProps(),
         value: {
           start: new Date(),

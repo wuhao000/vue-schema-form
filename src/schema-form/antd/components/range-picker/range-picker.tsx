@@ -1,10 +1,10 @@
 import {DatePicker} from 'ant-design-vue';
 import moment, {Moment} from 'moment';
-import {computed, defineComponent, ref, watch} from 'vue';
+import {defineComponent, ref, watch} from 'vue';
 import {useBaseInput} from '../../../';
 import {isNotNull} from '../../../utils/utils';
 
-const convertValue = (value: Array<Date | number>, format: string): any => {
+const convertValue = (value: Array<Date | number>): any => {
   if (!value) {
     return undefined;
   }
@@ -24,23 +24,13 @@ export default defineComponent({
   props: {
     value: {
       type: Array
-    },
-    mode: {type: String, default: 'date'}
+    }
   },
   setup(props, ctx) {
     const {emit} = ctx;
     const currentValue = ref<Moment[]>(null);
-    const format = computed(() => {
-      switch (props.mode) {
-        case 'date':
-          return 'YYYY-MM-DD';
-        case 'datetime':
-          return 'YYYY-MM-DD HH:mm:ss';
-      }
-      return undefined;
-    });
     watch(() => props.value, (value: any) => {
-      const convertedValue = convertValue(value, format.value);
+      const convertedValue = convertValue(value);
       if (!currentValue.value) {
         currentValue.value = convertedValue;
       } else if (!convertedValue) {

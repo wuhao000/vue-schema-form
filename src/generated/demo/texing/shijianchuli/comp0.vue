@@ -67,7 +67,7 @@
         $('name').onFieldBlur((a, b) => {
           console.log('blur', a, b);
         });
-        $('name').onFieldFocus((a, b) => {
+        $('name').onFieldFocus(() => {
           console.log('onFocus')
         });
       };

@@ -16,7 +16,6 @@ import {
   SchemaFormField,
   SchemaFormStore,
   ShowFieldCondition,
-  Validator,
   ValueProcessor
 } from '../../../types';
 import Empty from '../empty';

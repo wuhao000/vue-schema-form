@@ -8,8 +8,7 @@
   </div>
 </template>
 <script lang="ts">
-  import {defineComponent, reactive, ref} from 'vue';
-  import {SchemaFormField} from '../../../../../types';
+  import {defineComponent, reactive} from 'vue';
   import {FieldTypes, registerAntd} from '../../../../schema-form';
 
   registerAntd();

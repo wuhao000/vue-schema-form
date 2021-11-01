@@ -17,8 +17,7 @@
   &lt;/div&gt;
 &lt;/template&gt;
 &lt;script lang="ts"&gt;
-  import {defineComponent, reactive, ref} from 'vue';
-  import {SchemaFormField} from '../../../../types';
+  import {defineComponent, reactive} from 'vue';
   import {FieldTypes, registerAntd} from '../../../schema-form';
 
   registerAntd();

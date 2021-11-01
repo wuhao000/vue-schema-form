@@ -13,7 +13,7 @@
           <router-view name="nav"/>
         </a-layout-sider>
         <a-layout-content class="bg-white">
-          <div style="height:100%;">
+          <div class="full-height">
             <router-view/>
           </div>
         </a-layout-content>
@@ -102,5 +102,8 @@
         }
       }
     }
+  }
+  .full-height {
+    height:100%;
   }
 </style>

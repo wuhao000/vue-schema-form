@@ -18,7 +18,6 @@
 &lt;script lang="ts" setup&gt;
   import {registerAntd} from '../../../schema-form';
   // noinspection ES6UnusedImports
-  import SimpleEditDemo from '../../../views/common/simple.vue';
   import {SchemaFormField} from '../../../types';
 
   registerAntd();
