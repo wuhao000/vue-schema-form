@@ -7,8 +7,7 @@
 <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;div&gt;
     &lt;simple-edit-demo :init="register"/&gt;
   &lt;/div&gt;

@@ -3,8 +3,7 @@
     <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;a-layout&gt;
     &lt;a-layout-content&gt;
       &lt;v-schema-form

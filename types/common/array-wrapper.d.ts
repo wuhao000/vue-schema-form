@@ -7,7 +7,6 @@ export type BaseArrayComponentProps = {
   showRemoveBtn: Prop<boolean>;
   showAddBtn: Prop<boolean>;
   disabled: Prop<boolean>;
-  fields: Prop<any[]>;
   addBtnText: Prop<string>;
   addBtnProps: Prop<any>;
   deleteBtnProps: Prop<any>;

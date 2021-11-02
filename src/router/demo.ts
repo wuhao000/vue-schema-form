@@ -348,17 +348,6 @@ export default [{
   ]
 },
 {
-  path: '/demo/buju/shuzu',
-  component: () => import('../generated/demo/buju/shuzu/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '数组'
-  },
-  children: [
-    
-  ]
-},
-{
   path: '/demo/buju/wenbenchuanlian',
   component: () => import('../generated/demo/buju/wenbenchuanlian/index.vue'),
   meta: {
@@ -381,44 +370,11 @@ export default [{
   ]
 },
 {
-  path: '/demo/buju/denglu',
-  component: () => import('../generated/demo/buju/denglu/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '登录'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/buju/jiandan',
-  component: () => import('../generated/demo/buju/jiandan/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '简单'
-  },
-  children: [
-    
-  ]
-},
-{
   path: '/demo/buju/xianxing',
   component: () => import('../generated/demo/buju/xianxing/index.vue'),
   meta: {
     tags: ['布局'],
     name: '线性'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/buju/biaoge',
-  component: () => import('../generated/demo/buju/biaoge/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '表格'
   },
   children: [
     

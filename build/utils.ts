@@ -3,7 +3,6 @@ import fs from 'fs';
 import {escape, unescape} from 'html-escaper';
 import marked from 'marked';
 import pinyin from 'pinyin';
-import beautify from './beautify';
 import {DocPluginOptions} from './doc-plugin';
 
 marked.setOptions({

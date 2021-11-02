@@ -7,24 +7,26 @@
 &lt;template&gt;
   &lt;a-layout class="bg-white wrapper"&gt;
     &lt;a-layout-content&gt;
-      &lt;v-schema-form
-          v-model:value="value"
-          :editable="editable"
-          :schema="schema"&gt;&lt;/v-schema-form&gt;
-      &lt;v-schema-form
-          v-model:value="searchForm"
-          :schema="searchFormDefinition"
-          class="m-b"&gt;
-        &lt;template #search&gt;
-          &lt;a-form-item&gt;
-            &lt;a-button&gt;查询&lt;/a-button&gt;
-          &lt;/a-form-item&gt;
-        &lt;/template&gt;
-      &lt;/v-schema-form&gt;
-      &lt;v-schema-form
-          v-model:value="value2"
-          :effects="effects2"
-          :schema="schema2"/&gt;
+      &lt;a-space direction="vertical"&gt;
+        &lt;v-schema-form
+            v-model:value="value"
+            :editable="editable"
+            :schema="schema"/&gt;
+        &lt;v-schema-form
+            v-model:value="searchForm"
+            :schema="searchFormDefinition"
+            class="m-b"&gt;
+          &lt;template #search&gt;
+            &lt;a-form-item&gt;
+              &lt;a-button&gt;查询&lt;/a-button&gt;
+            &lt;/a-form-item&gt;
+          &lt;/template&gt;
+        &lt;/v-schema-form&gt;
+        &lt;v-schema-form
+            v-model:value="value2"
+            :effects="effects2"
+            :schema="schema2"/&gt;  
+      &lt;/a-space&gt;
       &lt;a-button @click="changeMode"&gt;
         {{ editable ? '详情' : '编辑' }}
       &lt;/a-button&gt;

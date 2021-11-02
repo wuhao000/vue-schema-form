@@ -4,15 +4,24 @@
 <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
   &lt;a-layout&gt;
     &lt;a-layout-content&gt;
       &lt;v-schema-form
           v-model:value="value"
           :schema="schema"
           class="demo-form"
-          @ok="onOk"&gt;&lt;/v-schema-form&gt;
+          @ok="onOk"/&gt;
+      &lt;v-schema-form 
+          v-model:value="value3"
+          :schema="{
+        fields: [{
+          property: 'name',
+          type: 'string',
+          array: true
+        }]
+      }"/&gt;
+      &lt;show-value :value="value3"/&gt;
     &lt;/a-layout-content&gt;
   &lt;/a-layout&gt;
 &lt;/template&gt;
@@ -20,7 +29,7 @@
   import {registerAntd} from '../../../schema-form';
   import {SchemaFormField} from '../../../../types';
   import {defineComponent, ref} from 'vue';
-
+  
   registerAntd();
   export default defineComponent({
     name: 'Demo',
@@ -37,23 +46,12 @@
         a: '1',
         b: '2'
       }]);
+      const value3 = ref({
+        name: ['1','2']
+      })
       return {
+        value3,
         value2,
-        tableSchema: {
-          type: 'object',
-          array: true,
-          arrayComponent: 'table',
-          fields: {
-            a: {
-              type: 'string',
-              title: '字段1'
-            },
-            b: {
-              type: 'string',
-              title: '字段2'
-            }
-          }
-        },
         schema: {
           props: {
             title: '对象列表',

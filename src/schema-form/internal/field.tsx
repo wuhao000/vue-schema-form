@@ -160,7 +160,6 @@ export default defineComponent({
         localProps.field = field.value;
       }
       if (renderComponent.mode === 'layout') {
-        localProps.fields = getSubFields();
         localProps.layout = definition.layout;
         localProps.fieldDefinitions = relatedSubFields.value;
       }
@@ -407,8 +406,7 @@ export default defineComponent({
         },
         onAdd: () => {
           addArrayItem();
-        },
-        fields: arrayContent
+        }
       });
       return <ArrayComponent {...arrayProps}
                              v-slots={{
@@ -462,7 +460,7 @@ export default defineComponent({
       delete propsTmp.style;
       const slots: { [name: string]: Slot } = {};
       if (inputFieldDef.mode === 'layout') {
-        slots.default = () => propsTmp.fields as VNode[];
+        slots.default = getSubFields;
       }
       if (definition.slots) {
         const slotsDef = definition.slots;

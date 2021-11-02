@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <simple-edit-demo :init="register"/>

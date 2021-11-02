@@ -21,7 +21,6 @@ export const baseArrayComponentProps: BaseArrayComponentProps = {
   showRemoveBtn: {type: Boolean, default: true},
   showAddBtn: {type: Boolean, default: true},
   disabled: {type: Boolean, default: false},
-  fields: {type: [Array, Object]},
   addBtnText: {type: String},
   addBtnProps: {type: Object},
   deleteBtnProps: {type: Object}
@@ -48,8 +47,9 @@ emits: ['add', 'remove'],
       return store.editable && field.value.editable;
     });
     const renderAddButton = () => {
+      const fields = slots.default();
       if (!editable.value || !props.showAddBtn || (props.maxLength > 0 && slots.default
-          && (props.fields as VNode[]).length >= props.maxLength)) {
+          && fields.length >= props.maxLength)) {
         return null;
       }
       const ColComponent: any = getColComponent(store.platform);
@@ -82,14 +82,14 @@ emits: ['add', 'remove'],
       const LayoutComponent = getLayoutComponent(store.platform);
       const ASideComponent = getSiderComponent(store.platform);
       const ContentComponent = getContentComponent(store.platform);
+      const fields = slots.default();
       if (store.platform === MOBILE) {
-        return (props.fields as VNode[]).map((it, index) => {
+        return fields.map((it, index) => {
           return <div style={{position: 'relative'}}>{
             [renderDeleteBtn(index), it]
           }</div>;
         });
       }
-      const fields = props.fields || [];
       if (Array.isArray(fields)) {
         return fields.map((it, index) => {
           return (
