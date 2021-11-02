@@ -1,3 +1,4 @@
+import {Slot} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -115,7 +116,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
       if (field.value.slot) {
@@ -159,8 +160,8 @@ export default defineComponent({
         localProps.field = field.value;
       }
       if (renderComponent.mode === 'layout') {
+        localProps.fields = getSubFields();
         localProps.layout = definition.layout;
-        localProps.fields = subFields.value;
         localProps.fieldDefinitions = relatedSubFields.value;
       }
       localProps.disabled = isDisabled.value;
@@ -232,9 +233,9 @@ export default defineComponent({
             </span>
           };
           formItemProps.label = <LibComponentsPopover
-              content={definition.tip}
-              v-slots={slots}
-              trigger="hover"/>;
+            content={definition.tip}
+            v-slots={slots}
+            trigger="hover"/>;
         } else {
           formItemProps.label = definition.title;
         }
@@ -313,8 +314,7 @@ export default defineComponent({
       if (!isEqual(currentValue.value, val)) {
         setCurrentValue(val);
       }
-    }, 10);
-
+    });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
       const definition = props.definition as SchemaFormField;
@@ -410,18 +410,21 @@ export default defineComponent({
         },
         fields: arrayContent
       });
-      return <ArrayComponent {...arrayProps}/>;
+      return <ArrayComponent {...arrayProps}
+                             v-slots={{
+                               default: () => arrayContent
+                             }}/>;
     };
     const relatedSubFields = computed(() => {
       const definition = props.definition as SchemaFormField;
       return getRealFields(definition.fields);
     });
-    const subFields = computed(() => {
+    const getSubFields = () => {
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, currentValue.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
-    });
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
+    };
     const objectStore = inject(SchemaFormObjectStoreKey, undefined);
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
@@ -448,15 +451,19 @@ export default defineComponent({
           return <span>{displayValue}</span>;
         }
       }
-      const style: any = Object.assign({}, inputProps.value.style || {});
       // 渲染数组
       if (field.value.array && inputFieldDef.arrayMode === 'single') {
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
+      const style: any = Object.assign({}, inputProps.value.style || {});
+
       const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
-      const slots = {};
+      const slots: { [name: string]: Slot } = {};
+      if (inputFieldDef.mode === 'layout') {
+        slots.default = () => propsTmp.fields as VNode[];
+      }
       if (definition.slots) {
         const slotsDef = definition.slots;
         Object.keys(slotsDef).forEach(slotName => {
@@ -465,20 +472,20 @@ export default defineComponent({
               slots[slotName] = store.root.slots[slotsDef[slotName] as string];
             }
           } else {
-            slots[slotName] = slotsDef[slotName];
+            slots[slotName] = slotsDef[slotName] as Slot;
           }
         });
       }
       return <InputFieldComponent
-          {...propsTmp}
-          v-slots={slots}
-          class={className}
-          style={style}
-          key={field.value.plainPath}
-          ref={el => {
-            inputRef.value = el;
-            field.value.inputRef = el;
-          }}/>;
+        {...propsTmp}
+        v-slots={slots}
+        class={className}
+        style={style}
+        key={field.value.plainPath}
+        ref={el => {
+          inputRef.value = el;
+          field.value.inputRef = el;
+        }}/>;
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
@@ -551,13 +558,13 @@ export default defineComponent({
         };
       }
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent
-              {...formItemProps}
-              v-slots={formItemProps.slots}
-              class={className}
-              style={style}>
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent
+          {...formItemProps}
+          v-slots={formItemProps.slots}
+          class={className}
+          style={style}>
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
         return <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {

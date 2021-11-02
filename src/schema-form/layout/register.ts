@@ -1,5 +1,5 @@
 import {Component} from 'vue';
-import {FieldDefinition, LayoutOptions, Platform} from '../../../types';
+import {ArrayMode, FieldDefinition, LayoutOptions, Platform} from '../../../types';
 import {registerComponent} from '../config';
 import {DESKTOP, MOBILE} from '../utils/utils';
 import Card from './card';
@@ -16,6 +16,7 @@ import TextBox from './text-box';
 export const registerLayout = (options: {
   component: string | Component,
   platforms: Platform | Platform[],
+  arrayMode?: ArrayMode,
   types: string | string[],
   layoutOptions?: LayoutOptions,
   getProps?: ((definition: FieldDefinition, platform: Platform) => any)
@@ -24,6 +25,7 @@ export const registerLayout = (options: {
     component: options.component,
     platforms: options.platforms,
     mode: 'layout',
+    arrayMode: options.arrayMode ?? 'both',
     types: options.types,
     layoutOptions: options.layoutOptions,
     getProps: options.getProps
@@ -52,12 +54,14 @@ registerLayout({
 registerLayout({
   component: Table,
   platforms: DESKTOP,
+  arrayMode: 'array',
   types: 'table'
 });
 registerLayout({
   component: FormBlock,
   platforms: DESKTOP,
   types: 'block',
+  arrayMode: 'array',
   layoutOptions: {
     noTitle: true,
     noWrap: true

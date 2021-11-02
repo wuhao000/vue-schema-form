@@ -4,14 +4,13 @@ import './text-box.less';
 export default defineComponent({
   name: 'TextBox',
   props: {
-    layout: {type: String, required: true},
-    fields: {type: [Array, Object], required: true}
+    layout: {type: String, required: true}
   },
-  setup(props) {
+  setup(props, {slots}) {
     const getContent = () => {
       const layout = props.layout as any;
       let array = [];
-      const fields = props.fields as any;
+      const fields = slots.default();
       const copyFields = [...fields];
       if (layout) {
         const split = layout.split('%s');

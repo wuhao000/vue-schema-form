@@ -1,8 +1,7 @@
-import {computed, defineComponent, inject} from 'vue';
+import {defineComponent, inject} from 'vue';
 import {SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
-import {baseLayoutProps} from './base-layout';
 import './form-block.less';
 
 
@@ -14,19 +13,18 @@ export default defineComponent({
     title: {
       type: [String, Object]
     },
-    removeText: String,
-    fields: baseLayoutProps.fields
+    removeText: String
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
-  setup(props, {emit}) {
+  setup(props, {emit, slots}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
-    const localFields = computed(() => props.fields as any[]);
     const renderAddBtn = (index: number) => {
-      if (index !== localFields.value.length - 1) {
+      const fields = slots.default();
+      if (index !== fields.length - 1) {
         return;
       }
       const PlusIcon = LibComponents.icons[store.platform].plus;
-      if (props.maxItems && props.maxItems <= localFields.value.length) {
+      if (props.maxItems && props.maxItems <= fields.length) {
         return;
       }
       return <div class="array-item-addition">
@@ -40,10 +38,11 @@ export default defineComponent({
       </div>;
     };
     const renderOperations = (index: number) => {
+      const fields = slots.default();
       const DownIcon = LibComponents.icons[store.platform].down;
       const UpIcon = LibComponents.icons[store.platform].up;
-      return localFields.value.length > 1 ? [
-        index !== localFields.value.length - 1
+      return fields.length > 1 ? [
+        index !== fields.length - 1
           ? <div class="circle-btn"
                  onClick={() => {
                    emit('move-down', index);
@@ -76,7 +75,6 @@ export default defineComponent({
       onRemove(index: number) {
         emit('remove', index);
       },
-      localFields,
       renderOperations,
       onAdd: () => {
         emit('add');
@@ -88,10 +86,10 @@ export default defineComponent({
     const DeleteIcon = LibComponents.icons[store.platform].delete;
     const PlusIcon = LibComponents.icons[store.platform].plus;
     const EmptyComponent = LibComponents.empty[store.platform];
-
+    const fields = this.$slots.default();
     return <div class="schema-form-block">
       {
-        this.localFields.length ? this.localFields.map((it, index) => {
+        fields.length ? fields.map((it, index) => {
           return <div class="array-item" key={'item-' + index}>
             <div class="array-index">
               <span>{index + 1}</span>

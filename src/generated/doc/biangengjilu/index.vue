@@ -1,6 +1,9 @@
 <template>
   <div class="markdown-body">
     <h2 id="更新日志">更新日志</h2>
+<h3 id="v312">v3.1.2</h3>
+<p><code>2021.11.1</code>
+🐛 修复嵌套布局下数据回填失效的问题</p>
 <h3 id="v311">v3.1.1</h3>
 <p><code>2021.11.1</code>
 🌟 表单项选项去除forDisplay,forArray,forInput,layout等属性，使用mode和arrayMode代替

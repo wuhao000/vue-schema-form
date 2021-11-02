@@ -412,6 +412,17 @@ export default [{
   children: [
     
   ]
+},
+{
+  path: '/demo/buju/biaoge',
+  component: () => import('../generated/demo/buju/biaoge/index.vue'),
+  meta: {
+    tags: ['布局'],
+    name: '表格'
+  },
+  children: [
+    
+  ]
 }
   ]
 }, {

@@ -82,15 +82,6 @@ emits: ['ok', 'cancel'],
         (field as any).clearValidate();
       });
     };
-    const resetFields = () => {
-      if (!props.model) {
-        console.warn('[Element Warn][Form]model is required for resetFields to work.');
-        return;
-      }
-      fields.value.forEach(field => {
-        (field as any).resetField();
-      });
-    };
     const validate = (callback) => {
       if (!props.model) {
         return;
@@ -100,7 +91,7 @@ emits: ['ok', 'cancel'],
       // if no callback, return promise
       if (typeof copyCallback !== 'function' && Promise) {
         promise = new Promise((resolve, reject) => {
-          copyCallback = (valid) => {
+          copyCallback = valid => {
             const errorField = fields.value.find(it => it.currentValidateStatus === 'error');
             if (errorField) {
               errorField.focus();
@@ -132,17 +123,6 @@ emits: ['ok', 'cancel'],
       if (promise) {
         return promise;
       }
-    };
-    const validateField = (props, cb) => {
-      const copyProps = [].concat(props);
-      const localFields = fields.value.filter(field => copyProps.indexOf((field as any).prop) !== -1);
-      if (!localFields.length) {
-        console.warn('[Element Warn]please pass correct props!');
-        return;
-      }
-      localFields.forEach(field => {
-        (field as any).validate('', cb);
-      });
     };
     const getLayout = () => {
       if (props.inline) {
@@ -189,9 +169,7 @@ emits: ['ok', 'cancel'],
       prefixCls,
       fields,
       clearValidate,
-      resetFields,
       validate,
-      validateField,
       getLayout,
       renderButtons
     };

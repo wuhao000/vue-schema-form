@@ -7,8 +7,12 @@ export default defineComponent({
     ...baseLayoutProps
   },
   render() {
-    return <div>
-      {this.fields}
-    </div>;
+    return <table>
+        {this.$slots.default().map(row => {
+          return <tr>
+            {row}
+          </tr>;
+        })}
+    </table>;
   }
 });

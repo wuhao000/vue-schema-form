@@ -35,12 +35,11 @@ export default defineComponent({
     colClass: [Object, String, Function],
     colStyle: [Object, Function]
   },
-  setup(props) {
+  setup(props, {slots}) {
     const {store} = useBaseLayout();
     const containsArray = computed(() => props.layout.some(it => Array.isArray(it)));
     const isMixed = computed(() =>
       props.layout.some(it => typeof it === 'number' || (!Array.isArray(it) && typeof it === 'object')) && props.layout.some(it => Array.isArray(it)));
-    const localFields = computed(() => props.fields);
     const getRowStyle = (index) => {
       if (typeof props.rowStyle === 'function') {
         return props.rowStyle(index);
@@ -93,7 +92,7 @@ export default defineComponent({
       return groups;
     }
     const layoutFields = computed(() => {
-      const fields = localFields.value;
+      const fields = slots.default();
       const layout: Array<number | number[]> = props.layout;
       const groups = toGroups(fields, layout);
       const LibComponentsCol: any = LibComponents.col[store.platform];
@@ -138,7 +137,6 @@ export default defineComponent({
       });
     });
     return {
-      localFields,
       layoutFields,
       isMixed,
       store
@@ -149,7 +147,7 @@ export default defineComponent({
     const LibComponentsRow: any = LibComponents.row[store.platform];
     const {store: {platform}} = this;
     if (platform === MOBILE) {
-      return <div>{this.localFields}</div>;
+      return <div>{this.$slots.default()}</div>;
     }
     const FormItemComponent: any = getFormItemComponent(this.store.platform);
     if (this.title) {

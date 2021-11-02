@@ -50,7 +50,7 @@ export default defineComponent({
     },
     render() {
       const iFields = this.fieldDefinitions.map(it => this.store.fields[it.property]) as FieldDefinition[];
-      const fields = [...this.fields as any[]];
+      const fields = this.$slots.default();
       const groups = (this.layout as number[]).map((n) => {
         return fields.splice(0, n);
       });

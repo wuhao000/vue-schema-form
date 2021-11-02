@@ -46,8 +46,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -57,17 +57,17 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => {
-          const field = fields[key];
-          if (!field.id) {
-            field.id = uuid.v4();
-          }
-          if (!field.property) {
-            field.property = key;
-          }
-          return field;
-        });
+      .filter(key => fields[key])
+      .map(key => {
+        const field = fields[key];
+        if (!field.id) {
+          field.id = uuid.v4();
+        }
+        if (!field.property) {
+          field.property = key;
+        }
+        return field;
+      });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -93,7 +93,7 @@ export function getComponentType(store: SchemaFormStore,
   const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
-      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
+    || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {

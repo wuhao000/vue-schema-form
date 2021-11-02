@@ -1,10 +1,16 @@
 import {Plugin} from 'vite';
 import {createDemoRoutes} from './routes-util';
 import {createDoc} from './utils';
+import _ from 'lodash'
 
 export interface DocPluginOptions {
   highLightLanguages: string[];
 }
+
+const doUpdate = _.debounce((id, options) => {
+  createDoc(id, options);
+  createDemoRoutes();
+}, 500);
 
 export default (options: DocPluginOptions): Plugin => {
   return {
@@ -12,15 +18,13 @@ export default (options: DocPluginOptions): Plugin => {
     name: 'Doc',
     transform(source, id) {
       if (id.toLowerCase().endsWith('.md')) {
-        createDoc(id, options);
-        createDemoRoutes();
+        doUpdate(id, options);
       }
       return source;
     },
     async handleHotUpdate(ctx) {
       if (ctx.file.toLowerCase().endsWith('.md')) {
-        createDoc(ctx.file, options);
-        createDemoRoutes();
+        doUpdate(ctx.file, options);
       }
     }
   };
