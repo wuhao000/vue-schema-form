@@ -1,5 +1,5 @@
 import {Slot} from '@vue/runtime-core';
-import {ComponentInternalInstance, VNode} from 'vue';
+import {Component, ComponentInternalInstance, VNode} from 'vue';
 import {ValidateRules} from './async-validator';
 import {Effects, EffectsContext, SchemaFormComponent, SchemaFormComponentOptions} from './form';
 import {DefaultPatternRule, IFieldOptions, IFieldState, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
@@ -8,7 +8,6 @@ export type Mode = 'edit' | 'display';
 
 export class FieldDefinition<V = any> {
   public array: boolean;
-  public changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   public default?: V;
   public definition: SchemaFormField;
   public description?: string | VNode;
@@ -16,48 +15,35 @@ export class FieldDefinition<V = any> {
     path: string,
     destruct: any
   };
-  public destructor?: () => void;
-  public dirty?: boolean;
-  public dirtyType?: string;
   public disabled: boolean;
   public display: boolean;
   public displayValue?: any;
   public editable: boolean;
-  public effectErrors?: string[];
   public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]>;
   public errors?: string[];
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields;
   public focus?: (event?: boolean) => any;
-  public hiddenFromParent?: boolean;
   public id: string;
-  public initialize?: (options: IFieldOptions) => void;
   public invalid?: boolean;
-  public lastValidateValue?: V;
   public loading: boolean;
   public match?: (path: Path | IFormPathMatcher) => boolean;
   public max?: number;
   public min?: number;
   public name?: string;
-  public notify?: (forceUpdate?: boolean) => void;
   public onChange?: (fn: () => void) => void;
   public path?: string[];
-  public pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   public plainPath?: string;
   public pristine?: boolean;
   public processor: ValueProcessor;
   public props?: { [key: string]: any };
-  public publishState?: () => IFieldState;
   public required: boolean;
   public rules?: IRuleDescription[];
   public setGetValue?: (value?: any) => any;
-  public shownFromParent?: boolean;
   public slot?: string;
   public store?: SchemaFormStore;
-  public syncContextValue?: () => void;
   public title: any;
-  public type: string | SchemaFormComponentOptions | SchemaFormComponentOptions[];
-  public updateState?: (fn: (state: IFieldState) => void) => void;
+  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
   public valid: boolean;
   public validate?: (trigger?: string) => (boolean | Promise<unknown>);
   public value: V;
@@ -204,7 +190,7 @@ export interface SchemaFormField {
   /**
    * 表单项类型
    */
-  type?: string | SchemaFormComponentOptions | SchemaFormComponentOptions[];
+  type?: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
   /**
    * 是否可见
    */

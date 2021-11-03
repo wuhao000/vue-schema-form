@@ -125,14 +125,14 @@ export default defineComponent({
       return field.value.getComponent(!editable.value, store.platform);
     });
     const preProps = computed<{ [key: string]: unknown }>(() => {
-      const localProps: { [key: string]: unknown } = {};
+      const definition = props.definition as SchemaFormField;
+      const localProps: { [key: string]: unknown } = {...(definition.props ?? {})};
       const renderComponent = fieldComponent.value;
-      if (renderComponent !== undefined) {
+      if (renderComponent !== undefined && renderComponent.getProps) {
         Object.assign(localProps, renderComponent.getProps(field.value));
       }
       const {platform} = store;
       const {path, schemaPath} = props;
-      const definition = props.definition as SchemaFormField;
       if (field.value.type === FieldTypes.Object) {
         localProps.platform = platform;
         localProps.editable = editable.value;

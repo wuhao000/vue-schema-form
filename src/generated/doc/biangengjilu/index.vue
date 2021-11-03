@@ -1,8 +1,11 @@
 <template>
   <div class="markdown-body">
     <h2 id="更新日志">更新日志</h2>
+<h3 id="v314">v3.1.4</h3>
+<p><code>2021.11.3</code>
+🐛 修复typescript类型</p>
 <h3 id="v313">v3.1.3</h3>
-<p><code>2021.11.1</code></p>
+<p><code>2021.11.2</code></p>
 <p>🐛 修复嵌套布局下数据回填失效的问题</p>
 <h3 id="v311">v3.1.1</h3>
 <p><code>2021.11.1</code></p>

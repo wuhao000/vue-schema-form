@@ -1,6 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
 import classNames from 'classnames';
-import {computed, ComputedRef, defineComponent, inject, PropType, VNode} from 'vue';
+import {computed, ComputedRef, defineComponent, inject, PropType} from 'vue';
 import {BaseArrayComponentProps, SchemaFormStore} from '../../../types';
 import {FieldDefinition} from '../internal/utils';
 import {SchemaFormStoreKey} from '../utils/key';

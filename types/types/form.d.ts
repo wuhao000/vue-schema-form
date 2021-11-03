@@ -215,38 +215,28 @@ export interface IFieldMap {
 
 export interface IField<V = any> {
   array?: boolean;
-  changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   component: SchemaFormComponent;
   definition: SchemaFormField;
   destructPath?: {
     path: string,
     destruct: any
   };
-  destructor?: () => void;
-  dirty?: boolean;
-  dirtyType?: string;
   disabled: boolean;
   display?: boolean;
   displayValue?: any;
   editable?: boolean;
-  effectErrors?: string[];
   enum: any[];
   errors?: string[];
   fields?: FormFields;
   focus?: () => any;
-  hiddenFromParent?: boolean;
   id?: string;
   initialValue?: V;
-  initialize?: (options: IFieldOptions) => void;
   invalid?: boolean;
-  lastValidateValue?: V;
   loading?: boolean;
   match?: (path: Path | IFormPathMatcher) => boolean;
   name?: string;
-  notify?: (forceUpdate?: boolean) => void;
   onChange?: (fn: () => void) => void;
   path?: string[];
-  pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   plainPath?: string;
   pristine?: boolean;
   processor?: {
@@ -254,16 +244,12 @@ export interface IField<V = any> {
     setValue: (parentValue: {[key: string]: unknown}, field: IField, fieldValue: any) => any;
   };
   props?: any;
-  publishState?: () => IFieldState;
   required?: boolean;
   rules?: IRuleDescription[];
   setGetValue?: (value?: any) => any;
-  shownFromParent?: boolean;
   store?: SchemaFormStore;
-  syncContextValue?: () => void;
   title?: string | VNode;
   type?: string;
-  updateState?: (fn: (state: IFieldState) => void) => void;
   valid: boolean;
   validate?: () => (boolean | Promise<unknown>);
   value: V;

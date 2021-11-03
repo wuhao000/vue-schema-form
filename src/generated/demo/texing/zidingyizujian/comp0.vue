@@ -1,14 +1,21 @@
 <template>
   <v-schema-form
       v-model:value="value"
-      :effects="effects"
       :schema="schema"/>
 </template>
 <script lang="tsx">
   import {defineComponent, ref, watch} from 'vue';
-  import {EffectsContext, SchemaFormField} from '../../../../../types';
+  import {SchemaFormField} from '../../../../../types';
   import {registerAntd} from '../../../../schema-form';
   
+  
+  const Input = defineComponent({
+    name: 'CustomInput',
+    render() {
+      console.log(this.$attrs);
+      return <div>我是自定义组件</div>;
+    }
+  })
 
   export default defineComponent({
     name: 'Demo',
@@ -20,48 +27,45 @@
         string3: 'aaa'
       });
       return {
-        effects: ($: EffectsContext) => {
-          $('string1').hide();
-          $('selectCfg').hide();
-        },
         schema: {
           fields: [
             {
               property: 'string1',
               title: 'string',
-              type: 'string'
+              type: Input,
+              props: {
+                mode: 'textarea'
+              }
             },
             {
               property: 'string2',
               title: 'string2',
-              type: 'text'
+              type: (props) => {
+                return <div>我也是自定义组件: {props.mode}</div>;
+              },
+              props: {
+                mode: 'aaaa'
+              }
             },
             {
               property: 'string3',
               title: 'string3',
               type: {
-                mode: ['single', 'input'],
-                platform: 'desktop',
-                component: {
-                  name: 'CustomField',
-                  props: {
-                    value: String
-                  },
-                  setup(props, {emit}) {
-                    const localValue = ref(props.value);
-                    watch(() => localValue.value, v => {
-                      emit('update:value', v);
-                    });
-                    return {
-                      localValue
-                    };
-                  },
-                  render() {
-                    return <a-input v-model={[this['localValue'], 'value']}/>;
-                  }
+                name: 'CustomField',
+                props: {
+                  value: String
                 },
-                getProps: () => {
-                  return {};
+                setup(props, {emit}) {
+                  const localValue = ref(props.value);
+                  watch(() => localValue.value, v => {
+                    emit('update:value', v);
+                  });
+                  return {
+                    localValue
+                  };
+                },
+                render() {
+                  return <a-input v-model={[this['localValue'], 'value']}/>;
                 }
               }
             }

@@ -22,7 +22,6 @@ export interface IFieldError {
 }
 
 export interface IFormState<V = any> {
-  dirty: boolean; // 是否存在变化
   errors: IFieldError[]; // 错误提示集合
   initialValues: V; // 初始化数据
   invalid: boolean; // 是否不合法

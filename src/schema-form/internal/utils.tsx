@@ -1,12 +1,10 @@
 import clone from 'lodash.clonedeep';
 import get from 'lodash.get';
 import uuid from 'uuid';
-import {isVNode, reactive, VNode} from 'vue';
+import {Component, isVNode, reactive, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FormFields,
-  IFieldOptions,
-  IFieldState,
   IFormPathMatcher,
   IRuleDescription,
   Path,
@@ -169,7 +167,21 @@ function getComponent(field: SchemaFormField,
       }
     };
   }
-  return fixComponentDefinition(type, !field.editable);
+  if (typeof type === 'object' && typeof type['render'] === 'function') {
+    return {
+      component: type,
+      platform,
+      mode: forDisplay ? 'display' : 'input',
+      arrayMode: 'single',
+      layoutOptions: null,
+      valueProp: 'value',
+      wrap: true,
+      getProps: () => {
+        return {};
+      }
+    };
+  }
+  return fixComponentDefinition(type as SchemaFormComponentOptions | SchemaFormComponentOptions[], !field.editable);
 }
 
 export function renderField(pathPrefix: string[] | null,
@@ -221,50 +233,36 @@ export class FieldDefinition<V = any> {
   public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]> = null;
   public title: any = null;
   public array = false;
-  public type: string | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
+  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
   public processor: ValueProcessor;
-  public changeEditable?: (editable: boolean | ((name: string) => boolean)) => void = null;
   public description?: string | VNode;
   public destructPath?: {
     path: string,
     destruct: any
   } = null;
-  public destructor?: () => void = null;
-  public dirty?: boolean = null;
-  public dirtyType?: string = null;
   public display = false;
   public displayValue?: any = null;
   public editable = true;
-  public effectErrors?: string[] = null;
   public errors?: string[] = null;
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields = null;
   public focus?: (event?: boolean) => any = null;
-  public hiddenFromParent?: boolean = null;
   public default?: V = null;
-  public initialize?: (options: IFieldOptions) => void = null;
   public invalid?: boolean = false;
-  public lastValidateValue?: V = null;
   public loading = false;
   public match?: (path: Path | IFormPathMatcher) => boolean = null;
   public name?: string = null;
-  public notify?: (forceUpdate?: boolean) => void = null;
   public onChange?: (fn: () => void) => void = null;
   public path?: string[] = null;
-  public pathEqual?: (path: Path | IFormPathMatcher) => boolean = null;
   public plainPath?: string = null;
   public pristine?: boolean = null;
   public props?: { [key: string]: any } = null;
-  public publishState?: () => IFieldState = null;
   public required = false;
   public min?: number;
   public max?: number;
   public rules?: IRuleDescription[] = null;
   public setGetValue?: (value?: any) => any = null;
-  public shownFromParent?: boolean = null;
-  public syncContextValue?: () => void = null;
   public store?: SchemaFormStore = null;
-  public updateState?: (fn: (state: IFieldState) => void) => void = null;
   public valid = true;
   public validate?: (trigger?: string) => (boolean | Promise<unknown>) = null;
   public inputRef?: any;
@@ -302,14 +300,9 @@ export class FieldDefinition<V = any> {
     this.min = definition.min;
     this.max = definition.max;
     this.fields = definition.fields;
-    this.effectErrors = [];
     this.description = definition.description;
     this.errors = [];
-    this.hiddenFromParent = false;
     this.default = definition.default;
-    this.initialize = () => {
-      // default do nothing
-    };
     this.invalid = false;
     this.value = currentValue;
     this.setGetValue = null;
