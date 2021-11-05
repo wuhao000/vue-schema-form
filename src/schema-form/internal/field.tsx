@@ -126,7 +126,7 @@ export default defineComponent({
     });
     const preProps = computed<{ [key: string]: unknown }>(() => {
       const definition = props.definition as SchemaFormField;
-      const localProps: { [key: string]: unknown } = {...(definition.props ?? {})};
+      const localProps: { [key: string]: unknown } = {...(definition.xProps || definition.props || {})};
       const renderComponent = fieldComponent.value;
       if (renderComponent !== undefined && renderComponent.getProps) {
         Object.assign(localProps, renderComponent.getProps(field.value));

@@ -8,7 +8,7 @@ import './steps.less';
 export default defineComponent({
     name: 'StepsLayout',
     props: {
-      layout: {type: Array as PropType<any[]>, required: true},
+      layout: {type: Array as PropType<number[]>, required: true},
       titles: {
         type: [Array]
       },

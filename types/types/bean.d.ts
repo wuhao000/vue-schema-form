@@ -2,7 +2,7 @@ import {Slot} from '@vue/runtime-core';
 import {Component, ComponentInternalInstance, VNode} from 'vue';
 import {ValidateRules} from './async-validator';
 import {Effects, EffectsContext, SchemaFormComponent, SchemaFormComponentOptions} from './form';
-import {DefaultPatternRule, IFieldOptions, IFieldState, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
+import {DefaultPatternRule, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
 
 export type Mode = 'edit' | 'display';
 
@@ -82,7 +82,14 @@ export class ComponentStore {
 
 export type Platform = 'desktop' | 'mobile';
 
-export interface SchemaFormField {
+export type SchemaFormFieldType =
+  Exclude<'grid' | 'steps', string>
+  | Component
+  | SchemaFormComponentOptions
+  | SchemaFormComponentOptions[]
+  | (() => VNode | VNode[]);
+
+interface BaseSchemaFormField {
   /**
    * 字段值是否数组类型
    */
@@ -132,7 +139,6 @@ export interface SchemaFormField {
    */
   format?: DefaultPatternRule;
   id?: string;
-  layout?: any;
   layoutProps?: { [key: string]: unknown };
   layoutType?: string | { [key: string]: unknown };
   /**
@@ -155,10 +161,7 @@ export interface SchemaFormField {
    * 表单属性名称
    */
   property?: string;
-  /**
-   * 表单输入组件的自定义属性
-   */
-  props?: SchemaFormFieldProps;
+
   /**
    * 字段是否为必填
    */
@@ -188,10 +191,6 @@ export interface SchemaFormField {
    */
   title?: string | VNode;
   /**
-   * 表单项类型
-   */
-  type?: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
-  /**
    * 是否可见
    */
   visible?: boolean;
@@ -202,8 +201,86 @@ export interface SchemaFormField {
   /**
    * 指定额外的组件类型
    */
-  xType?: string | SchemaFormComponentOptions;
+  xType?: SchemaFormFieldType;
 }
+
+type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType>;
+
+type ClassType = string | string[] | { [key: string]: boolean };
+
+
+export interface StepsField extends BaseSchemaFormField {
+  /**
+   * 每个步骤包含的组件数量
+   */
+  layout: number[];
+  type: 'steps';
+  props?: SchemaFormFieldProps;
+  xProps: {
+    /**
+     * 步骤标题，和步骤数保持一致
+     */
+    titles: Array<string | VNode>;
+    currentStep?: number;
+  };
+}
+
+export interface GridField extends BaseSchemaFormField {
+  /**
+   * 数字或数字数组，可以深层嵌套
+   */
+  layout: GridLayoutType;
+  type: 'grid';
+  props?: SchemaFormFieldProps;
+  xProps?: {
+    /**
+     * 栅格之间的间隙
+     */
+    gutter?: number;
+    /**
+     * 是否对单个栅格使用行组件包裹，即每个栅格占用一行
+     */
+    wrapSingle?: boolean;
+    /**
+     * 行样式
+     */
+    rowStyle?: Partial<CSSStyleDeclaration> | ((rowIndex: number) => Partial<CSSStyleDeclaration>);
+    /**
+     * 行class
+     */
+    rowClass?: ClassType | ((rowIndex: number) => ClassType);
+    /**
+     * 栅格class
+     */
+    colClass?: ClassType | ((colIndex: number) => ClassType);
+    /**
+     * 栅格样式
+     */
+    colStyle?: Partial<CSSStyleDeclaration> | ((colIndex: number) => Partial<CSSStyleDeclaration>);
+  };
+}
+
+interface DefaultSchemaFormField extends BaseSchemaFormField {
+  /**
+   * 表单项类型
+   */
+  type?: SchemaFormFieldType;
+  /**
+   * 布局描述，根据不同的布局有所不同
+   */
+  layout?: any;
+  /**
+   * 表单输入组件的自定义属性
+   */
+  props?: SchemaFormFieldProps;
+  /**
+   * 表单输入组件的自定义属性, 和props的作用完全一致（props会被当成其他对象的同名属性合并，造成代码提示错误），设置了xProps则props无效
+   */
+  xProps?: SchemaFormFieldProps;
+}
+
+export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField;
+
 
 interface ValueProcessor {
   getValue: (parentValue: { [key: string]: unknown }, field: FieldDefinition) => any;

@@ -9,6 +9,20 @@
     fields: [
       {
         type: () => <ShowValue/>
+      },
+      {
+        type: 'grid',
+        layout: [12, [12, 13]],
+        xProps: {
+          colClass: ''
+        }
+      },
+      {
+        type: 'steps',
+        layout: [1, 2],
+        xProps: {
+          titles: ['1']
+        }
       }
     ]
   };
