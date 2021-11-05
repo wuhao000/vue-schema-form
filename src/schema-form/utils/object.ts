@@ -9,3 +9,6 @@ export const part = <T>(obj: T, fields: Array<keyof T>): { [key in keyof T]?: un
   return newObj;
 };
 
+export const values = (obj: any) => {
+  return Object.keys(obj).map(key => obj[key]);
+};

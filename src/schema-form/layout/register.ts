@@ -5,6 +5,7 @@ import {DESKTOP, MOBILE} from '../utils/utils';
 import Card from './card';
 import FormBlock from './form-block';
 import GridLayout from './grid';
+import GroupLayout from './group';
 import StepsLayout from './steps';
 import Table from './table';
 import TextBox from './text-box';
@@ -31,6 +32,16 @@ export const registerLayout = (options: {
     getProps: options.getProps
   });
 };
+
+registerLayout({
+  component: GroupLayout,
+  platforms: [DESKTOP, MOBILE],
+  types: 'group',
+  layoutOptions: {
+    noTitle: true,
+    noWrap: true
+  }
+});
 
 registerLayout({
   component: StepsLayout,

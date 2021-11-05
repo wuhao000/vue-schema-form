@@ -97,7 +97,6 @@ export default defineComponent({
       const groups = toGroups(fields, layout);
       const LibComponentsCol: any = LibComponents.col[store.platform];
       const LibComponentsRow: any = LibComponents.row[store.platform];
-
       return normalizedLayout.value.map((span, index) => {
         const group = groups[index];
         if (group) {
@@ -120,7 +119,6 @@ export default defineComponent({
               }
             </LibComponentsRow>;
           } else {
-
             const col = <LibComponentsCol
               style={getColStyle(index)}
               class={getColClass(index)}

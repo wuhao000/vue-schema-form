@@ -48,7 +48,7 @@ export class FieldDefinition<V = any> {
   public validate?: (trigger?: string) => (boolean | Promise<unknown>);
   public value: V;
   public visible: boolean;
-  public xType: string | SchemaFormComponentOptions;
+  public xType: SchemaFormFieldType;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,

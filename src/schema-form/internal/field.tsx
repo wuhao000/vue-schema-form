@@ -42,6 +42,7 @@ import {
   getComponentType,
   getFormItemComponent,
   getRealFields,
+  isNullStructValue,
   renderField,
   SchemaFormEvents
 } from './utils';
@@ -79,11 +80,11 @@ export default defineComponent({
   emits: ['change', 'update:value'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
-    const arrayRef = ref<VNode>(null);
+    const arrayRef = ref<any>(null);
     const inputRef = ref<any>(null);
     const currentValue = ref(props.value || null);
     const field = computed(() => props.field);
-    watch(() => currentValue.value, val => {
+    watch(() => currentValue.value, _.debounce(val => {
       field.value.value = val;
       if (store.editable && field.value.editable) {
         emit(`update:value`, val);
@@ -97,7 +98,7 @@ export default defineComponent({
         value: val,
         field: field.value
       });
-    }, {deep: true});
+    }, 5), {deep: true});
     const setCurrentValue = value => {
       const component = fieldComponent.value;
       if ((!component || component.mode === 'input') && !isEqual(currentValue.value, value)) {
@@ -254,11 +255,16 @@ export default defineComponent({
         return [];
       }
       if (fieldComponent.value?.mode === 'layout') {
-        return [];
+        const validateFields = getSubFields();
+        return new Promise(resolve => {
+          Promise.all(validateFields.map(it => it.props.field.validate())).then(values => {
+            resolve(flat(values.filter(it => isNotNull(it))));
+          });
+        });
       }
       if (type.value === FieldTypes.Object && arrayRef.value) {
         const array = arrayRef.value;
-        const validateFields = array.props.fields.filter(it => it.validate);
+        const validateFields = array.$slots.default().filter(it => it.validate);
         return new Promise(resolve => {
           Promise.all(validateFields.map(it => it.validate())).then(values => {
             resolve(flat(values.filter(it => isNotNull(it))));
@@ -294,7 +300,7 @@ export default defineComponent({
                 value: currentValue.value
               }]);
             } else {
-              resolve(null);
+              resolve([]);
             }
           });
         });
@@ -305,7 +311,7 @@ export default defineComponent({
       (currentValue.value as any[]).splice(index, 1, val);
       onValueUpdate(currentValue.value);
     };
-    const onValueUpdate = _.debounce((value) => {
+    const onValueUpdate = (value) => {
       let val = value;
       if (isRef(value)) {
         val = unref(value);
@@ -313,7 +319,7 @@ export default defineComponent({
       if (!isEqual(currentValue.value, val)) {
         setCurrentValue(val);
       }
-    }, 5);
+    };
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
       const definition = props.definition as SchemaFormField;
@@ -353,12 +359,12 @@ export default defineComponent({
           key: `${field.value.plainPath}-${index}`,
           [valueProp]: v,
           title: store.platform === 'mobile' ? field.value.title : null,
-          ['onUpdate:' + valueProp]: _.debounce((val) => {
+          ['onUpdate:' + valueProp]: (val) => {
             const oldValue = currentValue.value[index];
             if (!isEqual(val, oldValue)) {
               onArrayItemInput(val, index);
             }
-          }, 10)
+          }
         });
         return <InputFieldComponent {...itemProps}/>;
       }) : null;
@@ -490,7 +496,7 @@ export default defineComponent({
     });
     const onCreated = () => {
       // 设置默认值
-      if (isNull(currentValue.value)) {
+      if (isNullStructValue(currentValue.value, field.value.destructPath.destruct)) {
         setCurrentValue(getDefaultValue(field.value));
       }
       // 初始化属性

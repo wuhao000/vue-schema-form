@@ -97,7 +97,8 @@ export default defineComponent({
               onClick={() => {
                 const fields = iFieldGroups[this.current];
                 Promise.all(fields.map(it => it.validate())).then(data => {
-                  if (!data.some(it => it && (it as string[]).length) && this.current < this.layout.length - 1) {
+                  const errors = flat(data).filter(it => it !== undefined);
+                  if (errors.length === 0 && this.current < this.layout.length - 1) {
                     this.current = this.current + 1;
                   }
                 });

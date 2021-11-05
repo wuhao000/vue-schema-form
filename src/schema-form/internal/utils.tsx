@@ -12,6 +12,7 @@ import {
   SchemaFormComponent,
   SchemaFormComponentOptions,
   SchemaFormField,
+  SchemaFormFieldType,
   SchemaFormStore,
   ShowFieldCondition,
   ValueProcessor
@@ -23,7 +24,7 @@ import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';
 import {globalComponentStore} from '../utils/register';
-import {fixComponentDefinition, isNotNull, LibComponents, Mode} from '../utils/utils';
+import {fixComponentDefinition, isNotNull, isNull, LibComponents, Mode} from '../utils/utils';
 import FormField from './field';
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -268,7 +269,7 @@ export class FieldDefinition<V = any> {
   public inputRef?: any;
   public value: V = null;
   public visible = true;
-  public xType: string | SchemaFormComponentOptions = null;
+  public xType: SchemaFormFieldType = null;
   public slot?: string = null;
 
   constructor(definition: SchemaFormField,
@@ -481,3 +482,25 @@ export enum SchemaFormEvents {
   fieldCreate = 'fieldCreate',
   validate = 'validate'
 }
+
+
+export const isNullStructValue = (value, struct) => {
+  if (isNull(value)) {
+    return true;
+  }
+  if (struct === undefined) {
+    return false;
+  }
+  if (typeof struct === 'string') {
+    return false;
+  }
+  if (Array.isArray(struct)) {
+    return !struct.some((s, index) => {
+      return !isNullStructValue(value[index], s);
+    });
+  } else {
+    return !Object.keys(struct).some(key => {
+      return !isNullStructValue(value[key], struct[key]);
+    });
+  }
+};
