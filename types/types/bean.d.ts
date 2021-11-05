@@ -83,7 +83,7 @@ export class ComponentStore {
 export type Platform = 'desktop' | 'mobile';
 
 export type SchemaFormFieldType =
-  Exclude<'grid' | 'steps', string>
+  Exclude<string, 'grid' | 'steps'>
   | Component
   | SchemaFormComponentOptions
   | SchemaFormComponentOptions[]

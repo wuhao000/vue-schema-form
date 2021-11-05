@@ -313,7 +313,7 @@ export default defineComponent({
       if (!isEqual(currentValue.value, val)) {
         setCurrentValue(val);
       }
-    });
+    }, 5);
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
       const definition = props.definition as SchemaFormField;

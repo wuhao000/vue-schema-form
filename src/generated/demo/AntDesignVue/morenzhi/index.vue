@@ -1,17 +1,21 @@
-
-# 简单场景
-
-> 最简单的表单使用场景，只需要定义描述表单结构的schema即可
-```vue
 <template>
-  <a-layout>
-    <a-layout-content>
-      <v-schema-form
+  <div class="markdown-body">
+    <h1 id="默认值">默认值</h1>
+<blockquote>
+<p>最简单的表单使用场景，只需要定义描述表单结构的schema即可</p>
+</blockquote>
+<pre><demo-wrapper>
+<comp0></comp0>
+<template #code><code-container>
+  &lt;template&gt;
+  &lt;a-layout&gt;
+    &lt;a-layout-content&gt;
+      &lt;v-schema-form
           v-model:value="formOptions"
           platform="desktop"
           :schema="optionFormDefinition"
-      />
-      <v-schema-form
+      /&gt;
+      &lt;v-schema-form
           v-model:value="value"
           :disabled="formOptions.disabled"
           :editable="!formOptions.displayMode"
@@ -23,12 +27,12 @@
           class="demo-form"
           @cancel="onCancel"
           @ok="onOk"
-          @reset="onReset"/>
-      <show-value :value="value"/>
-    </a-layout-content>
-  </a-layout>
-</template>
-<script lang="ts" setup>
+          @reset="onReset"/&gt;
+      &lt;show-value :value="value"/&gt;
+    &lt;/a-layout-content&gt;
+  &lt;/a-layout&gt;
+&lt;/template&gt;
+&lt;script lang="ts" setup&gt;
   import {ref} from 'vue';
   import {useBaseDemo} from '../../../views/demo/base';
   import {registerAntd, FieldTypes} from '../../../schema-form';
@@ -37,32 +41,7 @@
   registerAntd();
 
   const {options: formOptions, onOk, optionFormDefinition, onReset, onCancel} = useBaseDemo();
-  const value = ref({
-    string: '111',
-    text: 'abc',
-    integer: 122,
-    double: 0.2,
-    url: 'http://www',
-    datetime: new Date(),
-    date: new Date(),
-    start: new Date(),
-    end: new Date(),
-    year: new Date().getFullYear(),
-    month: new Date(),
-    time: '12:24',
-    timerange: ['12:24', '13:24'],
-    select: 4,
-    multiSelect: [1, 3],
-    expandSelect: 1,
-    expandMultiSelect: [1, 2],
-    transfer: ['1'],
-    subForm: {
-      input: 'abs'
-    },
-    subFormArray: [{
-      input: 'sssssssss'
-    }]
-  });
+  const value = ref();
   const options = [{
     label: '选项1',
     value: 1
@@ -82,32 +61,37 @@
       title: '展开单选',
       required: true,
       type: 'expand-select',
-      props: {options}
+      props: {options},
+      default: 1
     },
     select: {
       title: '单选',
       required: true,
       type: 'select',
-      props: {options, clearable: true}
+      props: {options, clearable: true},
+      default: 4
     },
     multiSelect: {
       title: '多选',
       required: true,
       type: 'select',
       array: true,
-      props: {options}
+      props: {options},
+      default: [1, 2]
     },
     expandMultiSelect: {
       title: '展开多选',
       required: true,
       type: 'expand-select',
       array: true,
-      props: {options}
+      props: {options},
+      default: [1, 2]
     },
     text: {
       title: '多行文本',
       required: true,
-      type: 'text'
+      type: 'text',
+      default: 'abc'
     },
     zh: {
       title: '仅限中文',
@@ -120,30 +104,28 @@
       title: '单行文本',
       type: 'string',
       required: true,
-      placeholder: '请输入文本'
+      placeholder: '请输入文本',
+      default: '111'
     },
     url: {
       title: '链接',
       rules: 'url',
-      type: 'url'
+      type: 'url',
+      default: 'http://www'
     },
     integer: {
       title: '整数',
       type: 'integer',
       required: true,
-      min: 100,
-      max: 200,
-      props: {
-        min: 100
-      }
+      min: 0,
+      max: 10,
+      default: 5
     },
     double: {
       title: '小数',
       required: true,
       type: 'double',
-      props: {
-        step: 0.1
-      }
+      default: 0.5
     },
     switch: {
       title: '开关',
@@ -152,37 +134,44 @@
     date: {
       title: '日期',
       required: true,
-      type: 'date'
+      type: 'date',
+      default: new Date()
     },
     '[start, end]': {
       title: '日期范围',
       required: true,
-      type: 'daterange'
+      type: 'daterange',
+      default: [new Date(), new Date()]
     },
     year: {
       title: '年份',
       required: true,
-      type: 'year'
+      type: 'year',
+      default: 2023
     },
     time: {
       title: '时间',
       required: true,
-      type: 'time'
+      type: 'time',
+      default: '13:40'
     },
     timerange: {
       title: '时间范围',
       required: true,
-      type: FieldTypes.TimeRange
+      type: FieldTypes.TimeRange,
+      default: ['12:24', '13:24']
     },
     datetime: {
       title: '日期时间',
       required: true,
-      type: 'datetime'
+      type: 'datetime',
+      default: new Date()
     },
     month: {
       title: '月份',
       required: true,
-      type: 'month'
+      type: 'month',
+      default: new Date()
     },
     file: {
       title: '卡片上传文件',
@@ -215,7 +204,8 @@
       }, {
         label: '选项2',
         value: '2'
-      }]
+      }],
+      default: ['2']
     },
     range: {
       title: '范围',
@@ -237,6 +227,9 @@
       },
       props: {
         addBtnText: '添加子表单', addBtnProps: {block: true}
+      },
+      default: {
+        input: 'abs'
       }
     },
     subFormArray: {
@@ -253,7 +246,10 @@
       props: {
         addBtnText: '添加子表单',
         addBtnProps: {block: true}
-      }
+      },
+      default: [{
+        input: 'sssssssss'
+      }]
     }
   };
 
@@ -265,5 +261,12 @@
     },
     fields
   }
+&lt;/script&gt;
+
+</code-container></template>
+</demo-wrapper></pre>
+</div>
+</template>
+<script lang="ts" setup>
+  import  comp0 from './comp0.vue';
 </script>
-```

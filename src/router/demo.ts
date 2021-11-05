@@ -86,6 +86,17 @@ export default [{
   children: [
     
   ]
+},
+{
+  path: '/demo/AntDesignVue/morenzhi',
+  component: () => import('../generated/demo/AntDesignVue/morenzhi/index.vue'),
+  meta: {
+    tags: ['Ant Design Vue'],
+    name: '默认值'
+  },
+  children: [
+    
+  ]
 }
   ]
 }, {

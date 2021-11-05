@@ -5,12 +5,11 @@
 </template>
 <script lang="tsx">
   import {defineComponent, ref, watch} from 'vue';
-  import {SchemaFormField} from '../../../../../types';
+  import {EffectsContext, SchemaFormField} from '../../../../../types';
   import {registerAntd} from '../../../../schema-form';
   
   
   const Input = defineComponent({
-    name: 'CustomInput',
     render() {
       console.log(this.$attrs);
       return <div>我是自定义组件</div>;

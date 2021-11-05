@@ -1,9 +1,10 @@
 /**
  * Compile components
  */
-const fs = require('fs-extra');
-const path = require('path');
-const babel = require('@babel/core');
+import * as babel from '@babel/core';
+import fs from 'fs-extra';
+import less from 'less';
+import path from 'path';
 
 const esDir = path.join(__dirname, '../es');
 const libDir = path.join(__dirname, '../lib');
@@ -16,6 +17,7 @@ const scriptRegExp = /\.(js|jsx|ts|tsx)$/;
 const isDir = dir => fs.lstatSync(dir).isDirectory();
 const isCode = path => !/(demo|test|\.md)$/.test(path);
 const isScript = path => scriptRegExp.test(path);
+const isLess = path => /\.less$/.test(path);
 
 function compile(dir) {
   const files = fs.readdirSync(dir);
@@ -35,9 +37,19 @@ function compile(dir) {
 
     // compile js or ts
     if (isScript(file)) {
-      const { code } = babel.transformFileSync(filePath, babelConfig);
+      const {code} = babel.transformFileSync(filePath, babelConfig);
       fs.removeSync(filePath);
       fs.outputFileSync(filePath.replace(scriptRegExp, '.js'), code);
+    }
+
+    if (isLess(file)) {
+      const content = fs.readFileSync(filePath).toString();
+      less.render(content, {
+        filename: file,
+        paths: [dir]
+      }).then(data => {
+        fs.writeFileSync(filePath.replace('.less', '.css'), data.css);
+      });
     }
   });
 }
