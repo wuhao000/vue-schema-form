@@ -1,0 +1,266 @@
+<template>
+  <div class="markdown-body">
+    <h1 id="默认值">默认值</h1>
+<blockquote>
+<p>最简单的表单使用场景，只需要定义描述表单结构的schema即可</p>
+</blockquote>
+<pre><demo-wrapper>
+<comp0></comp0>
+<template #code><code-container>
+  &lt;template&gt;
+  &lt;a-layout&gt;
+    &lt;a-layout-content&gt;
+      &lt;v-schema-form
+          v-model:value="formOptions"
+          platform="desktop"
+          :schema="optionFormDefinition"
+      /&gt;
+      &lt;v-schema-form
+          v-model:value="value"
+          :disabled="formOptions.disabled"
+          :editable="!formOptions.displayMode"
+          :loading="formOptions.loading"
+          :platform="platform"
+          :props="props"
+          :readonly="formOptions.readonly"
+          :schema="definition"
+          class="demo-form"
+          @cancel="onCancel"
+          @ok="onOk"
+          @reset="onReset"/&gt;
+      &lt;show-value :value="value"/&gt;
+    &lt;/a-layout-content&gt;
+  &lt;/a-layout&gt;
+&lt;/template&gt;
+&lt;script lang="ts" setup&gt;
+  import {ref} from 'vue';
+  import {useBaseDemo} from '../../../views/demo/base';
+  import {registerAntd, FieldTypes} from '../../../schema-form';
+  import {SchemaFormField} from '../../../../types';
+
+  registerAntd();
+
+  const {options: formOptions, onOk, optionFormDefinition, onReset, onCancel} = useBaseDemo();
+  const value = ref();
+  const options = [{
+    label: '选项1',
+    value: 1
+  }, {
+    label: '选项2',
+    value: 2
+  }, {
+    label: '选项3',
+    value: 3
+  }, {
+    label: '选项4',
+    value: 4
+  }];
+
+  const fields: { [key: string]: SchemaFormField } = {
+    expandSelect: {
+      title: '展开单选',
+      required: true,
+      type: 'expand-select',
+      props: {options},
+      default: 1
+    },
+    select: {
+      title: '单选',
+      required: true,
+      type: 'select',
+      props: {options, clearable: true},
+      default: 4
+    },
+    multiSelect: {
+      title: '多选',
+      required: true,
+      type: 'select',
+      array: true,
+      props: {options},
+      default: [1, 2]
+    },
+    expandMultiSelect: {
+      title: '展开多选',
+      required: true,
+      type: 'expand-select',
+      array: true,
+      props: {options},
+      default: [1, 2]
+    },
+    text: {
+      title: '多行文本',
+      required: true,
+      type: 'text',
+      default: 'abc'
+    },
+    zh: {
+      title: '仅限中文',
+      required: true,
+      type: 'text',
+      format: 'zh',
+      default: 'not chinese'
+    },
+    string: {
+      title: '单行文本',
+      type: 'string',
+      required: true,
+      placeholder: '请输入文本',
+      default: '111'
+    },
+    url: {
+      title: '链接',
+      rules: 'url',
+      type: 'url',
+      default: 'http://www'
+    },
+    integer: {
+      title: '整数',
+      type: 'integer',
+      required: true,
+      min: 0,
+      max: 10,
+      default: 5
+    },
+    double: {
+      title: '小数',
+      required: true,
+      type: 'double',
+      default: 0.5
+    },
+    switch: {
+      title: '开关',
+      type: FieldTypes.Boolean
+    },
+    date: {
+      title: '日期',
+      required: true,
+      type: 'date',
+      default: new Date()
+    },
+    year: {
+      title: '年份',
+      required: true,
+      type: 'year',
+      default: 2023
+    },
+    time: {
+      title: '时间',
+      required: true,
+      type: 'time',
+      default: '13:40'
+    },
+    timerange: {
+      title: '时间范围',
+      required: true,
+      type: FieldTypes.TimeRange,
+      default: ['12:24', '13:24']
+    },
+    datetime: {
+      title: '日期时间',
+      required: true,
+      type: 'datetime',
+      default: new Date()
+    },
+    month: {
+      title: '月份',
+      required: true,
+      type: 'month',
+      default: new Date()
+    },
+    file: {
+      title: '卡片上传文件',
+      type: FieldTypes.File,
+      props: {
+        mode: 'card'
+      }
+    },
+    file2: {
+      title: '拖拽上传文件',
+      type: FieldTypes.File,
+      props: {
+        mode: 'dragger'
+      }
+    },
+    file3: {
+      title: '普通上传文件',
+      type: FieldTypes.File
+    },
+    image: {
+      title: '图片',
+      type: FieldTypes.Picture
+    },
+    transfer: {
+      title: '穿梭框',
+      type: FieldTypes.Transfer,
+      enum: [{
+        label: '选项1',
+        value: '1'
+      }, {
+        label: '选项2',
+        value: '2'
+      }],
+      default: ['2']
+    },
+    range: {
+      title: '范围',
+      type: FieldTypes.Range
+    },
+    rate: {
+      title: '评分',
+      type: FieldTypes.Rate
+    },
+    subForm: {
+      title: '子表单',
+      type: FieldTypes.Object,
+      fields: {
+        input: {
+          title: '输入框',
+          type: 'string',
+          required: true
+        }
+      },
+      props: {
+        addBtnText: '添加子表单', addBtnProps: {block: true}
+      },
+      default: {
+        input: 'abs'
+      }
+    },
+    subFormArray: {
+      title: '子表单数组',
+      type: FieldTypes.Object,
+      array: true,
+      fields: {
+        input: {
+          title: '输入框(数组)',
+          type: 'string',
+          required: true
+        }
+      },
+      props: {
+        addBtnText: '添加子表单',
+        addBtnProps: {block: true}
+      },
+      default: [{
+        input: 'sssssssss'
+      }]
+    }
+  };
+
+  const definition = {
+    props: {
+      section: true,
+      spaceBetweenSection: 16,
+      labelWidth: 120
+    },
+    fields
+  }
+&lt;/script&gt;
+
+</code-container></template>
+</demo-wrapper></pre>
+</div>
+</template>
+<script lang="ts" setup>
+  import  comp0 from './comp0.vue';
+</script>
