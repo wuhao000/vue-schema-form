@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.1.1",
+  "version": "3.1.5",
   "files": [
     "es",
     "package.json",
@@ -11,8 +11,8 @@
   "scripts": {
     "dev": "vite",
     "dev-webpack": "npm run docs && node compile/build-components.js && vue-cli-service serve",
-    "compile": "npm run docs && node compile/build-components.js",
-    "build": "npm run docs && node compile/build-components.js && vue-cli-service build",
+    "compile": "npm run docs && ts-node build/build-components.ts",
+    "build": "npm run compile && vue-cli-service build",
     "docs": "ts-node build/routes.ts",
     "lint": "vue-cli-service lint",
     "cdn": "npm run lib && ts-node build/cdn.ts",
@@ -22,16 +22,18 @@
     "test": "ts-node build/test.ts && ts-node build/test.ts"
   },
   "dependencies": {
-    "@types/lodash.flatten": "^4.4.6",
+    "@types/less": "^3.0.3",
+    "async-validator": "^4.0.7",
     "classnames": "^2.2.6",
     "default-passive-events": "^2.0.0",
     "js-beautify": "^1.13.0",
     "lodash.chunk": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
-    "lodash.flatten": "^4.4.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
+    "moment": "^2.27.0",
     "rxjs": "^7.4.0"
   },
   "devDependencies": {
@@ -79,11 +81,9 @@
     "js-beautify": "^1.13.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.0",
-    "lodash.debounce": "^4.0.8",
     "markdown-loader": "^5.1.0",
     "marked": "^1.1.1",
     "md5": "^2.3.0",
-    "moment": "^2.27.0",
     "pinyin": "^2.10.2",
     "raw-loader": "^4.0.1",
     "ts-loader": "^8.0.3",

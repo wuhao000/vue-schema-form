@@ -19,6 +19,7 @@ import {isEqual} from './uform/utils';
 import runValidation from './uform/validator';
 import {createContext} from './utils/effects';
 import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from './utils/key';
+import {values} from './utils/object';
 import {ComponentStore} from './utils/register';
 import {LibComponents} from './utils/utils';
 
@@ -105,9 +106,9 @@ const SchemaForm = defineComponent({
     }, {deep: true});
 
     const hasSubmitHandler = computed(() =>
-        props.onOk !== undefined
-        || props.onSubmit
-        || props.onSubmit !== undefined);
+      props.onOk !== undefined
+      || props.onSubmit
+      || props.onSubmit !== undefined);
 
     const localOnOk = async (forceValidate: boolean, callback?: (value) => any) => {
       if (hasSubmitHandler.value) {
@@ -167,10 +168,10 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled;
       buttonProps.loading = props.loading;
       return createButton(
-          text || btnProps && btnProps.okText || '提交',
-          action || (() => {
-            localOnOk(true);
-          }), buttonProps, 'confirm-btn'
+        text || btnProps && btnProps.okText || '提交',
+        action || (() => {
+          localOnOk(true);
+        }), buttonProps, 'confirm-btn'
       );
     };
     const createButton = (text, action, btnAttrs, classes) => {
@@ -192,7 +193,7 @@ const SchemaForm = defineComponent({
       return Button;
     };
     const validate = (): Promise<IValidateResponse[]> | [] =>
-        runValidation(store.fields);
+      runValidation(values(store.fields).filter(it => it.getComponent().mode !== 'layout'));
     const createCancelButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
       const hasCancelHandler = props.onCancel !== undefined || action !== undefined;
       if (!hasCancelHandler) {
@@ -205,9 +206,9 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-          text || btnProps?.cancelText || '取消',
-          action || localOnCancel, buttonProps,
-          'cancel-btn'
+        text || btnProps?.cancelText || '取消',
+        action || localOnCancel, buttonProps,
+        'cancel-btn'
       );
     };
     const createResetButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
@@ -222,8 +223,8 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-          text || btnProps && btnProps.cancelText || '重置',
-          action || localOnReset, buttonProps, 'reset-btn'
+        text || btnProps && btnProps.cancelText || '重置',
+        action || localOnReset, buttonProps, 'reset-btn'
       );
     };
     const localOnReset = () => {
@@ -325,13 +326,13 @@ const SchemaForm = defineComponent({
     let content: any = [
       this.$slots.header?.(),
       renderField(
-          null,
-          store,
-          rootFieldDef,
-          currentValue,
-          0,
-          false,
-          this.$emit
+        null,
+        store,
+        rootFieldDef,
+        currentValue,
+        0,
+        false,
+        this.$emit
       )
     ];
     let footer: any = [

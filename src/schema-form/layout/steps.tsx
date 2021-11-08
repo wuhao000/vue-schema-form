@@ -8,7 +8,7 @@ import './steps.less';
 export default defineComponent({
     name: 'StepsLayout',
     props: {
-      layout: {type: Array as PropType<any[]>, required: true},
+      layout: {type: Array as PropType<number[]>, required: true},
       titles: {
         type: [Array]
       },
@@ -50,7 +50,7 @@ export default defineComponent({
     },
     render() {
       const iFields = this.fieldDefinitions.map(it => this.store.fields[it.property]) as FieldDefinition[];
-      const fields = [...this.fields as any[]];
+      const fields = this.$slots.default();
       const groups = (this.layout as number[]).map((n) => {
         return fields.splice(0, n);
       });
@@ -97,7 +97,8 @@ export default defineComponent({
               onClick={() => {
                 const fields = iFieldGroups[this.current];
                 Promise.all(fields.map(it => it.validate())).then(data => {
-                  if (!data.some(it => it && (it as string[]).length) && this.current < this.layout.length - 1) {
+                  const errors = flat(data).filter(it => it !== undefined);
+                  if (errors.length === 0 && this.current < this.layout.length - 1) {
                     this.current = this.current + 1;
                   }
                 });

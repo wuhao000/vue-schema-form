@@ -1,7 +1,7 @@
 import {Subject} from 'rxjs';
 import {App, Component, VNode} from 'vue';
 import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
-import {IFieldOptions, IFieldState, IFormPathMatcher, IRuleDescription, Path} from './uform';
+import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
 export interface IValidateResponse {
   errors: string[];
@@ -43,7 +43,7 @@ export function registerMobileLib(map: Record<keyof ILibComponents, any>): void;
 export function registerDesktop(component: string | Component,
                                 types: string | string[],
                                 mode: ArrayMode,
-                                getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
+                                getProps?: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown })): void;
 
 export function registerDisplay(options: DisplayComponentOptions): void;
 
@@ -51,7 +51,7 @@ export function register(component: string | Component,
                          platforms: Platform | Platform[],
                          types: string | string[],
                          mode: ArrayMode,
-                         getProps?: ((definition: FieldDefinition, platform: Platform) => {[key: string]: unknown})): void;
+                         getProps?: ((definition: FieldDefinition, platform: Platform) => { [key: string]: unknown })): void;
 
 export function registerComponent(options: SchemaFormComponentOptions): void;
 
@@ -78,12 +78,14 @@ export interface SchemaFormFieldStates {
 
 export interface EffectsHandlers {
   appendPath(path: string): EffectsHandlers;
+
   /**
    * 禁用
    * @returns {EffectsHandlers}
    * @deprecated 使用 setStates 代替
    */
   disable(disable?: boolean): EffectsHandlers;
+
   /**
    * 设置表单项是否可编辑
    *
@@ -92,11 +94,13 @@ export interface EffectsHandlers {
    * @deprecated 使用 setStates 代替
    */
   editable(editable: boolean): EffectsHandlers;
+
   /**
    * 启用
    * @deprecated 使用 setStates 代替
    */
   enable(enable?: boolean): EffectsHandlers;
+
   fields: () => FieldDefinition[];
   field: () => FieldDefinition;
   /**
@@ -105,13 +109,16 @@ export interface EffectsHandlers {
    * @deprecated 使用 setStates 代替
    */
   hide: (hide?: boolean) => EffectsHandlers;
+
   isEnabled(): boolean;
+
   onFieldBlur: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
   onFieldChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
   onFieldCreate: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
   onFieldCreateOrChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
   onFieldFocus: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
   paths: () => string[];
+
   /**
    * 设置表单项是否为只读
    *
@@ -120,6 +127,7 @@ export interface EffectsHandlers {
    * @deprecated 使用 setStates 代替
    */
   readonly(readonly: boolean): EffectsHandlers;
+
   replaceLastPath(...path: string[]): EffectsHandlers;
 
   /**
@@ -131,7 +139,7 @@ export interface EffectsHandlers {
   required: (required: boolean) => EffectsHandlers;
   setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
   setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers;
-  setFieldProps: (props: {[key: string]: unknown} | ((field: IField) => {[key: string]: unknown})) => EffectsHandlers;
+  setFieldProps: (props: { [key: string]: unknown } | ((field: IField) => { [key: string]: unknown })) => EffectsHandlers;
   setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers;
   setStates: (states: SchemaFormFieldStates) => EffectsHandlers;
   /**
@@ -143,7 +151,9 @@ export interface EffectsHandlers {
   show: (show?: boolean) => EffectsHandlers;
   subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;
   trigger: (event: string, value: any) => EffectsHandlers;
+
   takePath(number: number): EffectsHandlers;
+
   toggle: () => EffectsHandlers;
   value: (value?: unknown | ((field: IField) => any)) => any;
 }
@@ -164,7 +174,7 @@ export interface SchemaFormComponent {
   arrayMode: ArrayMode;
   layoutOptions?: LayoutOptions;
   getDefaultValue?: (field: FieldDefinition) => any;
-  getProps: (field: FieldDefinition) => {[key: string]: unknown};
+  getProps: (field: FieldDefinition) => { [key: string]: unknown };
   platform: Platform;
   valueProp?: string;
   wrap?: WrapType;
@@ -205,7 +215,7 @@ type BuiltInActions = 'submit' | 'cancel' | 'reset';
 type Action = BuiltInActions | {
   name: BuiltInActions | string;
   text: string;
-  props?: {[key: string]: unknown};
+  props?: { [key: string]: unknown };
   action?: () => any;
 };
 
@@ -215,55 +225,41 @@ export interface IFieldMap {
 
 export interface IField<V = any> {
   array?: boolean;
-  changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   component: SchemaFormComponent;
   definition: SchemaFormField;
   destructPath?: {
     path: string,
     destruct: any
   };
-  destructor?: () => void;
-  dirty?: boolean;
-  dirtyType?: string;
   disabled: boolean;
   display?: boolean;
   displayValue?: any;
   editable?: boolean;
-  effectErrors?: string[];
   enum: any[];
   errors?: string[];
   fields?: FormFields;
   focus?: () => any;
-  hiddenFromParent?: boolean;
   id?: string;
   initialValue?: V;
-  initialize?: (options: IFieldOptions) => void;
   invalid?: boolean;
-  lastValidateValue?: V;
   loading?: boolean;
   match?: (path: Path | IFormPathMatcher) => boolean;
   name?: string;
-  notify?: (forceUpdate?: boolean) => void;
   onChange?: (fn: () => void) => void;
   path?: string[];
-  pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   plainPath?: string;
   pristine?: boolean;
   processor?: {
-    getValue: (parentValue: {[key: string]: unknown}, field: IField) => any;
-    setValue: (parentValue: {[key: string]: unknown}, field: IField, fieldValue: any) => any;
+    getValue: (parentValue: { [key: string]: unknown }, field: IField) => any;
+    setValue: (parentValue: { [key: string]: unknown }, field: IField, fieldValue: any) => any;
   };
   props?: any;
-  publishState?: () => IFieldState;
   required?: boolean;
   rules?: IRuleDescription[];
   setGetValue?: (value?: any) => any;
-  shownFromParent?: boolean;
   store?: SchemaFormStore;
-  syncContextValue?: () => void;
   title?: string | VNode;
   type?: string;
-  updateState?: (fn: (state: IFieldState) => void) => void;
   valid: boolean;
   validate?: () => (boolean | Promise<unknown>);
   value: V;
@@ -323,7 +319,7 @@ export interface SchemaFormComponentOptions {
    * @param {Platform} platform
    * @return {{[p: string]: unknown}}
    */
-  getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
+  getProps?: (definition: FieldDefinition, platform: Platform) => { [key: string]: unknown };
   /**
    * 支持的平台，desktop表示pc端，mobile表示移动端
    */
@@ -353,7 +349,7 @@ export type ArrayMode = 'array' | 'single' | 'both';
 export interface DisplayComponentOptions {
   component: string | Component;
   arrayMode?: ArrayMode;
-  getProps?: (definition: FieldDefinition, platform: Platform) => {[key: string]: unknown};
+  getProps?: (definition: FieldDefinition, platform: Platform) => { [key: string]: unknown };
   layout?: boolean;
   platforms: Platform | Platform[];
   types: string | string[];
@@ -372,7 +368,7 @@ export interface CommonFormProps {
 }
 
 interface Transformers {
-  formProps: (props: CommonFormProps) => {[key: string]: unknown};
+  formProps: (props: CommonFormProps) => { [key: string]: unknown };
 }
 
 export type PropsTransformer = {

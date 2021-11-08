@@ -1,3 +1,4 @@
+import {Slot} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -41,6 +42,7 @@ import {
   getComponentType,
   getFormItemComponent,
   getRealFields,
+  isNullStructValue,
   renderField,
   SchemaFormEvents
 } from './utils';
@@ -78,11 +80,11 @@ export default defineComponent({
   emits: ['change', 'update:value'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
-    const arrayRef = ref<VNode>(null);
+    const arrayRef = ref<any>(null);
     const inputRef = ref<any>(null);
     const currentValue = ref(props.value || null);
     const field = computed(() => props.field);
-    watch(() => currentValue.value, val => {
+    watch(() => currentValue.value, _.debounce(val => {
       field.value.value = val;
       if (store.editable && field.value.editable) {
         emit(`update:value`, val);
@@ -96,7 +98,7 @@ export default defineComponent({
         value: val,
         field: field.value
       });
-    }, {deep: true});
+    }, 5), {deep: true});
     const setCurrentValue = value => {
       const component = fieldComponent.value;
       if ((!component || component.mode === 'input') && !isEqual(currentValue.value, value)) {
@@ -115,7 +117,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
       if (field.value.slot) {
@@ -124,14 +126,14 @@ export default defineComponent({
       return field.value.getComponent(!editable.value, store.platform);
     });
     const preProps = computed<{ [key: string]: unknown }>(() => {
-      const localProps: { [key: string]: unknown } = {};
+      const definition = props.definition as SchemaFormField;
+      const localProps: { [key: string]: unknown } = {...(definition.xProps || definition.props || {})};
       const renderComponent = fieldComponent.value;
-      if (renderComponent !== undefined) {
+      if (renderComponent !== undefined && renderComponent.getProps) {
         Object.assign(localProps, renderComponent.getProps(field.value));
       }
       const {platform} = store;
       const {path, schemaPath} = props;
-      const definition = props.definition as SchemaFormField;
       if (field.value.type === FieldTypes.Object) {
         localProps.platform = platform;
         localProps.editable = editable.value;
@@ -160,7 +162,6 @@ export default defineComponent({
       }
       if (renderComponent.mode === 'layout') {
         localProps.layout = definition.layout;
-        localProps.fields = subFields.value;
         localProps.fieldDefinitions = relatedSubFields.value;
       }
       localProps.disabled = isDisabled.value;
@@ -232,9 +233,9 @@ export default defineComponent({
             </span>
           };
           formItemProps.label = <LibComponentsPopover
-              content={definition.tip}
-              v-slots={slots}
-              trigger="hover"/>;
+            content={definition.tip}
+            v-slots={slots}
+            trigger="hover"/>;
         } else {
           formItemProps.label = definition.title;
         }
@@ -254,11 +255,16 @@ export default defineComponent({
         return [];
       }
       if (fieldComponent.value?.mode === 'layout') {
-        return [];
+        const validateFields = getSubFields();
+        return new Promise(resolve => {
+          Promise.all(validateFields.map(it => it.props.field.validate())).then(values => {
+            resolve(flat(values.filter(it => isNotNull(it))));
+          });
+        });
       }
       if (type.value === FieldTypes.Object && arrayRef.value) {
         const array = arrayRef.value;
-        const validateFields = array.props.fields.filter(it => it.validate);
+        const validateFields = array.$slots.default().filter(it => it.validate);
         return new Promise(resolve => {
           Promise.all(validateFields.map(it => it.validate())).then(values => {
             resolve(flat(values.filter(it => isNotNull(it))));
@@ -294,7 +300,7 @@ export default defineComponent({
                 value: currentValue.value
               }]);
             } else {
-              resolve(null);
+              resolve([]);
             }
           });
         });
@@ -305,7 +311,7 @@ export default defineComponent({
       (currentValue.value as any[]).splice(index, 1, val);
       onValueUpdate(currentValue.value);
     };
-    const onValueUpdate = _.debounce((value) => {
+    const onValueUpdate = (value) => {
       let val = value;
       if (isRef(value)) {
         val = unref(value);
@@ -313,8 +319,7 @@ export default defineComponent({
       if (!isEqual(currentValue.value, val)) {
         setCurrentValue(val);
       }
-    }, 10);
-
+    };
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
       const definition = props.definition as SchemaFormField;
@@ -354,12 +359,12 @@ export default defineComponent({
           key: `${field.value.plainPath}-${index}`,
           [valueProp]: v,
           title: store.platform === 'mobile' ? field.value.title : null,
-          ['onUpdate:' + valueProp]: _.debounce((val) => {
+          ['onUpdate:' + valueProp]: (val) => {
             const oldValue = currentValue.value[index];
             if (!isEqual(val, oldValue)) {
               onArrayItemInput(val, index);
             }
-          }, 10)
+          }
         });
         return <InputFieldComponent {...itemProps}/>;
       }) : null;
@@ -407,21 +412,23 @@ export default defineComponent({
         },
         onAdd: () => {
           addArrayItem();
-        },
-        fields: arrayContent
+        }
       });
-      return <ArrayComponent {...arrayProps}/>;
+      return <ArrayComponent {...arrayProps}
+                             v-slots={{
+                               default: () => arrayContent
+                             }}/>;
     };
     const relatedSubFields = computed(() => {
       const definition = props.definition as SchemaFormField;
       return getRealFields(definition.fields);
     });
-    const subFields = computed(() => {
+    const getSubFields = () => {
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, currentValue.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
-    });
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
+    };
     const objectStore = inject(SchemaFormObjectStoreKey, undefined);
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
@@ -448,15 +455,19 @@ export default defineComponent({
           return <span>{displayValue}</span>;
         }
       }
-      const style: any = Object.assign({}, inputProps.value.style || {});
       // 渲染数组
       if (field.value.array && inputFieldDef.arrayMode === 'single') {
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
+      const style: any = Object.assign({}, inputProps.value.style || {});
+
       const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
-      const slots = {};
+      const slots: { [name: string]: Slot } = {};
+      if (inputFieldDef.mode === 'layout') {
+        slots.default = getSubFields;
+      }
       if (definition.slots) {
         const slotsDef = definition.slots;
         Object.keys(slotsDef).forEach(slotName => {
@@ -465,27 +476,27 @@ export default defineComponent({
               slots[slotName] = store.root.slots[slotsDef[slotName] as string];
             }
           } else {
-            slots[slotName] = slotsDef[slotName];
+            slots[slotName] = slotsDef[slotName] as Slot;
           }
         });
       }
       return <InputFieldComponent
-          {...propsTmp}
-          v-slots={slots}
-          class={className}
-          style={style}
-          key={field.value.plainPath}
-          ref={el => {
-            inputRef.value = el;
-            field.value.inputRef = el;
-          }}/>;
+        {...propsTmp}
+        v-slots={slots}
+        class={className}
+        style={style}
+        key={field.value.plainPath}
+        ref={el => {
+          inputRef.value = el;
+          field.value.inputRef = el;
+        }}/>;
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
     });
     const onCreated = () => {
       // 设置默认值
-      if (isNull(currentValue.value)) {
+      if (isNullStructValue(currentValue.value, field.value.destructPath.destruct)) {
         setCurrentValue(getDefaultValue(field.value));
       }
       // 初始化属性
@@ -551,13 +562,13 @@ export default defineComponent({
         };
       }
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent
-              {...formItemProps}
-              v-slots={formItemProps.slots}
-              class={className}
-              style={style}>
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent
+          {...formItemProps}
+          v-slots={formItemProps.slots}
+          class={className}
+          style={style}>
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
         return <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {

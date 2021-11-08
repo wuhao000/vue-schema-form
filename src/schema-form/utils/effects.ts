@@ -3,6 +3,7 @@ import {nextTick} from 'vue';
 import {EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore} from '../../../types';
 import {FieldDefinition, SchemaFormEvents} from '../internal/utils';
 import runValidation from '../uform/validator';
+import {values} from './object';
 import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
 
 let contextId = 1;
@@ -24,13 +25,13 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             pathsOrHandler(v);
           } else {
             const patterns = typeof pathsOrHandler === 'string' ? [pathsOrHandler]
-                : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
-                  if (typeof item === 'string') {
-                    return item;
-                  } else {
-                    return findFieldPath(item, store.fields as any);
-                  }
-                }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
+              : (Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
+                if (typeof item === 'string') {
+                  return item;
+                } else {
+                  return findFieldPath(item, store.fields as any);
+                }
+              }) : [findFieldPath(pathsOrHandler, store.fields as any)]);
             if (isPathMatchPatterns(v.field, patterns)) {
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
                 handler(v.value, v.path);
@@ -98,7 +99,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
       });
       return context(...paths);
     };
-    const readonly = (value = true) => {
+    const readOnly = (value = true) => {
       matchFields(paths).forEach(field => {
         field.editable = !value;
       });
@@ -136,7 +137,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
           editable(states.editable);
         }
         if (states.readonly !== undefined) {
-          readonly(states.readonly);
+          readOnly(states.readonly);
         }
         if (states.enable !== undefined) {
           enable(states.enable);
@@ -179,7 +180,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
       required,
       disable,
       editable,
-      readonly,
+      readonly: readOnly,
       enable,
       setEnum: (options: any): EffectsHandlers => {
         matchFields(paths).forEach(field => {
@@ -212,8 +213,8 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
         return context(...paths);
       },
       onFieldCreateOrChange: (callback): EffectsHandlers =>
-          context(...paths).onFieldCreate(callback)
-              .onFieldChange(callback),
+        context(...paths).onFieldCreate(callback)
+          .onFieldChange(callback),
       onFieldChange: (callback): EffectsHandlers => {
         subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
@@ -240,7 +241,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-                it, store.fields as any
+              it, store.fields as any
             )), number));
           }
         }
@@ -258,7 +259,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
       },
       isEnabled: (): boolean => !matchFields(paths).some(it => it.disabled),
       replaceLastPath: (...last: string[]): EffectsHandlers =>
-          context(...replaceLastPath(paths as string[], last))
+        context(...replaceLastPath(paths as string[], last))
     } as EffectsHandlers;
   };
   context.subscribe = subscribe;
@@ -266,7 +267,7 @@ export const createContext = (store: SchemaFormStore, onOk: (forceValidate: bool
     onOk(forceValidate, callback);
   };
   context.validate = async (handler) => {
-    const errors = await runValidation(store.fields);
+    const errors = await runValidation(values(store.fields).filter(it => it.getComponent().mode !== 'layout'));
     if (handler) {
       handler(errors, context);
     } else {

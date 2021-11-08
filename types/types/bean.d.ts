@@ -1,14 +1,13 @@
 import {Slot} from '@vue/runtime-core';
-import {ComponentInternalInstance, VNode} from 'vue';
+import {Component, ComponentInternalInstance, VNode} from 'vue';
 import {ValidateRules} from './async-validator';
 import {Effects, EffectsContext, SchemaFormComponent, SchemaFormComponentOptions} from './form';
-import {DefaultPatternRule, IFieldOptions, IFieldState, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
+import {DefaultPatternRule, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
 
 export type Mode = 'edit' | 'display';
 
 export class FieldDefinition<V = any> {
   public array: boolean;
-  public changeEditable?: (editable: boolean | ((name: string) => boolean)) => void;
   public default?: V;
   public definition: SchemaFormField;
   public description?: string | VNode;
@@ -16,53 +15,40 @@ export class FieldDefinition<V = any> {
     path: string,
     destruct: any
   };
-  public destructor?: () => void;
-  public dirty?: boolean;
-  public dirtyType?: string;
   public disabled: boolean;
   public display: boolean;
   public displayValue?: any;
   public editable: boolean;
-  public effectErrors?: string[];
   public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]>;
   public errors?: string[];
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields;
   public focus?: (event?: boolean) => any;
-  public hiddenFromParent?: boolean;
   public id: string;
-  public initialize?: (options: IFieldOptions) => void;
   public invalid?: boolean;
-  public lastValidateValue?: V;
   public loading: boolean;
   public match?: (path: Path | IFormPathMatcher) => boolean;
   public max?: number;
   public min?: number;
   public name?: string;
-  public notify?: (forceUpdate?: boolean) => void;
   public onChange?: (fn: () => void) => void;
   public path?: string[];
-  public pathEqual?: (path: Path | IFormPathMatcher) => boolean;
   public plainPath?: string;
   public pristine?: boolean;
   public processor: ValueProcessor;
   public props?: { [key: string]: any };
-  public publishState?: () => IFieldState;
   public required: boolean;
   public rules?: IRuleDescription[];
   public setGetValue?: (value?: any) => any;
-  public shownFromParent?: boolean;
   public slot?: string;
   public store?: SchemaFormStore;
-  public syncContextValue?: () => void;
   public title: any;
-  public type: string | SchemaFormComponentOptions | SchemaFormComponentOptions[];
-  public updateState?: (fn: (state: IFieldState) => void) => void;
+  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
   public valid: boolean;
   public validate?: (trigger?: string) => (boolean | Promise<unknown>);
   public value: V;
   public visible: boolean;
-  public xType: string | SchemaFormComponentOptions;
+  public xType: SchemaFormFieldType;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,
@@ -96,7 +82,14 @@ export class ComponentStore {
 
 export type Platform = 'desktop' | 'mobile';
 
-export interface SchemaFormField {
+export type SchemaFormFieldType =
+  Exclude<string, 'grid' | 'steps'>
+  | Component
+  | SchemaFormComponentOptions
+  | SchemaFormComponentOptions[]
+  | (() => VNode | VNode[]);
+
+interface BaseSchemaFormField {
   /**
    * 字段值是否数组类型
    */
@@ -146,7 +139,6 @@ export interface SchemaFormField {
    */
   format?: DefaultPatternRule;
   id?: string;
-  layout?: any;
   layoutProps?: { [key: string]: unknown };
   layoutType?: string | { [key: string]: unknown };
   /**
@@ -169,10 +161,7 @@ export interface SchemaFormField {
    * 表单属性名称
    */
   property?: string;
-  /**
-   * 表单输入组件的自定义属性
-   */
-  props?: SchemaFormFieldProps;
+
   /**
    * 字段是否为必填
    */
@@ -202,10 +191,6 @@ export interface SchemaFormField {
    */
   title?: string | VNode;
   /**
-   * 表单项类型
-   */
-  type?: string | SchemaFormComponentOptions | SchemaFormComponentOptions[];
-  /**
    * 是否可见
    */
   visible?: boolean;
@@ -216,8 +201,86 @@ export interface SchemaFormField {
   /**
    * 指定额外的组件类型
    */
-  xType?: string | SchemaFormComponentOptions;
+  xType?: SchemaFormFieldType;
 }
+
+type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType>;
+
+type ClassType = string | string[] | { [key: string]: boolean };
+
+
+export interface StepsField extends BaseSchemaFormField {
+  /**
+   * 每个步骤包含的组件数量
+   */
+  layout: number[];
+  type: 'steps';
+  props?: SchemaFormFieldProps;
+  xProps: {
+    /**
+     * 步骤标题，和步骤数保持一致
+     */
+    titles: Array<string | VNode>;
+    currentStep?: number;
+  };
+}
+
+export interface GridField extends BaseSchemaFormField {
+  /**
+   * 数字或数字数组，可以深层嵌套
+   */
+  layout: GridLayoutType;
+  type: 'grid';
+  props?: SchemaFormFieldProps;
+  xProps?: {
+    /**
+     * 栅格之间的间隙
+     */
+    gutter?: number;
+    /**
+     * 是否对单个栅格使用行组件包裹，即每个栅格占用一行
+     */
+    wrapSingle?: boolean;
+    /**
+     * 行样式
+     */
+    rowStyle?: Partial<CSSStyleDeclaration> | ((rowIndex: number) => Partial<CSSStyleDeclaration>);
+    /**
+     * 行class
+     */
+    rowClass?: ClassType | ((rowIndex: number) => ClassType);
+    /**
+     * 栅格class
+     */
+    colClass?: ClassType | ((colIndex: number) => ClassType);
+    /**
+     * 栅格样式
+     */
+    colStyle?: Partial<CSSStyleDeclaration> | ((colIndex: number) => Partial<CSSStyleDeclaration>);
+  };
+}
+
+interface DefaultSchemaFormField extends BaseSchemaFormField {
+  /**
+   * 表单项类型
+   */
+  type?: SchemaFormFieldType;
+  /**
+   * 布局描述，根据不同的布局有所不同
+   */
+  layout?: any;
+  /**
+   * 表单输入组件的自定义属性
+   */
+  props?: SchemaFormFieldProps;
+  /**
+   * 表单输入组件的自定义属性, 和props的作用完全一致（props会被当成其他对象的同名属性合并，造成代码提示错误），设置了xProps则props无效
+   */
+  xProps?: SchemaFormFieldProps;
+}
+
+export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField;
+
 
 interface ValueProcessor {
   getValue: (parentValue: { [key: string]: unknown }, field: FieldDefinition) => any;

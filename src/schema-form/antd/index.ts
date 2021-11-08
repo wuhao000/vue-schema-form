@@ -28,8 +28,9 @@ import {
   registerDisplay,
   resolveOptions
 } from '../';
-import {ILibComponents, SchemaFormField} from '../../../types';
+import {FieldDefinition, ILibComponents, SchemaFormField} from '../../../types';
 import DUrl from '../common/url';
+import {isNotNull} from '../utils/utils';
 import Button from './components/button';
 import CheckboxGroup from './components/checkbox-group';
 import DatePicker from './components/date-picker';
@@ -90,7 +91,7 @@ function getTransferOptions(array) {
   });
 }
 
-const transferPropsTransform = (def: SchemaFormField) => {
+const transferPropsTransform = (def: FieldDefinition) => {
   if (typeof def.enum === 'function') {
     const result = def.enum();
     if (Array.isArray(result)) {
@@ -202,7 +203,16 @@ export function registerAntd() {
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], 'single',
       (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerDesktop(createComponentProxy(InputNumber), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single');
+  registerDesktop(createComponentProxy(InputNumber), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single', field => {
+    const props: any = {};
+    if (isNotNull(field.min)) {
+      props.min = field.min
+    }
+    if (isNotNull(field.max)) {
+      props.max = field.max;
+    }
+    return props;
+  });
   registerComponent({
     component: createComponentProxy(Checkbox),
     types: FieldTypes.Checkbox,

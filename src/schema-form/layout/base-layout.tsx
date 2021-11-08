@@ -4,7 +4,6 @@ import {SchemaFormStoreKey} from '../utils/key';
 
 export const baseLayoutProps = {
   layout: {type: Array, required: true},
-  fields: {type: [Array, Object] as PropType<any[]>},
   fieldDefinitions: {
     type: Array as PropType<SchemaFormField[]>
   }

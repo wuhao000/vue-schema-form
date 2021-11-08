@@ -1,12 +1,10 @@
 import clone from 'lodash.clonedeep';
 import get from 'lodash.get';
 import uuid from 'uuid';
-import {isVNode, reactive, VNode} from 'vue';
+import {Component, isVNode, reactive, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FormFields,
-  IFieldOptions,
-  IFieldState,
   IFormPathMatcher,
   IRuleDescription,
   Path,
@@ -14,6 +12,7 @@ import {
   SchemaFormComponent,
   SchemaFormComponentOptions,
   SchemaFormField,
+  SchemaFormFieldType,
   SchemaFormStore,
   ShowFieldCondition,
   ValueProcessor
@@ -25,7 +24,7 @@ import {getStructValue} from '../utils/destruct';
 import {setFieldValue} from '../utils/field';
 import {splitPath} from '../utils/path';
 import {globalComponentStore} from '../utils/register';
-import {fixComponentDefinition, isNotNull, LibComponents, Mode} from '../utils/utils';
+import {fixComponentDefinition, isNotNull, isNull, LibComponents, Mode} from '../utils/utils';
 import FormField from './field';
 
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
@@ -46,8 +45,8 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
       return definition.depends(currentValue);
     } else {
       return !definition.depends
-          .map(condition => matchCondition(currentValue, condition))
-          .some(it => !it);
+        .map(condition => matchCondition(currentValue, condition))
+        .some(it => !it);
     }
   } else {
     return definition.visible || definition.visible === null || definition.visible === undefined;
@@ -57,17 +56,17 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
 export function getRealFields(fields: FormFields) {
   if (typeof fields === 'object') {
     return Object.keys(fields)
-        .filter(key => fields[key])
-        .map(key => {
-          const field = fields[key];
-          if (!field.id) {
-            field.id = uuid.v4();
-          }
-          if (!field.property) {
-            field.property = key;
-          }
-          return field;
-        });
+      .filter(key => fields[key])
+      .map(key => {
+        const field = fields[key];
+        if (!field.id) {
+          field.id = uuid.v4();
+        }
+        if (!field.property) {
+          field.property = key;
+        }
+        return field;
+      });
   } else {
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
@@ -93,7 +92,7 @@ export function getComponentType(store: SchemaFormStore,
   const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
-      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
+    || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {
@@ -169,7 +168,21 @@ function getComponent(field: SchemaFormField,
       }
     };
   }
-  return fixComponentDefinition(type, !field.editable);
+  if (typeof type === 'object' && typeof type['render'] === 'function') {
+    return {
+      component: type,
+      platform,
+      mode: forDisplay ? 'display' : 'input',
+      arrayMode: 'single',
+      layoutOptions: null,
+      valueProp: 'value',
+      wrap: true,
+      getProps: () => {
+        return {};
+      }
+    };
+  }
+  return fixComponentDefinition(type as SchemaFormComponentOptions | SchemaFormComponentOptions[], !field.editable);
 }
 
 export function renderField(pathPrefix: string[] | null,
@@ -221,56 +234,42 @@ export class FieldDefinition<V = any> {
   public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]> = null;
   public title: any = null;
   public array = false;
-  public type: string | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
+  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
   public processor: ValueProcessor;
-  public changeEditable?: (editable: boolean | ((name: string) => boolean)) => void = null;
   public description?: string | VNode;
   public destructPath?: {
     path: string,
     destruct: any
   } = null;
-  public destructor?: () => void = null;
-  public dirty?: boolean = null;
-  public dirtyType?: string = null;
   public display = false;
   public displayValue?: any = null;
   public editable = true;
-  public effectErrors?: string[] = null;
   public errors?: string[] = null;
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields = null;
   public focus?: (event?: boolean) => any = null;
-  public hiddenFromParent?: boolean = null;
   public default?: V = null;
-  public initialize?: (options: IFieldOptions) => void = null;
   public invalid?: boolean = false;
-  public lastValidateValue?: V = null;
   public loading = false;
   public match?: (path: Path | IFormPathMatcher) => boolean = null;
   public name?: string = null;
-  public notify?: (forceUpdate?: boolean) => void = null;
   public onChange?: (fn: () => void) => void = null;
   public path?: string[] = null;
-  public pathEqual?: (path: Path | IFormPathMatcher) => boolean = null;
   public plainPath?: string = null;
   public pristine?: boolean = null;
   public props?: { [key: string]: any } = null;
-  public publishState?: () => IFieldState = null;
   public required = false;
   public min?: number;
   public max?: number;
   public rules?: IRuleDescription[] = null;
   public setGetValue?: (value?: any) => any = null;
-  public shownFromParent?: boolean = null;
-  public syncContextValue?: () => void = null;
   public store?: SchemaFormStore = null;
-  public updateState?: (fn: (state: IFieldState) => void) => void = null;
   public valid = true;
   public validate?: (trigger?: string) => (boolean | Promise<unknown>) = null;
   public inputRef?: any;
   public value: V = null;
   public visible = true;
-  public xType: string | SchemaFormComponentOptions = null;
+  public xType: SchemaFormFieldType = null;
   public slot?: string = null;
 
   constructor(definition: SchemaFormField,
@@ -294,7 +293,7 @@ export class FieldDefinition<V = any> {
     this.path = buildArrayPath(pathPrefix, definition);
     this.plainPath = buildArrayPath(pathPrefix, definition).join('.');
     this.destructPath = parseDestructPath(definition.property);
-    this.props = Object.assign({}, definition.props);
+    this.props = Object.assign({}, definition.xProps || definition.props);
     this.visible = calcShowState(currentValue, definition);
     this.valid = true;
     this.displayValue = definition.displayValue;
@@ -302,14 +301,9 @@ export class FieldDefinition<V = any> {
     this.min = definition.min;
     this.max = definition.max;
     this.fields = definition.fields;
-    this.effectErrors = [];
     this.description = definition.description;
     this.errors = [];
-    this.hiddenFromParent = false;
     this.default = definition.default;
-    this.initialize = () => {
-      // default do nothing
-    };
     this.invalid = false;
     this.value = currentValue;
     this.setGetValue = null;
@@ -488,3 +482,25 @@ export enum SchemaFormEvents {
   fieldCreate = 'fieldCreate',
   validate = 'validate'
 }
+
+
+export const isNullStructValue = (value, struct) => {
+  if (isNull(value)) {
+    return true;
+  }
+  if (struct === undefined) {
+    return false;
+  }
+  if (typeof struct === 'string') {
+    return false;
+  }
+  if (Array.isArray(struct)) {
+    return !struct.some((s, index) => {
+      return !isNullStructValue(value[index], s);
+    });
+  } else {
+    return !Object.keys(struct).some(key => {
+      return !isNullStructValue(value[key], struct[key]);
+    });
+  }
+};

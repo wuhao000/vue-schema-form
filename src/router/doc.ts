@@ -22,21 +22,21 @@ export default [{
     
   ]
 }, {
-  path: '/doc/biaodanxiangleixingshuoming',
-  component: () => import('../generated/doc/biaodanxiangleixingshuoming/index.vue'),
-  meta: {
-    tags: [],
-    name: ' 表单项类型说明'
-  },
-  children: [
-    
-  ]
-}, {
   path: '/doc/kuozhanguifan',
   component: () => import('../generated/doc/kuozhanguifan/index.vue'),
   meta: {
     tags: [],
     name: '扩展规范'
+  },
+  children: [
+    
+  ]
+}, {
+  path: '/doc/biaodanxiangleixingshuoming',
+  component: () => import('../generated/doc/biaodanxiangleixingshuoming/index.vue'),
+  meta: {
+    tags: [],
+    name: '表单项类型说明'
   },
   children: [
     

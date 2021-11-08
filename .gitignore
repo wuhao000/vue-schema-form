@@ -23,3 +23,4 @@ pnpm-debug.log*
 yarn.lock
 package.json.lock
 es/
+src/generated/

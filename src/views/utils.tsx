@@ -33,7 +33,7 @@ export const getValue = () => {
     date: new Date(),
     start: new Date(),
     end: new Date(),
-    year: new Date(),
+    year: new Date().getFullYear(),
     month: new Date(),
     time: '12:24',
     timerange: ['12:24', '13:24'],
@@ -106,12 +106,18 @@ const fields: { [key: string]: SchemaFormField } = {
     type: 'integer',
     required: true,
     min: 100,
-    max: 200
+    max: 200,
+    props: {
+      min: 100
+    }
   },
   double: {
     title: '小数',
     required: true,
-    type: 'double'
+    type: 'double',
+    props: {
+      step: 0.1
+    }
   },
   switch: {
     title: '开关',

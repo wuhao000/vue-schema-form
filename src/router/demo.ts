@@ -86,6 +86,17 @@ export default [{
   children: [
     
   ]
+},
+{
+  path: '/demo/AntDesignVue/morenzhi',
+  component: () => import('../generated/demo/AntDesignVue/morenzhi/index.vue'),
+  meta: {
+    tags: ['Ant Design Vue'],
+    name: '默认值'
+  },
+  children: [
+    
+  ]
 }
   ]
 }, {
@@ -348,17 +359,6 @@ export default [{
   ]
 },
 {
-  path: '/demo/buju/shuzu',
-  component: () => import('../generated/demo/buju/shuzu/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '数组'
-  },
-  children: [
-    
-  ]
-},
-{
   path: '/demo/buju/wenbenchuanlian',
   component: () => import('../generated/demo/buju/wenbenchuanlian/index.vue'),
   meta: {
@@ -375,28 +375,6 @@ export default [{
   meta: {
     tags: ['布局'],
     name: '栅格'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/buju/denglu',
-  component: () => import('../generated/demo/buju/denglu/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '登录'
-  },
-  children: [
-    
-  ]
-},
-{
-  path: '/demo/buju/jiandan',
-  component: () => import('../generated/demo/buju/jiandan/index.vue'),
-  meta: {
-    tags: ['布局'],
-    name: '简单'
   },
   children: [
     
