@@ -9,7 +9,7 @@
   ],
   "main": "es/index.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run docs && vite",
     "dev-webpack": "npm run docs && node compile/build-components.js && vue-cli-service serve",
     "compile": "npm run docs && ts-node build/build-components.ts",
     "build": "npm run compile && vue-cli-service build",
@@ -34,7 +34,9 @@
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
     "moment": "^2.27.0",
-    "rxjs": "^7.4.0"
+    "rxjs": "^7.4.0",
+    "tinymce-mention": "^4.0.2",
+    "tinymce-mention-sourcecodecap": "^1.0.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-export-default-from": "^7.12.13",
@@ -45,8 +47,10 @@
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-typescript": "^7.13.0",
     "@babel/runtime": "^7.15.4",
+    "@tinymce/tinymce-vue": "^4.0.4",
     "@types/classnames": "^2.2.11",
     "@types/codemirror": "0.0.98",
+    "@types/tinymce": "^4.6.4",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "@vitejs/plugin-vue": "^1.2.1",
@@ -86,6 +90,7 @@
     "md5": "^2.3.0",
     "pinyin": "^2.10.2",
     "raw-loader": "^4.0.1",
+    "tinymce": "^5.10.1",
     "ts-loader": "^8.0.3",
     "typescript": "^4.4.3",
     "vant": "^3.0.0",

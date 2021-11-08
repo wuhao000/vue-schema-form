@@ -54,6 +54,7 @@ export * from './common/base-url';
 export * from './common/base-upload';
 export * from './config';
 export * from './mixins';
+export * from './create';
 export {SchemaFormEvents} from './internal/utils';
 
 SchemaForm.install = (app: App) => {

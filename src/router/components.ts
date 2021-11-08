@@ -42,6 +42,16 @@ export default [{
     
   ]
 }, {
+  path: '/components/fuwenbenbianjiqi',
+  component: () => import('../generated/components/fuwenbenbianjiqi/index.vue'),
+  meta: {
+    tags: [],
+    name: '富文本编辑器'
+  },
+  children: [
+    
+  ]
+}, {
   path: '/components/anniu',
   component: () => import('../generated/components/anniu/index.vue'),
   meta: {

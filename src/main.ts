@@ -14,6 +14,7 @@ import './styles';
 import './styles/github-markdown.less';
 import App from './views/index.vue';
 import ShowValue from './views/show-value.vue';
+import 'tinymce';
 
 const app = createApp(App);
 app.config.warnHandler = () => {

@@ -408,3 +408,5 @@ export enum FieldTypes {
   Password = 'password',
   TimeRange = 'timerange',
 }
+
+declare function createSchemaForm(schema: SchemaFormField, effects: ($: EffectsContext) => void): VNode;
