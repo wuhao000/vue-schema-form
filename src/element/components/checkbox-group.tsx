@@ -30,22 +30,22 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <ElRow>
-            {
-              c.map(o => (
-                  <ElCol span={this.span}>
-                    <ElCheckbox {...o}>{o.label}</ElCheckbox>
-                  </ElCol>
-              ))
-            }
-          </ElRow>
+        <ElRow>
+          {
+            c.map(o => (
+              <ElCol span={this.span}>
+                <ElCheckbox {...o}>{o.label}</ElCheckbox>
+              </ElCol>
+            ))
+          }
+        </ElRow>
       ));
     } else {
-      slots.default =  this.localOptions.map(o => (
-          <ElCol span={this.span}>
-            <ElCheckbox {...o}>{o.label}</ElCheckbox>
-          </ElCol>
-      ))
+      slots.default = () => this.localOptions.map(o => (
+        <ElCol span={this.span}>
+          <ElCheckbox {...o}>{o.label}</ElCheckbox>
+        </ElCol>
+      ));
     }
     return <ElCheckboxGroup {...props}
                             v-slots={slots}/>;

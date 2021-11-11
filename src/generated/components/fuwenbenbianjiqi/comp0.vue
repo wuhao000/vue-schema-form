@@ -1,9 +1,9 @@
-
 <template>
+  <div>{{ value }}</div>
   <tiny-mce-editor
       v-model="value"
       @keydown="onKeydown"
-      id="ab"
+      :id="id"
       :init="init"/>
   <Teleport
       v-if="showPortal"
@@ -42,13 +42,48 @@
   import uuid from 'uuid';
   import {nextTick, onMounted, reactive, ref} from 'vue';
 
+
+  tinymce.PluginManager.add('defendImage', function addPlugin(editor) {
+    editor.ui.registry.addButton('defendImage', {
+      text: '数据表',
+      onAction(button: { isDisabled: () => boolean, setDisabled: (p: boolean) => void }) {
+        tinyMCE.execCommand('mceInsertContent', false, `<div 
+          data-type="data-list" 
+          data-entity-id="Project"
+          contenteditable="false" >
+        <div>
+          <a>项目列表</a>
+        </div>  
+        <table 
+          style="width:100%;">
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>创建时间</th>
+            <th>创建人</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </tbody>
+        </table></div>`);
+      }
+    });
+  });
+
   const mentionList = ref([{
     name: '张三', value: '1'
   }, {
     name: '李四', value: '2'
   }])
 
-  const value = ref('');
+  const value = ref(``);
+  const id = ref('abc');
+  const editor = ref();
 
   const init: Settings = {
     base_url: '/static/tinymce',
@@ -58,8 +93,8 @@
     height: 300,
     branding: false,
     content_css: 'writer',
-    plugins: 'lists image media table textcolor wordcount contextmenu autolink paste mention',
-    toolbar: 'undo redo | formatselect | bold italic',
+    plugins: 'lists image media table textcolor wordcount contextmenu autolink paste mention defendImage',
+    toolbar: 'undo redo | formatselect | bold italic | defendImage',
     mentions: {
       delimiter: ['@', '#'],
       source: [
@@ -77,7 +112,9 @@
   }
 
   onMounted(() => {
-    tinymce.init({})
+    tinymce.init({});
+    editor.value = tinymce.get(id.value);
+
   });
 
   const showPortal = ref(false);
@@ -104,7 +141,6 @@
       selectedIndex.value--;
     }
   }
-  const editor = ref();
   const isMentionAction = ref(false);
   const onKeydown = (event: KeyboardEvent, b) => {
     // editor.value = b;

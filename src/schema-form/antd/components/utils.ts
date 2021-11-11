@@ -1,4 +1,4 @@
-import {computed} from 'vue';
+import {computed, ComputedRef} from 'vue';
 
 export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {
   if (typeof option === 'string') {
@@ -9,7 +9,9 @@ export const getOptionProperty = function getOptionProperty(option: any, propert
     return property(option);
   }
 };
-export const useOptions = (props) => {
+export const useOptions = (props): {
+  options: ComputedRef<any[]>
+} => {
   const options = computed(() => {
     if (props.options) {
       return props.options.map(option => {

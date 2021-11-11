@@ -55,12 +55,14 @@ export function register(component: string | Component,
 
 export function registerComponent(options: SchemaFormComponentOptions): void;
 
-export const DButton;
-export const DTimePicker;
-export const DRangePicker;
-export const DDatePicker;
-export const DForm;
-export const DSelect;
+export const DButton: any;
+export const DTimePicker: any;
+export const DRangePicker: any;
+export const DDatePicker: any;
+export const DForm: any;
+export const DSelect: any;
+export const CheckboxGroup: any;
+export const RadioGroup: any;
 
 export class SchemaForm {
   public static install: (app: App) => void;

@@ -4,12 +4,12 @@
 <pre><demo-wrapper>
 <comp0></comp0>
 <template #code><code-container>
-  
-&lt;template&gt;
+  &lt;template&gt;
+  &lt;div&gt;{{ value }}&lt;/div&gt;
   &lt;tiny-mce-editor
       v-model="value"
       @keydown="onKeydown"
-      id="ab"
+      :id="id"
       :init="init"/&gt;
   &lt;Teleport
       v-if="showPortal"
@@ -48,13 +48,48 @@
   import uuid from 'uuid';
   import {nextTick, onMounted, reactive, ref} from 'vue';
 
+
+  tinymce.PluginManager.add('defendImage', function addPlugin(editor) {
+    editor.ui.registry.addButton('defendImage', {
+      text: '数据表',
+      onAction(button: { isDisabled: () =&gt; boolean, setDisabled: (p: boolean) =&gt; void }) {
+        tinyMCE.execCommand('mceInsertContent', false, `&lt;div 
+          data-type="data-list" 
+          data-entity-id="Project"
+          contenteditable="false" &gt;
+        &lt;div&gt;
+          &lt;a&gt;项目列表&lt;/a&gt;
+        &lt;/div&gt;  
+        &lt;table 
+          style="width:100%;"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;名称&lt;/th&gt;
+            &lt;th&gt;创建时间&lt;/th&gt;
+            &lt;th&gt;创建人&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+        &lt;/table&gt;&lt;/div&gt;`);
+      }
+    });
+  });
+
   const mentionList = ref([{
     name: '张三', value: '1'
   }, {
     name: '李四', value: '2'
   }])
 
-  const value = ref('');
+  const value = ref(``);
+  const id = ref('abc');
+  const editor = ref();
 
   const init: Settings = {
     base_url: '/static/tinymce',
@@ -64,8 +99,8 @@
     height: 300,
     branding: false,
     content_css: 'writer',
-    plugins: 'lists image media table textcolor wordcount contextmenu autolink paste mention',
-    toolbar: 'undo redo | formatselect | bold italic',
+    plugins: 'lists image media table textcolor wordcount contextmenu autolink paste mention defendImage',
+    toolbar: 'undo redo | formatselect | bold italic | defendImage',
     mentions: {
       delimiter: ['@', '#'],
       source: [
@@ -83,7 +118,9 @@
   }
 
   onMounted(() =&gt; {
-    tinymce.init({})
+    tinymce.init({});
+    editor.value = tinymce.get(id.value);
+
   });
 
   const showPortal = ref(false);
@@ -110,7 +147,6 @@
       selectedIndex.value--;
     }
   }
-  const editor = ref();
   const isMentionAction = ref(false);
   const onKeydown = (event: KeyboardEvent, b) =&gt; {
     // editor.value = b;

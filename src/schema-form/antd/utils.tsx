@@ -38,6 +38,6 @@ export const getPropByPath = function getPropByPath(obj, path, strict?) {
   };
 };
 
-export const noop = function noop(...args: any[]) {
+export const noop = function noop() {
   // do nothing
 };

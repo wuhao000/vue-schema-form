@@ -28,7 +28,7 @@ import {
   registerDisplay,
   resolveOptions
 } from '../';
-import {FieldDefinition, ILibComponents, SchemaFormField} from '../../../types';
+import {FieldDefinition, ILibComponents} from '../../../types';
 import DUrl from '../common/url';
 import {isNotNull} from '../utils/utils';
 import Button from './components/button';

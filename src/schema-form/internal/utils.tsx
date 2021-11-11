@@ -390,7 +390,7 @@ export class FieldDefinition<V = any> {
     return fieldEvents;
   }
 
-  public getComponent(forDisplay = false, platform: Platform = 'desktop'): SchemaFormComponent {
+  public getComponent(forDisplay = false, platform: Platform = 'desktop'): SchemaFormComponent | undefined {
     return getComponent(this, this.store, forDisplay, platform);
   }
 

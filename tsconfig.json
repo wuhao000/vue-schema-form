@@ -12,6 +12,11 @@
     "strictNullChecks": false,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "antd-mobile-vue-next/*": ["../antd-mobile-vue-next/src/packages/*"]
+    }
   }
 }
