@@ -1,12 +1,12 @@
-import {SchemaForm} from './types/form';
+import {SchemaForm} from './form';
 
-export * from './types/async-validator';
+export * from './async-validator';
 
-export * from './types/uform';
+export * from './uform';
 
-export * from './types/bean';
+export * from './bean';
 
-export * from './types/form';
+export * from './form';
 
 export * from './config';
 

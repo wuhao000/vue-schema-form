@@ -16,6 +16,7 @@ import App from './views/index.vue';
 import ShowValue from './views/show-value.vue';
 import 'tinymce';
 
+
 const app = createApp(App);
 app.config.warnHandler = () => {
   // do not show

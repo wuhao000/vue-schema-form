@@ -1,6 +1,6 @@
 import {Component} from 'vue';
-import {FieldDefinition, Platform} from './types/bean';
-import {PropsTransformer} from './types/form';
+import {FieldDefinition, Platform} from './bean';
+import {PropsTransformer} from './form';
 
 
 interface Config {

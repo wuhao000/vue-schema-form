@@ -56,27 +56,27 @@ const fields: { [key: string]: SchemaFormField } = {
     title: '展开单选',
     required: true,
     type: 'expand-select',
-    props: {options}
+    xProps: {options}
   },
   select: {
     title: '单选',
     required: true,
     type: 'select',
-    props: {options, clearable: true}
+    xProps: {options, clearable: true}
   },
   multiSelect: {
     title: '多选',
     required: true,
     type: 'select',
     array: true,
-    props: {options}
+    xProps: {options}
   },
   expandMultiSelect: {
     title: '展开多选',
     required: true,
     type: 'expand-select',
     array: true,
-    props: {options}
+    xProps: {options}
   },
   text: {
     title: '多行文本',
@@ -107,7 +107,7 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     min: 100,
     max: 200,
-    props: {
+    xProps: {
       min: 100
     }
   },
@@ -115,7 +115,7 @@ const fields: { [key: string]: SchemaFormField } = {
     title: '小数',
     required: true,
     type: 'double',
-    props: {
+    xProps: {
       step: 0.1
     }
   },
@@ -161,14 +161,14 @@ const fields: { [key: string]: SchemaFormField } = {
   file: {
     title: '卡片上传文件',
     type: FieldTypes.File,
-    props: {
+    xProps: {
       mode: 'card'
     }
   },
   file2: {
     title: '拖拽上传文件',
     type: FieldTypes.File,
-    props: {
+    xProps: {
       mode: 'dragger'
     }
   },
@@ -209,7 +209,7 @@ const fields: { [key: string]: SchemaFormField } = {
         required: true
       }
     },
-    props: {
+    xProps: {
       addBtnText: '添加子表单', addBtnProps: {block: true}
     }
   },
@@ -224,7 +224,7 @@ const fields: { [key: string]: SchemaFormField } = {
         required: true
       }
     },
-    props: {
+    xProps: {
       addBtnText: '添加子表单',
       addBtnProps: {block: true}
     }
