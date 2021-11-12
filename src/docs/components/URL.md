@@ -1,7 +1,6 @@
 # URL
 
 ```vue
-
 <template>
   <d-url v-model:value="value"/>
 </template>

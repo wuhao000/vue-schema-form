@@ -1,5 +1,5 @@
 import {Subject} from 'rxjs';
-import {App, Component, VNode} from 'vue';
+import {App, Component, Ref, VNode} from 'vue';
 import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
@@ -14,18 +14,35 @@ export interface ISubscribers {
   [eventName: string]: Subject<any>;
 }
 
-export type Paths = Array<string | SchemaFormField>;
+export type Paths<Path extends any = any> = Array<Path | SchemaFormField>;
 
-export interface EffectsContext {
+export type PathType<T> = T extends { fields: infer S } ? {
+  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
+}[Extract<keyof S, string>] : never
+
+export type IDType<T> = T extends { fields: infer S } ? {
+  [K in Extract<keyof S, string>]: (S[K] extends SchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
+}[Extract<keyof S, string>] : never;
+
+
+interface SchemaContext {
+  onOk: (forceValidate: boolean, callback?: (value) => any) => Promise<void>;
+  store: SchemaFormStore;
+  currentValue: Ref;
+  matchFields: (paths: Paths) => FieldDefinition[];
+}
+
+export interface EffectsContext<Path extends any = any> {
+  __context?: SchemaContext;
   getValue?: () => any;
   onValidate: (handler: (response: IValidateResponse[]) => any) => void;
-  submit: (forceValidate: boolean, callback: (value: any) => any) => any;
-  subscribe?: (event: string, paths: string | SchemaFormField | Paths | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
-  subscribes: ISubscribers;
-  trigger: (event: string, value?: any) => void;
-  validate: (callback?: (errors: IValidateResponse[], context: EffectsContext) => any) => Promise<IValidateResponse[]>;
+  submit?: (forceValidate: boolean, callback: (value: any) => any) => any;
+  subscribe?: (event: string, paths: string | SchemaFormField | Paths<Path> | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
+  subscribes?: ISubscribers;
+  trigger?: (event: string, value?: any) => void;
+  validate: (callback?: (errors: IValidateResponse[], context: EffectsContext<Path>) => any) => Promise<IValidateResponse[]>;
 
-  (...path: Paths): EffectsHandlers;
+  (...path: Paths<Path>): EffectsHandlers;
 }
 
 export function registerAntd();
@@ -160,7 +177,7 @@ export interface EffectsHandlers {
   value: (value?: unknown | ((field: IField) => any)) => any;
 }
 
-export type Effects = (context: EffectsContext) => any;
+export type Effects = (context: EffectsContext<any>) => any;
 
 export type WrapType = boolean | {
   desktop: boolean;
@@ -411,4 +428,4 @@ export enum FieldTypes {
   TimeRange = 'timerange',
 }
 
-declare function createSchemaForm(schema: SchemaFormField, effects: ($: EffectsContext) => void): VNode;
+declare function createSchemaForm(schema: SchemaFormField, effects: ($: EffectsContext<any>) => void): VNode;

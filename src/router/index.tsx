@@ -11,6 +11,9 @@ export default createRouter({
     path: '/',
     redirect: docRoutes[0].path
   }, {
+    path: '/test',
+    component: () => import('../views/custom.vue')
+  }, {
     path: '/doc',
     redirect: docRoutes[0]?.path,
     components: {

@@ -12,7 +12,15 @@ import {
   ref,
   watch
 } from 'vue';
-import {Action, Effects, IValidateResponse, Platform, SchemaFormComponentOptions, SchemaFormStore} from '../../types';
+import {
+  Action,
+  Effects,
+  EffectsContext,
+  IValidateResponse,
+  Platform,
+  SchemaFormComponentOptions,
+  SchemaFormStore
+} from '../../types';
 import {registerComponent} from './config';
 import {renderField, SchemaFormEvents} from './internal/utils';
 import {isEqual} from './uform/utils';
@@ -47,7 +55,8 @@ const SchemaForm = defineComponent({
     onReset: Function,
     onCancel: Function,
     onOk: Function,
-    onSubmit: Function
+    onSubmit: Function,
+    context: Object as PropType<EffectsContext>
   },
   emits: ['update:value'],
   setup(props, {emit, slots}) {
@@ -301,9 +310,8 @@ const SchemaForm = defineComponent({
     });
 
     setCurrentValue();
-    store.context = createContext(store, localOnOk, currentValue);
+    store.context = createContext(store, localOnOk, currentValue, props.context);
     store.editable = props.editable as boolean;
-
     return {
       createResetButton,
       createCancelButton,

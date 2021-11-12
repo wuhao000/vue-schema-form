@@ -68,6 +68,9 @@ export function getRealFields(fields: FormFields) {
         return field;
       });
   } else {
+    if (fields === undefined) {
+      return [];
+    }
     return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
   }
 }
