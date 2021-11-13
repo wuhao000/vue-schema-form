@@ -119,10 +119,6 @@ interface BaseSchemaFormField {
   enum?: any[] | (() => any[] | Promise<any[]>) | Promise<any[]>;
   events?: { [key: string]: (...args: any[]) => any };
   /**
-   * 当字段类型为object时，子表单的字段列表
-   */
-  fields?: FormFields;
-  /**
    * 校验的格式，支持：
    * url 链接
    * email 邮箱
@@ -209,7 +205,7 @@ type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType
 type ClassType = string | string[] | { [key: string]: boolean };
 
 
-export interface StepsField extends BaseSchemaFormField {
+export interface StepsField extends HasChildrenField {
   /**
    * 每个步骤包含的组件数量
    */
@@ -225,7 +221,7 @@ export interface StepsField extends BaseSchemaFormField {
   };
 }
 
-export interface GridField extends BaseSchemaFormField {
+export interface GridField extends HasChildrenField {
   /**
    * 数字或数字数组，可以深层嵌套
    */
@@ -260,6 +256,13 @@ export interface GridField extends BaseSchemaFormField {
   };
 }
 
+interface HasChildrenField extends DefaultSchemaFormField {
+  /**
+   * 当字段类型为object时，子表单的字段列表
+   */
+  fields: FormFields;
+}
+
 interface DefaultSchemaFormField extends BaseSchemaFormField {
   /**
    * 表单项类型
@@ -279,7 +282,7 @@ interface DefaultSchemaFormField extends BaseSchemaFormField {
   xProps?: SchemaFormFieldProps;
 }
 
-export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField;
+export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField | HasChildrenField;
 
 
 
@@ -324,7 +327,6 @@ export interface SchemaFormStore {
   effects?: Effects;
   fields: { [key: string]: FieldDefinition };
   id?: number;
-  inline?: boolean;
   loading?: boolean;
   platform?: Platform;
   props?: FormProps;

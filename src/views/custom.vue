@@ -1,9 +1,7 @@
 <template>
-  {{value}}
   <v-schema-form
       v-model:value="value"
-      :schema="formDef.schema"
-      :context="formDef.$"/>
+      :context="ctx"/>
 </template>
 <script lang="tsx" setup>
   import {ref} from 'vue';
@@ -13,7 +11,7 @@
   registerAntd();
 
   const value = ref({});
-  const formDef = defineSchemaForm({
+  const ctx = defineSchemaForm({
     fields: {
       title: {
         type: 'string',
@@ -37,11 +35,17 @@
         layout: [1, 2],
         xProps: {
           titles: ['1']
+        },
+        fields: {
+          a: {
+            type: 'text',
+            tile: 'a'
+          }
         }
       }
     }
   });
-  formDef.$('title').onFieldCreateOrChange(v => {
-    console.log(v);
+  ctx('title').onFieldCreateOrChange((a, b, c) => {
+    console.log(a, b, c);
   });
 </script>

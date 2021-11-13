@@ -30,6 +30,7 @@ const a = defineSchemaForm({
   }
 } as const);
 
+a.$('#aaaaaaaaa')
 type NonArrayField = Omit<any, 'array'>
 
 type NonFieldsField = Omit<any, 'fields'>

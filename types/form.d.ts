@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
 import {App, Component, Ref, VNode} from 'vue';
-import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
+import {FieldDefinition, FormFields, HasChildrenField, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
 export interface IValidateResponse {
@@ -16,9 +16,15 @@ export interface ISubscribers {
 
 export type Paths<Path extends any = any> = Array<Path | SchemaFormField>;
 
-export type PathType<T> = T extends { fields: infer S } ? {
+type PathTyp2<S> = {
   [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
-}[Extract<keyof S, string>] : never
+}[Extract<keyof S, string>]
+
+type PathTyp3<S> = {
+  [K in Extract<keyof S, string>]: K
+}[Extract<keyof S, string>]
+
+export type PathType<T> = T extends { fields: infer S } ? (T extends HasChildrenField ? PathTyp2<S> : PathTyp3<S>) : never
 
 export type IDType<T> = T extends { fields: infer S } ? {
   [K in Extract<keyof S, string>]: (S[K] extends SchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
@@ -33,6 +39,7 @@ interface SchemaContext {
 }
 
 export interface EffectsContext<Path extends any = any> {
+  schema?: SchemaFormField;
   __context?: SchemaContext;
   getValue?: () => any;
   onValidate: (handler: (response: IValidateResponse[]) => any) => void;
@@ -43,6 +50,13 @@ export interface EffectsContext<Path extends any = any> {
   validate: (callback?: (errors: IValidateResponse[], context: EffectsContext<Path>) => any) => Promise<IValidateResponse[]>;
 
   (...path: Paths<Path>): EffectsHandlers;
+}
+
+declare function defineSchemaForm<T extends SchemaFormField>(schema: T): EffectsContext<PathType<T> | IDType<T>>;
+
+export interface SchemaFormDefinition<T extends SchemaFormField> {
+  $: EffectsContext<PathType<T> | IDType<T>>,
+  schema: T;
 }
 
 export function registerAntd();

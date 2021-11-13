@@ -18,7 +18,7 @@ import {
   EffectsContext,
   IValidateResponse,
   Platform,
-  SchemaFormComponentOptions,
+  SchemaFormComponentOptions, SchemaFormField,
   SchemaFormStore
 } from '../../types';
 import {registerComponent} from './config';
@@ -44,11 +44,10 @@ const SchemaForm = defineComponent({
     platform: {type: String as PropType<Platform>, default: 'desktop'},
     editable: {type: Boolean as PropType<boolean>, default: true},
     effects: {type: Function as PropType<Effects>},
-    schema: {type: Object, required: true},
+    schema: {type: Object},
     props: {type: Object},
     value: [Object, Array],
     title: [String, Object],
-    inline: {type: Boolean as PropType<boolean>},
     sticky: {type: Boolean as PropType<boolean>, default: false},
     components: {type: Array as PropType<SchemaFormComponentOptions[]>, default: () => []},
     onChange: Function,
@@ -63,6 +62,14 @@ const SchemaForm = defineComponent({
     const instance = getCurrentInstance();
     const currentValue = ref(props.value || {});
     const componentStore = new ComponentStore();
+
+    const realSchema = computed<SchemaFormField>(() => {
+      if (props.context) {
+        return props.context.schema;
+      }
+      return props.schema;
+    });
+
     props.components.forEach((comp: SchemaFormComponentOptions) => {
       registerComponent(comp, componentStore);
     });
@@ -72,26 +79,13 @@ const SchemaForm = defineComponent({
       loading: props.loading,
       readonly: props.readonly,
       platform: props.platform,
-      props: props.props || props.schema.props || {},
+      props: props.props || realSchema.value.xProps || realSchema.value.props || {},
       effects: props.effects,
-      inline: props.inline,
       editable: props.editable,
       context: null,
       root: instance,
       components: componentStore
     });
-    watch(() => props, () => {
-      Object.assign(store, {
-        disabled: props.disabled,
-        loading: props.loading,
-        readonly: props.readonly,
-        platform: props.platform,
-        props: props.props,
-        effects: props.effects,
-        inline: props.inline,
-        editable: props.editable
-      });
-    }, {deep: true});
     provide(SchemaFormFieldOperationStoreKey, {
       addField(field) {
         if (field) {
@@ -106,18 +100,20 @@ const SchemaForm = defineComponent({
     });
     provide(SchemaFormStoreKey, store);
     watch(() => props, (val: any) => {
+      store.platform = val.platform;
       store.readonly = val.readonly;
       store.disabled = val.disabled;
       store.platform = val.platform as Platform;
-      store.props = val.props || val.schema.props || {};
+      store.props = val.props || realSchema.value.xProps || realSchema.value.props || {};
       store.loading = val.loading;
       store.editable = val.editable;
+      store.effects = val.effects;
     }, {deep: true});
 
     const hasSubmitHandler = computed(() =>
-      props.onOk !== undefined
-      || props.onSubmit
-      || props.onSubmit !== undefined);
+        props.onOk !== undefined
+        || props.onSubmit
+        || props.onSubmit !== undefined);
 
     const localOnOk = async (forceValidate: boolean, callback?: (value) => any) => {
       if (hasSubmitHandler.value) {
@@ -153,7 +149,7 @@ const SchemaForm = defineComponent({
           } else {
             currentValue.value = clone(props.value);
           }
-        } else if (props.schema.array) {
+        } else if (realSchema.value.array) {
           currentValue.value = [];
         } else {
           currentValue.value = {};
@@ -177,10 +173,10 @@ const SchemaForm = defineComponent({
       buttonProps.disabled = props.disabled;
       buttonProps.loading = props.loading;
       return createButton(
-        text || btnProps && btnProps.okText || '提交',
-        action || (() => {
-          localOnOk(true);
-        }), buttonProps, 'confirm-btn'
+          text || btnProps && btnProps.okText || '提交',
+          action || (() => {
+            localOnOk(true);
+          }), buttonProps, 'confirm-btn'
       );
     };
     const createButton = (text, action, btnAttrs, classes) => {
@@ -202,7 +198,7 @@ const SchemaForm = defineComponent({
       return Button;
     };
     const validate = (): Promise<IValidateResponse[]> | [] =>
-      runValidation(values(store.fields).filter(it => it.getComponent().mode !== 'layout'));
+        runValidation(values(store.fields).filter(it => it.getComponent().mode !== 'layout'));
     const createCancelButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
       const hasCancelHandler = props.onCancel !== undefined || action !== undefined;
       if (!hasCancelHandler) {
@@ -215,9 +211,9 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-        text || btnProps?.cancelText || '取消',
-        action || localOnCancel, buttonProps,
-        'cancel-btn'
+          text || btnProps?.cancelText || '取消',
+          action || localOnCancel, buttonProps,
+          'cancel-btn'
       );
     };
     const createResetButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
@@ -232,8 +228,8 @@ const SchemaForm = defineComponent({
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
-        text || btnProps && btnProps.cancelText || '重置',
-        action || localOnReset, buttonProps, 'reset-btn'
+          text || btnProps && btnProps.cancelText || '重置',
+          action || localOnReset, buttonProps, 'reset-btn'
       );
     };
     const localOnReset = () => {
@@ -320,27 +316,28 @@ const SchemaForm = defineComponent({
       validate,
       store,
       renderButtons,
-      currentValue
+      currentValue,
+      realSchema
     };
   },
   render() {
     const LibComponentsContent: any = LibComponents.content[this.platform as string];
     const LibComponentsFooter: any = LibComponents.footer[this.platform as string];
-    const {title, sticky, prefixCls, store, currentValue, schema} = this;
-    const rootFieldDef: any = Object.assign({}, schema, {
+    const {title, sticky, prefixCls, store, currentValue, realSchema} = this;
+    const rootFieldDef: any = Object.assign({}, realSchema, {
       type: 'object',
       title
     });
     let content: any = [
       this.$slots.header?.(),
       renderField(
-        null,
-        store,
-        rootFieldDef,
-        currentValue,
-        0,
-        false,
-        this.$emit
+          null,
+          store,
+          rootFieldDef,
+          currentValue,
+          0,
+          false,
+          this.$emit
       )
     ];
     let footer: any = [

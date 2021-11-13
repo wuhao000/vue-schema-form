@@ -8,13 +8,9 @@ export const createSchemaForm = (schema: SchemaFormField, effects?: ($: EffectsC
                      effects={effects}/>;
 };
 
-export const defineSchemaForm = <T extends SchemaFormField>(obj: T): {
-  $: EffectsContext<PathType<T> | IDType<T>>,
-  schema: T
-} => {
-  return {
-    schema: obj,
-    $: defineEffectsContext()
-  };
+export const defineSchemaForm = <T extends SchemaFormField>(schema: T): EffectsContext<PathType<T> | IDType<T>> => {
+  const context = defineEffectsContext();
+  context.schema = schema;
+  return context;
 };
 
