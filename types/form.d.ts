@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
 import {App, Component, Ref, VNode} from 'vue';
-import {FieldDefinition, FormFields, HasChildrenField, Platform, SchemaFormField, SchemaFormStore} from './bean';
+import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
 export interface IValidateResponse {
@@ -20,11 +20,7 @@ type PathTyp2<S> = {
   [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
 }[Extract<keyof S, string>]
 
-type PathTyp3<S> = {
-  [K in Extract<keyof S, string>]: K
-}[Extract<keyof S, string>]
-
-export type PathType<T> = T extends { fields: infer S } ? (T extends HasChildrenField ? PathTyp2<S> : PathTyp3<S>) : never
+export type PathType<T> = T extends { fields: infer S } ? PathTyp2<S> : never
 
 export type IDType<T> = T extends { fields: infer S } ? {
   [K in Extract<keyof S, string>]: (S[K] extends SchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`

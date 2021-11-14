@@ -205,7 +205,7 @@ type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType
 type ClassType = string | string[] | { [key: string]: boolean };
 
 
-export interface StepsField extends HasChildrenField {
+export interface StepsField extends DefaultSchemaFormField {
   /**
    * 每个步骤包含的组件数量
    */
@@ -221,7 +221,7 @@ export interface StepsField extends HasChildrenField {
   };
 }
 
-export interface GridField extends HasChildrenField {
+export interface GridField extends DefaultSchemaFormField {
   /**
    * 数字或数字数组，可以深层嵌套
    */
@@ -256,18 +256,13 @@ export interface GridField extends HasChildrenField {
   };
 }
 
-interface HasChildrenField extends DefaultSchemaFormField {
-  /**
-   * 当字段类型为object时，子表单的字段列表
-   */
-  fields: FormFields;
-}
-
 interface DefaultSchemaFormField extends BaseSchemaFormField {
   /**
    * 表单项类型
    */
   type?: SchemaFormFieldType;
+
+  fields?: FormFields;
   /**
    * 布局描述，根据不同的布局有所不同
    */
@@ -282,7 +277,7 @@ interface DefaultSchemaFormField extends BaseSchemaFormField {
   xProps?: SchemaFormFieldProps;
 }
 
-export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField | HasChildrenField;
+export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField;
 
 
 
