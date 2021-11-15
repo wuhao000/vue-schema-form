@@ -17,10 +17,10 @@ export interface ISubscribers {
 export type Paths<Path extends any = any> = Array<Path | SchemaFormField>;
 
 type PathTyp2<S> = {
-  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
+  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}`
 }[Extract<keyof S, string>]
 
-export type PathType<T> = T extends { fields: infer S } ? PathTyp2<S> : never
+export type PathType<T> = T extends { fields: infer S } ? (PathTyp2<S>) : never
 
 export type IDType<T> = T extends { fields: infer S } ? {
   [K in Extract<keyof S, string>]: (S[K] extends SchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
@@ -141,11 +141,11 @@ export interface EffectsHandlers {
 
   isEnabled(): boolean;
 
-  onFieldBlur: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
-  onFieldChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  onFieldCreate: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  onFieldCreateOrChange: (cb: (value: any, path?: string, field?: IField) => any) => EffectsHandlers;
-  onFieldFocus: (cb: (path: string, event?: Event) => any) => EffectsHandlers;
+  onFieldBlur: (cb: (this: EffectsHandlers, path: string, event?: Event) => any) => EffectsHandlers;
+  onFieldChange: (cb: (this: EffectsHandlers, value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldCreate: (cb: (this: EffectsHandlers, value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldCreateOrChange: (cb: (this: EffectsHandlers, value: any, path?: string, field?: IField) => any) => EffectsHandlers;
+  onFieldFocus: (cb: (this: EffectsHandlers, path: string, event?: Event) => any) => EffectsHandlers;
   paths: () => string[];
 
   /**

@@ -29,7 +29,7 @@ class SchemaContext {
 
 export const defineEffectsContext = () => {
 
-  const context: EffectsContext = function(...paths) {
+  const context: EffectsContext = <EffectsContext>function(...paths) {
     const required = (required: boolean) => {
       if (typeof required === 'boolean') {
         context.__context.matchFields(paths).forEach(field => {
@@ -137,9 +137,9 @@ export const defineEffectsContext = () => {
       value: (value: unknown) => {
         const res = context.__context.matchFields(paths).map(it => {
           if (typeof value === 'function') {
-            it.setGetValue(value(it));
+            return it.setGetValue(value(it));
           } else {
-            it.setGetValue(value);
+            return it.setGetValue(value);
           }
         });
         if (value === undefined) {
@@ -188,8 +188,8 @@ export const defineEffectsContext = () => {
         return context(...paths);
       },
       onFieldCreateOrChange: (callback): EffectsHandlers =>
-          context(...paths).onFieldCreate(callback)
-              .onFieldChange(callback),
+        context(...paths).onFieldCreate(callback)
+          .onFieldChange(callback),
       onFieldChange: (callback): EffectsHandlers => {
         context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
@@ -216,7 +216,7 @@ export const defineEffectsContext = () => {
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-                it, context.__context.store.fields as any
+              it, context.__context.store.fields as any
             )), number));
           }
         }
@@ -234,7 +234,7 @@ export const defineEffectsContext = () => {
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
       replaceLastPath: (...last: string[]): EffectsHandlers =>
-          context(...replaceLastPath(paths as string[], last)),
+        context(...replaceLastPath(paths as string[], last)),
     } as EffectsHandlers;
   };
   context.subscribes = {};
@@ -261,12 +261,13 @@ export const defineEffectsContext = () => {
               }) : [findFieldPath(pathsOrHandler, context.__context.store.fields as any)];
             }
             if (isPathMatchPatterns(v.field, patterns)) {
+              const h = context(v.field.plainPath);
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
-                handler(v.value, v.path);
+                handler.call(h, v.value, v.path);
               } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
-                handler(v.path, v.event);
+                handler.call(h, v.path, v.event);
               } else {
-                handler(v.value);
+                handler.call(h, v.value);
               }
             }
           }
