@@ -165,7 +165,7 @@ export const defineEffectsContext = () => {
       },
       setFieldProps: (props): EffectsHandlers => {
         context.__context.matchFields(paths).forEach(field => {
-          field.props = Object.assign({}, field.props, props);
+          Object.assign(field.props, props);
         });
         return context(...paths);
       },

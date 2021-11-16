@@ -274,10 +274,16 @@ export class FieldDefinition<V = any> {
   public visible = true;
   public xType: SchemaFormFieldType = null;
   public slot?: string = null;
+  public layoutType?: string | { [key: string]: unknown };
+  public layoutProps?: { [key: string]: unknown };
+  public placeholder?: string;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,
               pathPrefix: string[], currentValue: any) {
+    this.placeholder = definition.placeholder;
+    this.layoutType = definition.layoutType;
+    this.layoutProps = definition.layoutProps;
     this.array = definition.array;
     this.definition = definition;
     this.disabled = false;
@@ -296,7 +302,7 @@ export class FieldDefinition<V = any> {
     this.path = buildArrayPath(pathPrefix, definition);
     this.plainPath = buildArrayPath(pathPrefix, definition).join('.');
     this.destructPath = parseDestructPath(definition.property);
-    this.props = Object.assign({}, definition.xProps || definition.props);
+    this.props = reactive(Object.assign({}, definition.xProps || definition.props));
     this.visible = calcShowState(currentValue, definition);
     this.valid = true;
     this.displayValue = definition.displayValue;

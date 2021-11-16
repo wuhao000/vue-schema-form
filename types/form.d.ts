@@ -49,6 +49,7 @@ export interface EffectsContext<Path extends any = any> {
 }
 
 declare function defineSchemaForm<T extends SchemaFormField>(schema: T): EffectsContext<PathType<T> | IDType<T>>;
+declare function defineActions<T extends Action[] = Action[]>(actions: T): T;
 
 export interface SchemaFormDefinition<T extends SchemaFormField> {
   $: EffectsContext<PathType<T> | IDType<T>>,
@@ -242,8 +243,8 @@ export interface ILibComponents {
 type BuiltInActions = 'submit' | 'cancel' | 'reset';
 
 type Action = BuiltInActions | {
-  name: BuiltInActions | string;
-  text: string;
+  name?: BuiltInActions | string;
+  text?: string;
   props?: { [key: string]: unknown };
   action?: () => any;
 };

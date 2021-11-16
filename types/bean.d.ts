@@ -49,6 +49,9 @@ export class FieldDefinition<V = any> {
   public value: V;
   public visible: boolean;
   public xType: SchemaFormFieldType;
+  public layoutType?: string | { [key: string]: unknown };
+  public layoutProps?: { [key: string]: unknown };
+  public placeholder?: string;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,

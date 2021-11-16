@@ -55,7 +55,7 @@ const SchemaForm = defineComponent({
     onCancel: Function,
     onOk: Function,
     onSubmit: Function,
-    context: Object as PropType<EffectsContext>
+    context: Function as PropType<EffectsContext>
   },
   emits: ['update:value'],
   setup(props, {emit, slots}) {

@@ -15,7 +15,7 @@ import {
   toRaw,
   unref,
   VNode,
-  watch
+  watch, watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
@@ -126,8 +126,7 @@ export default defineComponent({
       return field.value.getComponent(!editable.value, store.platform);
     });
     const preProps = computed<{ [key: string]: unknown }>(() => {
-      const definition = props.definition as SchemaFormField;
-      const localProps: { [key: string]: unknown } = {...(definition.xProps || definition.props || {})};
+      const localProps: { [key: string]: unknown } = {...field.value.props};
       const renderComponent = fieldComponent.value;
       if (renderComponent !== undefined && renderComponent.getProps) {
         Object.assign(localProps, renderComponent.getProps(field.value));
@@ -137,8 +136,8 @@ export default defineComponent({
       if (field.value.type === FieldTypes.Object) {
         localProps.platform = platform;
         localProps.editable = editable.value;
-        localProps.layoutType = definition.layoutType;
-        localProps.layoutProps = definition.layoutProps;
+        localProps.layoutType = field.value.layoutType;
+        localProps.layoutProps = field.value.layoutProps;
         localProps.pathPrefix = path;
         localProps.schemaPath = schemaPath;
       }
@@ -149,8 +148,8 @@ export default defineComponent({
       const definition = props.definition as SchemaFormField;
       const {platform} = store;
       const renderComponent = fieldComponent.value;
-      if (isNotNull(definition.placeholder)) {
-        localProps.placeholder = definition.placeholder;
+      if (isNotNull(field.value.placeholder)) {
+        localProps.placeholder = field.value.placeholder;
       }
       localProps.required = field.value.required;
       if (isNull(editable.value) || platform === DESKTOP) {
@@ -575,6 +574,7 @@ export default defineComponent({
         return formItem;
       }
     };
+    watchEffect(() => props.field.props);
     return {
       editable,
       store,

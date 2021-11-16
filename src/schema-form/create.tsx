@@ -1,5 +1,5 @@
 import {VNode} from 'vue';
-import {EffectsContext, IDType, PathType, SchemaFormField} from '../../types';
+import {Action, EffectsContext, IDType, PathType, SchemaFormField} from '../../types';
 import SchemaForm from './form';
 import {defineEffectsContext} from './utils/effects';
 
@@ -14,3 +14,6 @@ export const defineSchemaForm = <T extends SchemaFormField>(schema: T): EffectsC
   return context;
 };
 
+export const defineActions = <T extends Action[] = Action[]>(actions: T): T => {
+  return actions;
+}
