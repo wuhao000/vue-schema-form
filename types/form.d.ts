@@ -246,7 +246,7 @@ type Action = BuiltInActions | {
   name?: BuiltInActions | string;
   text?: string;
   props?: { [key: string]: unknown };
-  action?: () => any;
+  action?: ($: EffectsContext, ...args: any[]) => any;
 };
 
 export interface IFieldMap {
