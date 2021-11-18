@@ -7,8 +7,8 @@
   &lt;template&gt;
   &lt;div&gt;{{ value }}&lt;/div&gt;
   &lt;tiny-mce-editor
-      v-model="value"
       :id="id"
+      v-model="value"
       :init="init"
       @keydown="onKeydown"/&gt;
   &lt;Teleport
@@ -20,9 +20,9 @@
       &lt;a-list&gt;
         &lt;a-list-item
             v-for="(item, index) in mentionList"
+            :key="item.value"
             class="mention-user-item"
             :class="{selected: selectedIndex === index}"
-            :key="item.value"
             @click="onUserSelect(item)"&gt;{{ item.name }}
         &lt;/a-list-item&gt;
       &lt;/a-list&gt;
@@ -54,7 +54,7 @@
     editor.ui.registry.addButton('defendImage', {
       text: '数据表',
       onAction(button: { isDisabled: () =&gt; boolean, setDisabled: (p: boolean) =&gt; void }) {
-        tinyMCE.execCommand('mceInsertContent', false, `&lt;div 
+        tinymce.execCommand('mceInsertContent', false, `&lt;div 
           data-type="data-list" 
           data-entity-id="Project"
           contenteditable="false" &gt;
@@ -135,7 +135,7 @@
 
   const selectedIndex = ref(-1);
   const selectNextUser = () =&gt; {
-    if (selectedIndex &lt; 0 || selectedIndex.value === mentionList.value.length - 1) {
+    if (selectedIndex.value &lt; 0 || selectedIndex.value === mentionList.value.length - 1) {
       selectedIndex.value = 0;
     } else {
       selectedIndex.value++;
