@@ -8,21 +8,22 @@
   &lt;div&gt;{{ value }}&lt;/div&gt;
   &lt;tiny-mce-editor
       v-model="value"
-      @keydown="onKeydown"
       :id="id"
-      :init="init"/&gt;
+      :init="init"
+      @keydown="onKeydown"/&gt;
   &lt;Teleport
       v-if="showPortal"
       :to="target"&gt;
-    &lt;div class="user-selection-dropdown user-selection-dropdown-active"
-         :style="mentionListStyle"&gt;
+    &lt;div 
+        class="user-selection-dropdown user-selection-dropdown-active"
+        :style="mentionListStyle"&gt;
       &lt;a-list&gt;
         &lt;a-list-item
             v-for="(item, index) in mentionList"
             class="mention-user-item"
             :class="{selected: selectedIndex === index}"
             :key="item.value"
-            @click="onUserSelect(item)"&gt;{{item.name}}
+            @click="onUserSelect(item)"&gt;{{ item.name }}
         &lt;/a-list-item&gt;
       &lt;/a-list&gt;
     &lt;/div&gt;
