@@ -17,7 +17,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "vue/attribute-hyphenation": "error",
-    "vue/attributes-order": "error",
+    "vue/attributes-order": "off",
     "vue/component-definition-name-casing": "error",
     "vue/component-name-in-template-casing": "off",
     "vue/component-tags-order": "error",
