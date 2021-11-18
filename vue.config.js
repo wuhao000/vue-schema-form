@@ -13,9 +13,9 @@ module.exports = {
   },
   configureWebpack: (config) => {
     config.externals = {
-      'vue': 'Vue',
-      'moment': 'moment',
-      "antd":"ant-design-vue"
+      // 'vue': 'Vue',
+      // 'moment': 'moment',
+      // "antd":"ant-design-vue"
       // 'highlight': 'hljs',
       // 'codemirror': 'CodeMirror',
       // 'vue-router': 'VueRouter',
