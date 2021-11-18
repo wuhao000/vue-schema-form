@@ -29,7 +29,7 @@ class SchemaContext {
 
 export const defineEffectsContext = () => {
 
-  const context: EffectsContext = <EffectsContext>function(...paths) {
+  const context: EffectsContext = function(...paths) {
     const required = (required: boolean) => {
       if (typeof required === 'boolean') {
         context.__context.matchFields(paths).forEach(field => {
@@ -236,7 +236,7 @@ export const defineEffectsContext = () => {
       replaceLastPath: (...last: string[]): EffectsHandlers =>
         context(...replaceLastPath(paths as string[], last)),
     } as EffectsHandlers;
-  };
+  } as EffectsContext;
   context.subscribes = {};
   context.subscribe = (e: string, pathsOrHandler, handler) => {
     if (!context.subscribes[e]) {
