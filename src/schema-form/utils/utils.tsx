@@ -47,7 +47,9 @@ export const MOBILE = 'mobile';
 
 
 export function swap(array, x, y) {
+  console.log('before ',array.map(it => it.components[0].id));
   array.splice(x, 1, ...array.splice(y, 1, array[x]));
+  console.log('after ',array.map(it => it.components[0].id));
 }
 
 export const registerMobileLib = (map: Record<keyof ILibComponents, any>) => {
@@ -281,7 +283,7 @@ export const fixComponentDefinition = (value: SchemaFormComponentOptions | Schem
     valueProp: options.valueProp || 'value',
     wrap: options.wrap,
     getProps: (definition: FieldDefinition) => {
-      const  getProps = options.getProps || (() => ({}));
+      const getProps = options.getProps || (() => ({}));
       const props: any = getProps(definition, options.platforms as Platform) || {};
       if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
         props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;
@@ -292,4 +294,17 @@ export const fixComponentDefinition = (value: SchemaFormComponentOptions | Schem
       return props;
     }
   };
+};
+
+
+export const uuid = () => {
+  const s = [];
+  const hexDigits = '0123456789abcdef';
+  for (let i = 0; i < 36; i++) {
+    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+  }
+  s[14] = '4';  // bits 12-15 of the time_hi_and_version field to 0010
+  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+  s[8] = s[13] = s[18] = s[23] = '-';
+  return s.join('');
 };

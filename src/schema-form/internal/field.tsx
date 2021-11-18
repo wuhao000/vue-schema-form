@@ -35,7 +35,7 @@ import {
   isNull,
   LibComponents,
   MOBILE,
-  swap
+  swap, uuid
 } from '../utils/utils';
 import {
   FieldDefinition,
@@ -355,7 +355,7 @@ export default defineComponent({
           style,
           arrayIndex: index,
           disabled: isDisabled.value,
-          key: `${field.value.plainPath}-${index}`,
+          key: `${uuid()}`,
           [valueProp]: v,
           title: store.platform === 'mobile' ? field.value.title : null,
           ['onUpdate:' + valueProp]: (val) => {
@@ -401,12 +401,16 @@ export default defineComponent({
         },
         onMoveDown: index => {
           if (index <= (currentValue.value as any[]).length - 1) {
-            swap(currentValue.value, index, index + 1);
+            const newArray = [...currentValue.value as any[]];
+            swap(newArray, index, index + 1);
+            currentValue.value = newArray;
           }
         },
         onMoveUp: index => {
           if (index > 0) {
-            swap(currentValue.value, index, index - 1);
+            const newArray = [...currentValue.value as any[]];
+            swap(newArray, index, index - 1);
+            currentValue.value = newArray;
           }
         },
         onAdd: () => {
