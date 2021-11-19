@@ -483,6 +483,9 @@ export default defineComponent({
           }
         });
       }
+      if (!editable.value) {
+        propsTmp.value = props.value;
+      }
       return <InputFieldComponent
         {...propsTmp}
         v-slots={slots}
@@ -588,6 +591,7 @@ export default defineComponent({
   },
   render() {
     const field = this.field;
+    console.log(field.plainPath, this.value);
     const {editable, store: {platform}} = this;
     const definition = this.definition as SchemaFormField;
     if (definition.slot) {

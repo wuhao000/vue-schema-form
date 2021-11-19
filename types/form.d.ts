@@ -185,6 +185,14 @@ export interface EffectsHandlers {
   takePath(number: number): EffectsHandlers;
 
   toggle: () => EffectsHandlers;
+  /**
+   * 获取或设置字段值（该方法模拟jQuery的value方法思路）
+   * 当value为undefined时，该方法将返回匹配的字段值
+   * 如果value不是undefined，则将匹配到的字段的值修改为value的值
+   * 当字段为详情模式（即editable=false）时，修改值的操作是无效的，请使用setDisplayValue方法
+   * @param {unknown} value 要修改的值，如果为undefined则表示获取值
+   * @return {any}
+   */
   value: (value?: unknown | ((field: IField) => any)) => any;
 }
 

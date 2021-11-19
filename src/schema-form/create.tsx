@@ -8,6 +8,11 @@ export const createSchemaForm = (schema: SchemaFormField, effects?: ($: EffectsC
                      effects={effects}/>;
 };
 
+/**
+ * 创建一个表单上下文，主要是提供typescript类型
+ * @param {T} schema 描述表单结构的对象
+ * @return {EffectsContext<PathType<T> | IDType<T>>} 返回副作用函数上下文操作对象
+ */
 export const defineSchemaForm = <T extends SchemaFormField>(schema: T): EffectsContext<PathType<T> | IDType<T>> => {
   const context = defineEffectsContext();
   context.schema = schema;
