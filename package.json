@@ -14,7 +14,7 @@
     "compile": "npm run docs && ts-node build/build-components.ts",
     "build": "npm run compile && vue-cli-service build",
     "docs": "ts-node build/routes.ts",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --max-warnings 1",
     "cdn": "npm run lib && ts-node build/cdn.ts",
     "check": "ts-node build/check-ts.ts",
     "version": "ts-node build/version.ts",
@@ -104,10 +104,5 @@
     "vue-router": "^4.0.5"
   },
   "typings": "types/index.d.ts",
-  "browserslist": [
-    "> 5%",
-    "last 2 versions",
-    "not dead"
-  ],
   "lastVersion": "3.0.142"
 }

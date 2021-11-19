@@ -34,7 +34,7 @@ export function each<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): void;
-export function each<T extends any>(
+export function each<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -76,7 +76,7 @@ export function map<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): T[];
-export function map<T extends any>(
+export function map<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -110,7 +110,7 @@ export function reduce<T>(
     accumulator?: T,
     revert?: boolean
 ): T;
-export function reduce<T extends any, U>(
+export function reduce<T, U>(
     val: T,
     iterator: MemoObjectIterator<T, U>,
     accumulator?: U,
@@ -143,7 +143,7 @@ export function every<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): boolean;
-export function every<T extends any>(
+export function every<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -173,7 +173,7 @@ export function some<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): boolean;
-export function some<T extends any>(
+export function some<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -203,7 +203,7 @@ export function findIndex<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): number;
-export function findIndex<T extends any>(
+export function findIndex<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
@@ -237,7 +237,7 @@ export function find<T>(
     iterator: EachArrayIterator<T>,
     revert?: boolean
 ): T;
-export function find<T extends any>(
+export function find<T>(
     val: T,
     iterator: EachObjectIterator<T>,
     revert?: boolean
