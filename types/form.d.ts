@@ -34,16 +34,37 @@ interface SchemaContext {
   matchFields: (paths: Paths) => FieldDefinition[];
 }
 
+type FormValue = {[key: string]: unknown};
+
+/**
+ * 副作用函数上下文
+ */
 export interface EffectsContext<Path extends any = any> {
-  schema?: SchemaFormField;
+  __schema?: SchemaFormField;
   __context?: SchemaContext;
-  getValue?: () => any;
+  /**
+   * 获取表单值
+   * @return {any}
+   */
+  getValue?: () => FormValue | FormValue[];
   onValidate: (handler: (response: IValidateResponse[]) => any) => void;
+  /**
+   * 提交表单， 会触发submit事件，提交前会自动调用validate方法进行表单校验
+   * @param {boolean} forceValidate
+   * @param {(value: any) => any} callback
+   * @return {any}
+   */
   submit?: (forceValidate: boolean, callback: (value: any) => any) => any;
   subscribe?: (event: string, paths: string | SchemaFormField | Paths<Path> | ((...margs: any) => any), handler?: (...margs: any) => any) => any;
   subscribes?: ISubscribers;
   trigger?: (event: string, value?: any) => void;
-  validate: (callback?: (errors: IValidateResponse[], context: EffectsContext<Path>) => any) => Promise<IValidateResponse[]>;
+  /**
+   * 校验表单，异步返回表单校验失败的的提示列表，如果为空则表示校验通过
+   * 如果提供了回调函数参数，则不返回Promise，通过调用回调函数返回校验结果
+   * @param {(errors: IValidateResponse[], context: EffectsContext<Path>) => any} callback
+   * @return {Promise<string[]>}
+   */
+  validate: (callback?: (errors: string[], context: EffectsContext<Path>) => any) => Promise<string[]>;
 
   (...path: Paths<Path>): EffectsHandlers;
 }
@@ -196,7 +217,10 @@ export interface EffectsHandlers {
   value: (value?: unknown | ((field: IField) => any)) => any;
 }
 
-export type Effects = (context: EffectsContext<any>) => any;
+/**
+ * 副作用函数
+ */
+export type Effects = (context: EffectsContext) => void;
 
 export type WrapType = boolean | {
   desktop: boolean;

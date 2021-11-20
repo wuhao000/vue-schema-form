@@ -65,7 +65,7 @@ const SchemaForm = defineComponent({
 
     const realSchema = computed<SchemaFormField>(() => {
       if (props.context) {
-        return props.context.schema;
+        return props.context.__schema;
       }
       return props.schema;
     });
