@@ -47,9 +47,7 @@ export const MOBILE = 'mobile';
 
 
 export function swap(array, x, y) {
-  console.log('before ',array.map(it => it.components[0].id));
   array.splice(x, 1, ...array.splice(y, 1, array[x]));
-  console.log('after ',array.map(it => it.components[0].id));
 }
 
 export const registerMobileLib = (map: Record<keyof ILibComponents, any>) => {

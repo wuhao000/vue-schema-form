@@ -591,7 +591,6 @@ export default defineComponent({
   },
   render() {
     const field = this.field;
-    console.log(field.plainPath, this.value);
     const {editable, store: {platform}} = this;
     const definition = this.definition as SchemaFormField;
     if (definition.slot) {
