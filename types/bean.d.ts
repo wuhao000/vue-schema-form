@@ -286,7 +286,7 @@ interface DefaultSchemaFormField extends BaseSchemaFormField {
 }
 
 
-export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField | FlatFieldType;
+export type SchemaFormField = (StepsField | GridField | DefaultSchemaFormField) & FlatFieldType;
 
 
 interface ValueProcessor {

@@ -143,7 +143,15 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   return true;
 }
 
-function getComponent(field: SchemaFormField,
+interface SimpleField {
+  xType?: SchemaFormFieldType;
+  type?: SchemaFormFieldType;
+  slot?: string;
+  array?: boolean;
+  editable?: boolean;
+}
+
+function getComponent(field: SimpleField,
                       store: SchemaFormStore,
                       forDisplay = false,
                       platform: Platform = 'desktop'): SchemaFormComponent {
