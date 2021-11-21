@@ -52,7 +52,7 @@ registerComponent({
   getProps: (definition, platform) => {
     return {
       platform,
-      definition: {fields: definition.fields}
+      definition
     };
   }
 });
@@ -64,7 +64,7 @@ registerDisplay({
   getProps: (definition, platform) => {
     return {
       platform,
-      definition: {fields: definition.fields}
+      definition
     };
   }
 });

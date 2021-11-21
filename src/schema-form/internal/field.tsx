@@ -424,7 +424,7 @@ export default defineComponent({
     };
     const relatedSubFields = computed(() => {
       const definition = props.definition as SchemaFormField;
-      return getRealFields(definition.fields);
+      return getRealFields(definition);
     });
     const getSubFields = () => {
       const definition = props.definition as SchemaFormField;

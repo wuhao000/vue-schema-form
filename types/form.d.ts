@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
 import {App, Component, Ref, VNode} from 'vue';
-import {FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
+import {DefaultSchemaFormField, FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
 export interface IValidateResponse {
@@ -23,7 +23,7 @@ type PathTyp2<S> = {
 export type PathType<T> = T extends { fields: infer S } ? (PathTyp2<S>) : never
 
 export type IDType<T> = T extends { fields: infer S } ? {
-  [K in Extract<keyof S, string>]: (S[K] extends SchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
+  [K in Extract<keyof S, string>]: (S[K] extends DefaultSchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
 }[Extract<keyof S, string>] : never;
 
 
@@ -64,7 +64,7 @@ export interface EffectsContext<Path extends any = any> {
    * @param {(errors: IValidateResponse[], context: EffectsContext<Path>) => any} callback
    * @return {Promise<string[]>}
    */
-  validate: (callback?: (errors: string[], context: EffectsContext<Path>) => any) => Promise<string[]>;
+  validate: (callback?: (errors: IValidateResponse[], context: EffectsContext<Path>) => any) => Promise<IValidateResponse[]>;
 
   (...path: Paths<Path>): EffectsHandlers;
 }
@@ -133,7 +133,6 @@ export interface EffectsHandlers {
   /**
    * 禁用
    * @returns {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   disable(disable?: boolean): EffectsHandlers;
 
@@ -142,13 +141,11 @@ export interface EffectsHandlers {
    *
    * @param {boolean} editable
    * @returns {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   editable(editable: boolean): EffectsHandlers;
 
   /**
    * 启用
-   * @deprecated 使用 setStates 代替
    */
   enable(enable?: boolean): EffectsHandlers;
 
@@ -157,7 +154,6 @@ export interface EffectsHandlers {
   /**
    * @param {boolean} hide
    * @return {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   hide: (hide?: boolean) => EffectsHandlers;
 
@@ -175,7 +171,6 @@ export interface EffectsHandlers {
    *
    * @param {boolean} readonly
    * @returns {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   readonly(readonly: boolean): EffectsHandlers;
 
@@ -185,7 +180,6 @@ export interface EffectsHandlers {
    *
    * @param {boolean} required
    * @return {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   required: (required: boolean) => EffectsHandlers;
   setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers;
@@ -197,7 +191,6 @@ export interface EffectsHandlers {
    *
    * @param {boolean} show
    * @return {EffectsHandlers}
-   * @deprecated 使用 setStates 代替
    */
   show: (show?: boolean) => EffectsHandlers;
   subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers;

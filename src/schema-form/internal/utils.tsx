@@ -3,19 +3,8 @@ import get from 'lodash.get';
 import uuid from 'uuid';
 import {Component, isVNode, reactive, VNode} from 'vue';
 import {
-  DefaultPatternRule,
-  FormFields,
-  IFormPathMatcher,
-  IRuleDescription,
-  Path,
-  Platform,
-  SchemaFormComponent,
-  SchemaFormComponentOptions,
-  SchemaFormField,
-  SchemaFormFieldType,
-  SchemaFormStore,
-  ShowFieldCondition,
-  ValueProcessor
+  DefaultPatternRule, FormFields, IFormPathMatcher, IRuleDescription, Path, Platform, SchemaFormComponent,
+  SchemaFormComponentOptions, SchemaFormField, SchemaFormFieldType, SchemaFormStore, ShowFieldCondition, ValueProcessor
 } from '../../../types';
 import Empty from '../empty';
 import {isArr, parseDestructPath} from '../uform/utils';
@@ -53,26 +42,38 @@ export function calcShowState(currentValue, definition: SchemaFormField) {
   }
 }
 
-export function getRealFields(fields: FormFields) {
-  if (typeof fields === 'object') {
-    return Object.keys(fields)
-      .filter(key => fields[key])
-      .map(key => {
-        const field = fields[key];
-        if (!field.id) {
-          field.id = uuid.v4();
-        }
+export function getRealFields(definition: SchemaFormField) {
+  const fields = [];
+  Object.keys(definition).forEach(key => {
+    if (key.startsWith('$') && definition[key]) {
+      const field = definition[key];
+      field.property = key.substr(1)
+      fields.push(field);
+    }
+  });
+  const fieldsObject = definition.fields;
+  if (typeof fieldsObject === 'object') {
+    Object.keys(fieldsObject)
+      .filter(key => fieldsObject[key])
+      .forEach(key => {
+        const field = fieldsObject[key];
         if (!field.property) {
           field.property = key;
         }
-        return field;
+        fields.push(field);
       });
-  } else {
-    if (fields === undefined) {
-      return [];
-    }
-    return (fields as SchemaFormField[]).filter(it => it !== null && it !== undefined);
+  } else if (Array.isArray(fieldsObject)){
+    fields.push(...(fieldsObject as SchemaFormField[]).filter(it => isNotNull(it)));
   }
+  fields.forEach(field => {
+    if (!field.id) {
+      field.id = uuid.v4();
+    }
+    if (!field.property) {
+      throw new Error('表单字段必须设置property属性');
+    }
+  });
+  return fields;
 }
 
 const EmptyDefinition = {
@@ -309,7 +310,7 @@ export class FieldDefinition<V = any> {
     this.required = definition.required;
     this.min = definition.min;
     this.max = definition.max;
-    this.fields = definition.fields;
+    this.fields = getRealFields(definition);
     this.description = definition.description;
     this.errors = [];
     this.default = definition.default;

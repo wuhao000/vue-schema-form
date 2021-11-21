@@ -86,11 +86,11 @@ export class ComponentStore {
 export type Platform = 'desktop' | 'mobile';
 
 export type SchemaFormFieldType =
-  Exclude<string, 'grid' | 'steps'>
-  | Component
-  | SchemaFormComponentOptions
-  | SchemaFormComponentOptions[]
-  | (() => VNode | VNode[]);
+    Exclude<string, 'grid' | 'steps'>
+    | Component
+    | SchemaFormComponentOptions
+    | SchemaFormComponentOptions[]
+    | (() => VNode | VNode[]);
 
 interface BaseSchemaFormField {
   /**
@@ -259,6 +259,10 @@ export interface GridField extends DefaultSchemaFormField {
   };
 }
 
+export type FlatFieldType = {
+  [key in `$${string}`]: SchemaFormField;
+}
+
 interface DefaultSchemaFormField extends BaseSchemaFormField {
   /**
    * 表单项类型
@@ -278,10 +282,11 @@ interface DefaultSchemaFormField extends BaseSchemaFormField {
    * 表单输入组件的自定义属性, 和props的作用完全一致（props会被当成其他对象的同名属性合并，造成代码提示错误），设置了xProps则props无效
    */
   xProps?: SchemaFormFieldProps;
+
 }
 
-export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField;
 
+export type SchemaFormField = StepsField | GridField | DefaultSchemaFormField | FlatFieldType;
 
 
 interface ValueProcessor {

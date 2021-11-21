@@ -289,13 +289,8 @@ export const defineEffectsContext = () => {
   context.submit = (forceValidate: boolean, callback: (value) => any) => {
     context.__context.onOk(forceValidate, callback);
   };
-  context.validate = async (handler) => {
-    const errors = await runValidation(values(context.__context.store.fields).filter(it => it.getComponent()?.mode !== 'layout'));
-    if (handler) {
-      handler(errors, context);
-    } else {
-      return errors;
-    }
+  context.validate = async () => {
+    return runValidation(values(context.__context.store.fields).filter(it => it.getComponent()?.mode !== 'layout'));
   };
   context.onValidate = (handler) => {
     context.subscribe(SchemaFormEvents.validate, handler);
