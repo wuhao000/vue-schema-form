@@ -18,7 +18,7 @@ export const runValidation = async (
     }
     queue.push(field.validate());
   });
-  return Promise.all(queue).then((response: Array<IValidateResponse[]>) =>
+  return Promise.all(queue).then<IValidateResponse[]>((response: Array<IValidateResponse[]>) =>
     flat(response).filter(it => isNotNull(it)));
 };
 

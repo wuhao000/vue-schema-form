@@ -176,7 +176,7 @@ export default defineComponent({
       }
       validate('change');
     };
-    const validate = debounce((trigger, callback: ((...args: any) => void) = noop) => {
+    const validate = debounce((trigger, callback: ((...args: any[]) => void) = noop) => {
       nextTick().then(() => {
         validateDisabled.value = false;
         const rules = getFilteredRule(trigger);

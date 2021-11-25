@@ -3,8 +3,19 @@ import get from 'lodash.get';
 import uuid from 'uuid';
 import {Component, isVNode, reactive, VNode} from 'vue';
 import {
-  DefaultPatternRule, FormFields, IFormPathMatcher, IRuleDescription, Path, Platform, SchemaFormComponent,
-  SchemaFormComponentOptions, SchemaFormField, SchemaFormFieldType, SchemaFormStore, ShowFieldCondition, ValueProcessor
+  DefaultPatternRule,
+  FormFields,
+  IFormPathMatcher,
+  IRuleDescription,
+  Path,
+  Platform,
+  SchemaFormComponent,
+  SchemaFormComponentOptions,
+  SchemaFormField,
+  SchemaFormFieldType,
+  SchemaFormStore,
+  ShowFieldCondition,
+  ValueProcessor
 } from '../../../types';
 import Empty from '../empty';
 import {isArr, parseDestructPath} from '../uform/utils';
@@ -47,7 +58,7 @@ export function getRealFields(definition: SchemaFormField) {
   Object.keys(definition).forEach(key => {
     if (key.startsWith('$') && definition[key]) {
       const field = definition[key];
-      field.property = key.substr(1)
+      field.property = key.substr(1);
       fields.push(field);
     }
   });
@@ -62,7 +73,7 @@ export function getRealFields(definition: SchemaFormField) {
         }
         fields.push(field);
       });
-  } else if (Array.isArray(fieldsObject)){
+  } else if (Array.isArray(fieldsObject)) {
     fields.push(...(fieldsObject as SchemaFormField[]).filter(it => isNotNull(it)));
   }
   fields.forEach(field => {
@@ -106,7 +117,6 @@ export function getComponentType(store: SchemaFormStore,
   }
   return component;
 }
-
 
 export function matchCondition(value: any, condition: ShowFieldCondition): boolean {
   if (!value) {
@@ -227,7 +237,6 @@ export function renderField(pathPrefix: string[] | null,
   return <FormField {...props}/>;
 }
 
-
 export function buildArrayPath(pathPrefix: string[], field: SchemaFormField): string[] {
   if (pathPrefix) {
     return pathPrefix.concat(field.property);
@@ -331,7 +340,6 @@ export class FieldDefinition<V = any> {
     return getRulesFromProps(this.definition, this.required);
   }
 
-
   public generateEvents(): { [key: string]: (...args: any[]) => any } {
 
     const getEventMetadata = (event) => {
@@ -414,7 +422,6 @@ export class FieldDefinition<V = any> {
 
 }
 
-
 export function createField(currentValue: any,
                             store: SchemaFormStore,
                             pathPrefix: string[],
@@ -450,7 +457,30 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     resolveRule(field.rules);
   }
   if (required && !rules.some(rule => rule.required)) {
-    rules.push({required: true, message: `${field.title ?? '该字段'}为必填项`});
+    let type = null;
+    switch (field.type) {
+      case 'integer':
+        type = 'integer';
+        break;
+      case 'double':
+        type = 'float';
+        break;
+      case 'number':
+        type = 'number';
+        break;
+      case 'string':
+      case 'text':
+        type = 'string';
+        break;
+      case 'boolean':
+        type = 'boolean';
+        break;
+    }
+    rules.push({
+      required: true,
+      type,
+      message: `${field.title ?? '该字段'}为必填项`
+    });
   }
   if (field.format && !rules.some(rule => rule.format === field.format)) {
     rules.push({format: field.format, message: `${field.title ?? '字段'}格式不正确`});
@@ -500,7 +530,6 @@ export enum SchemaFormEvents {
   fieldCreate = 'fieldCreate',
   validate = 'validate'
 }
-
 
 export const isNullStructValue = (value, struct) => {
   if (isNull(value)) {

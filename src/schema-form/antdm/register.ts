@@ -17,6 +17,7 @@ import {
 } from 'antd-mobile-vue-next';
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib, resolveOptions} from '../';
 import {ILibComponents} from '../../../types';
+import NumberInput from './number';
 
 export const ComponentMap: Record<keyof ILibComponents, any> = {
   alert: null,
@@ -62,10 +63,10 @@ export function registerAntdMobile() {
   };
   config.formItemPropTransform.mobile = (component, field) => {
     const props: any = {};
-    props.help = field.errors.join('、');
-    if (props.help) {
+    props.errorMessage = field.errors.join('、');
+    if (props.errorMessage) {
       props.hasFeedback = true;
-      props.validateStatus = 'error';
+      props.error = true;
     }
     if (field.definition?.wrapperProps?.noTitle || !field?.definition?.title) {
       props.colon = false;
@@ -77,9 +78,9 @@ export function registerAntdMobile() {
   // registerMobile(ImagePicker, [FieldTypes.Picture, FieldTypes.File]);
   registerMobile(Input, [FieldTypes.String, FieldTypes.Url], 'single',
     () => ({textAlign: 'right'}));
-  registerMobile(Input, [FieldTypes.Number, FieldTypes.Integer], 'single',
+  registerMobile(NumberInput, [FieldTypes.Number, FieldTypes.Integer], 'single',
     () => ({type: 'number', textAlign: 'right'}));
-  registerMobile(Input, [FieldTypes.Double], 'single',
+  registerMobile(NumberInput, [FieldTypes.Double], 'single',
     () => ({type: 'digit', textAlign: 'right'}));
   registerMobile(Input, [FieldTypes.Password], 'single',
     () => ({type: 'password'}));

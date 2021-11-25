@@ -211,6 +211,7 @@ export function registerAntd() {
     if (isNotNull(field.max)) {
       props.max = field.max;
     }
+    props.errorDisplayType = 'toast';
     return props;
   });
   registerComponent({

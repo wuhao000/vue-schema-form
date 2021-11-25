@@ -37,9 +37,9 @@
           titles: ['1']
         },
         fields: {
-          a: {
+          $a: {
             type: 'text',
-            tile: 'a'
+            title: 'a'
           }
         }
       }

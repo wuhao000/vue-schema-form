@@ -13,7 +13,20 @@ const formItemPropTransform = {
   desktop: null
 };
 
-export const config = {
+type SchemaFormBaseConfig = {
+  defaultEmptyText: string;
+  confirmFn: {
+    mobile: (...args: any[]) => any;
+    desktop: (...args: any[]) => any;
+  };
+  formItemPropTransform: {
+    mobile: any;
+    desktop: any;
+  };
+  getFormItemProps: (...args: any[]) => any;
+}
+
+export const config : SchemaFormBaseConfig = {
   defaultEmptyText: 'N/A',
   confirmFn: {
     mobile: null,

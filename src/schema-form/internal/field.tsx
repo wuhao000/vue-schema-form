@@ -24,7 +24,7 @@ import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
 import {isEqual} from '../uform/utils';
 import {flat} from '../utils/array';
-import {SchemaFormFieldOperationStoreKey, SchemaFormObjectStoreKey, SchemaFormStoreKey} from '../utils/key';
+import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from '../utils/key';
 import {
   addRule,
   DESKTOP,
@@ -79,7 +79,7 @@ export default defineComponent({
   },
   emits: ['change', 'update:value', 'focus', 'click', 'blur', 'keydown', 'keyup'],
   setup(props, {emit}) {
-    const store: SchemaFormStore = inject(SchemaFormStoreKey);
+    const store: SchemaFormStore = inject(SchemaFormStoreKey as any);
     const arrayRef = ref<any>(null);
     const inputRef = ref<any>(null);
     const currentValue = ref(props.value || null);
@@ -105,7 +105,7 @@ export default defineComponent({
         currentValue.value = value;
       }
     };
-    const fieldOperations: any = inject(SchemaFormFieldOperationStoreKey);
+    const fieldOperations: any = inject(SchemaFormFieldOperationStoreKey as any);
     watch(() => field.value, localField => {
       fieldOperations.addField(localField);
     }, {immediate: true});
@@ -255,7 +255,7 @@ export default defineComponent({
       }
       if (fieldComponent.value?.mode === 'layout') {
         const validateFields = getSubFields();
-        return new Promise(resolve => {
+        return new Promise<IValidateResponse[]>(resolve => {
           Promise.all(validateFields.map(it => it.props.field.validate())).then(values => {
             resolve(flat(values.filter(it => isNotNull(it))));
           });
@@ -264,7 +264,7 @@ export default defineComponent({
       if (type.value === FieldTypes.Object && arrayRef.value) {
         const array = arrayRef.value;
         const validateFields = array.$slots.default().filter(it => it.validate);
-        return new Promise(resolve => {
+        return new Promise<IValidateResponse[]>(resolve => {
           Promise.all(validateFields.map(it => it.validate())).then(values => {
             resolve(flat(values.filter(it => isNotNull(it))));
           });
@@ -276,13 +276,13 @@ export default defineComponent({
           [field.value.plainPath]: rules
         });
         let value = currentValue.value;
-        if ([FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number].includes(type.value as FieldTypes)) {
+        if ([FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number].includes(type.value as any)) {
           value = parseFloat(value as FieldTypes);
         }
         const model = {
           [field.value.plainPath]: value
         };
-        return new Promise(resolve => {
+        return new Promise<IValidateResponse[]>(resolve => {
           validator.validate(model, {firstFields: true}, (errors) => {
             if (errors) {
               field.value.valid = false;
@@ -432,7 +432,6 @@ export default defineComponent({
       return relatedSubFields.value.map((localField, index) =>
         renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
     };
-    const objectStore = inject(SchemaFormObjectStoreKey, undefined);
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
       const {content} = props;
@@ -485,6 +484,15 @@ export default defineComponent({
       }
       if (!editable.value) {
         propsTmp.value = props.value;
+      }
+      const formItemProps = getFormItemProps();
+      const {platform} = store;
+      if (platform === 'mobile') {
+        Object.keys(formItemProps).forEach(key => {
+          if (propsTmp[key] === undefined) {
+            propsTmp[key] = formItemProps[key];
+          }
+        })
       }
       return <InputFieldComponent
         {...propsTmp}
@@ -555,7 +563,7 @@ export default defineComponent({
       if (noTitle) {
         label.push(<span/>);
       } else {
-        if (objectStore?.index ?? store.props?.index) {
+        if (store.props?.index) {
           label.push(<span class="form-item-index">{props.index + 1}. </span>);
         }
         label.push(formItemProps.title);

@@ -1,14 +1,3 @@
-/*
-  @Prop([Array, Object])
-  public value: { [key: string]: any } | Array<{ [key: string]: any }>;
-  @Prop(Array)
-  public pathPrefix: string[];
-  public currentValue: { [key: string]: any } | Array<{ [key: string]: any }> = null;
-  @Inject()
-  public store: SchemaFormStore;
-
- */
-
 import {SchemaFormStoreKey} from '../utils/key';
 import {renderField} from './utils';
 import {SchemaFormField, SchemaFormStore} from '../../../types';
