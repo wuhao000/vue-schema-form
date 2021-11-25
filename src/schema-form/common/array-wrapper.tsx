@@ -10,7 +10,7 @@ import {
   getContentComponent,
   getLayoutComponent,
   getRowComponent,
-  getSiderComponent,
+  getSiderComponent, isNull,
   LibComponents,
   MOBILE
 } from '../utils/utils';
@@ -37,7 +37,7 @@ export default defineComponent({
     clsPrefix: {type: String, default: 'schema-form-array-wrapper'},
     ...baseArrayComponentProps
   },
-emits: ['add', 'remove'],
+  emits: ['add', 'remove'],
   setup(props, {slots, emit}) {
     const field: ComputedRef<FieldDefinition> = computed(() => {
       return props.field as FieldDefinition;
@@ -49,7 +49,7 @@ emits: ['add', 'remove'],
     const renderAddButton = () => {
       const fields = slots.default();
       if (!editable.value || !props.showAddBtn || (props.maxLength > 0 && slots.default
-          && fields.length >= props.maxLength)) {
+        && fields.length >= props.maxLength)) {
         return null;
       }
       const ColComponent: any = getColComponent(store.platform);
@@ -72,6 +72,9 @@ emits: ['add', 'remove'],
       if (props.subForm) {
         return <div style={{margin: '10px 15px'}}>{button}</div>;
       }
+      if (isNull(ColComponent)) {
+        return button;
+      }
       return <ColComponent span={props.cellSpan}>{button}</ColComponent>;
     };
     const onAddClick = () => {
@@ -93,15 +96,15 @@ emits: ['add', 'remove'],
       if (Array.isArray(fields)) {
         return fields.map((it, index) => {
           return (
-              <ColComponent span={props.cellSpan}>
-                <LayoutComponent>
-                  <ContentComponent style={{
-                    overflow: 'hidden'
-                  }}>{it}</ContentComponent>
-                  <ASideComponent
-                      width={props.deleteBtnProps?.['width'] ?? 'auto'}>{renderDeleteBtn(index)}</ASideComponent>
-                </LayoutComponent>
-              </ColComponent>
+            <ColComponent span={props.cellSpan}>
+              <LayoutComponent>
+                <ContentComponent style={{
+                  overflow: 'hidden'
+                }}>{it}</ContentComponent>
+                <ASideComponent
+                  width={props.deleteBtnProps?.['width'] ?? 'auto'}>{renderDeleteBtn(index)}</ASideComponent>
+              </LayoutComponent>
+            </ColComponent>
           );
         });
       }
@@ -147,7 +150,7 @@ emits: ['add', 'remove'],
       return <div class={this.clsPrefix}>{content}</div>;
     }
 
-    if (this.$attrs.platform === 'mobile') {
+    if (this.store.platform === 'mobile') {
       return content;
     } else {
       return <RowComponent gutter={this.gutter}

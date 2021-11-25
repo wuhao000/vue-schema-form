@@ -77,7 +77,7 @@ export default defineComponent({
     },
     pathPrefix: {type: Array as PropType<string[]>}
   },
-  emits: ['change', 'update:value'],
+  emits: ['change', 'update:value', 'focus', 'click', 'blur', 'keydown', 'keyup'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const arrayRef = ref<any>(null);

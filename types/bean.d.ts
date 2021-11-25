@@ -323,18 +323,18 @@ export interface ShowFieldCondition {
 }
 
 export interface SchemaFormStore {
-  components: ComponentStore;
+  components?: ComponentStore;
   context?: EffectsContext | null;
   disabled?: boolean;
   editable?: boolean;
   effects?: Effects;
-  fields: { [key: string]: FieldDefinition };
+  fields?: { [key: string]: FieldDefinition };
   id?: number;
   loading?: boolean;
   platform?: Platform;
   props?: FormProps;
   readonly?: boolean;
-  root: ComponentInternalInstance;
+  root?: any;
   value?: any;
 }
 

@@ -44,8 +44,8 @@ const SchemaForm = defineComponent({
     platform: {type: String as PropType<Platform>, default: 'desktop'},
     editable: {type: Boolean as PropType<boolean>, default: true},
     effects: {type: Function as PropType<Effects>},
-    schema: {type: Object},
-    props: {type: Object},
+    schema: {type: Object as PropType<SchemaFormField>},
+    props: {type: Object as PropType<{ [key: string]: unknown }>},
     value: [Object, Array],
     title: [String, Object],
     sticky: {type: Boolean as PropType<boolean>, default: false},
@@ -55,12 +55,12 @@ const SchemaForm = defineComponent({
     onCancel: Function,
     onOk: Function,
     onSubmit: Function,
-    context: Function as PropType<EffectsContext>
+    context: Function as PropType<EffectsContext>,
   },
   emits: ['update:value'],
   setup(props, {emit, slots}) {
     const instance = getCurrentInstance();
-    const currentValue = ref(props.value || {});
+    const currentValue = ref<any[] | {[key: string]: unknown}>(props.value || {});
     const componentStore = new ComponentStore();
 
     const realSchema = computed<SchemaFormField>(() => {
@@ -86,7 +86,7 @@ const SchemaForm = defineComponent({
       root: instance,
       components: componentStore
     });
-    provide(SchemaFormFieldOperationStoreKey, {
+    provide(SchemaFormFieldOperationStoreKey as any, {
       addField(field) {
         if (field) {
           store.fields[field.plainPath] = field;
@@ -165,7 +165,7 @@ const SchemaForm = defineComponent({
         okProps?: { [key: string]: unknown };
         cancelProps?: { [key: string]: unknown };
         okText?: { [key: string]: unknown };
-      } = props.props;
+      } = props.props as any;
       const buttonProps = customBtnProps || (btnProps && btnProps.okProps) || {};
       if (!buttonProps.type) {
         buttonProps.type = 'primary';
@@ -197,7 +197,7 @@ const SchemaForm = defineComponent({
       }
       return Button;
     };
-    const validate = (): Promise<IValidateResponse[]> | [] =>
+    const validate = (): Promise<IValidateResponse[]> =>
         runValidation(values(store.fields).filter(it => it.getComponent().mode !== 'layout'));
     const createCancelButton = (text = '', customBtnProps: any = undefined, action: () => any = undefined) => {
       const hasCancelHandler = props.onCancel !== undefined || action !== undefined;
@@ -207,7 +207,7 @@ const SchemaForm = defineComponent({
       const btnProps: {
         cancelProps?: any;
         cancelText?: any;
-      } = props.props;
+      } = props.props as any;
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
@@ -224,7 +224,7 @@ const SchemaForm = defineComponent({
       const btnProps: {
         cancelProps?: any;
         cancelText?: any;
-      } = props.props;
+      } = props.props as any;
       const buttonProps = customBtnProps || (btnProps && btnProps.cancelProps) || {};
       buttonProps.disabled = props.disabled || props.loading;
       return createButton(
@@ -346,7 +346,7 @@ const SchemaForm = defineComponent({
     ];
     const classes = className(prefixCls, {
       [`${prefixCls}-sticky`]: sticky
-    }, `${prefixCls}-${this.platform}`, this.$attrs.class);
+    }, `${prefixCls}-${this.platform}`, this.$attrs.class as any);
     if (this.sticky) {
       content = <LibComponentsContent>
         {content}
