@@ -13,11 +13,13 @@ const transferValue = (value) => {
   }
   return value;
 }
+
 export default (props, {emit}) => {
   const value = props.value;
   props.value = transferValue(value)
   props['onUpdate:value'] = (value) => {
     emit('update:value', transferValue(value));
   }
-  return <Input {...props}/>
+  const Input2 = Input as any;
+  return <Input2 {...props}/>;
 }
