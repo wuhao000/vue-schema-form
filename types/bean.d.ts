@@ -97,6 +97,7 @@ interface BaseSchemaFormField {
    * 字段值是否数组类型
    */
   array?: boolean;
+  rowKey?: string | ((value) => string);
   arrayComponent?: any;
   arrayProps?: { [key: string]: unknown };
   /**

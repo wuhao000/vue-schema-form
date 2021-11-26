@@ -349,13 +349,24 @@ export default defineComponent({
         const style = itemProps.style;
         delete itemProps.className;
         delete itemProps.style;
+        let key = '';
+        if (definition.rowKey && isNotNull(v) && typeof v === 'object') {
+          if (typeof definition.rowKey === 'string') {
+            key = v[definition.rowKey]
+          } else if (typeof definition.rowKey === 'function') {
+            key = definition.rowKey(v);
+          }
+        }
+        if (!v) {
+          key = uuid();
+        }
         Object.assign(itemProps, {
           ...events,
           class: className,
           style,
           arrayIndex: index,
           disabled: isDisabled.value,
-          key: `${uuid()}`,
+          key,
           [valueProp]: v,
           title: store.platform === 'mobile' ? field.value.title : null,
           ['onUpdate:' + valueProp]: (val) => {
