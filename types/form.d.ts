@@ -14,7 +14,7 @@ export interface ISubscribers {
   [eventName: string]: Subject<any>;
 }
 
-export type Paths<Path extends any = any> = Array<Path | SchemaFormField>;
+export type Paths<Path = any> = Array<Path | SchemaFormField>;
 
 type PathTyp2<S> = {
   [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}`
@@ -39,7 +39,7 @@ type FormValue = {[key: string]: unknown};
 /**
  * 副作用函数上下文
  */
-export interface EffectsContext<Path extends any = any> {
+export interface EffectsContext<Path = any> {
   __schema?: SchemaFormField;
   __context?: SchemaContext;
   /**

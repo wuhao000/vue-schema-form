@@ -17,12 +17,18 @@ class SchemaContext {
   constructor(store: SchemaFormStore, currentValue: Ref, onOk: (forceValidate: boolean, callback?: (value) => any) => Promise<void>) {
     this.store = store;
     this.currentValue = currentValue;
-    this.onOk = onOk
+    this.onOk = onOk;
   }
 
   public matchFields = (paths: Paths): FieldDefinition[] => {
     const matchedPaths = match(paths, this.store.fields as any);
-    return matchedPaths.map(path => this.store.fields[path]).filter(it => !!it) as any;
+    return matchedPaths.map(path => {
+      if (typeof path === 'object') {
+        return path;
+      } else {
+        return this.store.fields[path];
+      }
+    }).filter(it => !!it) as any;
   };
 
 }
@@ -234,7 +240,7 @@ export const defineEffectsContext = () => {
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
       replaceLastPath: (...last: string[]): EffectsHandlers =>
-        context(...replaceLastPath(paths as string[], last)),
+        context(...replaceLastPath(paths as string[], last))
     } as EffectsHandlers;
   } as EffectsContext;
   context.subscribes = {};
@@ -304,7 +310,7 @@ export const createContext = (store: SchemaFormStore,
                               preDefinedContext?: EffectsContext): EffectsContext => {
 
   const context: EffectsContext = preDefinedContext || defineEffectsContext();
-  context.__context = new SchemaContext(store, currentValue, onOk)
+  context.__context = new SchemaContext(store, currentValue, onOk);
 
   store.id = contextId++;
   return context;

@@ -10,7 +10,7 @@ export const baseFieldComponentProps = {
 
 export const useBaseFieldComponent = (props, {emit}) => {
   const currentValue: Ref<{ [key: string]: any } | Array<{ [key: string]: any }>> = ref(null);
-  const store: SchemaFormStore = inject(SchemaFormStoreKey);
+  const store: SchemaFormStore = inject(SchemaFormStoreKey as any);
   return {
     currentValue, store,
     renderFormField(field: SchemaFormField, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>, index: number, wrap: boolean) {

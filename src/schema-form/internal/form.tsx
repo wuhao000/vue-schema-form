@@ -1,5 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {computed, defineComponent, inject, PropType, provide, watch} from 'vue';
+import {SchemaFormField, SchemaFormStore} from '../../../types';
 import {transformFormProps} from '../config';
 import {isEqual} from '../uform/utils';
 import {SchemaFormObjectStoreKey} from '../utils/key';
@@ -15,7 +16,7 @@ export default defineComponent({
     arrayIndex: Number,
     pathPrefix: Array,
     index: {type: Boolean as PropType<boolean>, default: false},
-    definition: {type: Object, required: true},
+    definition: {type: Object as PropType<SchemaFormField>, required: true},
     schemaPath: Array,
     inline: {type: Boolean, default: false},
     layoutType: [String, Object],
@@ -45,9 +46,8 @@ export default defineComponent({
         currentValue.value = {};
       }
     }, {immediate: true, deep: true});
-    const objectStore = inject(SchemaFormObjectStoreKey, undefined);
-    provide(SchemaFormObjectStoreKey, {
-      index: props.index ?? objectStore?.index ?? store.props?.index
+    provide(SchemaFormObjectStoreKey as any, {
+      index: props.index ?? store.props?.index
     });
     const renderTitle = () => {
       if (slots.title) {
@@ -56,7 +56,6 @@ export default defineComponent({
         return <h2 class="form-title">{props.title}</h2>;
       }
     };
-
     const groups = computed(() => {
       const array = [];
       const spanGroups = [];
