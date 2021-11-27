@@ -224,6 +224,7 @@ export function renderField(pathPrefix: string[] | null,
     wrap,
     field: newField,
     path: newField.path,
+    pathPrefix: component.mode === 'input' ? newField.path : pathPrefix,
     disabled: newField.disabled || store.disabled || store.loading,
     definition: fieldDefinition,
     formValue: currentValue,
@@ -475,6 +476,9 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
       case 'boolean':
         type = 'boolean';
         break;
+    }
+    if (field.array) {
+      type = 'array';
     }
     rules.push({
       required: true,
