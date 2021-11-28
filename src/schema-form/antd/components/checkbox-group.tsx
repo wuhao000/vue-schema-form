@@ -21,7 +21,9 @@ export default defineComponent({
     const onSelectAllChange = (v) => {
       allSelected.value = v;
       if (v) {
-        emit('update:value', localOptions.value.map(it => it.value));
+        emit('update:value', localOptions.value
+          .filter(it => !it.disabled)
+          .map(it => it.value));
       } else {
         emit('update:value', []);
       }

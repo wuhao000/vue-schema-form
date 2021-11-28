@@ -480,11 +480,18 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     if (field.array) {
       type = 'array';
     }
-    rules.push({
-      required: true,
-      type,
-      message: `${field.title ?? '该字段'}为必填项`
-    });
+    if (type) {
+      rules.push({
+        required: true,
+        type,
+        message: `${field.title ?? '该字段'}为必填项`
+      });
+    } else {
+      rules.push({
+        required: true,
+        message: `${field.title ?? '该字段'}为必填项`
+      });
+    }
   }
   if (field.format && !rules.some(rule => rule.format === field.format)) {
     rules.push({format: field.format, message: `${field.title ?? '字段'}格式不正确`});
