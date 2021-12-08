@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {defineComponent, TransitionGroup, inject} from 'vue';
+import {defineComponent, inject, TransitionGroup} from 'vue';
 import {SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents, uuid} from '../utils/utils';
@@ -8,6 +8,7 @@ import './form-block.less';
 const FormBlockItem = defineComponent({
   name: 'FormBlockItem',
   props: {
+    id: String,
     index: Number,
     total: Number,
     removeText: String,
@@ -44,7 +45,7 @@ const FormBlockItem = defineComponent({
         index !== props.total - 1
             ? <div class="circle-btn"
                    onClick={() => {
-                     props.onMoveDown()
+                     props.onMoveDown();
                    }}>
               <DownIcon/>
               <span class="op-name"/>
@@ -61,12 +62,12 @@ const FormBlockItem = defineComponent({
       store,
       renderOperations,
       renderAddBtn
-    }
+    };
   },
   render() {
     const DeleteIcon = LibComponents.icons[this.store.platform].delete;
     return <div class="array-item"
-                key={uuid()}>
+                key={this.id}>
       <div class="array-index">
         <span>{this.index + 1}</span>
       </div>
@@ -131,27 +132,30 @@ export default defineComponent({
       class: classNames('schema-form-block', this.class),
       style: this.style,
       tag: 'div'
-    }
+    };
     return <TransitionGroup {...props}>
       {
         fields.length ? fields.map((it, index) => {
+          const key = it.props.value.__id__;
           return <FormBlockItem
+              id={key}
               index={index}
               total={fields.length}
               maxItems={this.maxItems}
+              key={key}
               removeText={this.removeText}
               addText={this.addText}
               onAdd={() => {
                 this.$emit('add');
               }}
               onRemove={() => {
-                this.$emit('remove', index)
+                this.$emit('remove', index);
               }}
               onMoveUp={() => {
-                this.$emit('move-up', index)
+                this.$emit('move-up', index);
               }}
               onMoveDown={() => {
-                this.$emit('move-down', index)
+                this.$emit('move-down', index);
               }}
               v-slots={{
                 title: () => this.renderTitle(),

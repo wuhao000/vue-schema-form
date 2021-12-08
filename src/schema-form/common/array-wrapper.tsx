@@ -5,14 +5,8 @@ import {BaseArrayComponentProps, SchemaFormStore} from '../../../types';
 import {FieldDefinition} from '../internal/utils';
 import {SchemaFormStoreKey} from '../utils/key';
 import {
-  getButtonComponent,
-  getColComponent,
-  getContentComponent,
-  getLayoutComponent,
-  getRowComponent,
-  getSiderComponent, isNull,
-  LibComponents,
-  MOBILE
+  getButtonComponent, getColComponent, getContentComponent, getLayoutComponent, getRowComponent, getSiderComponent,
+  isNull, LibComponents, MOBILE
 } from '../utils/utils';
 import './style/array-wrapper.less';
 
@@ -49,7 +43,7 @@ export default defineComponent({
     const renderAddButton = () => {
       const fields = slots.default();
       if (!editable.value || !props.showAddBtn || (props.maxLength > 0 && slots.default
-        && fields.length >= props.maxLength)) {
+          && fields.length >= props.maxLength)) {
         return null;
       }
       const ColComponent: any = getColComponent(store.platform);
@@ -95,16 +89,19 @@ export default defineComponent({
       }
       if (Array.isArray(fields)) {
         return fields.map((it, index) => {
+          const deleteButton = renderDeleteBtn(index);
           return (
-            <ColComponent span={props.cellSpan}>
-              <LayoutComponent>
-                <ContentComponent style={{
-                  overflow: 'hidden'
-                }}>{it}</ContentComponent>
-                <ASideComponent
-                  width={props.deleteBtnProps?.['width'] ?? 'auto'}>{renderDeleteBtn(index)}</ASideComponent>
-              </LayoutComponent>
-            </ColComponent>
+              <ColComponent span={props.cellSpan}>
+                <LayoutComponent>
+                  <ContentComponent style={{
+                    overflow: 'hidden'
+                  }}>{it}</ContentComponent>
+                  {
+                    deleteButton ? <ASideComponent
+                        width={props.deleteBtnProps?.['width'] ?? 'auto'}>{deleteButton}</ASideComponent> : null
+                  }
+                </LayoutComponent>
+              </ColComponent>
           );
         });
       }

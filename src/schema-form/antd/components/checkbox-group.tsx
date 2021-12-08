@@ -1,10 +1,11 @@
 import chunk from 'lodash.chunk';
-import {defineComponent, PropType, ref} from 'vue';
+import {computed, defineComponent, PropType, ref} from 'vue';
 import {useOptions} from './utils';
 
 export default defineComponent({
   name: 'DCheckboxGroup',
   props: {
+    value: Array,
     options: Array,
     span: Number as PropType<number>,
     labelProperty: {
@@ -18,17 +19,22 @@ export default defineComponent({
   emits: ['update:value'],
   setup(props, {emit}) {
     const {options: localOptions} = useOptions(props);
+    const allSelected = computed(() => {
+      if (!props.value) {
+        return false;
+      }
+      return !localOptions.value.filter(it => !it.disabled)
+          .some(it => !props.value.includes(it.value));
+    });
     const onSelectAllChange = (v) => {
-      allSelected.value = v;
       if (v) {
         emit('update:value', localOptions.value
-          .filter(it => !it.disabled)
-          .map(it => it.value));
+            .filter(it => !it.disabled)
+            .map(it => it.value));
       } else {
         emit('update:value', []);
       }
     };
-    const allSelected = ref(false);
     return {
       localOptions,
       allSelected,
@@ -46,15 +52,15 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-        <a-row>
-          {
-            c.map(o => (
-              <a-col span={this.span}>
-                <a-checkbox {...o}>{o.label}</a-checkbox>
-              </a-col>
-            ))
-          }
-        </a-row>
+          <a-row>
+            {
+              c.map(o => (
+                  <a-col span={this.span}>
+                    <a-checkbox {...o}>{o.label}</a-checkbox>
+                  </a-col>
+              ))
+            }
+          </a-row>
       ));
     } else {
       props.options = this.localOptions;
@@ -62,11 +68,12 @@ export default defineComponent({
     return <>
       {this.showSelectAll ? <div>
         <a-checkbox
-          onUpdate:checked={this.onSelectAllChange}
-          checked={this.allSelected}>全选
+            onUpdate:checked={this.onSelectAllChange}
+            checked={this.allSelected}>全选
         </a-checkbox>
       </div> : null}
       <a-checkbox-group {...props}
+                        value={this.value}
                         onUpdate:value={(v) => {
                           this.allSelected = v.length === this.localOptions.length;
                           this.$emit('update:value', v);

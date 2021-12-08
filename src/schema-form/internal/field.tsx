@@ -117,7 +117,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
       if (field.value.slot) {
@@ -232,9 +232,9 @@ export default defineComponent({
             </span>
           };
           formItemProps.label = <LibComponentsPopover
-            content={definition.tip}
-            v-slots={slots}
-            trigger="hover"/>;
+              content={definition.tip}
+              v-slots={slots}
+              trigger="hover"/>;
         } else {
           formItemProps.label = definition.title;
         }
@@ -349,16 +349,18 @@ export default defineComponent({
         const style = itemProps.style;
         delete itemProps.className;
         delete itemProps.style;
+        if (!v.__id__) {
+          v.__id__ = uuid();
+        }
         let key = '';
         if (definition.rowKey && isNotNull(v) && typeof v === 'object') {
           if (typeof definition.rowKey === 'string') {
-            key = v[definition.rowKey]
+            key = v[definition.rowKey];
           } else if (typeof definition.rowKey === 'function') {
             key = definition.rowKey(v);
           }
-        }
-        if (!v) {
-          key = uuid();
+        } else {
+          key = v.__id__;
         }
         Object.assign(itemProps, {
           ...events,
@@ -383,7 +385,6 @@ export default defineComponent({
       const arrayStyle = arrayProps.style;
       delete arrayProps.className;
       delete arrayProps.style;
-      // noinspection JSUnusedGlobalSymbols
       Object.assign(arrayProps, {
         class: arrayClass,
         style: arrayStyle,
@@ -441,7 +442,7 @@ export default defineComponent({
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
+          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
     };
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
@@ -503,18 +504,18 @@ export default defineComponent({
           if (propsTmp[key] === undefined) {
             propsTmp[key] = formItemProps[key];
           }
-        })
+        });
       }
       return <InputFieldComponent
-        {...propsTmp}
-        v-slots={slots}
-        class={className}
-        style={style}
-        key={field.value.plainPath}
-        ref={el => {
-          inputRef.value = el;
-          field.value.inputRef = el;
-        }}/>;
+          {...propsTmp}
+          v-slots={slots}
+          class={className}
+          style={style}
+          key={field.value.plainPath}
+          ref={el => {
+            inputRef.value = el;
+            field.value.inputRef = el;
+          }}/>;
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
@@ -587,13 +588,13 @@ export default defineComponent({
         };
       }
       const formItem = noWrap ? inputComponent :
-        <FormItemComponent
-          {...formItemProps}
-          v-slots={formItemProps.slots}
-          class={className}
-          style={style}>
-          {inputComponent}
-        </FormItemComponent>;
+          <FormItemComponent
+              {...formItemProps}
+              v-slots={formItemProps.slots}
+              class={className}
+              style={style}>
+            {inputComponent}
+          </FormItemComponent>;
       if (definition.span) {
         return <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {
