@@ -29,7 +29,7 @@ import {createContext} from './utils/effects';
 import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from './utils/key';
 import {values} from './utils/object';
 import {ComponentStore} from './utils/register';
-import {LibComponents} from './utils/utils';
+import {isNotNull, LibComponents} from './utils/utils';
 
 const SchemaForm = defineComponent({
   field: null,
@@ -244,7 +244,7 @@ const SchemaForm = defineComponent({
         if (slots.btns) {
           return slots.btns;
         }
-        const buttons = [];
+        let buttons = [];
         if (actions) {
           (actions as Action[]).forEach((action: any) => {
             if (typeof action === 'string') {
@@ -283,9 +283,13 @@ const SchemaForm = defineComponent({
           buttons.push(createSubmitButton());
           buttons.push(createResetButton());
         }
-        return <div class="action-btns">
-          {buttons}
-        </div>;
+        buttons = buttons.filter(it => isNotNull(it))
+        if (buttons.length) {
+          return <div class="action-btns">
+            {buttons}
+          </div>;
+        }
+        return undefined;
       }
     };
     watch(() => props.value, () => {
