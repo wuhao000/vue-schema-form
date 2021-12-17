@@ -22,9 +22,9 @@ app.config.warnHandler = () => {
   // do not show
 };
 app.use(Antdm);
-app.use(router);
+app.use(router as any);
 app.use(vant);
-app.use(antd);
+app.use(antd as any);
 app.use(SchemaForm);
 app.component('DemoWrapper', DemoWrapper);
 app.component('CodeContainer', CodeContainer);

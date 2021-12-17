@@ -39,7 +39,7 @@ export default defineComponent({
               ))
             }
           </ElRow>
-      ));
+      )) as any;
     } else {
       props.options = this.localOptions;
     }

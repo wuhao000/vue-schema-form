@@ -5,7 +5,7 @@ import {defineEffectsContext} from './utils/effects';
 
 export const createSchemaForm = (schema: SchemaFormField, effects?: ($: EffectsContext) => void): VNode => {
   return <SchemaForm schema={schema}
-                     effects={effects}/>;
+                     effects={effects}/> as any;
 };
 
 /**

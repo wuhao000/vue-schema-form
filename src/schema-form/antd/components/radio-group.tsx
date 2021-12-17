@@ -45,12 +45,12 @@ export default defineComponent({
             ))
           }
         </a-row>
-      ));
+      )) as any;
     } else {
       slots.default = () => this.localOptions.map(o => (
         this.type === 'button' ? <a-radio-button {...o}>{o.label}</a-radio-button>
           : <a-radio {...o}>{o.label}</a-radio>
-      ));
+      )) as any;
     }
     return <a-radio-group {...props}
                           v-slots={slots}/>;

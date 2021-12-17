@@ -442,7 +442,7 @@ export default defineComponent({
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap));
+          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
     };
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};

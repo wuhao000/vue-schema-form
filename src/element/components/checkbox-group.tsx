@@ -39,13 +39,13 @@ export default defineComponent({
             ))
           }
         </ElRow>
-      ));
+      )) as any;
     } else {
       slots.default = () => this.localOptions.map(o => (
         <ElCol span={this.span}>
           <ElCheckbox {...o}>{o.label}</ElCheckbox>
         </ElCol>
-      ));
+      )) as any;
     }
     return <ElCheckboxGroup {...props}
                             v-slots={slots}/>;

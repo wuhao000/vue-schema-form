@@ -61,7 +61,7 @@ export default defineComponent({
               ))
             }
           </a-row>
-      ));
+      )) as any;
     } else {
       props.options = this.localOptions;
     }
