@@ -12,6 +12,10 @@ export default defineComponent({
     },
     valueProperty: {
       type: String, default: 'value'
+    },
+    type: {
+      type: String as PropType<'button' | 'radio'>,
+      default: 'radio'
     }
   },
   setup(props) {
@@ -29,18 +33,24 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <a-row>
-            {
-              c.map(o => (
-                  <a-col span={this.span}>
-                    <a-radio {...o}>{o.label}</a-radio>
-                  </a-col>
-              ))
-            }
-          </a-row>
+        <a-row>
+          {
+            c.map(o => (
+              <a-col span={this.span}>
+                {
+                  this.type === 'button' ? <a-radio-button {...o}>{o.label}</a-radio-button>
+                    : <a-radio {...o}>{o.label}</a-radio>
+                }
+              </a-col>
+            ))
+          }
+        </a-row>
       ));
     } else {
-      props.options = this.localOptions;
+      slots.default = () => this.localOptions.map(o => (
+        this.type === 'button' ? <a-radio-button {...o}>{o.label}</a-radio-button>
+          : <a-radio {...o}>{o.label}</a-radio>
+      ));
     }
     return <a-radio-group {...props}
                           v-slots={slots}/>;
