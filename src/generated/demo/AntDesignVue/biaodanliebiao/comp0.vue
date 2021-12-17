@@ -1,0 +1,145 @@
+<template>
+  <a-layout>
+    <a-layout-content>
+      <v-schema-form
+          v-model:value="value"
+          :schema="schema"
+          class="demo-form"
+          @ok="onOk"/>
+      <v-schema-form 
+          v-model:value="value3"
+          :schema="{
+        fields: [{
+          property: 'name',
+          type: 'string',
+          array: true
+        }]
+      }"/>
+      <show-value :value="value3"/>
+    </a-layout-content>
+  </a-layout>
+</template>
+<script lang="ts">
+  import {registerAntd} from '../../../../schema-form';
+  import {SchemaFormField} from '../../../../../types';
+  import {defineComponent, ref} from 'vue';
+  
+  registerAntd();
+  export default defineComponent({
+    name: 'Demo',
+    setup() {
+      const value = ref([{
+        basic: {
+          aa: '1234',
+          cc: {
+            cc: '11'
+          }
+        }
+      }]);
+      const value2 = ref([{
+        a: '1',
+        b: '2'
+      }]);
+      const value3 = ref({
+        name: ['1','2']
+      })
+      return {
+        value3,
+        value2,
+        schema: {
+          props: {
+            title: '对象列表',
+            labelWidth: '120px',
+            labelPosition: 'left'
+          },
+          type: 'object',
+          array: true,
+          arrayComponent: 'block',
+          arrayProps: {
+            addText: '这是定制的添加文案',
+            removeText: '这是定制的删除文案',
+            maxItems: 3
+          },
+          fields: {
+            basic: {
+              type: 'object',
+              fields: {
+                aa: {
+                  type: 'string',
+                  title: '字段1'
+                },
+                bb: {
+                  type: 'string',
+                  title: '字段2'
+                },
+                cc: {
+                  type: 'object',
+                  props: {
+                    gutter: 10
+                  },
+                  fields: {
+                    grid: {
+                      type: 'grid',
+                      layout: [[8, 8]],
+                      title: '字段3',
+                      props: {gutter: 10},
+                      fields: {
+                        cc: {
+                          type: 'string'
+                        },
+                        dd: {
+                          type: 'string'
+                        }
+                      }
+                    },
+                    ee: {
+                      type: 'object',
+                      array: true,
+                      arrayComponent: 'block',
+                      fields: {
+                        aa: {
+                          type: 'string',
+                          title: '字段1'
+                        },
+                        bb: {
+                          type: 'string',
+                          title: '字段2'
+                        },
+                        cc: {
+                          type: 'object',
+                          props: {
+                            gutter: 10
+                          },
+                          fields: {
+                            grid: {
+                              type: 'grid',
+                              layout: [[8, 8]],
+                              title: '字段3',
+                              props: {gutter: 10},
+                              fields: {
+                                cc: {
+                                  type: 'string'
+                                },
+                                dd: {
+                                  type: 'string'
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } as SchemaFormField,
+        value,
+        onOk() {
+          console.log(value.value);
+        }
+      };
+    }
+  });
+</script>

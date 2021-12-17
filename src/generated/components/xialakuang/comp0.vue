@@ -1,0 +1,61 @@
+
+<template>
+  <div>
+    <v-schema-form
+        v-model:value="value"
+        :effects="effects"
+        :schema="schema"/>
+    <show-value :value="value"/>
+  </div>
+</template>
+<script lang="ts" setup>
+  import {ref} from 'vue';
+  import {EffectsContext, EffectsHandlers} from '../../../../types';
+  import {registerAntd} from '../../../schema-form';
+
+  registerAntd();
+
+  const value = ref()
+
+  const schema = {
+    fields: {
+      text: {
+        title: '单选',
+        type: 'select',
+        props: {
+          showSearch: true
+        },
+        events: {
+          onSearch(this: EffectsHandlers, $: EffectsContext, input) {
+            this.trigger('search', input);
+          }
+        }
+      },
+      text2: {
+        title: '多选',
+        type: 'select',
+        array: true,
+        enum: [
+          {label: 'a', value: '1'},
+          {label: 'b', value: '2'}
+        ],
+        props: {
+          showSearch: true
+        }
+      }
+    }
+  };
+  const effects = ($: EffectsContext) => {
+    $('text').subscribe('search', (v) => {
+      console.log('search', v);
+    });
+    $('text').onFieldCreate(() => {
+      setTimeout(() => {
+        $('text').setEnum([
+          {label: 'a', value: '1'},
+          {label: 'b', value: '2'}
+        ]);
+      }, 200);
+    });
+  };
+</script>
