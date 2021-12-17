@@ -37,7 +37,7 @@ export default defineComponent({
     }, {deep: true});
     watch(() => props.value, (value) => {
       if (!isEqual(value, currentValue.value)) {
-        if (props.definition.array) {
+        if ((props.definition as SchemaFormField).array) {
           currentValue.value = value || [];
         } else {
           currentValue.value = value || {};
@@ -91,8 +91,8 @@ export default defineComponent({
       path.pop();
       const form = (
           <FormComponent {...formProps}>
-            {definition.array ? renderTitle() : null}
-            {!definition.array && isDesktop.value ? renderTitle() : null}
+            {(definition as SchemaFormField).array ? renderTitle() : null}
+            {!(definition as SchemaFormField).array && isDesktop.value ? renderTitle() : null}
             {inline ? groups.value.reduce((a, b) => a.concat(b)) : groups.value.map(group => wrapGroup(group))}
           </FormComponent>
       );
@@ -111,7 +111,7 @@ export default defineComponent({
     const renderAddFormButton = () => {
       const {definition} = props;
       const ButtonComponent: any = getButtonComponent(store.platform);
-      if (definition.array && store.editable) {
+      if ((definition as SchemaFormField).array && store.editable) {
         return <ButtonComponent
             {...{
               block: true,
