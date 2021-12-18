@@ -1,4 +1,3 @@
-import {DatePicker} from 'ant-design-vue';
 import moment, {Moment} from 'moment';
 import {defineComponent, ref, watch} from 'vue';
 import {useBaseInput} from '../../../';
@@ -63,6 +62,6 @@ export default defineComponent({
     return {getProps};
   },
   render() {
-    return <DatePicker.RangePicker {...this.getProps() as any}/>;
+    return <a-range-picker {...this.getProps() as any}/>;
   }
 });

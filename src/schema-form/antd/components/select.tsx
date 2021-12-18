@@ -1,4 +1,3 @@
-import {Select} from 'ant-design-vue';
 import {defineComponent, PropType} from 'vue';
 import {isNull} from '../../utils/utils';
 import {useOptions} from './utils';
@@ -47,6 +46,6 @@ export default defineComponent({
       allowClear: this.clearable ? true : this.$attrs.allowClear,
       options: this.localOptions
     };
-    return <Select {...props}/>;
+    return <a-select {...props}/>;
   }
 });

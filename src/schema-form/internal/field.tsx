@@ -1,7 +1,7 @@
 import {Slot} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
+import _ from 'lodash';
 import {
   computed,
   defineComponent,
@@ -84,7 +84,7 @@ export default defineComponent({
     const inputRef = ref<any>(null);
     const currentValue = ref(props.value || null);
     const field = computed(() => props.field);
-    watch(() => currentValue.value, debounce(val => {
+    watch(() => currentValue.value, _.debounce(val => {
       field.value.value = val;
       if (store.editable && field.value.editable) {
         emit(`update:value`, val);

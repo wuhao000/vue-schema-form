@@ -15,11 +15,13 @@ module.exports = {
     config.externals = {
       'vue': 'Vue',
       'moment': 'moment',
-      "antd":"ant-design-vue"
+      'lodash': '_',
+      'ant-design-vue': 'antd',
+      'antd-mobile-vue-next': 'antdm',
+      'codemirror': 'CodeMirror',
+      'core-js': 'CoreJS'
       // 'highlight': 'hljs',
-      // 'codemirror': 'CodeMirror',
       // 'vue-router': 'VueRouter',
-      // 'core-js': 'CoreJS'
     };
     config.module.rules.push({
       test: /\.md$/,

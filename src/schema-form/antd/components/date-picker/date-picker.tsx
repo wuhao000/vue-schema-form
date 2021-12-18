@@ -1,4 +1,3 @@
-import {DatePicker} from 'ant-design-vue';
 import moment, {Moment} from 'moment';
 import {computed, defineComponent, PropType, ref, watch} from 'vue';
 
@@ -116,11 +115,11 @@ export default defineComponent({
       props.mode = this.realMode;
     }
     if (mode === 'week') {
-      return <DatePicker.WeekPicker {...props}/>;
+      return <a-week-picker {...props}/>;
     }
     if (mode === 'month') {
-      return <DatePicker.MonthPicker {...props}/>;
+      return <a-month-picker {...props}/>;
     }
-    return <DatePicker ref={'datePickerRef'} {...props as any}/>;
+    return <a-date-picker ref={'datePickerRef'} {...props as any}/>;
   }
 });

@@ -1,4 +1,3 @@
-import {Steps} from 'ant-design-vue';
 import {computed, defineComponent, PropType, ref, watch, watchEffect} from 'vue';
 import {FieldDefinition, SchemaFormField} from '../../../types';
 import {flat} from '../utils/array';
@@ -77,20 +76,20 @@ export default defineComponent({
         const groups = getGroups();
         const stepsCount = getStepsCount();
         return <div class="schema-form-steps-wrapper">
-          <Steps
+          <a-steps
               class="schema-form-steps"
               v-model={[this.current, 'value']}>
             {
               groups.map((n, index) => {
-                return <Steps.Step
+                return <a-steps-step
                     status={
                       this.getStatus(index, fieldDefGroups[index])
                     }
                     title={this.titles[index]}>
-                </Steps.Step>;
+                </a-steps-step>;
               })
             }
-          </Steps>
+          </a-steps>
           {
             groups.map((n, index) => {
               return <div style={{

@@ -83,6 +83,11 @@ const fields: { [key: string]: SchemaFormField } = {
     required: true,
     type: 'text'
   },
+  password: {
+    title: '密码',
+    required: true,
+    type: 'password'
+  },
   zh: {
     title: '仅限中文',
     required: true,

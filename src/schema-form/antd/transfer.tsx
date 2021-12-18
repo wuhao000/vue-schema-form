@@ -1,4 +1,3 @@
-import {Transfer} from 'ant-design-vue';
 import {defineComponent} from 'vue';
 
 
@@ -14,6 +13,6 @@ export default defineComponent({
         this.$emit('update:value', value);
       }
     };
-    return <Transfer {...props}/>;
+    return <a-transfer {...props}/>;
   }
 });

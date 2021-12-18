@@ -1,5 +1,3 @@
-import {Input} from 'antd-mobile-vue-next';
-
 const transferValue = (value) => {
   if (typeof value === 'number') {
     return value;
@@ -20,6 +18,5 @@ export default (props, {emit}) => {
   props['onUpdate:value'] = (value) => {
     emit('update:value', transferValue(value));
   }
-  const Input2 = Input as any;
-  return <Input2 {...props}/>;
+  return <m-input {...props}/>;
 }

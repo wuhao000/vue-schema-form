@@ -1,5 +1,4 @@
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
-import {Upload} from 'ant-design-vue';
 import {computed, defineComponent, ref} from 'vue';
 import {useBaseInput} from '../';
 import {AntUploadObject} from '../../../types';
@@ -9,11 +8,6 @@ import './upload.less';
 
 export default defineComponent({
   name: 'DUpload',
-  components: {
-    [Upload.name]: Upload,
-    [Upload.Dragger.name]: Upload.Dragger,
-    PlusOutlined: PlusOutlined as any, UploadOutlined
-  },
   props: {
     hint: String,
     ...baseUpdateProps
@@ -69,7 +63,7 @@ export default defineComponent({
       return <a-upload-dragger {...this.uploadProps}>
         <div class={{disabled: this.$attrs.disabled}}>
           <p class="ant-upload-drag-icon">
-            <upload-outlined/>
+            <UploadOutlined/>
           </p>
           <p class="ant-upload-text">点击或者拖动文件到虚线框内上传</p>
           <p class="ant-upload-hint">{this.hint}</p>
@@ -81,7 +75,7 @@ export default defineComponent({
         if (this.multiple || this.fileList.length === 0) {
           content = (
               <div class="ant-upload-select-btn">
-                <plus-outlined/>
+                <PlusOutlined/>
                 <div class="ant-upload-text">选择文件</div>
               </div>
           );
@@ -97,7 +91,7 @@ export default defineComponent({
                 )
                 : (
                   <div class="ant-upload-plus">
-                    <plus-outlined/>
+                    <PlusOutlined/>
                   </div>
                 )
             }

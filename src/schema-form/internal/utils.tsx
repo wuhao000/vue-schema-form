@@ -1,5 +1,4 @@
-import clone from 'lodash.clonedeep';
-import get from 'lodash.get';
+import _ from 'lodash';
 import uuid from 'uuid';
 import {Component, isVNode, reactive, VNode} from 'vue';
 import {
@@ -36,7 +35,7 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
     }
     tmp = tmp[path];
   });
-  return get(currentValue, property);
+  return _.get(currentValue, property);
 }
 
 export function calcShowState(currentValue, definition: SchemaFormField) {
@@ -510,7 +509,7 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
       rules.push({type: 'string', max: field.max, message: `${field.title}长度不能大于${field.max}`});
     }
   }
-  return clone(rules);
+  return _.cloneDeep(rules);
 
 };
 export const getFieldValue = (value: any,

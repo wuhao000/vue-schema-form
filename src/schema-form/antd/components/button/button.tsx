@@ -1,4 +1,3 @@
-import {Button} from 'ant-design-vue';
 import classNames from 'classnames';
 import {defineComponent, PropType} from 'vue';
 import {baseButtonProps} from '../../../common/base-button';
@@ -58,6 +57,6 @@ export default defineComponent({
         ];
       }
     });
-    return <Button {...props} v-slots={slots}/>;
+    return <a-button {...props} v-slots={slots}/>;
   }
 });

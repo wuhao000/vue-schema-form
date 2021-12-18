@@ -1,5 +1,5 @@
 import className from 'classnames';
-import clone from 'lodash.clonedeep';
+import _, {cloneDeep} from 'lodash';
 import {
   computed,
   defineComponent,
@@ -147,7 +147,7 @@ const SchemaForm = defineComponent({
           if (isVNode(props.value)) {
             console.error('VNode不能作为输入值');
           } else {
-            currentValue.value = clone(props.value);
+            currentValue.value = cloneDeep(props.value);
           }
         } else if (realSchema.value.array) {
           currentValue.value = [];
@@ -297,7 +297,7 @@ const SchemaForm = defineComponent({
     });
     watch(() => currentValue.value, (v) => {
       if (!isEqual(currentValue.value, props.value)) {
-        const cloneValue = clone(v);
+        const cloneValue = _.cloneDeep(v);
         emit('update:value', cloneValue);
         props.onChange?.(cloneValue);
       }

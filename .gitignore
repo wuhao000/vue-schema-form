@@ -23,3 +23,5 @@ pnpm-debug.log*
 yarn.lock
 package.json.lock
 es/
+dist/
+lib/

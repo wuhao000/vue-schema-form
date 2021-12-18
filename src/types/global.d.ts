@@ -4,6 +4,8 @@ declare global {
 
   export interface Window {
     moment: any;
+    antd: any;
+    antdm: any;
   }
 
 }

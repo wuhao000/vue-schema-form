@@ -1,22 +1,4 @@
 import {DeleteOutlined, DownOutlined, InfoCircleFilled, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
-import {
-  Alert,
-  AutoComplete,
-  Card,
-  Cascader,
-  Checkbox,
-  Col,
-  Empty,
-  Input,
-  InputNumber,
-  Layout,
-  Modal,
-  Popover,
-  Rate,
-  Row,
-  Slider,
-  Switch
-} from 'ant-design-vue';
 import {App, Component} from 'vue';
 import {
   config,
@@ -46,26 +28,40 @@ import TransferDisplay from './display/transfer';
 import InputField from './input';
 import Transfer from './transfer';
 import AntdUpload from './upload';
-import {createComponentProxy} from './utils';
+import {
+  createCard,
+  createCascader,
+  createCheckbox, createCol, createComponentProxy, createEmpty, createInput, createInputNumber, createLayout,
+  createLayoutContent,
+  createLayoutFooter,
+  createLayoutHeader, createLayoutSider, createPassword, createPopover,
+  createRate,
+  createRow,
+  createSlider,
+  createSwitch,
+  createTextarea
+} from './utils';
+const Alert = window.antd.Alert;
+const Modal = window.antd.Modal;
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
-  card: Card,
-  checkbox: Checkbox,
-  empty: Empty,
+  card: createCard(),
+  checkbox: createCheckbox(),
+  empty: createEmpty(),
+  input: createInput(),
+  row: createRow(),
+  col: createCol(),
+  layout: createLayout(),
+  header: createLayoutHeader(),
+  footer: createLayoutFooter(),
+  sider: createLayoutSider(),
+  content: createLayoutContent(),
+  popover: createPopover(),
   select: Select,
-  input: Input,
   button: Button,
-  row: Row,
-  col: Col,
   form: Form,
   formItem: Item,
   alert: Alert,
-  layout: Layout,
-  header: Layout.Header,
-  footer: Layout.Footer,
-  sider: Layout.Sider,
-  content: Layout.Content,
-  popover: Popover,
   icons: {
     info: InfoCircleFilled,
     up: UpOutlined,
@@ -163,7 +159,7 @@ export function registerAntd() {
     platforms: 'desktop',
     types: FieldTypes.Rate
   });
-  registerDesktop(createComponentProxy(Input.Password), [FieldTypes.Password], 'single');
+  registerDesktop(createPassword(), [FieldTypes.Password], 'single');
   registerComponent({
     component: AntdUpload,
     arrayMode: 'both',
@@ -177,7 +173,7 @@ export function registerAntd() {
       [FieldTypes.Time],
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerComponent({
-    component: AutoComplete,
+    component: 'a-auto-complete',
     platforms: 'desktop',
     types: [FieldTypes.AutoComplete]
   });
@@ -197,13 +193,13 @@ export function registerAntd() {
   });
   registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateRange], 'single');
   registerDesktop(createComponentProxy(InputField), [FieldTypes.String], 'single');
-  registerDesktop(createComponentProxy(Input.TextArea), [FieldTypes.Text], 'single');
+  registerDesktop(createTextarea(), [FieldTypes.Text], 'single');
   registerDesktop(createComponentProxy(DatePicker),
       [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], 'single',
       (definition) => ({mode: (definition.type as string).toLowerCase()}));
-  registerDesktop(createComponentProxy(InputNumber), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single', field => {
+  registerDesktop(createInputNumber(), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single', field => {
     const props: any = {};
     if (isNotNull(field.min)) {
       props.min = field.min
@@ -215,13 +211,13 @@ export function registerAntd() {
     return props;
   });
   registerComponent({
-    component: createComponentProxy(Checkbox),
+    component: createCheckbox(),
     types: FieldTypes.Checkbox,
     platforms: 'desktop',
     valueProp: 'checked'
   });
   registerComponent({
-    component: createComponentProxy(Switch),
+    component: createSwitch(),
     types: FieldTypes.Boolean,
     platforms: 'desktop',
     valueProp: 'checked'
@@ -249,7 +245,7 @@ export function registerAntd() {
     wrap: false
   });
 
-  registerDesktop(createComponentProxy(Cascader), FieldTypes.Cascader, 'single', field => {
+  registerDesktop(createCascader(), FieldTypes.Cascader, 'single', field => {
     return {options: resolveOptions(field)};
   });
   registerDesktop(createComponentProxy(CheckboxGroup), FieldTypes.ExpandSelect, 'array', field => {
@@ -258,9 +254,9 @@ export function registerAntd() {
   registerDesktop(createComponentProxy(RadioGroup), FieldTypes.ExpandSelect, 'single', field => {
     return {options: resolveOptions(field)};
   });
-  registerDesktop(createComponentProxy(Rate), FieldTypes.Rate);
+  registerDesktop(createRate(), FieldTypes.Rate);
   registerDesktop(createComponentProxy(Transfer), FieldTypes.Transfer, 'single', transferPropsTransform);
-  register(createComponentProxy(Slider), 'desktop',
+  register(createSlider(), 'desktop',
       FieldTypes.Range, 'single', () => {
     return {range: true};
   });

@@ -1,4 +1,3 @@
-import {Rate} from 'ant-design-vue';
 import {defineComponent} from 'vue';
 
 export default defineComponent({
@@ -11,6 +10,6 @@ export default defineComponent({
   },
   render() {
     const props = {value: this.value, disabled: true}
-    return <Rate {...props}/>;
+    return <a-rate {...props}/>;
   }
 });

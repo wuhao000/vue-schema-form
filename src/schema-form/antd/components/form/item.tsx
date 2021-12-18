@@ -1,6 +1,6 @@
 import {ComponentInternalInstance} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
-import debounce from 'lodash.debounce';
+import _ from 'lodash';
 import {
   computed,
   ComputedRef,
@@ -176,7 +176,7 @@ export default defineComponent({
       }
       validate('change');
     };
-    const validate = debounce((trigger, callback: ((...args: any[]) => void) = noop) => {
+    const validate = _.debounce((trigger, callback: ((...args: any[]) => void) = noop) => {
       nextTick().then(() => {
         validateDisabled.value = false;
         const rules = getFilteredRule(trigger);
