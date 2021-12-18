@@ -41,8 +41,7 @@ import {
   createSwitch,
   createTextarea
 } from './utils';
-const Alert = window.antd.Alert;
-const Modal = window.antd.Modal;
+import {Alert, Modal} from 'ant-design-vue';
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
   card: createCard(),

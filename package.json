@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.1.8",
+  "version": "3.1.9-1",
   "files": [
     "es",
     "package.json",
@@ -23,7 +23,7 @@
     "test": "ts-node build/test.ts && ts-node build/test.ts"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://nexus.aegis-info.com/repository/npm-aegis/"
   },
   "dependencies": {
     "@types/less": "^3.0.3",

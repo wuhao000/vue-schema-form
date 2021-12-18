@@ -81,12 +81,12 @@ export default defineComponent({
               v-model={[this.current, 'value']}>
             {
               groups.map((n, index) => {
-                return <a-steps-step
+                return <a-step
                     status={
                       this.getStatus(index, fieldDefGroups[index])
                     }
                     title={this.titles[index]}>
-                </a-steps-step>;
+                </a-step>;
               })
             }
           </a-steps>

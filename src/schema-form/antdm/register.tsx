@@ -2,8 +2,7 @@ import {DeleteOutlined, DownOutlined, InfoCircleFilled, PlusOutlined, UpOutlined
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib, resolveOptions} from '../';
 import {ILibComponents} from '../../../types';
 import NumberInput from './number';
-
-const Modal = window.antdm.Modal;
+import {Modal} from 'antd-mobile-vue-next';
 
 const Slider = (props, ctx) => <m-slider {...props}
                                          v-slots={ctx.slots}/>;
