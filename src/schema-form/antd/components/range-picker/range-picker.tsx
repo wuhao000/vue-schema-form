@@ -42,7 +42,7 @@ export default defineComponent({
     }, {immediate: true});
     watch(() => currentValue.value, (value) => {
       const val = convertValueBack(value);
-      if (props.value !== undefined) {
+      if (ctx.attrs['onUpdate:value']) {
         emit('update:value', val);
       }
       emit('change', val);

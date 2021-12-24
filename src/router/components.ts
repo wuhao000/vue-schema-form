@@ -62,6 +62,16 @@ export default [{
     
   ]
 }, {
+  path: '/components/riqixuanzeqi',
+  component: () => import('../generated/components/riqixuanzeqi/index.vue'),
+  meta: {
+    tags: [],
+    name: '日期选择器'
+  },
+  children: [
+    
+  ]
+}, {
   path: '/components/shijianxuanzeqi',
   component: () => import('../generated/components/shijianxuanzeqi/index.vue'),
   meta: {

@@ -275,7 +275,7 @@ export default defineComponent({
         const validator = new AsyncValidator({
           [field.value.plainPath]: rules
         });
-        let value = currentValue.value;
+        let value = props.value;
         if ([FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number].includes(type.value as any)) {
           value = parseFloat(value as FieldTypes);
         }
@@ -349,8 +349,10 @@ export default defineComponent({
         const style = itemProps.style;
         delete itemProps.className;
         delete itemProps.style;
-        if (!v.__id__) {
-          v.__id__ = uuid();
+        if (isNotNull(v) && typeof v === 'object') {
+          if (!v.__id__) {
+            v.__id__ = uuid();
+          }
         }
         let key = '';
         if (definition.rowKey && isNotNull(v) && typeof v === 'object') {
@@ -359,7 +361,7 @@ export default defineComponent({
           } else if (typeof definition.rowKey === 'function') {
             key = definition.rowKey(v);
           }
-        } else {
+        } else if (isNotNull(v) && typeof v === 'object') {
           key = v.__id__;
         }
         Object.assign(itemProps, {

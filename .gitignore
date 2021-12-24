@@ -25,3 +25,4 @@ package.json.lock
 es/
 dist/
 lib/
+src/generated/

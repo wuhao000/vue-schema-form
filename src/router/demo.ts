@@ -413,6 +413,17 @@ export default [{
   ]
 },
 {
+  path: '/demo/texing/shuzu',
+  component: () => import('../generated/demo/texing/shuzu/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '数组'
+  },
+  children: [
+    
+  ]
+},
+{
   path: '/demo/texing/qiyongjinyong',
   component: () => import('../generated/demo/texing/qiyongjinyong/index.vue'),
   meta: {
