@@ -22,6 +22,16 @@ export default [{
     
   ]
 }, {
+  path: '/components/danxuankuang',
+  component: () => import('../generated/components/danxuankuang/index.vue'),
+  meta: {
+    tags: [],
+    name: '单选框'
+  },
+  children: [
+    
+  ]
+}, {
   path: '/components/tupian',
   component: () => import('../generated/components/tupian/index.vue'),
   meta: {

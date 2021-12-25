@@ -15,7 +15,8 @@ import {
   toRaw,
   unref,
   VNode,
-  watch, watchEffect
+  watch,
+  watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
@@ -35,7 +36,8 @@ import {
   isNull,
   LibComponents,
   MOBILE,
-  swap, uuid
+  swap,
+  uuid
 } from '../utils/utils';
 import {
   FieldDefinition,
@@ -82,7 +84,7 @@ export default defineComponent({
     const store: SchemaFormStore = inject(SchemaFormStoreKey as any);
     const arrayRef = ref<any>(null);
     const inputRef = ref<any>(null);
-    const currentValue = ref(props.value || null);
+    const currentValue = ref(props.value ?? null);
     const field = computed(() => props.field);
     watch(() => currentValue.value, _.debounce(val => {
       field.value.value = val;
@@ -200,7 +202,7 @@ export default defineComponent({
       }
     };
     const getRules = (trigger?: string): any => {
-      const rules = field.value.getRules() || [];
+      const rules = field.value.getRules() ?? [];
       if (rules.length === 0 && field.value.required) {
         addRule(rules, field.value, {required: true, message: `${field.value.title}为必填项`});
       }
@@ -475,7 +477,7 @@ export default defineComponent({
       if (field.value.array && inputFieldDef.arrayMode === 'single') {
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
-      const style: any = Object.assign({}, inputProps.value.style || {});
+      const style: any = Object.assign({}, inputProps.value.style ?? {});
 
       const className = propsTmp.className;
       delete propsTmp.className;
@@ -620,8 +622,8 @@ export default defineComponent({
       const content = slot ? slot() : undefined;
       if (Array.isArray(content)) {
         content.forEach((node: VNode) => {
-          node.props = node.props || {};
-          node.props.style = node.props.style || {};
+          node.props = node.props ?? {};
+          node.props.style = node.props.style ?? {};
           if (field.visible) {
             delete node.props.style.display;
           } else {

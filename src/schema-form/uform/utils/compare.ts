@@ -1,3 +1,4 @@
+import {isNotNull} from '../../utils/utils';
 import {isArr, isFn} from '../types';
 
 const isArray = isArr;
@@ -18,7 +19,7 @@ function equal(a: any, b: any, filter: Filter) {
     return true;
   }
 
-  if (a && b && typeof a === 'object' && typeof b === 'object') {
+  if (isNotNull(a) && isNotNull(b) && typeof a === 'object' && typeof b === 'object') {
     const arrA = isArray(a);
     const arrB = isArray(b);
     let i: number;
