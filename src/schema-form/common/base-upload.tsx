@@ -9,7 +9,7 @@ interface SimpleFile {
   uid?: string;
 }
 
-const FILE_FIELDS = ['name', 'uid', 'size', 'type', 'url'];
+const DEFAULT_FIELDS = ['name', 'uid', 'size', 'type', 'url'];
 
 export const baseUpdateProps = {
   mode: String as PropType<'card' | 'dragger' | 'picture'>,
@@ -17,6 +17,10 @@ export const baseUpdateProps = {
   valueType: {
     type: String as PropType<'string' | 'object'>,
     default: 'string'
+  },
+  objectFields: {
+    type: Array as PropType<string[]>,
+    default: () => []
   },
   value: [String, Object, Array] as PropType<string | SimpleFile | string[] | SimpleFile[]>
 };
@@ -54,11 +58,11 @@ export const useBaseUpload = (props, {emit}) => {
     let simpleValue = null;
     if (props.multiple) {
       simpleValue = value.map(it => {
-        return props.valueType === 'string' ? it.url : part(it, FILE_FIELDS) as SimpleFile;
+        return props.valueType === 'string' ? it.url : part(it,  [...DEFAULT_FIELDS, ...props.objectFields]) as SimpleFile;
       });
     } else {
       if (value.length) {
-        simpleValue = props.valueType === 'string' ? value[0].url : part(value[0], FILE_FIELDS) as SimpleFile;
+        simpleValue = props.valueType === 'string' ? value[0].url : part(value[0], [...DEFAULT_FIELDS, ...props.objectFields]) as SimpleFile;
       }
     }
     emit('update:value', simpleValue);

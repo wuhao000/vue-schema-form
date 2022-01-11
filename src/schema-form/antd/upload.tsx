@@ -43,7 +43,13 @@ export default defineComponent({
         if (f.file.status && f.file.response?.code === 0) {
           const file = f.fileList.find(it => it.uid === f.file.uid);
           if (file) {
-            file.url = f.file.response.data.url;
+            const data = f.file.response.data;
+            file.url = data.url;
+            if (props.objectFields.length) {
+              props.objectFields.forEach(f => {
+                file[f] = data[f];
+              });
+            }
           }
         }
         ctx.emit('change', f);
@@ -74,10 +80,10 @@ export default defineComponent({
       if (this.listType === 'picture-card') {
         if (this.multiple || this.fileList.length === 0) {
           content = (
-              <div class="ant-upload-select-btn">
-                <PlusOutlined/>
-                <div class="ant-upload-text">选择文件</div>
-              </div>
+            <div class="ant-upload-select-btn">
+              <PlusOutlined/>
+              <div class="ant-upload-text">选择文件</div>
+            </div>
           );
         }
       } else if (this.listType === 'picture') {
