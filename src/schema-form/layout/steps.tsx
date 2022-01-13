@@ -7,12 +7,12 @@ import './steps.less';
 export default defineComponent({
     name: 'StepsLayout',
     props: {
+      ...baseLayoutProps,
       layout: {type: Array as PropType<number[]>},
       titles: {
         type: [Array]
       },
       currentStep: Number,
-      ...baseLayoutProps
     },
     setup(props) {
       const {store} = useBaseLayout();

@@ -56,8 +56,10 @@ export default defineComponent({
       },
       onPreview(f) {
         previewUrl.value = f.url;
-        previewVisible.value = true;
-        ctx.emit('preview', f);
+        if (previewUrl.value) {
+          previewVisible.value = true;
+          ctx.emit('preview', f);
+        }
       },
       cancelPreview() {
         previewVisible.value = false;
@@ -88,31 +90,30 @@ export default defineComponent({
         }
       } else if (this.listType === 'picture') {
         content = (
-          <div class="ant-upload-image-wrapper">
-            {
-              this.fileList.length && this.fileList[0].url ? (
-                  <img src={this.fileList[0].url}
-                       alt=""
-                       style="height: 100%;width: 100%;"/>
-                )
-                : (
-                  <div class="ant-upload-plus">
-                    <PlusOutlined/>
-                  </div>
-                )
-            }
-          </div>
+            <div class="ant-upload-image-wrapper">
+              {
+                this.fileList.length && this.fileList[0].url ? (
+                        <img src={this.fileList[0].url}
+                             alt=""
+                             style="height: 100%;width: 100%;"/>
+                    )
+                    : (
+                        <div class="ant-upload-plus">
+                          <PlusOutlined/>
+                        </div>
+                    )
+              }
+            </div>
         );
       } else if (this.listType === 'text') {
         content = (
-          <a-button
-            disabled={this.$attrs.disabled}
-            size={this.size}>选择文件
-          </a-button>
+            <a-button
+                disabled={this.$attrs.disabled}
+                size={this.size}>选择文件
+            </a-button>
         );
       }
       return (
-        <>
           <a-upload {...this.uploadProps}
                     listType={this.listType}
                     v-model={[this.fileList, 'fileList']}
@@ -121,22 +122,21 @@ export default defineComponent({
                     size={this.size}>
             {content}
             {this.$slots.default?.()}
+            <a-modal visible={this.previewVisible}
+                     footer={() => {
+                       return <Button type="primary"
+                                      onClick={() => {
+                                        this.cancelPreview();
+                                      }}>确定</Button>;
+                     }}
+                     onCancel={() => {
+                       this.cancelPreview();
+                     }}>
+              <img alt="example"
+                   style="width: 100%"
+                   src={this.previewUrl}/>
+            </a-modal>
           </a-upload>
-          <a-modal visible={this.previewVisible}
-                   footer={() => {
-                     return <Button type="primary"
-                                    onClick={() => {
-                                      this.cancelPreview();
-                                    }}>确定</Button>;
-                   }}
-                   onCancel={() => {
-                     this.cancelPreview();
-                   }}>
-            <img alt="example"
-                 style="width: 100%"
-                 src={this.previewUrl}/>
-          </a-modal>
-        </>
       );
     }
   }
