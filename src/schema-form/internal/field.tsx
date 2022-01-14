@@ -510,6 +510,9 @@ export default defineComponent({
           }
         });
       }
+      if (field.value.type === 'object' && !_.isEqual(propsTmp.definition.fields, props.definition.fields)) {
+        propsTmp.definition.fields = props.definition.fields;
+      }
       return <InputFieldComponent
           {...propsTmp}
           v-slots={slots}
