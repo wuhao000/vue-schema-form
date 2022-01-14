@@ -80,7 +80,7 @@ registerLayout({
 });
 registerLayout({
   component: Card,
-  platforms: [DESKTOP],
+  platforms: [DESKTOP, MOBILE],
   types: ['card'],
   layoutOptions: {
     noTitle: true,

@@ -512,8 +512,9 @@ export default defineComponent({
       }
       if (field.value.type === 'object') {
         const fields = getRealFields(props.definition)
-        if (!_.isEqual(propsTmp.definition.fields, fields)) {
-          propsTmp.definition.fields = fields;
+        const currentFields = (propsTmp.definition as any).fields
+        if (!_.isEqual(currentFields, fields)) {
+          (propsTmp.definition as any).fields = fields;
         }
       }
       return <InputFieldComponent
