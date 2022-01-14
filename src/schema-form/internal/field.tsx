@@ -572,7 +572,7 @@ export default defineComponent({
       });
       delete formItemProps.className;
       // 是否使用form-item组件包裹
-      const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) || isNull(definition.title);
+      const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) ?? isNull(definition.title);
       // 是否使用form-item组件的title
       const noTitle = !!(definition?.wrapperProps?.noTitle ?? inputFieldDef.layoutOptions?.noTitle);
       const label = [];
