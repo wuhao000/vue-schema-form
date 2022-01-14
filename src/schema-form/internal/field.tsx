@@ -119,7 +119,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
       if (field.value.slot) {
@@ -234,9 +234,9 @@ export default defineComponent({
             </span>
           };
           formItemProps.label = <LibComponentsPopover
-              content={definition.tip}
-              v-slots={slots}
-              trigger="hover"/>;
+            content={definition.tip}
+            v-slots={slots}
+            trigger="hover"/>;
         } else {
           formItemProps.label = definition.title;
         }
@@ -446,7 +446,7 @@ export default defineComponent({
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
     };
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
@@ -510,19 +510,22 @@ export default defineComponent({
           }
         });
       }
-      if (field.value.type === 'object' && !_.isEqual(propsTmp.definition.fields, props.definition.fields)) {
-        propsTmp.definition.fields = props.definition.fields;
+      if (field.value.type === 'object') {
+        const fields = getRealFields(props.definition)
+        if (!_.isEqual(propsTmp.definition.fields, fields)) {
+          propsTmp.definition.fields = fields;
+        }
       }
       return <InputFieldComponent
-          {...propsTmp}
-          v-slots={slots}
-          class={className}
-          style={style}
-          key={field.value.plainPath}
-          ref={el => {
-            inputRef.value = el;
-            field.value.inputRef = el;
-          }}/>;
+        {...propsTmp}
+        v-slots={slots}
+        class={className}
+        style={style}
+        key={field.value.plainPath}
+        ref={el => {
+          inputRef.value = el;
+          field.value.inputRef = el;
+        }}/>;
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
@@ -595,13 +598,13 @@ export default defineComponent({
         };
       }
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent
-              {...formItemProps}
-              v-slots={formItemProps.slots}
-              class={className}
-              style={style}>
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent
+          {...formItemProps}
+          v-slots={formItemProps.slots}
+          class={className}
+          style={style}>
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
         return <ColComponent span={definition.span}>{formItem}</ColComponent>;
       } else {
