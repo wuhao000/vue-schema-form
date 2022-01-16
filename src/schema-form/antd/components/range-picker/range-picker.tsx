@@ -62,6 +62,8 @@ export default defineComponent({
     return {getProps};
   },
   render() {
-    return <a-range-picker {...this.getProps() as any}/>;
+    return <a-range-picker {...this.getProps() as any}
+                           v-slots={this.$slots}
+    />;
   }
 });
