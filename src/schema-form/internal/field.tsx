@@ -122,9 +122,6 @@ export default defineComponent({
       renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
-      if (field.value.slot) {
-        return undefined;
-      }
       return field.value.getComponent(!editable.value, store.platform);
     });
     const preProps = computed<{ [key: string]: unknown }>(() => {

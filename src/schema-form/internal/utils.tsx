@@ -189,7 +189,7 @@ function getComponent(field: SimpleField,
       }
     };
   }
-  if (typeof type === 'object' && typeof type['render'] === 'function') {
+  if (typeof type === 'object' && (typeof type['setup'] === 'function' || typeof type['render'] === 'function')) {
     return {
       component: type,
       platform,
