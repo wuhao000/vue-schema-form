@@ -67,9 +67,7 @@ export default defineComponent({
     }, {immediate: true});
     watch(() => currentValue.value, (value) => {
       const val = convertValueBack(value, props.mode);
-      if (props.value !== undefined) {
-        emit('update:value', val);
-      }
+      emit('update:value', val);
       emit('change', val);
     });
     const realMode = computed(() => {
