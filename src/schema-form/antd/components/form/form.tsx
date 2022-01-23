@@ -184,9 +184,10 @@ emits: ['ok', 'cancel'],
     const layout = this.getLayout();
     const formClassName = classNames({
       [`${prefixCls}-hide-required-mark`]: hideRequiredMark
-    });
+    }, this.$attrs.class);
     return (
       <a-form onSubmit={onSubmit}
+              style={this.$attrs.style}
               layout={layout}
               class={formClassName}>
         {$slots.default?.()}
