@@ -75,7 +75,6 @@ export default defineComponent({
       <a-checkbox-group {...props}
                         value={this.value}
                         onUpdate:value={(v) => {
-                          this.allSelected = v.length === this.localOptions.length;
                           this.$emit('update:value', v);
                         }}
                         v-slots={slots}/>

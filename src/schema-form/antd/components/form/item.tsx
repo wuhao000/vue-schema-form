@@ -16,6 +16,7 @@ import {
 } from 'vue';
 import {ValidateRules} from '../../../../../types';
 import {getPropByPath, noop} from '../../utils';
+import {DFORM_STORE_KEY} from './utils';
 
 export interface FormItemProvider {
   validate: (trigger?: string, callback?) => void;
@@ -67,7 +68,7 @@ export default defineComponent({
     const control = ref(null);
     const currentHelp = ref('');
     const currentValidateStatus = ref('');
-    const form: { value: any } = inject('form', () => undefined) as any;
+    const form: { value: any } = inject(DFORM_STORE_KEY, () => undefined) as any;
     const validateDisabled = ref(true);
 
     const fieldValue = computed(() => {

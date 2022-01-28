@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import {computed, defineComponent, PropType, provide, ref, Ref} from 'vue';
 import {ValidateRules} from '../../../../../types';
+import {DFORM_STORE_KEY} from './utils';
 
 export default defineComponent({
   name: 'DForm',
@@ -164,7 +165,7 @@ emits: ['ok', 'cancel'],
         }
       }
     }));
-    provide('form', form);
+    provide(DFORM_STORE_KEY, form);
     return {
       prefixCls,
       fields,
