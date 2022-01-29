@@ -3,22 +3,49 @@ import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {
-  computed, defineComponent, inject, isProxy, isRef, isVNode, onBeforeUnmount, PropType, ref, toRaw, Transition, unref,
-  VNode, watch, watchEffect
+  computed,
+  defineComponent,
+  inject,
+  isProxy,
+  isRef,
+  isVNode,
+  onBeforeUnmount,
+  PropType,
+  ref,
+  toRaw,
+  Transition,
+  unref,
+  VNode,
+  watch,
+  watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
-import {createSimpleMobileFieldComponent} from '../compatible';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
 import {isEqual} from '../uform/utils';
 import {flat} from '../utils/array';
 import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from '../utils/key';
 import {
-  addRule, DESKTOP, FieldTypes, getColComponent, getDefaultValue, isNotNull, isNull, LibComponents, MOBILE, swap, uuid
+  addRule,
+  DESKTOP,
+  FieldTypes,
+  getColComponent,
+  getDefaultValue,
+  isNotNull,
+  isNull,
+  LibComponents,
+  MOBILE,
+  swap,
+  uuid
 } from '../utils/utils';
 import {
-  FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
+  FieldDefinition,
+  getComponentType,
+  getFormItemComponent,
+  getRealFields,
+  isNullStructValue,
+  renderField,
   SchemaFormEvents
 } from './utils';
 
@@ -37,7 +64,7 @@ export default defineComponent({
       type: [Object, String, Boolean, Number, Array]
     },
     content: {
-      type: [Object, String]
+      type: [Object, String] as PropType<VNode | string>
     },
     disabled: {
       type: Boolean,
@@ -92,7 +119,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const editable = computed(() => store.editable && field.value.editable);
     const fieldComponent = computed(() => {
       return field.value.getComponent(!editable.value, store.platform);
@@ -204,9 +231,9 @@ export default defineComponent({
             </span>
           };
           formItemProps.label = <LibComponentsPopover
-              content={definition.tip}
-              v-slots={slots}
-              trigger="hover"/>;
+            content={definition.tip}
+            v-slots={slots}
+            trigger="hover"/>;
         } else {
           formItemProps.label = definition.title;
         }
@@ -221,6 +248,7 @@ export default defineComponent({
       Object.assign(formItemProps, config.getFormItemProps(component, field.value, platform));
       return formItemProps;
     };
+    const visible = computed(() => field.value.visible || !field.value.plainPath);
     const validate = (trigger?: string): IValidateResponse[] | Promise<IValidateResponse[]> => {
       if (!field.value.visible) {
         return [];
@@ -404,6 +432,7 @@ export default defineComponent({
         }
       });
       return <ArrayComponent {...arrayProps}
+                             v-show={visible.value}
                              v-slots={{
                                default: () => arrayContent
                              }}/>;
@@ -416,7 +445,25 @@ export default defineComponent({
       const definition = props.definition as SchemaFormField;
       const noWrap = isNull(definition.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
+    };
+    const wrapText = (content: VNode | string) => {
+      if (isVNode(content)) {
+        const style: Partial<CSSStyleDeclaration> = {};
+        if (!visible.value) {
+          style.display = 'none';
+        }
+        if (content.props.style && typeof content.props.style === 'object') {
+          Object.assign(content.props.style, style);
+        } else {
+          content.props.style = style;
+        }
+        return content;
+      } else if (Array.isArray(content)) {
+        return content.map(item => wrapText(item));
+      } else {
+        return <div v-show={visible.value}>{content}</div>;
+      }
     };
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
@@ -428,7 +475,7 @@ export default defineComponent({
         InputFieldComponent = toRaw(InputFieldComponent);
       }
       if (content) {
-        return content;
+        return wrapText(content);
       }
       if (!editable.value && field.value.displayValue) {
         let displayValue: any;
@@ -437,11 +484,7 @@ export default defineComponent({
         } else {
           displayValue = field.value.displayValue;
         }
-        if (typeof displayValue === 'object') {
-          return displayValue;
-        } else {
-          return <span>{displayValue}</span>;
-        }
+        return wrapText(displayValue);
       }
       // 渲染数组
       if (field.value.array && inputFieldDef.arrayMode === 'single') {
@@ -488,15 +531,16 @@ export default defineComponent({
         }
       }
       return <InputFieldComponent
-          {...propsTmp}
-          v-slots={slots}
-          class={className}
-          style={style}
-          key={field.value.plainPath}
-          ref={el => {
-            inputRef.value = el;
-            field.value.inputRef = el;
-          }}/>;
+        {...propsTmp}
+        v-show={visible.value}
+        v-slots={slots}
+        class={className}
+        style={style}
+        key={field.value.plainPath}
+        ref={el => {
+          inputRef.value = el;
+          field.value.inputRef = el;
+        }}/>;
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
@@ -569,31 +613,65 @@ export default defineComponent({
         };
       }
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent
-              {...formItemProps}
-              v-slots={formItemProps.slots}
-              key={props.field.plainPath}
-              class={className}
-              style={style}>
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent
+          {...formItemProps}
+          v-slots={formItemProps.slots}
+          v-show={visible.value}
+          key={props.field.plainPath}
+          class={className}
+          style={style}>
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
-        return <ColComponent span={definition.span}>{formItem}</ColComponent>;
+        return <ColComponent
+          v-show={visible.value}
+          span={definition.span}>{formItem}</ColComponent>;
       } else {
         return formItem;
       }
     };
+    const resolveWrap = () => {
+      if (field.value.getComponent(true).wrap === false) {
+        return false;
+      }
+      return typeof field.value.getComponent(true).wrap !== 'object'
+        || (field.value.getComponent().wrap as any).mobile !== false;
+    };
+    /**
+     * 兼容性处理，如果需要引入新的组件库，需要修改代码进行支持
+     *
+     * @author 吴昊
+     * @since 0.1.19
+     */
+    const createSimpleMobileFieldComponent = () => {
+      const inputComponent = renderInputComponent();
+      if (field.value.type === FieldTypes.Object) {
+        return inputComponent;
+      }
+      const props: any = {title: field.value.title};
+      const FormItem: any = LibComponents.formItem['mobile'];
+      const slots = {
+        extra: () => inputComponent
+      };
+      return resolveWrap() ? <FormItem
+        {...props}
+        v-slots={slots}
+        v-show={visible.value}
+      /> : inputComponent;
+    };
+
     watchEffect(() => props.field.props);
     return {
       editable,
       store,
+      createSimpleMobileFieldComponent,
       renderInputComponent,
       renderDesktopComponent
     };
   },
   render() {
     const field = this.field;
-    const {editable, store: {platform}} = this;
+    const {editable, store: {platform, transitionName, transition}} = this;
     const definition = this.definition as SchemaFormField;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];
@@ -615,21 +693,17 @@ export default defineComponent({
     if (platform === DESKTOP) {
       item = this.renderDesktopComponent();
     } else if (platform === MOBILE) {
-      const inputComponent = this.renderInputComponent();
       if (editable) {
-        item = inputComponent;
+        item = this.renderInputComponent();
       } else {
-        item = createSimpleMobileFieldComponent(field.title, inputComponent, field);
+        item = this.createSimpleMobileFieldComponent();
       }
     }
-    const style: Partial<CSSStyleDeclaration> = {};
-    // 如果visible 是
-    if (!field.visible && this.field?.plainPath) {
-      style.display = 'none';
+    if (transition) {
+      return <Transition name={transitionName}>
+        {item}
+      </Transition>;
     }
-    (item as VNode).props.style = style;
-    return <Transition name="fade">
-      {item}
-    </Transition>;
+    return item;
   }
 });

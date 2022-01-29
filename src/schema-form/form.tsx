@@ -10,7 +10,7 @@ import {
   provide,
   reactive,
   ref,
-  watch
+  watch, watchEffect
 } from 'vue';
 import {
   Action,
@@ -42,6 +42,11 @@ const SchemaForm = defineComponent({
     loading: {type: Boolean as PropType<boolean>, default: false},
     actions: {type: Array as PropType<Action[]>},
     platform: {type: String as PropType<Platform>, default: 'desktop'},
+    transition: Boolean,
+    transitionName: {
+      type: String,
+      default: 'fade'
+    },
     editable: {type: Boolean as PropType<boolean>, default: true},
     effects: {type: Function as PropType<Effects>},
     schema: {type: Object as PropType<SchemaFormField>},
@@ -83,6 +88,8 @@ const SchemaForm = defineComponent({
       effects: props.effects,
       editable: props.editable,
       context: null,
+      transition: props.transition,
+      transitionName: props.transitionName,
       root: instance,
       components: componentStore
     });
@@ -99,17 +106,18 @@ const SchemaForm = defineComponent({
       }
     });
     provide(SchemaFormStoreKey, store);
-    watch(() => props, (val: any) => {
-      store.platform = val.platform;
-      store.readonly = val.readonly;
-      store.disabled = val.disabled;
-      store.platform = val.platform as Platform;
-      store.props = val.props || realSchema.value.xProps || realSchema.value.props || {};
-      store.loading = val.loading;
-      store.editable = val.editable;
-      store.effects = val.effects;
-    }, {deep: true});
-
+    watchEffect(() => {
+      store.platform = props.platform;
+      store.readonly = props.readonly;
+      store.disabled = props.disabled;
+      store.platform = props.platform as Platform;
+      store.props = props.props || realSchema.value.xProps || realSchema.value.props || {};
+      store.transition = props.transition;
+      store.transitionName = props.transitionName;
+      store.loading = props.loading;
+      store.editable = props.editable;
+      store.effects = props.effects;
+    });
     const hasSubmitHandler = computed(() =>
         props.onOk !== undefined
         || props.onSubmit

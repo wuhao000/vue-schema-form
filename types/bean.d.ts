@@ -172,6 +172,7 @@ interface BaseSchemaFormField {
   rules?: Rule;
   /**
    * 表单项渲染使用插槽，当指定插槽时，字段的类型无效
+   * @deprecated
    */
   slot?: string;
   /**
@@ -329,6 +330,8 @@ export interface SchemaFormStore {
   disabled?: boolean;
   editable?: boolean;
   effects?: Effects;
+  transition: boolean;
+  transitionName: string;
   fields?: { [key: string]: FieldDefinition };
   id?: number;
   loading?: boolean;
