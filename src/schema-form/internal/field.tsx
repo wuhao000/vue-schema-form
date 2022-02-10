@@ -16,8 +16,7 @@ import {
   Transition,
   unref,
   VNode,
-  watch,
-  watchEffect
+  watch
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
@@ -101,6 +100,10 @@ export default defineComponent({
         field: field.value
       });
     }, 5) as any, {deep: true});
+    const editable = computed(() => store.editable && field.value.editable);
+    const fieldComponent = computed(() => {
+      return field.value.getComponent(!editable.value, store.platform);
+    });
     const setCurrentValue = value => {
       const component = fieldComponent.value;
       if ((!component || component.mode === 'input') && !isEqual(currentValue.value, value)) {
@@ -120,10 +123,6 @@ export default defineComponent({
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
       renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
-    const editable = computed(() => store.editable && field.value.editable);
-    const fieldComponent = computed(() => {
-      return field.value.getComponent(!editable.value, store.platform);
-    });
     const preProps = computed<{ [key: string]: unknown }>(() => {
       const localProps: { [key: string]: unknown } = {...field.value.props};
       const renderComponent = fieldComponent.value;
@@ -659,8 +658,6 @@ export default defineComponent({
         v-show={visible.value}
       /> : inputComponent;
     };
-
-    watchEffect(() => props.field.props);
     return {
       editable,
       store,

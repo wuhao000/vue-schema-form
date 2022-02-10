@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import {defineComponent, inject, TransitionGroup} from 'vue';
 import {SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
-import {LibComponents, uuid} from '../utils/utils';
+import {LibComponents} from '../utils/utils';
 import './form-block.less';
 
 const FormBlockItem = defineComponent({
@@ -15,13 +15,14 @@ const FormBlockItem = defineComponent({
     addText: String,
     maxItems: Number,
     onMoveUp: Function,
-    onMoveDown: Function
+    onMoveDown: Function,
+    display: Boolean
   },
   emits: ['add', 'remove'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = (index: number) => {
-      if (index !== props.total - 1) {
+      if (index !== props.total - 1 || props.display) {
         return;
       }
       const PlusIcon = LibComponents.icons[store.platform].plus;
@@ -43,13 +44,13 @@ const FormBlockItem = defineComponent({
       const UpIcon = LibComponents.icons[store.platform].up;
       return props.total > 1 ? [
         index !== props.total - 1
-            ? <div class="circle-btn"
-                   onClick={() => {
-                     props.onMoveDown();
-                   }}>
-              <DownIcon/>
-              <span class="op-name"/>
-            </div> : null,
+          ? <div class="circle-btn"
+                 onClick={() => {
+                   props.onMoveDown();
+                 }}>
+            <DownIcon/>
+            <span class="op-name"/>
+          </div> : null,
         index !== 0 ? <div class="circle-btn" onClick={() => {
           props.onMoveUp();
         }}>
@@ -65,6 +66,7 @@ const FormBlockItem = defineComponent({
     };
   },
   render() {
+    const {renderOperations, renderAddBtn} = this;
     const DeleteIcon = LibComponents.icons[this.store.platform].delete;
     return <div class="array-item"
                 key={this.id}>
@@ -73,7 +75,7 @@ const FormBlockItem = defineComponent({
       </div>
       {this.$slots.title()}
       <div class="array-item-wrapper">{this.$slots.default()}</div>
-      <div class="array-item-operator">
+      {this.display ? undefined : <div class="array-item-operator">
         <div class="circle-btn"
              onClick={() => {
                this.$emit('remove');
@@ -81,9 +83,9 @@ const FormBlockItem = defineComponent({
           <DeleteIcon/>
           <span class="op-name">{this.removeText || '删除'}</span>
         </div>
-        {this.renderOperations(this.index)}
-      </div>
-      {this.renderAddBtn(this.index)}
+        {renderOperations(this.index)}
+      </div>}
+      {renderAddBtn(this.index)}
     </div>;
   }
 });
@@ -99,7 +101,8 @@ export default defineComponent({
     },
     class: [String, Object, Array],
     style: [Object, String],
-    removeText: String
+    removeText: String,
+    display: Boolean
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit, slots}) {
@@ -138,36 +141,37 @@ export default defineComponent({
         fields.length ? fields.map((it, index) => {
           const key = it.props.value.__id__;
           return <FormBlockItem
-              id={key}
-              index={index}
-              total={fields.length}
-              maxItems={this.maxItems}
-              key={key}
-              removeText={this.removeText}
-              addText={this.addText}
-              onAdd={() => {
-                this.$emit('add');
-              }}
-              onRemove={() => {
-                this.$emit('remove', index);
-              }}
-              onMoveUp={() => {
-                this.$emit('move-up', index);
-              }}
-              onMoveDown={() => {
-                this.$emit('move-down', index);
-              }}
-              v-slots={{
-                title: () => this.renderTitle(),
-                default: () => it
-              }}
+            id={key}
+            index={index}
+            total={fields.length}
+            maxItems={this.maxItems}
+            key={key}
+            display={this.display}
+            removeText={this.removeText}
+            addText={this.addText}
+            onAdd={() => {
+              this.$emit('add');
+            }}
+            onRemove={() => {
+              this.$emit('remove', index);
+            }}
+            onMoveUp={() => {
+              this.$emit('move-up', index);
+            }}
+            onMoveDown={() => {
+              this.$emit('move-down', index);
+            }}
+            v-slots={{
+              title: () => this.renderTitle(),
+              default: () => it
+            }}
           />;
         }) : <EmptyComponent description=""
                              onClick={this.onAdd}>
-          <div class="array-empty">
+          {!this.display ? <div class="array-empty">
             <PlusIcon/>
             <span>添加</span>
-          </div>
+          </div> : undefined}
         </EmptyComponent>
       }
     </TransitionGroup>;
