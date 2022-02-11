@@ -72,7 +72,7 @@ const FormBlockItem = defineComponent({
     return <div class="array-item"
                 key={this.id}>
       {
-        this.platform === 'desktop' ? <div className="array-index">
+        this.platform === 'desktop' ? <div class="array-index">
           <span>{this.index + 1}</span>
         </div> : undefined
       }
