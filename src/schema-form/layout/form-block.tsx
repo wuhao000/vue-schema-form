@@ -16,7 +16,8 @@ const FormBlockItem = defineComponent({
     maxItems: Number,
     onMoveUp: Function,
     onMoveDown: Function,
-    display: Boolean
+    display: Boolean,
+    platform: String
   },
   emits: ['add', 'remove'],
   setup(props, {emit}) {
@@ -70,12 +71,14 @@ const FormBlockItem = defineComponent({
     const DeleteIcon = LibComponents.icons[this.store.platform].delete;
     return <div class="array-item"
                 key={this.id}>
-      <div class="array-index">
-        <span>{this.index + 1}</span>
-      </div>
+      {
+        this.platform === 'desktop' ? <div className="array-index">
+          <span>{this.index + 1}</span>
+        </div> : undefined
+      }
       {this.$slots.title()}
       <div class="array-item-wrapper">{this.$slots.default()}</div>
-      {this.display ? undefined : <div class="array-item-operator">
+      {this.display || this.platform === 'mobile' ? undefined : <div class="array-item-operator">
         <div class="circle-btn"
              onClick={() => {
                this.$emit('remove');
@@ -102,37 +105,75 @@ export default defineComponent({
     class: [String, Object, Array],
     style: [Object, String],
     removeText: String,
-    display: Boolean
+    display: Boolean,
+    platform: String
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit, slots}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
-    const renderTitle = () => {
+    const renderTitle = (index: number) => {
+      const DeleteIcon = LibComponents.icons[props.platform].delete;
       if (!props.title) {
         return;
       }
       return <div class="schema-form-block-header">
         <div class="schema-form-block-main">
-          <div class="schema-form-block-title">{props.title}</div>
+          <div class="schema-form-block-title">
+            {props.title}
+            {props.platform === 'mobile' ? <span> ({index + 1}) </span> : undefined}
+            {
+              !props.display && props.platform === 'mobile' ? <label class="circle-btn remove-btn pull-right"
+                                                                     onClick={() => {
+                                                                       emit('remove', index);
+                                                                     }}>
+                <DeleteIcon/>
+                <span class="op-name">{props.removeText || '删除'}</span>
+              </label> : undefined
+            }
+          </div>
         </div>
       </div>;
+    };
+    const onAdd = () => {
+      emit('add');
+    };
+    const renderEmpty = () => {
+      const PlusIcon = LibComponents.icons[store.platform].plus;
+      const EmptyComponent = LibComponents.empty[store.platform];
+      if (store.platform === 'mobile') {
+        return <m-list
+          class="form-block form-block-mobile"
+          title={props.title}>
+          {!props.display ? <div class="array-item"><div class="array-item-addition">
+            <div class="form-block-add-btn"
+                 onClick={onAdd}>
+              <PlusIcon/>
+              <span>添加</span>
+            </div>
+          </div></div> : undefined}
+        </m-list>;
+      }
+      return <EmptyComponent description=""
+                             onClick={onAdd}>
+        {!props.display ? <div class="array-empty">
+          <PlusIcon/>
+          <span>添加</span>
+        </div> : undefined}
+      </EmptyComponent>;
     };
     return {
       store,
       renderTitle,
-      onAdd: () => {
-        emit('add');
-      }
+      renderEmpty,
+      onAdd
     };
   },
   render() {
     const {store} = this;
-    const PlusIcon = LibComponents.icons[store.platform].plus;
-    const EmptyComponent = LibComponents.empty[store.platform];
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
-      class: classNames('schema-form-block', this.class),
+      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class),
       style: this.style,
       tag: 'div'
     };
@@ -143,6 +184,7 @@ export default defineComponent({
           return <FormBlockItem
             id={key}
             index={index}
+            platform={this.platform}
             total={fields.length}
             maxItems={this.maxItems}
             key={key}
@@ -162,17 +204,11 @@ export default defineComponent({
               this.$emit('move-down', index);
             }}
             v-slots={{
-              title: () => this.renderTitle(),
+              title: () => this.renderTitle(index),
               default: () => it
             }}
           />;
-        }) : <EmptyComponent description=""
-                             onClick={this.onAdd}>
-          {!this.display ? <div class="array-empty">
-            <PlusIcon/>
-            <span>添加</span>
-          </div> : undefined}
-        </EmptyComponent>
+        }) : this.renderEmpty()
       }
     </TransitionGroup>;
   }

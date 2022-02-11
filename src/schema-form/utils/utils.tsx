@@ -17,7 +17,6 @@ export enum FieldTypes {
   Cascader = 'cascader',
   Transfer = 'transfer',
   Rate = 'rate',
-  Upload = 'upload',
   DateRange = 'daterange',
   Url = 'url',
   String = 'string',

@@ -29,6 +29,9 @@ const CheckboxPopupList = (props, ctx) => <m-checkbox-popup-list {...props}
                                                                  v-slots={ctx.slots}/>;
 const CheckboxList = (props, ctx) => <m-checkbox-list {...props}
                                                       v-slots={ctx.slots}/>;
+
+const ImagePicker = (props, ctx) => <m-image-picker {...props}
+                                                    v-slots={ctx.slots}/>;
 const CalendarItem = (props, ctx) => <m-calendar-item {...props}
                                                       v-slots={ctx.slots}/>;
 
@@ -36,7 +39,9 @@ export const ComponentMap: Record<keyof ILibComponents, any> = {
   alert: null,
   col: null,
   content: null,
-  empty: null,
+  empty: (props, ctx) => <m-empty
+    {...props}
+    v-slots={ctx.slots}/>,
   footer: null,
   header: null,
   layout: null,
@@ -118,6 +123,12 @@ export function registerAntdMobile() {
     types: FieldTypes.Boolean,
     platforms: 'mobile',
     valueProp: 'checked'
+  });
+  registerComponent({
+    component: ImagePicker,
+    types:  FieldTypes.File,
+    mode: 'input',
+    platforms: 'mobile'
   });
   registerComponent({
     component: Button,

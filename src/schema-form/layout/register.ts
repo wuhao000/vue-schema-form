@@ -70,7 +70,7 @@ registerLayout({
 });
 registerLayout({
   component: FormBlock,
-  platforms: DESKTOP,
+  platforms: [DESKTOP, MOBILE],
   types: 'block',
   arrayMode: 'array',
   layoutOptions: {

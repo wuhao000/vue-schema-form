@@ -17,12 +17,10 @@
       line-height: 40px;
       .schema-form-block-title {
         padding-left: 8px;
-        display: inline-block;
+        display: block;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        max-width: 80%;
-        height: 100%;
         color: #333333;
         font-size: 16px;
 
@@ -36,13 +34,33 @@
           top: calc(50% - 16px / 2);
           width: 3px;
         }
+
+        .remove-btn {
+          color: #f5222d;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+
+  &&-desktop {
+    .array-item {
+      padding: 30px 20px 0;
+    }
+  }
+
+  &&-mobile {
+    .array-item {
+      .array-item-addition {
+        text-align: center;
+        margin: 0 0;
       }
     }
   }
 
   .array-item {
     border: 1px solid rgb(238, 238, 238);
-    padding: 30px 20px 0;
     position: relative;
     margin-bottom: 12px;
 
@@ -123,5 +141,5 @@
 }
 
 .flip-list-move {
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
 }
