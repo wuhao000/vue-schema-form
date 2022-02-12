@@ -1,7 +1,8 @@
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
+import {Toast} from 'antd-mobile-vue-next';
 import {computed, defineComponent, ref} from 'vue';
 import {useBaseInput} from '../';
-import {AntUploadObject} from '../../../types';
+import {AntUploadFile, AntUploadObject} from '../../../types';
 import {baseUpdateProps, useBaseUpload} from '../common/base-upload';
 import Button from './components/button';
 import './upload.less';
@@ -54,7 +55,11 @@ export default defineComponent({
         }
         ctx.emit('change', f);
       },
-      onPreview(f) {
+      onPreview(f: AntUploadFile) {
+        if (f.type.indexOf('image/') !== 0) {
+          Toast.info('该文件不支持预览');
+          return;
+        }
         previewUrl.value = f.url;
         if (previewUrl.value) {
           previewVisible.value = true;

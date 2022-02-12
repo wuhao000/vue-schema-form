@@ -1,6 +1,7 @@
 import {DeleteOutlined, DownOutlined, InfoCircleFilled, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib, resolveOptions} from '../';
 import {ILibComponents} from '../../../types';
+import Upload from './upload';
 import NumberInput from './number';
 import {Modal} from 'antd-mobile-vue-next';
 
@@ -125,10 +126,22 @@ export function registerAntdMobile() {
     valueProp: 'checked'
   });
   registerComponent({
-    component: ImagePicker,
-    types:  FieldTypes.File,
-    mode: 'input',
-    platforms: 'mobile'
+    component: Upload,
+    arrayMode: 'both',
+    types: FieldTypes.File,
+    platforms: 'mobile',
+    getProps: definition => {
+      return {multiple: definition.array};
+    }
+  });
+  registerComponent({
+    component: Upload,
+    arrayMode: 'both',
+    types: FieldTypes.Picture,
+    platforms: 'mobile',
+    getProps: definition => {
+      return {multiple: definition.array, mode: 'picture'};
+    }
   });
   registerComponent({
     component: Button,
