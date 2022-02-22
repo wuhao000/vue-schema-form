@@ -34,6 +34,7 @@ export class FieldDefinition<V = any> {
   public onChange?: (fn: () => void) => void;
   public path?: string[];
   public plainPath?: string;
+  public inputRef?: any;
   public pristine?: boolean;
   public processor: ValueProcessor;
   public props?: { [key: string]: any };

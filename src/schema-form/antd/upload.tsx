@@ -41,7 +41,9 @@ export default defineComponent({
         if (!props.multiple && fileList.value.length > 1) {
           fileList.value = [f.file];
         }
-        if (f.file.status && f.file.response?.code === 0) {
+        if (f.file.status === 'removed') {
+          fileList.value = fileList.value.filter(it => it.uid !== f.file.uid);
+        } else if (f.file.status && f.file.response?.code === 0) {
           const file = f.fileList.find(it => it.uid === f.file.uid);
           if (file) {
             const data = f.file.response.data;
@@ -95,53 +97,53 @@ export default defineComponent({
         }
       } else if (this.listType === 'picture') {
         content = (
-            <div class="ant-upload-image-wrapper">
-              {
-                this.fileList.length && this.fileList[0].url ? (
-                        <img src={this.fileList[0].url}
-                             alt=""
-                             style="height: 100%;width: 100%;"/>
-                    )
-                    : (
-                        <div class="ant-upload-plus">
-                          <PlusOutlined/>
-                        </div>
-                    )
-              }
-            </div>
+          <div class="ant-upload-image-wrapper">
+            {
+              this.fileList.length && this.fileList[0].url ? (
+                  <img src={this.fileList[0].url}
+                       alt=""
+                       style="height: 100%;width: 100%;"/>
+                )
+                : (
+                  <div class="ant-upload-plus">
+                    <PlusOutlined/>
+                  </div>
+                )
+            }
+          </div>
         );
       } else if (this.listType === 'text') {
         content = (
-            <a-button
-                disabled={this.$attrs.disabled}
-                size={this.size}>选择文件
-            </a-button>
+          <a-button
+            disabled={this.$attrs.disabled}
+            size={this.size}>选择文件
+          </a-button>
         );
       }
       return (
-          <a-upload {...this.uploadProps}
-                    listType={this.listType}
-                    v-model={[this.fileList, 'fileList']}
-                    onChange={this.onChange}
-                    onPreview={this.onPreview}
-                    size={this.size}>
-            {content}
-            {this.$slots.default?.()}
-            <a-modal visible={this.previewVisible}
-                     footer={() => {
-                       return <Button type="primary"
-                                      onClick={() => {
-                                        this.cancelPreview();
-                                      }}>确定</Button>;
-                     }}
-                     onCancel={() => {
-                       this.cancelPreview();
-                     }}>
-              <img alt="example"
-                   style="width: 100%"
-                   src={this.previewUrl}/>
-            </a-modal>
-          </a-upload>
+        <a-upload {...this.uploadProps}
+                  listType={this.listType}
+                  v-model={[this.fileList, 'fileList']}
+                  onChange={this.onChange}
+                  onPreview={this.onPreview}
+                  size={this.size}>
+          {content}
+          {this.$slots.default?.()}
+          <a-modal visible={this.previewVisible}
+                   footer={() => {
+                     return <Button type="primary"
+                                    onClick={() => {
+                                      this.cancelPreview();
+                                    }}>确定</Button>;
+                   }}
+                   onCancel={() => {
+                     this.cancelPreview();
+                   }}>
+            <img alt="example"
+                 style="width: 100%"
+                 src={this.previewUrl}/>
+          </a-modal>
+        </a-upload>
       );
     }
   }

@@ -1,5 +1,6 @@
 import {computed, PropType, ref, watch} from 'vue';
 import {part} from '../utils/object';
+import {cloneDeep} from 'lodash';
 
 interface SimpleFile {
   name?: string;
@@ -73,7 +74,7 @@ export const useBaseUpload = (props, {emit}) => {
       if (!value || !value.length) {
         fileList.value = [];
       } else if (props.valueType === 'object') {
-        fileList.value = [...props.value];
+        fileList.value = value.map(it => cloneDeep(it));
       } else {
         value.forEach((v, index) => {
           if (props.valueType === 'string') {
@@ -85,7 +86,7 @@ export const useBaseUpload = (props, {emit}) => {
               });
             }
           } else if (!urls.includes(v.url)) {
-            fileList.value.push(v);
+            fileList.value.push(cloneDeep(v));
           }
         });
       }
@@ -100,7 +101,7 @@ export const useBaseUpload = (props, {emit}) => {
         }];
       }
     } else if (!urls.includes(value.url)) {
-      fileList.value = [value];
+      fileList.value = [cloneDeep(value)];
     }
   }, {immediate: true});
   return {
