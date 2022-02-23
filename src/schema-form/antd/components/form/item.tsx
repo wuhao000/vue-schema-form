@@ -33,7 +33,7 @@ export default defineComponent({
       default: false
     },
     help: {
-      type: String as PropType<string>
+      type: [String, Object] as PropType<string | VNode>
     },
     label: {
       type: [String, Object] as PropType<string | VNode>,

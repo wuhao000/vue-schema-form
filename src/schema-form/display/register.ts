@@ -18,7 +18,12 @@ registerDisplay({
   component: TimeDisplayField,
   platforms: [DESKTOP, MOBILE],
   types: [FieldTypes.Datetime, FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.DateRange,
-    FieldTypes.Time, FieldTypes.TimeRange]
+    FieldTypes.Time, FieldTypes.TimeRange],
+  getProps: field => {
+    return {
+      definition: field.definition
+    };
+  }
 });
 registerDisplay({
   component: SwitchDisplayField,
