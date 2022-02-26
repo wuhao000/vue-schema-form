@@ -1,12 +1,4 @@
-.schema-form-block {
-  border-color: rgb(238, 238, 238);
-  border-image: initial;
-  border-style: solid;
-  border-width: 1px;
-  padding: 8px;
-  margin-bottom: 24px;
-  min-width: 400px;
-
+.schema-form-block-wrap {
   .schema-form-block-header {
     border-bottom: 1px solid #E6E7EB;
     .schema-form-block-main {
@@ -42,102 +34,115 @@
       }
     }
   }
+  .schema-form-block {
+    border-color: rgb(238, 238, 238);
+    border-image: initial;
+    border-style: solid;
+    border-width: 1px;
+    padding: 8px;
+    margin-bottom: 24px;
+    min-width: 400px;
 
-
-  &&-desktop {
-    .array-item {
-      padding: 30px 20px 0;
-    }
-  }
-
-  &&-mobile {
-    .array-item {
-      .array-item-addition {
-        text-align: center;
-        margin: 0 0;
+    &&-desktop {
+      .array-item {
+        padding: 30px 20px 0;
+        position: relative;
       }
     }
-  }
 
-  .array-item {
-    border: 1px solid rgb(238, 238, 238);
-    position: relative;
-    margin-bottom: 12px;
+    &&-mobile {
+      .array-item {
+        .array-item-addition {
+          text-align: center;
+          margin: 0 0;
+        }
+      }
+    }
 
-    .array-index {
-      display: block;
-      left: 0;
-      position: absolute;
-      top: 0;
+    .array-item {
+      border: 1px solid rgb(238, 238, 238);
+      position: relative;
+      margin-bottom: 12px;
 
-      &:after {
-        border-bottom: 20px solid transparent;
-        border-left: 20px solid transparent;
-        border-right: 20px solid rgb(136, 136, 136);
-        border-top: 20px solid transparent;
-        content: "";
+      .array-index {
         display: block;
-        left: -20px;
+        left: 0;
         position: absolute;
-        top: -20px;
-        transform: rotate(45deg);
-        z-index: 0;
+        top: 0;
+
+        &:after {
+          border-bottom: 20px solid transparent;
+          border-left: 20px solid transparent;
+          border-right: 20px solid rgb(136, 136, 136);
+          border-top: 20px solid transparent;
+          content: "";
+          display: block;
+          left: -20px;
+          position: absolute;
+          top: -20px;
+          transform: rotate(45deg);
+          z-index: 0;
+        }
+
+        span {
+          color: rgb(255, 255, 255);
+          font-size: 12px;
+          left: 3px;
+          line-height: initial;
+          position: absolute;
+          top: 3px;
+          z-index: 1;
+        }
       }
 
-      span {
-        color: rgb(255, 255, 255);
-        font-size: 12px;
-        left: 3px;
-        line-height: initial;
+      .array-item-operator {
+        border-top: 1px solid rgb(238, 238, 238);
+        display: flex;
+        padding-top: 4px;
         position: absolute;
-        top: 3px;
-        z-index: 1;
+        right: 0;
+        top: 0;
+
+        .circle-btn {
+          -webkit-box-align: center;
+          -webkit-box-pack: center;
+          align-items: center;
+          border-color: initial;
+          border-image: initial;
+          border-style: none;
+          border-width: initial;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          margin-bottom: 20px;
+          margin-right: 10px;
+        }
+      }
+
+      .array-item-addition {
+        background: rgb(251, 251, 251);
+        line-height: normal !important;
+        margin: 0 -20px;
+        padding: 10px 20px;
+
+        & > .form-block-add-btn {
+          cursor: pointer;
+          display: inline-block;
+          height: 20px;
+          line-height: 20px;
+        }
       }
     }
 
-    .array-item-operator {
-      border-top: 1px solid rgb(238, 238, 238);
-      display: flex;
-      padding-top: 20px;
+    .array-empty {
+      margin-bottom: 20px;
 
-      .circle-btn {
-        -webkit-box-align: center;
-        -webkit-box-pack: center;
-        align-items: center;
-        border-color: initial;
-        border-image: initial;
-        border-style: none;
-        border-width: initial;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
+      & > i {
         margin-right: 10px;
       }
     }
-
-    .array-item-addition {
-      background: rgb(251, 251, 251);
-      line-height: normal !important;
-      margin: 0 -20px;
-      padding: 10px 20px;
-
-      & > .form-block-add-btn {
-        cursor: pointer;
-        display: inline-block;
-        height: 20px;
-        line-height: 20px;
-      }
-    }
   }
 
-  .array-empty {
-    margin-bottom: 20px;
-
-    & > i {
-      margin-right: 10px;
-    }
-  }
 }
 
 .flip-list-move {

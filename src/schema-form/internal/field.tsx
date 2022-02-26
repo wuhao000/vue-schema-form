@@ -152,12 +152,20 @@ export default defineComponent({
     const removeArrayItem = (index: number) => {
       (currentValue.value as any[]).splice(index, 1);
     };
-    const addArrayItem = () => {
+    const addArrayItem = (index) => {
       if (isNotNull(currentValue.value)) {
         if (type.value === FieldTypes.Object) {
-          (currentValue.value as any[]).push({});
+          if (isNotNull(index)) {
+            (currentValue.value as any[]).splice(index, 0, {})
+          } else {
+            (currentValue.value as any[]).push({});
+          }
         } else {
-          (currentValue.value as any[]).push(null);
+          if (isNotNull(index)) {
+            (currentValue.value as any[]).splice(index, 0, null)
+          } else {
+            (currentValue.value as any[]).push(null);
+          }
         }
       } else {
         if (type.value === FieldTypes.Object) {
@@ -360,6 +368,7 @@ export default defineComponent({
         class: arrayClass,
         style: arrayStyle,
         disabled: isDisabled.value,
+        title: definition.title,
         subForm: field.value.type === FieldTypes.Object,
         addBtnText: propsTmp.addBtnText,
         key: field.value.plainPath,
@@ -396,8 +405,8 @@ export default defineComponent({
             currentValue.value = newArray;
           }
         },
-        onAdd: () => {
-          addArrayItem();
+        onAdd: (index) => {
+          addArrayItem(index);
         }
       });
       return <ArrayComponent {...arrayProps}
