@@ -20,45 +20,43 @@ const FormBlockItem = defineComponent({
     platform: String
   },
   emits: ['add', 'remove'],
-  setup(props, {emit}) {
+  setup(props, {emit, attrs}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = (index: number) => {
-      if (index !== props.total - 1 || props.display) {
+      if (props.display) {
         return;
       }
       const PlusIcon = LibComponents.icons[store.platform].plus;
       if (props.maxItems && props.maxItems <= props.total) {
         return;
       }
-      return <div class="array-item-addition">
-        <div class="form-block-add-btn"
-             onClick={() => {
-               emit('add');
-             }}>
-          <PlusIcon/>
-          {props.addText || '添加'}
-        </div>
-      </div>;
+      return <div class="circle-btn"
+                  onClick={() => {
+                    emit('add', index);
+                  }}>
+        <PlusIcon/>
+      </div>
+          ;
     };
     const renderOperations = (index: number) => {
       const DownIcon = LibComponents.icons[store.platform].down;
       const UpIcon = LibComponents.icons[store.platform].up;
-      return props.total > 1 ? [
+      return [
         index !== props.total - 1
-          ? <div class="circle-btn"
-                 onClick={() => {
-                   props.onMoveDown();
-                 }}>
-            <DownIcon/>
-            <span class="op-name"/>
-          </div> : null,
+            ? <div class="circle-btn"
+                   onClick={() => {
+                     props.onMoveDown();
+                   }}>
+              <DownIcon/>
+              <span class="op-name"/>
+            </div> : null,
         index !== 0 ? <div class="circle-btn" onClick={() => {
           props.onMoveUp();
         }}>
           <UpIcon/>
           <span class="op-name"/>
         </div> : null
-      ] : null;
+      ];
     };
     return {
       store,
@@ -76,19 +74,17 @@ const FormBlockItem = defineComponent({
           <span>{this.index + 1}</span>
         </div> : undefined
       }
-      {this.$slots.title()}
       <div class="array-item-wrapper">{this.$slots.default()}</div>
       {this.display || this.platform === 'mobile' ? undefined : <div class="array-item-operator">
-        <div class="circle-btn"
+        {renderOperations(this.index)}
+        <div class="circle-btn text-danger"
              onClick={() => {
                this.$emit('remove');
              }}>
           <DeleteIcon/>
-          <span class="op-name">{this.removeText || '删除'}</span>
         </div>
-        {renderOperations(this.index)}
+        {renderAddBtn(this.index)}
       </div>}
-      {renderAddBtn(this.index)}
     </div>;
   }
 });
@@ -109,9 +105,9 @@ export default defineComponent({
     platform: String
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
-  setup(props, {emit, slots}) {
+  setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
-    const renderTitle = (index: number) => {
+    const renderTitle = (index?: number) => {
       const DeleteIcon = LibComponents.icons[props.platform].delete;
       if (!props.title) {
         return;
@@ -134,23 +130,27 @@ export default defineComponent({
         </div>
       </div>;
     };
-    const onAdd = () => {
-      emit('add');
+    const onAdd = (index?: number) => {
+      emit('add', index);
     };
     const renderEmpty = () => {
       const PlusIcon = LibComponents.icons[store.platform].plus;
       const EmptyComponent = LibComponents.empty[store.platform];
       if (store.platform === 'mobile') {
         return <m-list
-          class="form-block form-block-mobile"
-          title={props.title}>
-          {!props.display ? <div class="array-item"><div class="array-item-addition">
-            <div class="form-block-add-btn"
-                 onClick={onAdd}>
-              <PlusIcon/>
-              <span>添加</span>
+            class="form-block form-block-mobile"
+            title={props.title}>
+          {!props.display ? <div class="array-item">
+            <div class="array-item-addition">
+              <div class="form-block-add-btn"
+                   onClick={() => {
+                     onAdd();
+                   }}>
+                <PlusIcon/>
+                <span>添加</span>
+              </div>
             </div>
-          </div></div> : undefined}
+          </div> : undefined}
         </m-list>;
       }
       return <EmptyComponent description=""
@@ -169,7 +169,7 @@ export default defineComponent({
     };
   },
   render() {
-    const {store} = this;
+    const {renderTitle} = this;
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
@@ -177,39 +177,42 @@ export default defineComponent({
       style: this.style,
       tag: 'div'
     };
-    return <TransitionGroup {...props}>
-      {
-        fields.length ? fields.map((it, index) => {
-          const key = it.props.value.__id__;
-          return <FormBlockItem
-            id={key}
-            index={index}
-            platform={this.platform}
-            total={fields.length}
-            maxItems={this.maxItems}
-            key={key}
-            display={this.display}
-            removeText={this.removeText}
-            addText={this.addText}
-            onAdd={() => {
-              this.$emit('add');
-            }}
-            onRemove={() => {
-              this.$emit('remove', index);
-            }}
-            onMoveUp={() => {
-              this.$emit('move-up', index);
-            }}
-            onMoveDown={() => {
-              this.$emit('move-down', index);
-            }}
-            v-slots={{
-              title: () => this.renderTitle(index),
-              default: () => it
-            }}
-          />;
-        }) : this.renderEmpty()
-      }
-    </TransitionGroup>;
+    return <div class="schema-form-block-wrap">
+      {renderTitle()}
+      <TransitionGroup {...props}>
+        {
+          fields.length ? fields.map((it, index) => {
+            const key = it.props.value.__id__;
+            return <FormBlockItem
+                id={key}
+                index={index}
+                platform={this.platform}
+                total={fields.length}
+                maxItems={this.maxItems}
+                key={key}
+                display={this.display}
+                removeText={this.removeText}
+                addText={this.addText}
+                onAdd={(index) => {
+                  this.$emit('add', index + 1);
+                }}
+                onRemove={() => {
+                  this.$emit('remove', index);
+                }}
+                onMoveUp={() => {
+                  this.$emit('move-up', index);
+                }}
+                onMoveDown={() => {
+                  this.$emit('move-down', index);
+                }}
+                v-slots={{
+                  title: () => this.renderTitle(index),
+                  default: () => it
+                }}
+            />;
+          }) : this.renderEmpty()
+        }
+      </TransitionGroup>
+    </div>;
   }
 });
