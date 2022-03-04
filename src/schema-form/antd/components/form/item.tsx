@@ -215,6 +215,9 @@ export default defineComponent({
     if (props.name) {
       form.value.addField(instance);
     }
+    const labelAlign = computed(() => {
+      return attrs.labelAlign || props.labelPosition || form.value?.labelPosition;
+    });
     const formItem: ComputedRef<FormItemProvider> = computed(() => ({
       ...props,
       validate,
@@ -240,6 +243,7 @@ export default defineComponent({
       focus,
       getFilteredRule,
       getRules,
+      labelAlign,
       onFieldBlur,
       onFieldChange,
       validate
@@ -261,6 +265,7 @@ export default defineComponent({
     } else {
       props.help = undefined;
     }
+    props.labelAlign = this.labelAlign;
     props.labelCol = this.labelCol;
     props.validateStatus = this.validateStatus || this.currentValidateStatus;
     props.wrapperCol = this.wrapperCol;

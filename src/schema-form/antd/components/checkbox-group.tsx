@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {computed, defineComponent, PropType, ref} from 'vue';
+import {computed, defineComponent, PropType} from 'vue';
 import {useOptions} from './utils';
 
 export default defineComponent({
@@ -24,13 +24,13 @@ export default defineComponent({
         return false;
       }
       return !localOptions.value.filter(it => !it.disabled)
-          .some(it => !props.value.includes(it.value));
+        .some(it => !props.value.includes(it.value));
     });
     const onSelectAllChange = (v) => {
       if (v) {
         emit('update:value', localOptions.value
-            .filter(it => !it.disabled)
-            .map(it => it.value));
+          .filter(it => !it.disabled)
+          .map(it => it.value));
       } else {
         emit('update:value', []);
       }
@@ -52,24 +52,24 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = _.chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <a-row>
-            {
-              c.map(o => (
-                  <a-col span={this.span}>
-                    <a-checkbox {...o}>{o.label}</a-checkbox>
-                  </a-col>
-              ))
-            }
-          </a-row>
+        <a-row>
+          {
+            c.map(o => (
+              <a-col span={this.span}>
+                <a-checkbox {...o}>{o.label}</a-checkbox>
+              </a-col>
+            ))
+          }
+        </a-row>
       )) as any;
     } else {
       props.options = this.localOptions;
     }
-    return <>
+    return <div>
       {this.showSelectAll ? <div>
         <a-checkbox
-            onUpdate:checked={this.onSelectAllChange}
-            checked={this.allSelected}>全选
+          onUpdate:checked={this.onSelectAllChange}
+          checked={this.allSelected}>全选
         </a-checkbox>
       </div> : null}
       <a-checkbox-group {...props}
@@ -78,6 +78,6 @@ export default defineComponent({
                           this.$emit('update:value', v);
                         }}
                         v-slots={slots}/>
-    </>;
+    </div>;
   }
 });
