@@ -17,6 +17,13 @@ export const createCascader = () => {
 export const createInputNumber = () => {
   return (props, ctx) => {
     const {size} = useBaseInput(props, ctx);
+    if (props.extra) {
+      return <span class="ant-input-number-fix-wrapper">
+        <a-input-number {...{size: size.value, ...props, ...ctx.attrs}}
+                        v-slots={ctx.slots}/>
+        <span>{props.extra}</span>
+      </span>;
+    }
     return <a-input-number {...{size: size.value, ...props, ...ctx.attrs}}
                            v-slots={ctx.slots}/>;
   };
@@ -51,19 +58,19 @@ export const createLayout = () => {
 export const createCard = () => {
   return (props, ctx) => {
     return <a-card {...props}
-                     v-slots={ctx.slots}/>;
+                   v-slots={ctx.slots}/>;
   };
 };
 export const createInput = () => {
   return (props, ctx) => {
     return <a-input {...props}
-                   v-slots={ctx.slots}/>;
+                    v-slots={ctx.slots}/>;
   };
 };
 export const createEmpty = () => {
   return (props, ctx) => {
     return <a-empty {...props}
-                   v-slots={ctx.slots}/>;
+                    v-slots={ctx.slots}/>;
   };
 };
 export const createLayoutFooter = () => {
@@ -75,7 +82,7 @@ export const createLayoutFooter = () => {
 export const createPopover = () => {
   return (props, ctx) => {
     return <a-popover {...props}
-                           v-slots={ctx.slots}/>;
+                      v-slots={ctx.slots}/>;
   };
 };
 export const createLayoutSider = () => {
