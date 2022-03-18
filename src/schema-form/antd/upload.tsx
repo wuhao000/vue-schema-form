@@ -1,9 +1,11 @@
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
+import {message} from 'ant-design-vue';
 import {Toast} from 'antd-mobile-vue-next';
 import {computed, defineComponent, ref} from 'vue';
 import {useBaseInput} from '../';
 import {AntUploadFile, AntUploadObject} from '../../../types';
 import {baseUpdateProps, useBaseUpload} from '../common/base-upload';
+import {isNotNull} from '../utils/utils';
 import Button from './components/button';
 import './upload.less';
 
@@ -43,15 +45,22 @@ export default defineComponent({
         }
         if (f.file.status === 'removed') {
           fileList.value = fileList.value.filter(it => it.uid !== f.file.uid);
-        } else if (f.file.status && f.file.response?.code === 0) {
+        } else if (f.file.status && isNotNull(f.file.response?.code)) {
+          const code = f.file.response.code;
           const file = f.fileList.find(it => it.uid === f.file.uid);
           if (file) {
-            const data = f.file.response.data;
-            file.url = data.url;
-            if (props.objectFields.length) {
-              props.objectFields.forEach(f => {
-                file[f] = data[f];
-              });
+            if (code === 0) {
+              const data = f.file.response.data;
+              file.url = data.url;
+              if (props.objectFields.length) {
+                props.objectFields.forEach(f => {
+                  file[f] = data[f];
+                });
+              }
+            } else {
+              file.status = 'error';
+              file.error = f.file.response.msg;
+              message.error(f.file.response.msg);
             }
           }
         }
@@ -89,61 +98,61 @@ export default defineComponent({
       if (this.listType === 'picture-card') {
         if (this.multiple || this.fileList.length === 0) {
           content = (
-            <div class="ant-upload-select-btn">
-              <PlusOutlined/>
-              <div class="ant-upload-text">选择文件</div>
-            </div>
+              <div class="ant-upload-select-btn">
+                <PlusOutlined/>
+                <div class="ant-upload-text">选择文件</div>
+              </div>
           );
         }
       } else if (this.listType === 'picture') {
         content = (
-          <div class="ant-upload-image-wrapper">
-            {
-              this.fileList.length && this.fileList[0].url ? (
-                  <img src={this.fileList[0].url}
-                       alt=""
-                       style="height: 100%;width: 100%;"/>
-                )
-                : (
-                  <div class="ant-upload-plus">
-                    <PlusOutlined/>
-                  </div>
-                )
-            }
-          </div>
+            <div class="ant-upload-image-wrapper">
+              {
+                this.fileList.length && this.fileList[0].url ? (
+                        <img src={this.fileList[0].url}
+                             alt=""
+                             style="height: 100%;width: 100%;"/>
+                    )
+                    : (
+                        <div class="ant-upload-plus">
+                          <PlusOutlined/>
+                        </div>
+                    )
+              }
+            </div>
         );
       } else if (this.listType === 'text') {
         content = (
-          <a-button
-            disabled={this.$attrs.disabled}
-            size={this.size}>选择文件
-          </a-button>
+            <a-button
+                disabled={this.$attrs.disabled}
+                size={this.size}>选择文件
+            </a-button>
         );
       }
       return (
-        <a-upload {...this.uploadProps}
-                  listType={this.listType}
-                  v-model={[this.fileList, 'fileList']}
-                  onChange={this.onChange}
-                  onPreview={this.onPreview}
-                  size={this.size}>
-          {content}
-          {this.$slots.default?.()}
-          <a-modal visible={this.previewVisible}
-                   footer={() => {
-                     return <Button type="primary"
-                                    onClick={() => {
-                                      this.cancelPreview();
-                                    }}>确定</Button>;
-                   }}
-                   onCancel={() => {
-                     this.cancelPreview();
-                   }}>
-            <img alt="example"
-                 style="width: 100%"
-                 src={this.previewUrl}/>
-          </a-modal>
-        </a-upload>
+          <a-upload {...this.uploadProps}
+                    listType={this.listType}
+                    v-model={[this.fileList, 'fileList']}
+                    onChange={this.onChange}
+                    onPreview={this.onPreview}
+                    size={this.size}>
+            {content}
+            {this.$slots.default?.()}
+            <a-modal visible={this.previewVisible}
+                     footer={() => {
+                       return <Button type="primary"
+                                      onClick={() => {
+                                        this.cancelPreview();
+                                      }}>确定</Button>;
+                     }}
+                     onCancel={() => {
+                       this.cancelPreview();
+                     }}>
+              <img alt="example"
+                   style="width: 100%"
+                   src={this.previewUrl}/>
+            </a-modal>
+          </a-upload>
       );
     }
   }

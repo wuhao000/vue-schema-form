@@ -1,4 +1,4 @@
-const isType = <T>(type: string) => (obj: unknown): obj is T =>
+const isType = <T,>(type: string) => (obj: unknown): obj is T =>
     obj != null && Object.prototype.toString.call(obj) === `[object ${type}]`;
 // FIXME: isFn, isArr is incorrect
 export const isFn = isType<(...args: any[]) => any>('Function');

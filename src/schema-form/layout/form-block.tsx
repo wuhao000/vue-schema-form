@@ -182,7 +182,7 @@ export default defineComponent({
       <TransitionGroup {...props}>
         {
           fields.length ? fields.map((it, index) => {
-            const key = it.props.value.__id__;
+            const key = it.props.value?.__id__;
             return <FormBlockItem
                 id={key}
                 index={index}
