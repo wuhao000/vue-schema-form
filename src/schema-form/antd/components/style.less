@@ -7,3 +7,31 @@
     }
   }
 }
+
+@ant-prefix: ant;
+@grid-columns: 24;
+
+.loop-grid-columns(@index, @class) when (@index > 0) {
+  &.@{class}-span-@{index} {
+    & > .@{class}-item {
+      display: block;
+      flex: 0 0 percentage((@index / @grid-columns));
+      max-width: percentage((@index / @grid-columns));
+    }
+  }
+  .loop-grid-columns((@index - 1), @class);
+}
+
+
+.make-grid(@class: ~'') {
+  .loop-grid-columns(@grid-columns, @class);
+}
+
+
+.ant-checkbox-group-span {
+  display: flex;
+  flex-flow: row wrap;
+
+  .make-grid(ant-checkbox-group);
+
+}

@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import {computed, defineComponent, PropType} from 'vue';
 import {useOptions} from './utils';
+import classNames from 'classnames';
 
 export default defineComponent({
   name: 'DCheckboxGroup',
@@ -42,29 +42,15 @@ export default defineComponent({
     };
   },
   render() {
+    const classes = classNames(this.$attrs.class, {
+      'ant-checkbox-group-span': this.span > 0,
+      ['ant-checkbox-group-span-' + this.span]: this.span > 0
+    });
     const props = {
-      ...this.$attrs
+      ...this.$attrs,
+      options: this.localOptions,
+      class: classes
     };
-    const slots = {
-      ...this.$slots
-    };
-    if (this.localOptions && this.span) {
-      const cols = Math.abs(24 / (this.span as number));
-      const chunks = _.chunk(this.localOptions, cols);
-      slots.default = () => chunks.map(c => (
-        <a-row>
-          {
-            c.map(o => (
-              <a-col span={this.span}>
-                <a-checkbox {...o}>{o.label}</a-checkbox>
-              </a-col>
-            ))
-          }
-        </a-row>
-      )) as any;
-    } else {
-      props.options = this.localOptions;
-    }
     return <div>
       {this.showSelectAll ? <div>
         <a-checkbox
@@ -77,7 +63,7 @@ export default defineComponent({
                         onUpdate:value={(v) => {
                           this.$emit('update:value', v);
                         }}
-                        v-slots={slots}/>
+                        v-slots={this.$slots}/>
     </div>;
   }
 });
