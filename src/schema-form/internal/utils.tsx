@@ -127,12 +127,14 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
     switch (condition.operator) {
       case 'in':
         return compareValue.includes(currentValue);
-      case 'notIn':
+      case 'nin':
         return !compareValue.includes(currentValue);
     }
     return false;
   } else {
     switch (condition.operator) {
+      case '!=':
+        return compareValue === currentValue
       case '=':
         return compareValue.toString() === currentValue.toString();
       case '<':
@@ -145,7 +147,7 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
         return parseFloat(currentValue) <= parseFloat(compareValue);
       case 'in':
         return compareValue.includes(currentValue);
-      case 'notIn':
+      case 'nin':
         return !compareValue.includes(currentValue);
     }
   }

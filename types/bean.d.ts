@@ -320,7 +320,7 @@ interface SchemaFormFieldProps {
 
 
 export interface ShowFieldCondition {
-  operator?: string;
+  operator?: '=' | '>' | '<' | '>=' | '<=' | 'in' | 'nin' | '!=';
   property?: string;
   value?: any;
 }

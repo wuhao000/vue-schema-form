@@ -424,6 +424,17 @@ export default [{
   ]
 },
 {
+  path: '/demo/texing/luojikongzhi',
+  component: () => import('../generated/demo/texing/luojikongzhi/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '逻辑控制'
+  },
+  children: [
+    
+  ]
+},
+{
   path: '/demo/texing/qiyongjinyong',
   component: () => import('../generated/demo/texing/qiyongjinyong/index.vue'),
   meta: {

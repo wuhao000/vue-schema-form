@@ -1,4 +1,7 @@
 <template>
+  <div>
+    {{value}}
+  </div>
   <v-schema-form
       v-model:value="value"
       :context="ctx"/>
@@ -10,17 +13,34 @@
 
   registerAntd();
 
-  const value = ref({});
+  const value = ref({
+    title: ''
+  });
   const ctx = defineSchemaForm({
     fields: {
       title: {
         type: 'string',
         title: '标题'
       },
+      'b.aj': {
+        type: 'string',
+        title: '子标题'
+      },
       showValue: {
-        type: {
-          component: () => <ShowValue value={value.value}/>,
-          mode: 'layout'
+        type: 'string',
+        title: '小标题',
+        depends: () => {
+          return value.value.title === 'aaa';
+        }
+      },
+      showValue2: {
+        type: 'string',
+        title: '小标题2',
+        depends: value => {
+          if (value.title === 'a') {
+            return value.b.aj === 'bbb'
+          }
+          return false;
         }
       },
       $grid: {
@@ -44,8 +64,5 @@
         }
       }
     }
-  });
-  ctx('title').onFieldCreateOrChange((a, b, c) => {
-    console.log(a, b, c);
   });
 </script>

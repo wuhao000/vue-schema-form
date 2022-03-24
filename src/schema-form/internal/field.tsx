@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {
   computed, defineComponent, inject, isProxy, isRef, isVNode, onBeforeUnmount, PropType, ref, toRaw, Transition, unref,
-  VNode, watch
+  VNode, watch, watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
@@ -17,7 +17,7 @@ import {
   addRule, DESKTOP, FieldTypes, getColComponent, getDefaultValue, isNotNull, isNull, LibComponents, MOBILE, swap, uuid
 } from '../utils/utils';
 import {
-  FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
+  calcShowState, FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
   SchemaFormEvents
 } from './utils';
 
@@ -156,13 +156,13 @@ export default defineComponent({
       if (isNotNull(currentValue.value)) {
         if (type.value === FieldTypes.Object) {
           if (isNotNull(index)) {
-            (currentValue.value as any[]).splice(index, 0, {})
+            (currentValue.value as any[]).splice(index, 0, {});
           } else {
             (currentValue.value as any[]).push({});
           }
         } else {
           if (isNotNull(index)) {
-            (currentValue.value as any[]).splice(index, 0, null)
+            (currentValue.value as any[]).splice(index, 0, null);
           } else {
             (currentValue.value as any[]).push(null);
           }
@@ -296,6 +296,9 @@ export default defineComponent({
         setCurrentValue(val);
       }
     };
+    watchEffect(() => {
+      field.value.visible = calcShowState(props.formValue, props.definition);
+    });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
       const definition = props.definition as SchemaFormField;
