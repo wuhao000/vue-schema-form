@@ -14,7 +14,18 @@ import {isEqual} from '../uform/utils';
 import {flat} from '../utils/array';
 import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from '../utils/key';
 import {
-  addRule, DESKTOP, FieldTypes, getColComponent, getDefaultValue, isNotNull, isNull, LibComponents, MOBILE, swap, uuid
+  addRule,
+  DESKTOP,
+  FieldTypes,
+  getColComponent,
+  getDefaultValue,
+  isNotNull,
+  isNull,
+  LibComponents,
+  MOBILE,
+  resolveOptions, resolveTitle,
+  swap,
+  uuid
 } from '../utils/utils';
 import {
   calcShowState, FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
@@ -194,8 +205,8 @@ export default defineComponent({
       const component = getFormItemComponent(platform);
       const formItemProps: any = {
         required: editable.value ? field.value.required : null,
-        title: definition.title,
-        label: definition.title
+        title: field.value.title,
+        label: field.value.title
       };
       if (platform === DESKTOP) {
         if (definition.tip) {
@@ -203,7 +214,7 @@ export default defineComponent({
           const LibComponentsPopover: any = LibComponents.popover[DESKTOP];
           const slots = {
             default: () => <span>
-              {definition.title}
+              {field.value.title}
               <InfoIcon style={{marginLeft: '5px', color: '#247dc5'}}/>
             </span>
           };
@@ -212,7 +223,7 @@ export default defineComponent({
               v-slots={slots}
               trigger="hover"/>;
         } else {
-          formItemProps.label = definition.title;
+          formItemProps.label = field.value.title;
         }
       }
       if (definition.wrapperProps) {
@@ -298,6 +309,8 @@ export default defineComponent({
     };
     watchEffect(() => {
       field.value.visible = calcShowState(props.formValue, props.definition);
+      field.value.options = resolveOptions(field.value, props.formValue);
+      field.value.title = resolveTitle(props.definition, props.formValue);
     });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
@@ -371,7 +384,7 @@ export default defineComponent({
         class: arrayClass,
         style: arrayStyle,
         disabled: isDisabled.value,
-        title: definition.title,
+        title: field.value.title,
         subForm: field.value.type === FieldTypes.Object,
         addBtnText: propsTmp.addBtnText,
         key: field.value.plainPath,
@@ -424,7 +437,7 @@ export default defineComponent({
     });
     const getSubFields = () => {
       const definition = props.definition as SchemaFormField;
-      const noWrap = isNull(definition.title);
+      const noWrap = isNull(field.value.title);
       return relatedSubFields.value.map((localField, index) =>
           renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
     };
@@ -574,7 +587,7 @@ export default defineComponent({
       });
       delete formItemProps.className;
       // 是否使用form-item组件包裹
-      const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) ?? isNull(definition.title);
+      const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) ?? isNull(field.value.title);
       // 是否使用form-item组件的title
       const noTitle = !!(definition?.wrapperProps?.noTitle ?? inputFieldDef.layoutOptions?.noTitle);
       const label = [];

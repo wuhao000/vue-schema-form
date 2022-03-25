@@ -19,7 +19,6 @@ export interface IFieldState {
   loading: boolean;
   name: string;
   path: string[];
-  pristine: boolean;
   props: ISchema;
   required: boolean;
   rules: IRuleDescription[];

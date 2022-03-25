@@ -25,7 +25,6 @@ export interface IFormState<V = any> {
   errors: IFieldError[]; // 错误提示集合
   initialValues: V; // 初始化数据
   invalid: boolean; // 是否不合法
-  pristine: boolean; // 是否是原始态
   valid: boolean; // 是否合法
   values: V; // 表单数据
 }

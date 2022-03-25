@@ -1,5 +1,5 @@
 import {DeleteOutlined, DownOutlined, InfoCircleFilled, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
-import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib, resolveOptions} from '../';
+import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib} from '../';
 import {ILibComponents} from '../../../types';
 import Upload from './upload';
 import NumberInput from './number';
@@ -154,17 +154,17 @@ export function registerAntdMobile() {
     wrap: false
   });
   registerMobile(CheckboxList, FieldTypes.ExpandSelect, 'array', field => {
-    return {options: resolveOptions(field), multiple: true};
+    return {options: field.options, multiple: true};
   });
   registerMobile(RadioList, FieldTypes.ExpandSelect, 'single', field => {
-    return {options: resolveOptions(field)};
+    return {options: field.options};
   });
   registerMobile(PickerItem, FieldTypes.Transfer, 'single');
   registerMobile(CheckboxPopupList, FieldTypes.Select, 'array', field => {
-    return {options: resolveOptions(field), multiple: true};
+    return {options: field.options, multiple: true};
   });
   registerMobile(RadioPopupList, FieldTypes.Select, 'single', field => {
-    return {options: resolveOptions(field)};
+    return {options: field.options};
   });
   register(Slider, 'mobile', FieldTypes.Range, 'single', () => {
     return {range: true};

@@ -1,5 +1,12 @@
-import {ILibComponents, Platform, SchemaFormComponent, SchemaFormComponentOptions} from '../../../types';
+import {
+  ILibComponents,
+  Platform,
+  SchemaFormComponent,
+  SchemaFormComponentOptions,
+  SchemaFormField
+} from '../../../types';
 import {FieldDefinition} from '../internal/utils';
+import {isVNode} from 'vue';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -140,13 +147,24 @@ export const LibComponents: ILibComponents = {
   }
 };
 
-export const resolveOptions = (field: FieldDefinition) => {
-  if (field.enum) {
+export const resolveTitle = (field: SchemaFormField, formValue: any) => {
+  if (typeof field.title === 'string' || isVNode(field.title)) {
+    return field.title;
+  } else if (typeof field.title === 'function') {
+    return field.title(formValue);
+  } else {
+    return field.title;
+  }
+}
+
+export const resolveOptions = (field: FieldDefinition, formValue: any) => {
+  const fieldEnum = field.enum;
+  if (fieldEnum) {
     if (field.props.options) {
       return field.props.options;
     }
-    if (typeof field.enum === 'function') {
-      const result = field.enum();
+    if (typeof fieldEnum === 'function') {
+      const result = fieldEnum(formValue);
       if (Array.isArray(result)) {
         return result;
       } else if (result.then) {
@@ -155,13 +173,13 @@ export const resolveOptions = (field: FieldDefinition) => {
         });
         return [];
       }
-    } else if (typeof field.enum === 'object' && field.enum['then']) {
-      field.enum['then'](data => {
+    } else if (typeof fieldEnum === 'object' && fieldEnum['then']) {
+      fieldEnum['then'](data => {
         field.props.options = data;
       });
       return [];
     }
-    return field.enum;
+    return fieldEnum;
   }
   if (field.props?.options) {
     if (typeof field.props.options === 'function') {
@@ -241,7 +259,7 @@ export function addRule(rules: any, field: FieldDefinition, rule: any) {
   } else if (type === FieldTypes.Date || type === FieldTypes.Datetime || type === FieldTypes.Year || type === FieldTypes.Month) {
     validateType = 'date';
   } else if (type === FieldTypes.Select || type === FieldTypes.ExpandSelect) {
-    const options = resolveOptions(field);
+    const options = field.options;
     if (options.length) {
       validateType = typeof getOptionProperty(options[0], field.props && field.props.valueProperty || 'value');
     }

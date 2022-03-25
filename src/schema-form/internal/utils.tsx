@@ -39,16 +39,19 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
 }
 
 export function calcShowState(currentValue, definition: SchemaFormField) {
-  if (definition.depends) {
-    if (typeof definition.depends === 'function') {
-      return definition.depends(currentValue);
-    } else {
-      return !definition.depends
+  if (definition.visible) {
+    if (typeof definition.visible === 'function') {
+      return definition.visible(currentValue);
+    } else if (Array.isArray(definition.visible)) {
+      return !definition.visible
         .map(condition => matchCondition(currentValue, condition))
         .some(it => !it);
+    } else {
+      return true;
     }
   } else {
-    return definition.visible || definition.visible === null || definition.visible === undefined;
+    // false null undefined
+    return isNull(definition.visible);
   }
 }
 
@@ -57,7 +60,7 @@ export function getRealFields(definition: SchemaFormField) {
   Object.keys(definition).forEach(key => {
     if (key.startsWith('$') && definition[key]) {
       const field = definition[key];
-      field.property = key.substr(1);
+      field.property = key.substring(1);
       fields.push(field);
     }
   });
@@ -134,7 +137,7 @@ export function matchCondition(value: any, condition: ShowFieldCondition): boole
   } else {
     switch (condition.operator) {
       case '!=':
-        return compareValue === currentValue
+        return compareValue === currentValue;
       case '=':
         return compareValue.toString() === currentValue.toString();
       case '<':
@@ -254,7 +257,8 @@ export class FieldDefinition<V = any> {
   public id: string = null;
   public definition: SchemaFormField = null;
   public disabled = false;
-  public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]> = null;
+  public enum: any[] | ((formValue: any) => any[] | Promise<any[]>) | Promise<any[]> = null;
+  public options: any[] = [];
   public title: any = null;
   public array = false;
   public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
@@ -279,7 +283,6 @@ export class FieldDefinition<V = any> {
   public onChange?: (fn: () => void) => void = null;
   public path?: string[] = null;
   public plainPath?: string = null;
-  public pristine?: boolean = null;
   public props?: { [key: string]: any } = null;
   public required = false;
   public min?: number;
@@ -313,7 +316,6 @@ export class FieldDefinition<V = any> {
     this.processor = definition.processor;
     this.slot = definition.slot;
     this.store = store;
-    this.title = definition.title;
     this.type = definition.type;
     this.xType = definition.xType;
     this.events = definition.events;

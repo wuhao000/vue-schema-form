@@ -10,6 +10,7 @@ export class FieldDefinition<V = any> {
   public array: boolean;
   public default?: V;
   public definition: SchemaFormField;
+  public options: any[];
   public description?: string | VNode;
   public destructPath?: {
     path: string,
@@ -19,7 +20,7 @@ export class FieldDefinition<V = any> {
   public display: boolean;
   public displayValue?: any;
   public editable: boolean;
-  public enum: any[] | (() => any[] | Promise<any[]>) | Promise<any[]>;
+  public enum: any[] | ((formValue: any) => any[] | Promise<any[]>) | Promise<any[]>;
   public errors?: string[];
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields;
@@ -106,10 +107,6 @@ interface BaseSchemaFormField {
    */
   default?: any;
   /**
-   * 依赖显示的条件，支持条件选项或函数，当函数返回false时不显示该字段
-   */
-  depends?: ShowFieldCondition[] | ((value: any) => boolean);
-  /**
    * 描述信息
    */
   description?: string | VNode;
@@ -121,7 +118,7 @@ interface BaseSchemaFormField {
   /**
    * 枚举选项
    */
-  enum?: any[] | (() => any[] | Promise<any[]>) | Promise<any[]>;
+  enum?: any[] | ((value: any) => any[] | Promise<any[]>) | Promise<any[]>;
   events?: { [key: string]: (...args: any[]) => any };
   /**
    * 校验的格式，支持：
@@ -191,11 +188,11 @@ interface BaseSchemaFormField {
   /**
    * 表单项名称
    */
-  title?: string | VNode;
+  title?: string | VNode | ((value: any) => string | VNode);
   /**
    * 是否可见
    */
-  visible?: boolean;
+  visible?: boolean | ShowFieldCondition[] | ((value: any) => boolean);
   /**
    * 表单项的属性
    */

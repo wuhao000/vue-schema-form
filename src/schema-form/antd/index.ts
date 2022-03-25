@@ -7,8 +7,7 @@ import {
   registerComponent,
   registerDesktop,
   registerDesktopLib,
-  registerDisplay,
-  resolveOptions
+  registerDisplay
 } from '../';
 import {FieldDefinition, ILibComponents} from '../../../types';
 import DUrl from '../common/url';
@@ -31,10 +30,19 @@ import AntdUpload from './upload';
 import {
   createCard,
   createCascader,
-  createCheckbox, createCol, createComponentProxy, createEmpty, createInput, createInputNumber, createLayout,
+  createCheckbox,
+  createCol,
+  createComponentProxy,
+  createEmpty,
+  createInput,
+  createInputNumber,
+  createLayout,
   createLayoutContent,
   createLayoutFooter,
-  createLayoutHeader, createLayoutSider, createPassword, createPopover,
+  createLayoutHeader,
+  createLayoutSider,
+  createPassword,
+  createPopover,
   createRate,
   createRow,
   createSlider,
@@ -169,8 +177,8 @@ export function registerAntd() {
     }
   });
   registerDesktop(createComponentProxy(TimePicker),
-      [FieldTypes.Time],
-      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+    [FieldTypes.Time],
+    'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerComponent({
     component: 'a-auto-complete',
     platforms: 'desktop',
@@ -194,14 +202,14 @@ export function registerAntd() {
   registerDesktop(createComponentProxy(InputField), [FieldTypes.String], 'single');
   registerDesktop(createTextarea(), [FieldTypes.Text], 'single');
   registerDesktop(createComponentProxy(DatePicker),
-      [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
-      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+    [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
+    'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerDesktop(createComponentProxy(TimePicker), [FieldTypes.Time], 'single',
-      (definition) => ({mode: (definition.type as string).toLowerCase()}));
+    (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerDesktop(createInputNumber(), [FieldTypes.Double, FieldTypes.Integer, FieldTypes.Number], 'single', field => {
     const props: any = {};
     if (isNotNull(field.min)) {
-      props.min = field.min
+      props.min = field.min;
     }
     if (isNotNull(field.max)) {
       props.max = field.max;
@@ -230,7 +238,7 @@ export function registerAntd() {
     return {
       dropdownMatchSelectWidth: false,
       mode: field.array ? 'multiple' : field.props?.mode,
-      options: resolveOptions(field as any)
+      options: field.options
     };
   });
   registerComponent({
@@ -245,20 +253,20 @@ export function registerAntd() {
   });
 
   registerDesktop(createCascader(), FieldTypes.Cascader, 'single', field => {
-    return {options: resolveOptions(field)};
+    return {options: field.options};
   });
   registerDesktop(createComponentProxy(CheckboxGroup), FieldTypes.ExpandSelect, 'array', field => {
-    return {options: resolveOptions(field)};
+    return {options: field.options};
   });
   registerDesktop(createComponentProxy(RadioGroup), FieldTypes.ExpandSelect, 'single', field => {
-    return {options: resolveOptions(field)};
+    return {options: field.options};
   });
   registerDesktop(createRate(), FieldTypes.Rate);
   registerDesktop(createComponentProxy(Transfer), FieldTypes.Transfer, 'single', transferPropsTransform);
   register(createSlider(), 'desktop',
-      FieldTypes.Range, 'single', () => {
-    return {range: true};
-  });
+    FieldTypes.Range, 'single', () => {
+      return {range: true};
+    });
 }
 
 export default (app: App) => {

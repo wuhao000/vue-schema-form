@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{value}}
+    {{ value }}
   </div>
   <v-schema-form
       v-model:value="value"
@@ -9,7 +9,6 @@
 <script lang="tsx" setup>
   import {ref} from 'vue';
   import {defineSchemaForm, registerAntd} from '../schema-form';
-  import ShowValue from './show-value.vue';
 
   registerAntd();
 
@@ -19,26 +18,36 @@
   const ctx = defineSchemaForm({
     fields: {
       title: {
-        type: 'string',
-        title: '标题'
+        type: 'select',
+        title: (v) => '标题' + v.title,
+        enum: [
+          {label: 'a', value: 'aaa'},
+          {label: 'b', value: 'bbb'},
+        ]
       },
       'b.aj': {
-        type: 'string',
-        title: '子标题'
+        type: 'select',
+        title: '标题2',
+        enum: (v) => {
+          return [
+            {label: 'c', value: 'ccc'},
+            {label: 'd', value: 'ddd'},
+          ];
+        }
       },
       showValue: {
         type: 'string',
         title: '小标题',
-        depends: () => {
+        visible: () => {
           return value.value.title === 'aaa';
         }
       },
       showValue2: {
         type: 'string',
         title: '小标题2',
-        depends: value => {
-          if (value.title === 'a') {
-            return value.b.aj === 'bbb'
+        visible: v => {
+          if (v.title === 'aaa') {
+            return v.b.aj === 'ccc';
           }
           return false;
         }

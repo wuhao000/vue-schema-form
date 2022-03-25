@@ -1,9 +1,8 @@
 import {isVNode} from 'vue';
-import {resolveOptions} from '../utils/utils';
 
 export default (props) => {
   const {field, value} = props;
-  const options = resolveOptions(field);
+  const options = field.options;
   const valueProperty = field.props.valueProperty || 'value';
   const labelProperty = field.props.labelProperty || 'label';
   if (value) {

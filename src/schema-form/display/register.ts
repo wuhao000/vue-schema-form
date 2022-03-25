@@ -1,7 +1,7 @@
 import {registerComponent} from '../config';
 import InternalForm from '../internal/form';
 import {registerDisplay} from '../utils/register';
-import {DESKTOP, FieldTypes, MOBILE, resolveOptions} from '../utils/utils';
+import {DESKTOP, FieldTypes, MOBILE} from '../utils/utils';
 import MobileDisplayField from './mobile-display-field';
 import PlainDisplayField from './plain-display-field';
 import RangeDisplayField from './range-display-field';
@@ -46,7 +46,7 @@ registerDisplay({
   types: [FieldTypes.Select, FieldTypes.ExpandSelect],
   arrayMode: 'both',
   getProps: field => {
-    return {options: resolveOptions(field), field};
+    return {options: field.options, field};
   }
 });
 registerComponent({

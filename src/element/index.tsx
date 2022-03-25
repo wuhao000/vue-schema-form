@@ -33,8 +33,7 @@ import {
   FieldTypes,
   registerComponent,
   registerDesktop,
-  registerDesktopLib,
-  resolveOptions
+  registerDesktopLib
 } from '../schema-form';
 import {createComponentProxy} from '../schema-form/antd/utils';
 import DUrl from '../schema-form/common/url';
@@ -108,7 +107,7 @@ export function registerElement() {
     getProps: field => {
       return {
         multiple: field.array,
-        options: resolveOptions(field as any)
+        options: field.options
       };
     }
   });
@@ -119,7 +118,7 @@ export function registerElement() {
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
-      return {options: resolveOptions(field as any), multiple: true};
+      return {options: field.options, multiple: true};
     }
   });
   registerComponent({
@@ -128,7 +127,7 @@ export function registerElement() {
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
-      return {options: resolveOptions(field as any), multiple: true};
+      return {options: field.options, multiple: true};
     }
   });
   registerComponent({
