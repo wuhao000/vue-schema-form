@@ -91,7 +91,8 @@ const SchemaForm = defineComponent({
       transition: props.transition,
       transitionName: props.transitionName,
       root: instance,
-      components: componentStore
+      components: componentStore,
+      value: currentValue.value
     });
     provide(SchemaFormFieldOperationStoreKey as any, {
       addField(field) {
@@ -308,6 +309,7 @@ const SchemaForm = defineComponent({
         const cloneValue = _.cloneDeep(v);
         emit('update:value', cloneValue);
         props.onChange?.(cloneValue);
+        store.value = v;
       }
     }, {deep: true});
 

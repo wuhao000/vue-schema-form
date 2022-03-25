@@ -28,6 +28,7 @@ import {
   uuid
 } from '../utils/utils';
 import {
+  calcEditable,
   calcShowState, FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
   SchemaFormEvents
 } from './utils';
@@ -308,9 +309,10 @@ export default defineComponent({
       }
     };
     watchEffect(() => {
-      field.value.visible = calcShowState(props.formValue, props.definition);
-      field.value.options = resolveOptions(field.value, props.formValue);
-      field.value.title = resolveTitle(props.definition, props.formValue);
+      field.value.visible = calcShowState(props.definition, store.value);
+      field.value.editable = calcEditable(props.definition, store.value);
+      field.value.options = resolveOptions(field.value, store.value);
+      field.value.title = resolveTitle(props.definition, store.value);
     });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;

@@ -105,6 +105,7 @@ export function register(component: string | Component,
 export function registerComponent(options: SchemaFormComponentOptions): void;
 
 export const DButton: any;
+export const DTimeRangePicker: any;
 export const DTimePicker: any;
 export const DRangePicker: any;
 export const DDatePicker: any;

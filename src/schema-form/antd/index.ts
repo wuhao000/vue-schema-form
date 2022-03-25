@@ -95,22 +95,8 @@ function getTransferOptions(array) {
 }
 
 const transferPropsTransform = (def: FieldDefinition) => {
-  if (typeof def.enum === 'function') {
-    const result = def.enum();
-    if (Array.isArray(result)) {
-      return {dataSource: getTransferOptions(result), render: (item) => item.title};
-    }
-    if (result.then) {
-      result.then(data => {
-        def.props.dataSource = getTransferOptions(data);
-      });
-    }
-    return {render: (item) => item.title};
-  } else if (typeof def.enum === 'object' && def.enum['then']) {
-    def.enum['then'](data => {
-      def.props.dataSource = getTransferOptions(data);
-    });
-    return {render: (item) => item.title};
+  if (def.options) {
+    return {dataSource: def.options, render: (item) => item.title};
   }
   const dataSource = def.props?.dataSource || getTransferOptions(def.enum || []);
   return {dataSource, render: (item) => item.title};

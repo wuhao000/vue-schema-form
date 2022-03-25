@@ -38,14 +38,21 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
   return _.get(currentValue, property);
 }
 
-export function calcShowState(currentValue, definition: SchemaFormField) {
+export function calcEditable(definition: SchemaFormField, currentValue): boolean {
+  if (typeof definition.editable === 'function') {
+    return definition.editable(currentValue);
+  }
+  return isNull(definition.editable) ? true : definition.editable;
+}
+
+export function calcShowState(definition: SchemaFormField, currentValue) {
   if (definition.visible) {
     if (typeof definition.visible === 'function') {
       return definition.visible(currentValue);
     } else if (Array.isArray(definition.visible)) {
       return !definition.visible
-        .map(condition => matchCondition(currentValue, condition))
-        .some(it => !it);
+          .map(condition => matchCondition(currentValue, condition))
+          .some(it => !it);
     } else {
       return true;
     }
@@ -67,14 +74,14 @@ export function getRealFields(definition: SchemaFormField) {
   const fieldsObject = definition.fields;
   if (typeof fieldsObject === 'object') {
     Object.keys(fieldsObject)
-      .filter(key => fieldsObject[key])
-      .forEach(key => {
-        const field = fieldsObject[key];
-        if (!field.property) {
-          field.property = key;
-        }
-        fields.push(field);
-      });
+        .filter(key => fieldsObject[key])
+        .forEach(key => {
+          const field = fieldsObject[key];
+          if (!field.property) {
+            field.property = key;
+          }
+          fields.push(field);
+        });
   } else if (Array.isArray(fieldsObject)) {
     fields.push(...(fieldsObject as SchemaFormField[]).filter(it => isNotNull(it)));
   }
@@ -102,14 +109,14 @@ const missingTypes = [];
 export function getComponentType(store: SchemaFormStore,
                                  definition: {
                                    type: string,
-                                   editable?: boolean,
+                                   editable?: boolean | ((value: any) => boolean),
                                    array?: boolean
                                  }): SchemaFormComponent {
   const type = definition.type;
   const array = definition.array ?? false;
   const mode: Mode = (!store.editable || definition.editable === false) ? Mode.Display : Mode.Edit;
   const component: SchemaFormComponent = store.components.search(mode, store.platform, type, array)
-    || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
+      || globalComponentStore.search(mode, store.platform, type, array) || EmptyDefinition;
   if (component.component === Empty) {
     const typeStr = type + mode + store.platform + array;
     if (!missingTypes.includes(typeStr)) {
@@ -162,7 +169,7 @@ interface SimpleField {
   type?: SchemaFormFieldType;
   slot?: string;
   array?: boolean;
-  editable?: boolean;
+  editable?: boolean | ((value: any) => boolean);
 }
 
 function getComponent(field: SimpleField,
@@ -258,7 +265,7 @@ export class FieldDefinition<V = any> {
   public definition: SchemaFormField = null;
   public disabled = false;
   public enum: any[] | ((formValue: any) => any[] | Promise<any[]>) | Promise<any[]> = null;
-  public options: any[] = [];
+  public options: any;
   public title: any = null;
   public array = false;
   public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
@@ -319,13 +326,11 @@ export class FieldDefinition<V = any> {
     this.type = definition.type;
     this.xType = definition.xType;
     this.events = definition.events;
-    this.editable = definition.editable === undefined ? true : definition.editable;
     this.name = definition.property;
     this.path = buildArrayPath(pathPrefix, definition);
     this.plainPath = buildArrayPath(pathPrefix, definition).join('.');
     this.destructPath = parseDestructPath(definition.property);
     this.props = reactive(Object.assign({}, definition.xProps || definition.props));
-    this.visible = calcShowState(currentValue, definition);
     this.valid = true;
     this.displayValue = definition.displayValue;
     this.required = definition.required;

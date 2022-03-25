@@ -10,7 +10,7 @@ export class FieldDefinition<V = any> {
   public array: boolean;
   public default?: V;
   public definition: SchemaFormField;
-  public options: any[];
+  public options: any;
   public description?: string | VNode;
   public destructPath?: {
     path: string,
@@ -114,7 +114,7 @@ interface BaseSchemaFormField {
    * 当表单模式为详情模式时显示的内容
    */
   displayValue?: any | VNode | ((value: any) => any);
-  editable?: boolean;
+  editable?: boolean | ((value: any) => boolean);
   /**
    * 枚举选项
    */
