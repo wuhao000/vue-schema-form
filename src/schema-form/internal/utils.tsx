@@ -38,17 +38,21 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
   return _.get(currentValue, property);
 }
 
-export function calcEditable(definition: SchemaFormField, currentValue): boolean {
+export function calcEditable(definition: SchemaFormField,
+                             currentValue: any,
+                             field: FieldDefinition): boolean {
   if (typeof definition.editable === 'function') {
-    return definition.editable(currentValue);
+    return definition.editable(currentValue, field);
   }
   return isNull(definition.editable) ? true : definition.editable;
 }
 
-export function calcShowState(definition: SchemaFormField, currentValue) {
+export function calcShowState(definition: SchemaFormField,
+                              currentValue: any,
+                              field: FieldDefinition) {
   if (definition.visible) {
     if (typeof definition.visible === 'function') {
-      return definition.visible(currentValue);
+      return definition.visible(currentValue, field);
     } else if (Array.isArray(definition.visible)) {
       return !definition.visible
           .map(condition => matchCondition(currentValue, condition))
@@ -109,7 +113,7 @@ const missingTypes = [];
 export function getComponentType(store: SchemaFormStore,
                                  definition: {
                                    type: string,
-                                   editable?: boolean | ((value: any) => boolean),
+                                   editable?: boolean | ((value: any, field: FieldDefinition) => boolean),
                                    array?: boolean
                                  }): SchemaFormComponent {
   const type = definition.type;
@@ -169,7 +173,7 @@ interface SimpleField {
   type?: SchemaFormFieldType;
   slot?: string;
   array?: boolean;
-  editable?: boolean | ((value: any) => boolean);
+  editable?: boolean | ((value: any, field: FieldDefinition) => boolean);
 }
 
 function getComponent(field: SimpleField,
@@ -264,7 +268,7 @@ export class FieldDefinition<V = any> {
   public id: string = null;
   public definition: SchemaFormField = null;
   public disabled = false;
-  public enum: any[] | ((formValue: any) => any[] | Promise<any[]>) | Promise<any[]> = null;
+  public enum: any[] | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>) | Promise<any[]> = null;
   public options: any;
   public title: any = null;
   public array = false;

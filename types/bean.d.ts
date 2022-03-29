@@ -20,7 +20,7 @@ export class FieldDefinition<V = any> {
   public display: boolean;
   public displayValue?: any;
   public editable: boolean;
-  public enum: any[] | ((formValue: any) => any[] | Promise<any[]>) | Promise<any[]>;
+  public enum: any[] | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>) | Promise<any[]>;
   public errors?: string[];
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields;
@@ -114,7 +114,7 @@ interface BaseSchemaFormField {
    * 当表单模式为详情模式时显示的内容
    */
   displayValue?: any | VNode | ((value: any) => any);
-  editable?: boolean | ((value: any) => boolean);
+  editable?: boolean | ((value: any, field: FieldDefinition) => boolean);
   /**
    * 枚举选项
    */
@@ -188,11 +188,11 @@ interface BaseSchemaFormField {
   /**
    * 表单项名称
    */
-  title?: string | VNode | ((value: any) => string | VNode);
+  title?: string | VNode | ((value: any, field: FieldDefinition) => string | VNode);
   /**
    * 是否可见
    */
-  visible?: boolean | ShowFieldCondition[] | ((value: any) => boolean);
+  visible?: boolean | ShowFieldCondition[] | ((value: any, field: FieldDefinition) => boolean);
   /**
    * 表单项的属性
    */

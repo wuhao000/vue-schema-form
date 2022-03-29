@@ -147,13 +147,15 @@ export const LibComponents: ILibComponents = {
   }
 };
 
-export const resolveTitle = (field: SchemaFormField, formValue: any) => {
-  if (typeof field.title === 'string' || isVNode(field.title)) {
-    return field.title;
-  } else if (typeof field.title === 'function') {
-    return field.title(formValue);
+export const resolveTitle = (definition: SchemaFormField,
+                             formValue: any,
+                             field: FieldDefinition) => {
+  if (typeof definition.title === 'string' || isVNode(definition.title)) {
+    return definition.title;
+  } else if (typeof definition.title === 'function') {
+    return definition.title(formValue, field);
   } else {
-    return field.title;
+    return definition.title;
   }
 }
 
@@ -164,7 +166,7 @@ export const resolveOptions = (field: FieldDefinition, formValue: any) => {
       return field.props.options;
     }
     if (typeof fieldEnum === 'function') {
-      const result = fieldEnum(formValue);
+      const result = fieldEnum(formValue, field);
       if (Array.isArray(result)) {
         return result;
       } else if (result.then) {

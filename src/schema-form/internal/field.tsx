@@ -3,8 +3,21 @@ import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {
-  computed, defineComponent, inject, isProxy, isRef, isVNode, onBeforeUnmount, PropType, ref, toRaw, Transition, unref,
-  VNode, watch, watchEffect
+  computed,
+  defineComponent,
+  inject,
+  isProxy,
+  isRef,
+  isVNode,
+  onBeforeUnmount,
+  PropType,
+  ref,
+  toRaw,
+  Transition,
+  unref,
+  VNode,
+  watch,
+  watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
@@ -23,13 +36,20 @@ import {
   isNull,
   LibComponents,
   MOBILE,
-  resolveOptions, resolveTitle,
+  resolveOptions,
+  resolveTitle,
   swap,
   uuid
 } from '../utils/utils';
 import {
   calcEditable,
-  calcShowState, FieldDefinition, getComponentType, getFormItemComponent, getRealFields, isNullStructValue, renderField,
+  calcShowState,
+  FieldDefinition,
+  getComponentType,
+  getFormItemComponent,
+  getRealFields,
+  isNullStructValue,
+  renderField,
   SchemaFormEvents
 } from './utils';
 
@@ -309,10 +329,10 @@ export default defineComponent({
       }
     };
     watchEffect(() => {
-      field.value.visible = calcShowState(props.definition, store.value);
-      field.value.editable = calcEditable(props.definition, store.value);
+      field.value.visible = calcShowState(props.definition, store.value, field.value);
+      field.value.editable = calcEditable(props.definition, store.value, field.value);
       field.value.options = resolveOptions(field.value, store.value);
-      field.value.title = resolveTitle(props.definition, store.value);
+      field.value.title = resolveTitle(props.definition, store.value, field.value);
     });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
