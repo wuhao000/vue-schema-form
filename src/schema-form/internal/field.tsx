@@ -329,10 +329,28 @@ export default defineComponent({
       }
     };
     watchEffect(() => {
-      field.value.visible = calcShowState(props.definition, store.value, field.value);
-      field.value.editable = calcEditable(props.definition, store.value, field.value);
-      field.value.options = resolveOptions(field.value, store.value);
-      field.value.title = resolveTitle(props.definition, store.value, field.value);
+      const v = calcShowState(props.definition, store.value, field.value)
+      if (v !== undefined) {
+        field.value.visible = v;
+      }
+    });
+    watchEffect(() => {
+      const e = calcEditable(props.definition, store.value, field.value)
+      if (e !== undefined) {
+        field.value.editable = e;
+      }
+    });
+    watchEffect(() => {
+      const opts = resolveOptions(field.value, store.value);
+      if (opts !== undefined) {
+        field.value.options = opts;
+      }
+    });
+    watchEffect(() => {
+      const title = resolveTitle(props.definition, store.value, field.value);
+      if (title !== undefined) {
+        field.value.title = title;
+      }
     });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;

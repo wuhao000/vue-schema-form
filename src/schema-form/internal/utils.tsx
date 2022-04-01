@@ -40,16 +40,22 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
 
 export function calcEditable(definition: SchemaFormField,
                              currentValue: any,
-                             field: FieldDefinition): boolean {
+                             field: FieldDefinition): boolean | undefined {
+  if (isNull(definition.editable)) {
+    return undefined
+  }
   if (typeof definition.editable === 'function') {
     return definition.editable(currentValue, field);
   }
-  return isNull(definition.editable) ? true : definition.editable;
+  return definition.editable;
 }
 
 export function calcShowState(definition: SchemaFormField,
                               currentValue: any,
                               field: FieldDefinition) {
+  if (isNull(definition.visible)) {
+    return undefined;
+  }
   if (definition.visible) {
     if (typeof definition.visible === 'function') {
       return definition.visible(currentValue, field);
@@ -60,10 +66,8 @@ export function calcShowState(definition: SchemaFormField,
     } else {
       return true;
     }
-  } else {
-    // false null undefined
-    return isNull(definition.visible);
   }
+  return false;
 }
 
 export function getRealFields(definition: SchemaFormField) {

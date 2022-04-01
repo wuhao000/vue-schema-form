@@ -6,7 +6,7 @@ import {
   SchemaFormField
 } from '../../../types';
 import {FieldDefinition} from '../internal/utils';
-import {isVNode} from 'vue';
+import {isVNode, VNode} from 'vue';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -149,7 +149,10 @@ export const LibComponents: ILibComponents = {
 
 export const resolveTitle = (definition: SchemaFormField,
                              formValue: any,
-                             field: FieldDefinition) => {
+                             field: FieldDefinition): string | VNode | VNode[] | undefined => {
+  if (isNull(definition.title)) {
+    return undefined;
+  }
   if (typeof definition.title === 'string' || isVNode(definition.title)) {
     return definition.title;
   } else if (typeof definition.title === 'function') {
@@ -161,6 +164,9 @@ export const resolveTitle = (definition: SchemaFormField,
 
 export const resolveOptions = (field: FieldDefinition, formValue: any) => {
   const fieldEnum = field.enum;
+  if (isNull(field.enum)) {
+    return undefined;
+  }
   if (fieldEnum) {
     if (field.props.options) {
       return field.props.options;
