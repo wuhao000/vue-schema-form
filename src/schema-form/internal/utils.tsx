@@ -477,11 +477,7 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     let type = null;
     switch (field.type) {
       case 'integer':
-        type = 'integer';
-        break;
       case 'double':
-        type = 'float';
-        break;
       case 'number':
         type = 'number';
         break;
@@ -499,8 +495,11 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     if (type) {
       rules.push({
         required: true,
-        type,
         message: `${field.title ?? '该字段'}为必填项`
+      }, {
+        required: true,
+        type,
+        message: `${field.title ?? '该字段'}的值无效`
       });
     } else {
       rules.push({
