@@ -2,6 +2,7 @@ import {Slot} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
+import SchemaFormFieldLabel from './label';
 import {
   computed,
   defineComponent,
@@ -145,7 +146,7 @@ export default defineComponent({
     });
     const inputProps = computed(() => {
       const localProps = preProps.value;
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       const {platform} = store;
       const renderComponent = fieldComponent.value;
       if (isNotNull(field.value.placeholder)) {
@@ -199,12 +200,10 @@ export default defineComponent({
             (currentValue.value as any[]).push(null);
           }
         }
+      } else if (type.value === FieldTypes.Object) {
+        setCurrentValue([{}]);
       } else {
-        if (type.value === FieldTypes.Object) {
-          setCurrentValue([{}]);
-        } else {
-          setCurrentValue([null]);
-        }
+        setCurrentValue([null]);
       }
     };
     const getRules = (trigger?: string): any => {
@@ -221,7 +220,7 @@ export default defineComponent({
     const type = computed(() => field.value.type);
 
     const getFormItemProps = () => {
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       const {platform} = store;
       const component = getFormItemComponent(platform);
       const formItemProps: any = {
@@ -229,23 +228,15 @@ export default defineComponent({
         title: field.value.title,
         label: field.value.title
       };
-      if (platform === DESKTOP) {
-        if (definition.tip) {
-          const InfoIcon = LibComponents.icons[store.platform].info;
-          const LibComponentsPopover: any = LibComponents.popover[DESKTOP];
-          const slots = {
-            default: () => <span>
-              {field.value.title}
-              <InfoIcon style={{marginLeft: '5px', color: '#247dc5'}}/>
-            </span>
-          };
-          formItemProps.label = <LibComponentsPopover
-              content={definition.tip}
-              v-slots={slots}
-              trigger="hover"/>;
-        } else {
-          formItemProps.label = field.value.title;
-        }
+
+      const labelPropName = platform === DESKTOP ? 'label' : 'title';
+      if (definition.tip) {
+        formItemProps[labelPropName] = <SchemaFormFieldLabel
+            content={<div v-html={definition.tip}/>}
+            platform={store.platform}
+            title={field.value.title}/>
+      } else {
+        formItemProps[labelPropName] = field.value.title;
       }
       if (definition.wrapperProps) {
         Object.assign(formItemProps, definition.wrapperProps);
@@ -329,13 +320,13 @@ export default defineComponent({
       }
     };
     watchEffect(() => {
-      const v = calcShowState(props.definition, store.value, field.value)
+      const v = calcShowState(props.definition, store.value, field.value);
       if (v !== undefined) {
         field.value.visible = v;
       }
     });
     watchEffect(() => {
-      const e = calcEditable(props.definition, store.value, field.value)
+      const e = calcEditable(props.definition, store.value, field.value);
       if (e !== undefined) {
         field.value.editable = e;
       }
@@ -354,7 +345,7 @@ export default defineComponent({
     });
     const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
       const InputFieldComponent = inputFieldDef.component;
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       let ArrayComponent: any = ArrayWrapper;
       if (typeof definition.arrayComponent === 'string') {
         const componentDef = getComponentType(store, {
@@ -472,11 +463,10 @@ export default defineComponent({
                              }}/>;
     };
     const relatedSubFields = computed(() => {
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       return getRealFields(definition);
     });
     const getSubFields = () => {
-      const definition = props.definition as SchemaFormField;
       const noWrap = isNull(field.value.title);
       return relatedSubFields.value.map((localField, index) =>
           renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
@@ -502,7 +492,7 @@ export default defineComponent({
     const renderInputComponent = () => {
       const propsTmp = {...(inputProps.value)};
       const {content} = props;
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       const inputFieldDef = fieldComponent.value;
       let InputFieldComponent = inputFieldDef.component;
       if (isProxy(InputFieldComponent)) {
@@ -556,6 +546,7 @@ export default defineComponent({
             propsTmp[key] = formItemProps[key];
           }
         });
+        propsTmp.title = formItemProps.title;
       }
       if (field.value.type === 'object') {
         const fields = getRealFields(props.definition);
@@ -637,7 +628,7 @@ export default defineComponent({
         if (store.props?.index) {
           label.push(<span class="form-item-index">{props.index + 1}. </span>);
         }
-        label.push(formItemProps.title);
+        label.push(formItemProps.label);
       }
       if (formItemProps.slots) {
         formItemProps.slots.label = () => label;
@@ -704,7 +695,7 @@ export default defineComponent({
   render() {
     const field = this.field;
     const {editable, store: {platform, transitionName, transition}} = this;
-    const definition = this.definition as SchemaFormField;
+    const definition = this.definition;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];
       const content = slot ? slot() : undefined;

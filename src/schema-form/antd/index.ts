@@ -1,4 +1,4 @@
-import {DeleteOutlined, DownOutlined, InfoCircleFilled, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
+import {DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
 import {App, Component} from 'vue';
 import {
   config,
@@ -42,8 +42,8 @@ import {
   createLayoutHeader,
   createLayoutSider,
   createPassword,
-  createPopover,
-  createRate,
+  createPopover, createPopup,
+  createRate, createResult,
   createRow,
   createSlider,
   createSwitch,
@@ -64,13 +64,15 @@ const ComponentMap: Record<keyof ILibComponents, any> = {
   sider: createLayoutSider(),
   content: createLayoutContent(),
   popover: createPopover(),
+  popup: createPopup(),
+  result: createResult(),
   select: Select,
   button: Button,
   form: Form,
   formItem: Item,
   alert: Alert,
   icons: {
-    info: InfoCircleFilled,
+    info: InfoCircleOutlined,
     up: UpOutlined,
     down: DownOutlined,
     delete: DeleteOutlined,

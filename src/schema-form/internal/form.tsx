@@ -1,6 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
-import {computed, defineComponent, inject, PropType, provide, watch} from 'vue';
-import {SchemaFormField, SchemaFormStore} from '../../../types';
+import {computed, defineComponent, PropType, provide, watch} from 'vue';
+import {SchemaFormField} from '../../../types';
 import {transformFormProps} from '../config';
 import {isEqual} from '../uform/utils';
 import {SchemaFormObjectStoreKey} from '../utils/key';

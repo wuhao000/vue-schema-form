@@ -79,6 +79,18 @@ export const createLayoutFooter = () => {
                             v-slots={ctx.slots}/>;
   };
 };
+export const createPopup = () => {
+  return (props, ctx) => {
+    return <a-popup {...props}
+                    v-slots={ctx.slots}/>;
+  };
+};
+export const createResult = () => {
+  return (props, ctx) => {
+    return <a-result {...props}
+                     v-slots={ctx.slots}/>;
+  };
+};
 export const createPopover = () => {
   return (props, ctx) => {
     return <a-popover {...props}

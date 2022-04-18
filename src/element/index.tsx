@@ -3,6 +3,7 @@ import {
   ElAside,
   ElButton,
   ElCard,
+  ElResult,
   ElCheckbox,
   ElCol,
   ElContainer,
@@ -42,6 +43,7 @@ import RadioGroup from './components/radio-group';
 import Select from './components/select';
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
+  result: ElResult,
   card: ElCard,
   checkbox: ElCheckbox,
   empty: ElEmpty,
@@ -58,6 +60,7 @@ const ComponentMap: Record<keyof ILibComponents, any> = {
   footer: ElFooter,
   sider: ElAside,
   content: ElMain,
+  popup: ElPopover,
   popover: ElPopover,
   icons: {
     info: <ElIcon class="el-info"/>,

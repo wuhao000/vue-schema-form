@@ -16,6 +16,7 @@ const FormBlockItem = defineComponent({
     maxItems: Number,
     onMoveUp: Function,
     onMoveDown: Function,
+    onRemove: Function,
     display: Boolean,
     platform: String
   },

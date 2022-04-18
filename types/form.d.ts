@@ -246,6 +246,7 @@ export interface IIcons {
 }
 
 export interface ILibComponents {
+  result: any;
   alert?: any;
   button: any;
   card?: any;
@@ -260,6 +261,7 @@ export interface ILibComponents {
   icons: { [key in Platform]: IIcons };
   layout?: any;
   popover: any;
+  popup?: any;
   row?: any;
   sider?: any;
   select?: any;
