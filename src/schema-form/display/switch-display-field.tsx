@@ -9,9 +9,9 @@ export default defineComponent({
   },
   render() {
     if (this.value) {
-      return this.onLabel ?? '开';
+      return this.onLabel ?? '是';
     } else {
-      return this.offLabel ?? '关';
+      return this.offLabel ?? '否';
     }
   }
 });

@@ -8,6 +8,7 @@ import RangeDisplayField from './range-display-field';
 import SelectDisplayField from './select-display-field';
 import SwitchDisplayField from './switch-display-field';
 import TimeDisplayField from './time-display-field';
+import NumberDisplay from './number';
 
 registerDisplay({
   component: RangeDisplayField,
@@ -33,12 +34,17 @@ registerDisplay({
 registerDisplay({
   component: PlainDisplayField,
   platforms: DESKTOP,
-  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number]
+  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url]
+});
+registerDisplay({
+  component: NumberDisplay,
+  platforms: [DESKTOP, MOBILE],
+  types: [FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number]
 });
 registerDisplay({
   component: MobileDisplayField,
   platforms: MOBILE,
-  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url, FieldTypes.Integer, FieldTypes.Double, FieldTypes.Number]
+  types: [FieldTypes.String, FieldTypes.Text, FieldTypes.Url]
 });
 registerDisplay({
   component: SelectDisplayField,
