@@ -36,6 +36,21 @@
       }
     }
   }
+
+  .ant-form-item-label {
+    & > label {
+      & > label {
+        display: flex;
+        width: 85%;
+        align-items: center;
+        & > span:first-of-type {
+          flex: 1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
 }
 
 .flip-list-move {

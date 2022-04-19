@@ -299,7 +299,6 @@ export interface IField<V = any> {
   focus?: () => any;
   id?: string;
   initialValue?: V;
-  invalid?: boolean;
   loading?: boolean;
   match?: (path: Path | IFormPathMatcher) => boolean;
   name?: string;

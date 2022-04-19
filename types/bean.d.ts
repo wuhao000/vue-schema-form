@@ -26,7 +26,6 @@ export class FieldDefinition<V = any> {
   public fields?: FormFields;
   public focus?: (event?: boolean) => any;
   public id: string;
-  public invalid?: boolean;
   public loading: boolean;
   public match?: (path: Path | IFormPathMatcher) => boolean;
   public max?: number;

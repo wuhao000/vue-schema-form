@@ -32,7 +32,6 @@ export default {
       // filter 169.254.*.* and 192.168.*.*
       '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})' +
       // filter 172.16.0.0 - 172.31.255.255
-      // TODO: add test to validate that it invalides address in 16-31 range
       '(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})' +
       // IP address dotted notation octets
       // excludes loopback network 0.0.0.0

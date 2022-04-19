@@ -15,7 +15,6 @@ export interface IFieldState {
   editable: boolean;
   errors: string[];
   initialValue: any;
-  invalid: boolean;
   loading: boolean;
   name: string;
   path: string[];

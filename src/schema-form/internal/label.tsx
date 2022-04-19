@@ -27,7 +27,8 @@ export default defineComponent({
       return <div>
         {this.title}
         <InfoIcon
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               this.visible = true;
             }}
             style={{marginLeft: '5px', color: '#247dc5'}}/>
@@ -40,7 +41,7 @@ export default defineComponent({
                   style={{paddingTop: '0'}}
                   buttonText="返回"
                   buttonType="primary"
-                  onClick={() => {
+                  onClick={(e) => {
                     this.visible = false;
                   }}/>
         </LibComponentsPopup>
@@ -48,14 +49,19 @@ export default defineComponent({
     } else {
       const LibComponentsPopover: any = LibComponents.popover[this.platform];
       const slots = {
-        default: () => <span>
-              {this.title}
-          <InfoIcon style={{marginLeft: '5px', color: '#247dc5'}}/>
-            </span>
+        default: () => (
+            <label>
+              <span>{this.title}</span>
+              <InfoIcon style={{marginLeft: '5px', color: '#247dc5'}}/>
+            </label>
+        )
       };
       return <LibComponentsPopover
           content={
-            this.content
+            <div>
+              <h2>{this.title}</h2>
+              {this.content}
+            </div>
           }
           v-slots={slots}
           trigger="hover"/>;

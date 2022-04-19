@@ -291,7 +291,6 @@ export class FieldDefinition<V = any> {
   public fields?: FormFields = null;
   public focus?: (event?: boolean) => any = null;
   public default?: V = null;
-  public invalid?: boolean = false;
   public loading = false;
   public match?: (path: Path | IFormPathMatcher) => boolean = null;
   public name?: string = null;
@@ -348,7 +347,6 @@ export class FieldDefinition<V = any> {
     this.description = definition.description;
     this.errors = [];
     this.default = definition.default;
-    this.invalid = false;
     this.value = currentValue;
     this.setGetValue = null;
   }
