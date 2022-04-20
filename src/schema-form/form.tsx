@@ -1,5 +1,5 @@
 import className from 'classnames';
-import _, {cloneDeep} from 'lodash';
+import {cloneDeep} from 'lodash';
 import {
   computed,
   defineComponent,
@@ -65,7 +65,7 @@ const SchemaForm = defineComponent({
   emits: ['update:value'],
   setup(props, {emit, slots}) {
     const instance = getCurrentInstance();
-    const currentValue = ref<any[] | {[key: string]: unknown}>(props.value || {});
+    const currentValue = ref<any[] | {[key: string]: unknown}>(cloneDeep(props.value) || {});
     const componentStore = new ComponentStore();
 
     const realSchema = computed<SchemaFormField>(() => {
@@ -92,7 +92,7 @@ const SchemaForm = defineComponent({
       transitionName: props.transitionName,
       root: instance,
       components: componentStore,
-      value: currentValue.value
+      value: cloneDeep(currentValue.value)
     });
     provide(SchemaFormFieldOperationStoreKey as any, {
       addField(field) {
@@ -132,19 +132,21 @@ const SchemaForm = defineComponent({
             errors[0].field.focus(true);
             store.context.trigger(SchemaFormEvents.validate, errors);
           } else {
+            const cloneValue = cloneDeep(currentValue.value)
             if (callback) {
-              callback(currentValue.value);
+              callback(cloneValue);
             } else {
-              props.onOk?.(currentValue.value);
-              props.onSubmit?.(currentValue.value);
+              props.onOk?.(cloneValue);
+              props.onSubmit?.(cloneValue);
             }
           }
         } else {
+          const cloneValue = cloneDeep(currentValue.value)
           if (callback) {
-            callback(currentValue.value);
+            callback(cloneValue);
           } else {
-            props.onOk?.(currentValue.value);
-            props.onSubmit?.(currentValue.value);
+            props.onOk?.(cloneValue);
+            props.onSubmit?.(cloneValue);
           }
         }
       }
@@ -306,10 +308,10 @@ const SchemaForm = defineComponent({
     });
     watch(() => currentValue.value, (v) => {
       if (!isEqual(currentValue.value, props.value)) {
-        const cloneValue = _.cloneDeep(v);
+        const cloneValue = cloneDeep(v);
         emit('update:value', cloneValue);
         props.onChange?.(cloneValue);
-        store.value = v;
+        store.value = cloneValue;
       }
     }, {deep: true});
 
