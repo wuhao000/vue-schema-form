@@ -2,10 +2,10 @@ import {isVNode} from 'vue';
 
 export default (props) => {
   const {field, value} = props;
-  const options = field.options;
+  const options = props.options || field.options;
   const valueProperty = field.props.valueProperty || 'value';
   const labelProperty = field.props.labelProperty || 'label';
-  if (value) {
+  if (value && options) {
     let selected = [];
     if (field.array) {
       selected = options.filter(it => value.includes(it[valueProperty]) || value.includes(it));

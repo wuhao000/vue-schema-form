@@ -31,6 +31,7 @@ export enum FieldTypes {
   Year = 'year',
   Month = 'month',
   Time = 'time',
+  Html = 'html',
   Select = 'select',
   Date = 'date',
   DateTimeRange = 'datetimerange',
