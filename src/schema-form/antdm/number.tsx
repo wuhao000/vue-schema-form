@@ -1,22 +1,30 @@
+import {isNull} from '../utils/utils';
+
 const transferValue = (value) => {
-  if (typeof value === 'number') {
+  if (isNull(value)) {
+    return '';
+  }
+  return value.toString();
+};
+
+const transferBack = (value) => {
+  if (isNull(value)) {
     return value;
+  } else if (typeof value === 'string') {
+    return parseFloat(value);
+  } else if (typeof value === 'number') {
+    return value;
+  } else {
+    return undefined;
   }
-  if (typeof value === 'string') {
-    if (value.trim() === '') {
-      return null;
-    } else {
-      return parseFloat(value);
-    }
-  }
-  return value;
-}
+};
 
 export default (props, {emit}) => {
-  const value = props.value;
-  props.value = transferValue(value)
-  props['onUpdate:value'] = (value) => {
-    emit('update:value', transferValue(value));
-  }
-  return <m-input {...props}/>;
+  const value = transferValue(props.value);
+  return <m-input
+      {...props}
+      value={value}
+      onUpdate:value={v => {
+        emit('update:value', transferBack(v));
+      }}/>;
 }
