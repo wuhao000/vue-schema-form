@@ -153,7 +153,7 @@ const SchemaForm = defineComponent({
     };
 
     const setCurrentValue = () => {
-      if (!(currentValue.value && isEqual(props.value, currentValue.value))) {
+      if (!currentValue.value || !isEqual(props.value, currentValue.value)){
         if (props.value) {
           if (isVNode(props.value)) {
             console.error('VNode不能作为输入值');
@@ -307,12 +307,12 @@ const SchemaForm = defineComponent({
       setCurrentValue();
     });
     watch(() => currentValue.value, (v) => {
+      const cloneValue = cloneDeep(v);
       if (!isEqual(currentValue.value, props.value)) {
-        const cloneValue = cloneDeep(v);
         emit('update:value', cloneValue);
         props.onChange?.(cloneValue);
-        store.value = cloneValue;
       }
+      store.value = cloneValue;
     }, {deep: true});
 
     onMounted(() => {
