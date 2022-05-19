@@ -21,6 +21,10 @@ export default defineComponent({
     valueProperty: {
       type: String, default: 'value'
     },
+    /**
+     * 多选模式下是否在下拉框下放展示收起按钮
+     */
+    showClose: Boolean,
     filterOption: {
       type: [Boolean, Function],
       default: () => {
@@ -39,13 +43,27 @@ export default defineComponent({
     return {localOptions};
   },
   render() {
-    const props: any = {
+    const selectProps: any = {
       ...this.$props,
       ...this.$attrs,
       mode: this.multiple ? 'multiple' : this.$attrs.mode,
       allowClear: this.clearable ? true : this.$attrs.allowClear,
       options: this.localOptions
     };
-    return <a-select {...props}/>;
+    const slots = {
+      ...this.$slots
+    };
+    if (this.showClose) {
+      slots.dropdownRender = ({menuNode, props}) => {
+        const closeMenu = <a class="multiple-select-close-btn">收起</a>;
+        if (this.$slots.dropdownRender) {
+          return [this.$slots.dropdownRender({menuNode, props}), closeMenu];
+        }
+        return [menuNode, closeMenu];
+      };
+    }
+    return <a-select
+        v-slots={slots}
+        {...selectProps}/>;
   }
 });
