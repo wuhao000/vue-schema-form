@@ -48,7 +48,7 @@ export default defineComponent({
     });
     const props = {
       ...this.$attrs,
-      options: this.localOptions,
+      options: this.localOptions ?? [],
       class: classes
     };
     return <div>

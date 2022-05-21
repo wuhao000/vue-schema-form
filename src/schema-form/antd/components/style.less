@@ -14,7 +14,6 @@
 .loop-grid-columns(@index, @class) when (@index > 0) {
   &.@{class}-span-@{index} {
     & > .@{class}-item {
-      display: block;
       flex: 0 0 percentage((@index / @grid-columns));
       max-width: percentage((@index / @grid-columns));
     }
