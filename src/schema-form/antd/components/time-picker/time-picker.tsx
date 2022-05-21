@@ -1,4 +1,4 @@
-import moment, {Moment} from 'moment';
+import dayjs, {Dayjs} from 'dayjs';
 import {defineComponent} from 'vue';
 import {baseTimePickerProps, useBaseTimePicker} from '../../../common/base-time-picker';
 import {isNotNull} from '../../../utils/utils';
@@ -15,12 +15,12 @@ export default defineComponent({
         return undefined;
       }
       if (typeof value === 'string') {
-        return moment(value, props.format as string);
+        return dayjs(value, props.format as string);
       } else {
-        return moment(value);
+        return dayjs(value);
       }
     };
-    const convertValueBack = (value: Moment) => {
+    const convertValueBack = (value: Dayjs) => {
       if (isNotNull(value)) {
         return value.format(props.format as string);
       }

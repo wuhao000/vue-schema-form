@@ -555,6 +555,9 @@ export default defineComponent({
           (propsTmp.definition as any).fields = fields;
         }
       }
+      if (platform === MOBILE && !visible.value) {
+        style.display = 'none';
+      }
       return <InputFieldComponent
           {...propsTmp}
           v-show={visible.value}

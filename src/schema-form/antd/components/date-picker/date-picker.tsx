@@ -1,4 +1,4 @@
-import moment, {Moment} from 'moment';
+import dayjs, {Dayjs} from 'dayjs';
 import {computed, defineComponent, PropType, ref, watch} from 'vue';
 
 const convertValue = (value: Date | number, format: string, mode: Mode): any => {
@@ -6,20 +6,20 @@ const convertValue = (value: Date | number, format: string, mode: Mode): any => 
     return undefined;
   }
   if (mode === 'year') {
-    const m = moment();
+    const m = dayjs();
     m.set('year', value as number);
     return m;
   }
   if (typeof value === 'string') {
-    return moment(value, format);
+    return dayjs(value, format);
   } else if (typeof value === 'number') {
-    return moment(value);
+    return dayjs(value);
   } else {
-    return moment(value);
+    return dayjs(value);
   }
 };
 
-const convertValueBack = (value: Moment | undefined, mode: Mode): Date | number => {
+const convertValueBack = (value: Dayjs | undefined, mode: Mode): Date | number => {
   if (value === undefined || value === null) {
     return null;
   } else {
@@ -42,7 +42,7 @@ export default defineComponent({
   },
   emits: ['update:value', 'change'],
   setup: function(props, {emit}) {
-    const currentValue = ref<Moment>(null);
+    const currentValue = ref<Dayjs>(null);
     const datePickerRef = ref();
     const format = computed(() => {
       switch (props.mode) {
@@ -86,7 +86,7 @@ export default defineComponent({
       updateCurrentValue(value) {
         currentValue.value = value;
       },
-      onPanelChange: (value: Moment) => {
+      onPanelChange: (value: Dayjs) => {
         if (props.mode === 'year') {
           currentValue.value = value;
           open.value = false;

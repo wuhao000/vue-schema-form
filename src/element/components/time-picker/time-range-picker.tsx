@@ -1,5 +1,5 @@
 import {ElTimePicker} from 'element-plus';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {defineComponent} from 'vue';
 import {baseTimeRangePickerProps, useBaseTimeRangePicker} from '../../../schema-form/common/base-time-range-picker';
 import DTimePicker from './time-picker';
@@ -20,15 +20,15 @@ export default defineComponent({
         return [null, null];
       }
       if (props.valueType === 'string') {
-        return (value as string).split(props.separator).map(it => moment(it, props.format).toDate());
+        return (value as string).split(props.separator).map(it => dayjs(it, props.format).toDate());
       }
-      return (value as string[]).map(it => moment(it, props.format).toDate());
+      return (value as string[]).map(it => dayjs(it, props.format).toDate());
     };
     const convertValueBack = (value: Date[]): Array<string> | string => {
       if (props.valueType === 'string') {
-        return value.map(it => moment(it).format(props.format)).join(props.separator);
+        return value.map(it => dayjs(it).format(props.format)).join(props.separator);
       }
-      return value.map(it => moment(it).format(props.format));
+      return value.map(it => dayjs(it).format(props.format));
     };
     const {
       fieldProps,

@@ -1,6 +1,7 @@
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {Toast} from 'antd-mobile-vue-next';
+import omit from 'omit.js';
 import {computed, defineComponent, ref} from 'vue';
 import {useBaseInput} from '../';
 import {AntUploadFile, AntUploadObject} from '../../../types';
@@ -29,7 +30,7 @@ export default defineComponent({
           return 'text';
       }
     });
-    const uploadProps = Object.assign({}, ctx.attrs, props);
+    const uploadProps = Object.assign({}, ctx.attrs, omit(props, ['value']));
     const {size} = useBaseInput(props, ctx);
     const previewUrl = ref();
     return {

@@ -14,7 +14,6 @@ module.exports = {
   configureWebpack: (config) => {
     config.externals = {
       'vue': 'Vue',
-      'moment': 'moment',
       'lodash': '_',
       'ant-design-vue': 'antd',
       'antd-mobile-vue-next': 'antdm',

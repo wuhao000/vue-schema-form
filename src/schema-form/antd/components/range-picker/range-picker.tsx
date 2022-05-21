@@ -1,4 +1,4 @@
-import moment, {Moment} from 'moment';
+import dayjs, {Dayjs} from 'dayjs';
 import {defineComponent, ref, watch} from 'vue';
 import {useBaseInput} from '../../../';
 import {isNotNull} from '../../../utils/utils';
@@ -7,10 +7,10 @@ const convertValue = (value: Array<Date | number>): any => {
   if (!value) {
     return undefined;
   }
-  return value.filter(it => isNotNull(it)).map(it => moment(it));
+  return value.filter(it => isNotNull(it)).map(it => dayjs(it));
 };
 
-const convertValueBack = (value: Moment[] | undefined): Date[] => {
+const convertValueBack = (value: Dayjs[] | undefined): Date[] => {
   if (value !== undefined) {
     return value.map(it => it.toDate());
   } else {
@@ -27,7 +27,7 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const {emit} = ctx;
-    const currentValue = ref<Moment[]>(null);
+    const currentValue = ref<Dayjs[]>(null);
     watch(() => props.value, (value: any) => {
       const convertedValue = convertValue(value);
       if (!currentValue.value) {

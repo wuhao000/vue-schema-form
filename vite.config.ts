@@ -37,7 +37,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['warning']
+    include: ['warning', 'uuid']
   },
   server: {
     proxy: {

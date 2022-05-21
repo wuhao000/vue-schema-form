@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import uuid from 'uuid';
+import {v4} from 'uuid';
 import {Component, isVNode, reactive, VNode} from 'vue';
 import {
   DefaultPatternRule,
@@ -95,7 +95,7 @@ export function getRealFields(definition: SchemaFormField) {
   }
   fields.forEach(field => {
     if (!field.id) {
-      field.id = uuid.v4();
+      field.id = v4();
     }
     if (!field.property) {
       throw new Error('表单字段必须设置property属性');

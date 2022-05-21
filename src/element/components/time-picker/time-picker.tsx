@@ -1,5 +1,5 @@
 import {ElTimePicker} from 'element-plus';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {defineComponent} from 'vue';
 import {baseTimePickerProps, useBaseTimePicker} from '../../../schema-form/common/base-time-picker';
 import {isNotNull} from '../../../schema-form/utils/utils';
@@ -16,14 +16,14 @@ export default defineComponent({
         return undefined;
       }
       if (typeof value === 'string') {
-        return moment(value, props.format as string).toDate();
+        return dayjs(value, props.format as string).toDate();
       } else {
-        return moment(value).toDate();
+        return dayjs(value).toDate();
       }
     };
     const convertValueBack = (value: Date) => {
       if (isNotNull(value)) {
-        return moment(value).format(props.format as string);
+        return dayjs(value).format(props.format as string);
       }
       return value;
     };

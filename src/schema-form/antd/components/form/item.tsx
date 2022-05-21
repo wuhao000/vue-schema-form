@@ -75,7 +75,7 @@ export default defineComponent({
       if (props.value !== null && props.value !== undefined) {
         return props.value;
       }
-      const model = form && form.value.model;
+      const model = form?.value?.model;
       if (!model || !props.name) {
         return;
       }
@@ -98,7 +98,7 @@ export default defineComponent({
       if (attrs['label-col']) {
         labelCol = attrs['label-col'];
       }
-      if (form && form.value.labelCol) {
+      if (form?.value?.labelCol) {
         if (typeof form.value.labelCol === 'number') {
           labelCol.span = form.value.labelCol;
         } else {
@@ -109,8 +109,8 @@ export default defineComponent({
       return labelCol;
     });
     const labelStyle = computed(() => {
-      const labelWidth = props.labelWidth ? props.labelWidth : (form && form.value.labelWidth);
-      const labelPosition = props.labelPosition ? props.labelPosition : (form && form.value.labelPosition) || 'right';
+      const labelWidth = props.labelWidth ? props.labelWidth : form?.value?.labelWidth;
+      const labelPosition = props.labelPosition ? props.labelPosition : form?.value?.labelPosition || 'right';
       const style: any = {};
       if (labelWidth) {
         style.width = typeof labelWidth === 'number' ? (labelWidth + 'px') : labelWidth;
@@ -124,13 +124,13 @@ export default defineComponent({
       if (attrs['wrapper-col']) {
         wrapperCol = attrs['wrapper-col'];
       }
-      if (form && form.value.wrapperCol) {
+      if (form?.value?.wrapperCol) {
         if (typeof form.value.wrapperCol === 'number') {
           wrapperCol.span = form.value.wrapperCol;
         } else {
           wrapperCol = form.value.wrapperCol;
         }
-      } else if (form && form.value.labelCol) {
+      } else if (form?.value?.labelCol) {
         if (typeof form.value.labelCol === 'number') {
           wrapperCol.span = 24 - form.value.labelCol;
         }
@@ -160,7 +160,7 @@ export default defineComponent({
       }).map(rule => Object.assign({}, rule));
     };
     const getRules = () => {
-      let formRules: ValidateRules = form && form.value.getRules();
+      let formRules: ValidateRules = form?.value?.getRules();
       const selfRules = props.rules;
       const requiredRule = props.required !== undefined ? {required: props.required} : [];
       const prop = getPropByPath(formRules, props.name || '');
@@ -202,21 +202,21 @@ export default defineComponent({
           currentHelp.value = errors ? errors[0].message : '';
           callback(currentHelp.value, invalidFields);
           emit('validate', !errors, errors);
-          form && form.value.emit('validate', props.name, !errors, currentHelp.value || null);
+          form?.value?.emit('validate', props.name, !errors, currentHelp.value || null);
         });
       });
     }, 300);
     const instance = getCurrentInstance();
     onBeforeUnmount(() => {
       if (props.name) {
-        form.value.removeField(instance);
+        form?.value?.removeField(instance);
       }
     });
     if (props.name) {
-      form.value.addField(instance);
+      form?.value?.addField(instance);
     }
     const labelAlign = computed(() => {
-      return attrs.labelAlign || props.labelPosition || form.value?.labelPosition;
+      return attrs.labelAlign || props.labelPosition || form?.value?.labelPosition;
     });
     const formItem: ComputedRef<FormItemProvider> = computed(() => ({
       ...props,

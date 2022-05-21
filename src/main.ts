@@ -1,7 +1,6 @@
 import antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import Antdm from 'antd-mobile-vue-next';
-import 'default-passive-events';
 import vant from 'vant';
 import 'vant/lib/index.css';
 import {createApp} from 'vue';

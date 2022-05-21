@@ -48,8 +48,22 @@ export const ComponentMap: Record<keyof ILibComponents, any> = {
   layout: null,
   row: null,
   sider: null,
-  card: (props, ctx) => <m-card {...props}
-                                v-slots={ctx.slots}/>,
+  card: (props, ctx) => {
+    return <m-card {...props}
+                   v-slots={{
+                     ...ctx.slots,
+                     default: () => {
+                       if (props.title) {
+                         return [
+                           <m-card-header>{props.title}</m-card-header>,
+                           <m-card-body>{ctx.slots.default?.()}</m-card-body>
+                         ];
+                       } else {
+                         return <m-card-body>{ctx.slots.default?.()}</m-card-body>;
+                       }
+                     }
+                   }}/>;
+  },
   checkbox: Checkbox,
   button: Button,
   form: (props, ctx) => <m-list {...props}
@@ -121,7 +135,7 @@ export function registerAntdMobile() {
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerMobile(CalendarItem, [FieldTypes.DateRange], 'single', () => ({type: 'range'}));
   registerMobile(CalendarItem, [FieldTypes.DateTimeRange], 'single', () => ({type: 'range', pickTime: true}));
-  registerMobile(Checkbox, FieldTypes.Checkbox, 'single');
+  registerMobile(SwitchItem, FieldTypes.Checkbox, 'single');
 
   registerComponent({
     component: SwitchItem,

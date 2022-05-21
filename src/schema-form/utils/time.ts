@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const formatTime = (value: Date | number | string, fmt?: string, pretty = false): string => {
   let text = '';
@@ -7,7 +7,7 @@ export const formatTime = (value: Date | number | string, fmt?: string, pretty =
   if (typeof value === 'string') {
     const reg1 = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
     if (reg1.test(value)) {
-      date = moment(value, 'YYYY-MM-DDTHH:mm:ss.sZ').toDate();
+      date = dayjs(value, 'YYYY-MM-DDTHH:mm:ss.sZ').toDate();
       date.setHours(date.getHours() + 8);
     } else {
       text = value;
@@ -17,9 +17,9 @@ export const formatTime = (value: Date | number | string, fmt?: string, pretty =
     if (!value) {
       text = '';
     } else {
-      text = moment(value).format(format);
+      text = dayjs(value).format(format);
       if (fmt) {
-        text = moment(value).format(fmt);
+        text = dayjs(value).format(fmt);
       }
     }
   }
@@ -37,17 +37,17 @@ export const formatTime = (value: Date | number | string, fmt?: string, pretty =
       } else if (now.getFullYear() === date.getFullYear()) {
         if (now.getMonth() === date.getMonth()
           && now.getDay() === date.getDay()) {
-          text = moment(date).format('HH:mm:ss');
+          text = dayjs(date).format('HH:mm:ss');
         } else {
-          text = moment(date).format('MM-DD HH:mm:ss');
+          text = dayjs(date).format('MM-DD HH:mm:ss');
         }
       }
     } else if (now.getFullYear() === date.getFullYear()) {
       if (now.getMonth() === date.getMonth()
         && now.getDay() === date.getDay()) {
-        text = moment(date).format('HH:mm:ss');
+        text = dayjs(date).format('HH:mm:ss');
       } else {
-        text = moment(date).format('MM-DD HH:mm:ss');
+        text = dayjs(date).format('MM-DD HH:mm:ss');
       }
     }
   }

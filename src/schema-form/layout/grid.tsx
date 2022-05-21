@@ -145,7 +145,7 @@ export default defineComponent({
     const LibComponentsRow: any = LibComponents.row[store.platform];
     const {store: {platform}} = this;
     if (platform === MOBILE) {
-      return <div>{this.$slots.default()}</div>;
+      return this.$slots.default();
     }
     const FormItemComponent: any = getFormItemComponent(this.store.platform);
     if (this.title) {
