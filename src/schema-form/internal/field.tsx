@@ -20,7 +20,10 @@ import {
   watch,
   watchEffect
 } from 'vue';
-import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
+import {
+  DefaultSchemaFormField,
+  FlatFieldType, GridField, IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore, StepsField
+} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
@@ -48,7 +51,7 @@ import {
   FieldDefinition,
   getComponentType,
   getFormItemComponent,
-  getRealFields,
+  getRealFields, isNoWrap,
   isNullStructValue,
   renderField,
   SchemaFormEvents
@@ -234,7 +237,7 @@ export default defineComponent({
         formItemProps[labelPropName] = <SchemaFormFieldLabel
             content={<div v-html={definition.tip}/>}
             platform={store.platform}
-            title={field.value.title}/>
+            title={field.value.title}/>;
       } else {
         formItemProps[labelPropName] = field.value.title;
       }
@@ -343,20 +346,24 @@ export default defineComponent({
         field.value.title = title;
       }
     });
-    const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
-      const InputFieldComponent = inputFieldDef.component;
+    const getArrayComponent = () => {
       const definition = props.definition;
-      let ArrayComponent: any = ArrayWrapper;
       if (typeof definition.arrayComponent === 'string') {
         const componentDef = getComponentType(store, {
           type: definition.arrayComponent
         });
         if (componentDef.component !== Empty) {
-          ArrayComponent = componentDef.component;
+          return componentDef.component;
         }
       } else if (['function', 'object'].includes(typeof definition.arrayComponent)) {
-        ArrayComponent = definition.arrayComponent;
+        return definition.arrayComponent;
       }
+      return ArrayWrapper;
+    };
+    const renderArrayInputComponent = (propsTmp, inputFieldDef: SchemaFormComponent) => {
+      const InputFieldComponent = inputFieldDef.component;
+      const definition = props.definition;
+      const ArrayComponent = getArrayComponent();
       const valueProp = inputFieldDef.valueProp;
       const arrayContent = currentValue.value ? (currentValue.value as any[]).map((v, index) => {
         const itemProps: any = Object.assign({}, propsTmp, {
@@ -368,7 +375,6 @@ export default defineComponent({
           delete itemProps.definition.array;
         }
         const events = field.value.generateEvents();
-
         const className = itemProps.className;
         const style = itemProps.style;
         delete itemProps.className;
@@ -515,7 +521,6 @@ export default defineComponent({
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
       const style: any = Object.assign({}, inputProps.value.style ?? {});
-
       const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
@@ -607,6 +612,7 @@ export default defineComponent({
       });
     };
     onCreated();
+
     const renderDesktopComponent = () => {
       const inputComponent = renderInputComponent();
       const definition = props.definition as SchemaFormField;
@@ -621,7 +627,7 @@ export default defineComponent({
       });
       delete formItemProps.className;
       // 是否使用form-item组件包裹
-      const noWrap = (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) ?? isNull(field.value.title);
+      const noWrap = isNoWrap(inputFieldDef, definition, store, field.value);
       // 是否使用form-item组件的title
       const noTitle = !!(definition?.wrapperProps?.noTitle ?? inputFieldDef.layoutOptions?.noTitle);
       const label = [];

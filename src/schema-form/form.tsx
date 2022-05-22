@@ -1,7 +1,7 @@
 import className from 'classnames';
 import {cloneDeep} from 'lodash';
 import {
-  computed,
+  computed, CSSProperties,
   defineComponent,
   getCurrentInstance,
   isVNode,
@@ -52,7 +52,6 @@ const SchemaForm = defineComponent({
     schema: {type: Object as PropType<SchemaFormField>},
     props: {type: Object as PropType<{ [key: string]: unknown }>},
     value: [Object, Array],
-    title: [String, Object],
     sticky: {type: Boolean as PropType<boolean>, default: false},
     components: {type: Array as PropType<SchemaFormComponentOptions[]>, default: () => []},
     onChange: Function,
@@ -339,10 +338,9 @@ const SchemaForm = defineComponent({
   render() {
     const LibComponentsContent: any = LibComponents.content[this.platform as string];
     const LibComponentsFooter: any = LibComponents.footer[this.platform as string];
-    const {title, sticky, prefixCls, store, currentValue, realSchema} = this;
+    const {sticky, prefixCls, store, currentValue, realSchema} = this;
     const rootFieldDef: any = Object.assign({}, realSchema, {
-      type: 'object',
-      title
+      type: 'object'
     });
     let content: any = [
       this.$slots.header?.(),
@@ -376,7 +374,8 @@ const SchemaForm = defineComponent({
         {footer}
       </Layout>;
     }
-    return <div class={classes} style={this.$attrs.style}>
+    return <div class={classes}
+                style={this.$attrs.style as CSSProperties}>
       {content}
       {footer}
     </div>;

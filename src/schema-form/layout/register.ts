@@ -4,6 +4,7 @@ import {registerComponent} from '../config';
 import {DESKTOP, MOBILE} from '../utils/utils';
 import Card from './card';
 import FormBlock from './form-block';
+import FormBlockMobile from './form-block-mobile';
 import GridLayout from './grid';
 import GroupLayout from './group';
 import StepsLayout from './steps';
@@ -70,7 +71,17 @@ registerLayout({
 });
 registerLayout({
   component: FormBlock,
-  platforms: [DESKTOP, MOBILE],
+  platforms: DESKTOP,
+  types: 'block',
+  arrayMode: 'array',
+  layoutOptions: {
+    noTitle: true,
+    noWrap: true
+  }
+});
+registerLayout({
+  component: FormBlockMobile,
+  platforms: MOBILE,
   types: 'block',
   arrayMode: 'array',
   layoutOptions: {

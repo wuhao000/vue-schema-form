@@ -1,7 +1,12 @@
 {
   "name": "v-schema-form",
   "version": "3.2.0-1",
-  "files": ["es", "package.json", "types", "templates"],
+  "files": [
+    "es",
+    "package.json",
+    "types",
+    "templates"
+  ],
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
@@ -28,15 +33,16 @@
     "lodash.chunk": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
-    "uuid": "^8.3.2",
     "lodash.difference": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
     "rxjs": "^7.4.0",
     "tinymce-mention": "^4.0.2",
-    "tinymce-mention-sourcecodecap": "^1.0.1"
+    "tinymce-mention-sourcecodecap": "^1.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.17.10",
     "@babel/plugin-proposal-export-default-from": "^7.12.13",
     "@babel/plugin-proposal-export-namespace-from": "^7.12.13",
     "@babel/plugin-transform-modules-commonjs": "^7.13.8",
@@ -62,13 +68,13 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "ant-design-vue": "^3.2.3",
-    "antd-mobile-vue-next": "0.0.2",
+    "antd-mobile-vue-next": "0.0.2-1",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "cheerio": "^1.0.0-rc.10",
+    "cheerio": "1.0.0-rc.10",
     "codemirror": "^5.62.3",
     "commitlint-config-gitmoji": "^2.2.5",
     "cssbeautify": "^0.3.1",

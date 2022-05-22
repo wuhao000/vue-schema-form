@@ -6,7 +6,7 @@ import {LibComponents} from '../utils/utils';
 import './form-block.less';
 
 const FormBlockItem = defineComponent({
-  name: 'FormBlockItem',
+  name: 'MFormBlockItem',
   props: {
     id: String,
     index: Number,
@@ -21,78 +21,32 @@ const FormBlockItem = defineComponent({
     platform: String
   },
   emits: ['add', 'remove'],
-  setup(props, {emit, attrs}) {
+  setup(props, {slots}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = () => {
-      const index = props.index;
-      if (props.display) {
+      if (props.display || (props.maxItems && props.maxItems <= props.total)) {
         return;
       }
-      const PlusIcon = LibComponents.icons[store.platform].plus;
-      if (props.maxItems && props.maxItems <= props.total) {
-        return;
-      }
-      return (
-          <div class="circle-btn"
-               onClick={() => {
-                 emit('add', index);
-               }}>
-            <PlusIcon/>
-          </div>
-      );
-    };
-    const renderOperations = (index: number) => {
-      const DownIcon = LibComponents.icons[store.platform].down;
-      const UpIcon = LibComponents.icons[store.platform].up;
-      return [
-        index !== props.total - 1
-            ? <div class="circle-btn"
-                   onClick={() => {
-                     props.onMoveDown();
-                   }}>
-              <DownIcon/>
-              <span class="op-name"/>
-            </div> : null,
-        index !== 0 ? <div class="circle-btn" onClick={() => {
-          props.onMoveUp();
-        }}>
-          <UpIcon/>
-          <span class="op-name"/>
-        </div> : null
-      ];
+      return slots.addButton();
     };
     return {
       store,
-      renderOperations,
       renderAddBtn
     };
   },
   render() {
-    const {renderOperations, renderAddBtn} = this;
-    const DeleteIcon = LibComponents.icons[this.store.platform].delete;
+    const {renderAddBtn} = this;
     return <div class="array-item"
                 key={this.id}>
-      <div class="array-index">
-        <span>{this.index + 1}</span>
-      </div>
+      {this.$slots.title()}
       <div class="array-item-wrapper">{this.$slots.default()}</div>
-      {this.display ? undefined : <div class="array-item-operator">
-        {renderOperations(this.index)}
-        <div class="circle-btn text-danger"
-             onClick={() => {
-               this.$emit('remove');
-             }}>
-          <DeleteIcon/>
-        </div>
-        {renderAddBtn()}
-      </div>
-      }
+      {renderAddBtn()}
     </div>;
   }
 });
 
 export default defineComponent({
-  name: 'FormBlock',
+  name: 'MFormBlock',
   inheritAttrs: false,
   props: {
     maxItems: Number,
@@ -118,6 +72,16 @@ export default defineComponent({
         <div class="schema-form-block-main">
           <div class="schema-form-block-title">
             {props.title}
+            <span> ({index + 1}) </span>
+            {
+              !props.display ? <label class="circle-btn remove-btn"
+                                      onClick={() => {
+                                        emit('remove', index);
+                                      }}>
+                <DeleteIcon/>
+                <span class="op-name">{props.removeText || '删除'}</span>
+              </label> : undefined
+            }
           </div>
         </div>
       </div>;
@@ -125,26 +89,37 @@ export default defineComponent({
     const onAdd = (index?: number) => {
       emit('add', index);
     };
-    const renderEmpty = () => {
+    const renderAddBtn = (index: number) => {
       const PlusIcon = LibComponents.icons[store.platform].plus;
-      const EmptyComponent = LibComponents.empty[store.platform];
-      return <EmptyComponent description=""
-                             onClick={onAdd}>
-        {!props.display ? <div class="array-empty">
+      return <div class="array-item-addition">
+        <div class="form-block-add-btn"
+             onClick={() => {
+               onAdd(index);
+             }}>
           <PlusIcon/>
           <span>添加</span>
+        </div>
+      </div>;
+    };
+    const renderEmpty = () => {
+      return <m-list
+          class={'form-block form-block-mobile'}
+          title={props.title}>
+        {!props.display ? <div class="array-item">
+          {renderAddBtn(0)}
         </div> : undefined}
-      </EmptyComponent>;
+      </m-list>;
     };
     return {
       store,
       renderTitle,
       renderEmpty,
+      renderAddBtn,
       onAdd
     };
   },
   render() {
-    const {renderTitle} = this;
+    const {renderTitle, renderAddBtn} = this;
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
@@ -152,8 +127,7 @@ export default defineComponent({
       style: this.style,
       tag: 'div'
     };
-    return <div class="schema-form-block-wrap schema-form-block-wrap-desktop">
-      {renderTitle()}
+    return <div class="schema-form-block-wrap schema-form-block-wrap-mobile">
       <TransitionGroup {...props}>
         {
           fields.length ? fields.map((it, index) => {
@@ -181,7 +155,8 @@ export default defineComponent({
                   this.$emit('move-down', index);
                 }}
                 v-slots={{
-                  title: () => this.renderTitle(index),
+                  title: () => renderTitle(index),
+                  addButton: () => renderAddBtn(index + 1),
                   default: () => it
                 }}
             />;

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {v4} from 'uuid';
-import {Component, isVNode, reactive, VNode} from 'vue';
+import {Component, ComputedRef, isVNode, reactive, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FormFields,
@@ -574,4 +574,16 @@ export const isNullStructValue = (value, struct) => {
       return !isNullStructValue(value[key], struct[key]);
     });
   }
+};
+
+export const isNoWrap = (inputFieldDef: SchemaFormComponent, definition: SchemaFormField, store: SchemaFormStore, field?: FieldDefinition) => {
+  if (definition.array && typeof definition.arrayComponent === 'string') {
+    const componentDef = getComponentType(store, {
+      type: definition.arrayComponent
+    });
+    if (componentDef.layoutOptions.noWrap) {
+      return true;
+    }
+  }
+  return (definition?.wrapperProps?.noWrap ?? inputFieldDef.layoutOptions?.noWrap) ?? isNull(field?.title);
 };

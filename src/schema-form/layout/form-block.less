@@ -1,9 +1,15 @@
 .schema-form-block-wrap {
+
+  &.schema-form-block-wrap-desktop {
+    .schema-form-block-main {
+      margin-top: 0;
+    }
+  }
+
   .schema-form-block-header {
     border-bottom: 1px solid #E6E7EB;
     .schema-form-block-main {
       position: relative;
-      margin-top: 8px;
       margin-bottom: 0;
       height: 40px;
       line-height: 40px;
@@ -30,27 +36,27 @@
         .remove-btn {
           color: #f5222d;
           cursor: pointer;
+          float: right;
+          margin-right: 8px;
         }
       }
     }
   }
-  .schema-form-block {
-    border-color: rgb(238, 238, 238);
-    border-image: initial;
-    border-style: solid;
-    border-width: 1px;
-    padding: 8px;
-    margin-bottom: 24px;
-    min-width: 400px;
 
-    &&-desktop {
+  .schema-form-block {
+    margin-bottom: 24px;
+
+    &.schema-form-block-desktop {
+      padding: 8px;
+      border: 1px solid rgb(238, 238, 238);
       .array-item {
+        border: 1px solid rgb(238, 238, 238);
         padding: 30px 20px 0;
         position: relative;
       }
     }
 
-    &&-mobile {
+    &.schema-form-block-mobile {
       .array-item {
         .array-item-addition {
           text-align: center;
@@ -59,13 +65,14 @@
       }
     }
 
-    .array-item-wrapper {
-      padding-top: 32px;
-      padding-left: 20px;
+    &&-desktop {
+      .array-item-wrapper {
+        padding-top: 32px;
+        padding-left: 20px;
+      }
     }
 
     .array-item {
-      border: 1px solid rgb(238, 238, 238);
       position: relative;
       margin-bottom: 12px;
 

@@ -6,7 +6,7 @@ import {isEqual} from '../uform/utils';
 import {SchemaFormObjectStoreKey} from '../utils/key';
 import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
 import {baseFieldComponentProps, useBaseFieldComponent} from './field-based-component';
-import {getComponentType, getRealFields} from './utils';
+import {FieldDefinition, getComponentType, getRealFields, isNoWrap} from './utils';
 
 export default defineComponent({
   name: 'SchemaFormInternal',
@@ -16,7 +16,7 @@ export default defineComponent({
     arrayIndex: Number,
     pathPrefix: Array,
     index: {type: Boolean as PropType<boolean>, default: false},
-    definition: {type: Object as PropType<SchemaFormField>, required: true},
+    definition: {type: Object as PropType<FieldDefinition>, required: true},
     schemaPath: Array,
     inline: {type: Boolean, default: false},
     layoutType: [String, Object],
@@ -37,7 +37,7 @@ export default defineComponent({
     }, {deep: true});
     watch(() => props.value, (value) => {
       if (!isEqual(value, currentValue.value)) {
-        if ((props.definition as SchemaFormField).array) {
+        if (props.definition.array) {
           currentValue.value = value || [];
         } else {
           currentValue.value = value || {};
@@ -60,7 +60,7 @@ export default defineComponent({
       const array = [];
       const spanGroups = [];
       let lastHasSpan = false;
-      getRealFields(props.definition).forEach((fieldDefinition, index) => {
+      getRealFields(props.definition.definition).forEach((fieldDefinition, index) => {
         const vnode = renderFormField(fieldDefinition, currentValue.value, index, true);
         if (fieldDefinition.span) {
           if (lastHasSpan) {
@@ -87,12 +87,13 @@ export default defineComponent({
       formProps.onSubmit = e => {
         e.preventDefault();
       };
-      const path = [].concat(...props.pathPrefix as string[]);
-      path.pop();
+      if (store.platform === 'mobile' && definition.definition.array) {
+        return groups.value.reduce((a, b) => a.concat(b));
+      }
       const form = (
           <FormComponent {...formProps}>
-            {(definition as SchemaFormField).array ? renderTitle() : null}
-            {!(definition as SchemaFormField).array && isDesktop.value ? renderTitle() : null}
+            {definition.array ? renderTitle() : null}
+            {!definition.array && isDesktop.value ? renderTitle() : null}
             {inline ? groups.value.reduce((a, b) => a.concat(b)) : groups.value.map(group => wrapGroup(group))}
           </FormComponent>
       );
@@ -111,7 +112,7 @@ export default defineComponent({
     const renderAddFormButton = () => {
       const {definition} = props;
       const ButtonComponent: any = getButtonComponent(store.platform);
-      if ((definition as SchemaFormField).array && store.editable) {
+      if (definition.array && store.editable) {
         return <ButtonComponent
             {...{
               block: true,
@@ -127,7 +128,6 @@ export default defineComponent({
     const addSubItem = () => {
       currentValue.value.push({});
     };
-
     const wrapGroup = (group: any) => {
       const RowComponent: any = getRowComponent(store.platform);
       const {props: commonProps} = store;

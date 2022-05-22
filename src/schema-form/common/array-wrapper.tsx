@@ -146,7 +146,6 @@ export default defineComponent({
     if (this.subForm) {
       return <div class={this.clsPrefix}>{content}</div>;
     }
-
     if (this.store.platform === 'mobile') {
       return content;
     } else {
