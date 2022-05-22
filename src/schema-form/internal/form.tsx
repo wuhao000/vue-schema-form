@@ -60,7 +60,7 @@ export default defineComponent({
       const array = [];
       const spanGroups = [];
       let lastHasSpan = false;
-      getRealFields(props.definition.definition).forEach((fieldDefinition, index) => {
+      getRealFields(props.definition).forEach((fieldDefinition, index) => {
         const vnode = renderFormField(fieldDefinition, currentValue.value, index, true);
         if (fieldDefinition.span) {
           if (lastHasSpan) {
@@ -128,6 +128,7 @@ export default defineComponent({
     const addSubItem = () => {
       currentValue.value.push({});
     };
+
     const wrapGroup = (group: any) => {
       const RowComponent: any = getRowComponent(store.platform);
       const {props: commonProps} = store;

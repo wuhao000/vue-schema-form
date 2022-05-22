@@ -1,12 +1,7 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.0-1",
-  "files": [
-    "es",
-    "package.json",
-    "types",
-    "templates"
-  ],
+  "version": "3.2.0-2",
+  "files": ["es", "package.json", "types", "templates"],
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
@@ -113,5 +108,5 @@
     }
   },
   "typings": "types/index.d.ts",
-  "lastVersion": "3.2.0-1"
+  "lastVersion": "3.2.0-2"
 }

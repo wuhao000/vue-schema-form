@@ -70,7 +70,7 @@ export function calcShowState(definition: SchemaFormField,
   return false;
 }
 
-export function getRealFields(definition: SchemaFormField) {
+export function getRealFields(definition: SchemaFormField | FieldDefinition) {
   const fields = [];
   Object.keys(definition).forEach(key => {
     if (key.startsWith('$') && definition[key]) {
