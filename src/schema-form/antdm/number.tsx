@@ -10,8 +10,8 @@ const transferValue = (value) => {
 const transferBack = (value) => {
   if (isNull(value)) {
     return value;
-  } else if (typeof value === 'string') {
-    return parseFloat(value);
+  } else if (typeof value === 'string' && value.trim() !== '') {
+    return parseFloat(value.trim());
   } else if (typeof value === 'number') {
     return value;
   } else {
