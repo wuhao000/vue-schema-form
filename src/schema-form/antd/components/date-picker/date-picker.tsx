@@ -34,6 +34,7 @@ type Mode = 'year' | 'week' | 'month' | 'date' | 'datetime';
 
 export default defineComponent({
   name: 'DDatePicker',
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Object]
@@ -109,15 +110,15 @@ export default defineComponent({
       onPanelChange: this.onPanelChange,
       onOpenChange: this.onOpenChange
     };
-    if (this.mode !== 'datetime') {
-      props.mode = this.realMode;
-    }
     if (mode === 'week') {
       return <a-week-picker {...props}/>;
     }
     if (mode === 'month') {
       return <a-month-picker {...props}/>;
     }
-    return <a-date-picker ref={'datePickerRef'} {...props as any}/>;
+    if (this.mode !== 'datetime' ) {
+      props.picker = this.realMode;
+    }
+    return <a-date-picker ref={'datePickerRef'} {...props}/>;
   }
 });
