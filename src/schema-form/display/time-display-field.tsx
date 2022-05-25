@@ -2,7 +2,7 @@ import {formatTime} from '../utils/time';
 
 export default (props) => {
   const {value, definition} = props;
-  let format = 'YYYY-MM-DD HH:mm:ss';
+  let format = props.format || 'YYYY-MM-DD HH:mm:ss';
   if (definition.type === 'date') {
     format = 'YYYY-MM-DD';
   } else if (definition.type === 'month') {
