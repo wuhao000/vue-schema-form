@@ -20,7 +20,7 @@ export default (props) => {
           <span>
             {formatTime(value[0], format)}
           </span>
-          <span> - </span>
+          <span> {props.separator || '~'} </span>
           <span>
             {formatTime(value[1], format)}
           </span>
