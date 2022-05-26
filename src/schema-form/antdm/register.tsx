@@ -33,7 +33,7 @@ const DatePickerItem = (props, ctx) => {
       {...props}
       value={convertValue(props.value)}
       onUpdate:value={v => {
-        ctx.emit('update:value', convertValueBack(v))
+        ctx.emit('update:value', convertValueBack(v));
       }}
       v-slots={ctx.slots}/>;
 };
@@ -58,8 +58,26 @@ const CheckboxList = (props, ctx) => <m-checkbox-list {...props}
 
 const ImagePicker = (props, ctx) => <m-image-picker {...props}
                                                     v-slots={ctx.slots}/>;
-const CalendarItem = (props, ctx) => <m-calendar-item {...props}
-                                                      v-slots={ctx.slots}/>;
+const CalendarItem = (props, ctx) => {
+  let value = props.value;
+  if (typeof value === 'string' && props.value !== '') {
+    value = dayjs(value, props.format).toDate();
+  } else if (Array.isArray(value)) {
+    value = value.map(it => {
+      if (typeof it === 'string' && it !== '') {
+        return dayjs(it, props.format).toDate();
+      } else {
+        return it;
+      }
+    });
+  }
+  return <m-calendar-item {...props}
+                          value={value}
+                          onUpdate:value={v => {
+                            ctx.emit('update:value', v);
+                          }}
+                          v-slots={ctx.slots}/>;
+};
 
 export const ComponentMap: Record<keyof ILibComponents, any> = {
   alert: null,
