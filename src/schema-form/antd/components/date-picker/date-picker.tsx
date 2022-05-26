@@ -39,25 +39,26 @@ export default defineComponent({
     value: {
       type: [String, Object]
     },
-    mode: {type: String as PropType<Mode>, default: 'date'}
+    mode: {type: String as PropType<Mode>, default: 'date'},
+    format: String
   },
   emits: ['update:value', 'change'],
-  setup: function(props, {emit}) {
+  setup(props, {emit}) {
     const currentValue = ref<Dayjs>(null);
     const datePickerRef = ref();
-    const format = computed(() => {
+    const localFormat = computed(() => {
       switch (props.mode) {
         case 'year':
           return 'YYYY';
         case 'date':
           return 'YYYY-MM-DD';
         case 'datetime':
-          return 'YYYY-MM-DD HH:mm:ss';
+          return props.format || 'YYYY-MM-DD HH:mm:ss';
       }
       return undefined;
     });
     watch(() => props.value, (value: any) => {
-      const convertedValue = convertValue(value, format.value, props.mode);
+      const convertedValue = convertValue(value, localFormat.value, props.mode);
       if (currentValue.value === null || currentValue.value === undefined) {
         currentValue.value = convertedValue;
       } else if (!convertedValue) {
@@ -82,7 +83,7 @@ export default defineComponent({
       realMode,
       currentValue,
       open,
-      format,
+      localFormat,
       datePickerRef,
       updateCurrentValue(value) {
         currentValue.value = value;
@@ -104,7 +105,7 @@ export default defineComponent({
       ...this.$attrs,
       value: currentValue,
       showTime: this.mode === 'datetime',
-      format: this.format,
+      format: this.localFormat,
       open: this.open,
       'onUpdate:value': this.updateCurrentValue,
       onPanelChange: this.onPanelChange,
