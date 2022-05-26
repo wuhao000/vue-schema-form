@@ -1,4 +1,4 @@
-import locale from 'ant-design-vue/lib/time-picker/locale/zh_CN';
+import locale from 'ant-design-vue/es/time-picker/locale/zh_CN';
 import {PropType, ref, watch} from 'vue';
 import {useBaseInput} from '../mixins';
 import {isNotNull, isNull} from '../utils/utils';
