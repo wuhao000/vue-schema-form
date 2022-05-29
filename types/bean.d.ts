@@ -2,9 +2,14 @@ import {Slot} from '@vue/runtime-core';
 import {Component, ComponentInternalInstance, VNode} from 'vue';
 import {ValidateRules} from './async-validator';
 import {Effects, EffectsContext, SchemaFormComponent, SchemaFormComponentOptions} from './form';
-import {DefaultPatternRule, IFormPathMatcher, IRuleDescription, Path, Rule} from './uform';
+import {DefaultPatternRule, IFormPathMatcher, IRuleDescription, Path, Rule, TriggerType} from './uform';
 
 export type Mode = 'edit' | 'display';
+
+export type FieldDefinitionEnum =
+    any[]
+    | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>)
+    | Promise<any[]>
 
 export class FieldDefinition<V = any> {
   public array: boolean;
@@ -20,7 +25,7 @@ export class FieldDefinition<V = any> {
   public display: boolean;
   public displayValue?: any;
   public editable: boolean;
-  public enum: any[] | ((formValue: any, field?: FieldDefinition) => any[] | Promise<any[]>) | Promise<any[]>;
+  public enum: FieldDefinitionEnum;
   public errors?: string[];
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields;
@@ -35,7 +40,6 @@ export class FieldDefinition<V = any> {
   public path?: string[];
   public plainPath?: string;
   public inputRef?: any;
-  public pristine?: boolean;
   public processor: ValueProcessor;
   public props?: { [key: string]: any };
   public required: boolean;
@@ -46,7 +50,7 @@ export class FieldDefinition<V = any> {
   public title: any;
   public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
   public valid: boolean;
-  public validate?: (trigger?: string) => (boolean | Promise<unknown>);
+  public validate?: (trigger?: TriggerType) => (boolean | Promise<unknown>);
   public value: V;
   public visible: boolean;
   public xType: SchemaFormFieldType;
@@ -93,7 +97,7 @@ export type SchemaFormFieldType =
     | SchemaFormComponentOptions[]
     | (() => VNode | VNode[]);
 
-interface BaseSchemaFormField {
+interface BaseSchemaFormField<V = any> {
   /**
    * 字段值是否数组类型
    */
@@ -112,12 +116,12 @@ interface BaseSchemaFormField {
   /**
    * 当表单模式为详情模式时显示的内容
    */
-  displayValue?: any | VNode | ((value: any) => any);
-  editable?: boolean | ((value: any, field?: FieldDefinition) => boolean);
+  displayValue?: any | VNode | ((value: V) => any);
+  editable?: boolean | ((value: V, field?: FieldDefinition<V>) => boolean);
   /**
    * 枚举选项
    */
-  enum?: any[] | ((value: any, field?: FieldDefinition) => any[] | Promise<any[]>) | Promise<any[]>;
+  enum?: any[] | ((value: V, field?: FieldDefinition<V>) => any[] | Promise<any[]>) | Promise<any[]>;
   events?: { [key: string]: (...args: any[]) => any };
   /**
    * 校验的格式，支持：
@@ -187,15 +191,15 @@ interface BaseSchemaFormField {
   /**
    * 表单项名称
    */
-  title?: string | VNode | ((value: any, field?: FieldDefinition) => string | VNode);
+  title?: string | VNode | ((value: V, field?: FieldDefinition<V>) => string | VNode);
   /**
    * 是否可见
    */
-  visible?: boolean | ShowFieldCondition[] | ((value: any, field?: FieldDefinition) => boolean);
+  visible?: boolean | ShowFieldCondition[] | ((value: V, field?: FieldDefinition<V>) => boolean);
   /**
    * 表单项的属性
    */
-  wrapperProps?: any;
+  wrapperProps?: { [key: string]: unknown };
   /**
    * 指定额外的组件类型
    */
@@ -207,7 +211,7 @@ type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType
 type ClassType = string | string[] | { [key: string]: boolean };
 
 
-export interface StepsField extends DefaultSchemaFormField {
+export interface StepsField<V = any> extends DefaultSchemaFormField<V> {
   /**
    * 每个步骤包含的组件数量
    */
@@ -223,7 +227,7 @@ export interface StepsField extends DefaultSchemaFormField {
   };
 }
 
-export interface GridField extends DefaultSchemaFormField {
+export interface GridField<V = any> extends DefaultSchemaFormField<V> {
   /**
    * 数字或数字数组，可以深层嵌套
    */
@@ -258,11 +262,11 @@ export interface GridField extends DefaultSchemaFormField {
   };
 }
 
-export type FlatFieldType = {
-  [key in `$${string}`]: SchemaFormField;
+export type FlatFieldType<V = any> = {
+  [key in `$${string}`]: SchemaFormField<V>;
 }
 
-interface DefaultSchemaFormField extends BaseSchemaFormField {
+interface DefaultSchemaFormField<V = any> extends BaseSchemaFormField<V> {
   /**
    * 表单项类型
    */
@@ -285,7 +289,7 @@ interface DefaultSchemaFormField extends BaseSchemaFormField {
 }
 
 
-export type SchemaFormField = (StepsField | GridField | DefaultSchemaFormField) & FlatFieldType;
+export type SchemaFormField<V = any> = (StepsField<V> | GridField<V> | DefaultSchemaFormField<V>) & FlatFieldType<V>;
 
 
 interface ValueProcessor {

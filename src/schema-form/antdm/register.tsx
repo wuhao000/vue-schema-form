@@ -13,25 +13,28 @@ const Slider = (props, ctx) => <m-slider {...props}
 const Button = (props, ctx) => <m-button {...props}
                                          v-slots={ctx.slots}/>;
 const DatePickerItem = (props, ctx) => {
-  const convertValue = (value: string) => {
+  const convertValue = (value: string | Date) => {
     if (!value) {
       return undefined;
     }
-    if (typeof value === 'string') {
-      return dayjs(value, 'HH:mm' as string).toDate();
+    if (value instanceof Date) {
+      return value;
+    } else if (typeof value === 'string' && props.mode === 'time') {
+      return dayjs(value, props.format || 'HH:mm').toDate();
     } else {
-      return dayjs(value).toDate();
+      return dayjs(value, props.format).toDate();
     }
   };
   const convertValueBack = (value: Date) => {
-    if (isNotNull(value)) {
-      return dayjs(value).format('HH:mm');
+    if (isNotNull(value) && props.mode === 'time') {
+      return dayjs(value).format(props.format || 'HH:mm');
     }
     return value;
   };
+  const value = convertValue(props.value)
   return <m-date-picker-item
       {...props}
-      value={convertValue(props.value)}
+      value={value}
       onUpdate:value={v => {
         ctx.emit('update:value', convertValueBack(v));
       }}

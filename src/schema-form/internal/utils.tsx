@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {v4} from 'uuid';
 import {Component, ComputedRef, isVNode, reactive, VNode} from 'vue';
 import {
-  DefaultPatternRule,
+  DefaultPatternRule, FieldDefinitionEnum,
   FormFields,
   IFormPathMatcher,
   IRuleDescription,
@@ -13,7 +13,7 @@ import {
   SchemaFormField,
   SchemaFormFieldType,
   SchemaFormStore,
-  ShowFieldCondition,
+  ShowFieldCondition, TriggerType,
   ValueProcessor
 } from '../../../types';
 import Empty from '../empty';
@@ -269,51 +269,51 @@ export function buildArrayPath(pathPrefix: string[], field: SchemaFormField): st
 }
 
 export class FieldDefinition<V = any> {
-  public id: string = null;
-  public definition: SchemaFormField = null;
-  public disabled = false;
-  public enum: any[] | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>) | Promise<any[]> = null;
-  public options: any;
-  public title: any = null;
   public array = false;
-  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
-  public processor: ValueProcessor;
+  public default?: V = null;
+  public definition: SchemaFormField = null;
   public description?: string | VNode;
   public destructPath?: {
     path: string,
     destruct: any
   } = null;
+  public disabled = false;
   public display = false;
   public displayValue?: any = null;
   public editable = true;
+  public enum: FieldDefinitionEnum;
   public errors?: string[] = null;
   public events?: { [key: string]: (...args: any[]) => any };
   public fields?: FormFields = null;
   public focus?: (event?: boolean) => any = null;
-  public default?: V = null;
+  public id: string = null;
+  public inputRef?: any;
   public loading = false;
+  public layoutType?: string | { [key: string]: unknown };
+  public layoutProps?: { [key: string]: unknown };
   public match?: (path: Path | IFormPathMatcher) => boolean = null;
+  public max?: number;
+  public min?: number;
   public name?: string = null;
+  public options: any;
   public onChange?: (fn: () => void) => void = null;
+  public processor: ValueProcessor;
   public path?: string[] = null;
   public plainPath?: string = null;
   public props?: { [key: string]: any } = null;
+  public placeholder?: string;
   public required = false;
-  public min?: number;
-  public max?: number;
   public rules?: IRuleDescription[] = null;
   public setGetValue?: (value?: any) => any = null;
+  public slot?: string = null;
   public store?: SchemaFormStore = null;
+  public title: any = null;
+  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
   public valid = true;
-  public validate?: (trigger?: string) => (boolean | Promise<unknown>) = null;
-  public inputRef?: any;
+  public validate?: (trigger?: TriggerType) => (boolean | Promise<unknown>) = null;
   public value: V = null;
   public visible = true;
   public xType: SchemaFormFieldType = null;
-  public slot?: string = null;
-  public layoutType?: string | { [key: string]: unknown };
-  public layoutProps?: { [key: string]: unknown };
-  public placeholder?: string;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,

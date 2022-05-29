@@ -87,7 +87,7 @@ export default defineComponent({
       formProps.onSubmit = e => {
         e.preventDefault();
       };
-      if (store.platform === 'mobile' && definition.definition.array) {
+      if (store.platform === 'mobile' && definition.definition?.array) {
         return groups.value.reduce((a, b) => a.concat(b));
       }
       const form = (

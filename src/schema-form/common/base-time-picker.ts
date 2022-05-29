@@ -17,7 +17,7 @@ export const baseTimePickerProps = {
   },
   clearable: {
     type: Boolean as PropType<boolean>,
-    default: false
+    default: true
   },
   format: {
     type: String as PropType<string>,

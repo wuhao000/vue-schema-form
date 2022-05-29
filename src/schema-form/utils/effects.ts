@@ -5,6 +5,7 @@ import {FieldDefinition, SchemaFormEvents} from '../internal/utils';
 import runValidation from '../uform/validator';
 import {values} from './object';
 import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
+import {isNotNull} from './utils';
 
 let contextId = 1;
 
@@ -33,7 +34,7 @@ class SchemaContext {
 
 }
 
-export const defineEffectsContext = () => {
+export const defineEffectsContext = <V>() => {
 
   const context: EffectsContext = function(...paths) {
     const required = (required: boolean) => {
@@ -44,7 +45,7 @@ export const defineEffectsContext = () => {
       }
       return context(...paths);
     };
-    const hide = (hide?: boolean): EffectsHandlers => {
+    const hide = (hide?: boolean): EffectsHandlers<V> => {
       context.__context.matchFields(paths).forEach(field => {
         if (typeof hide === 'boolean') {
           field.visible = !hide;
@@ -54,7 +55,7 @@ export const defineEffectsContext = () => {
       });
       return context(...paths);
     };
-    const show = (show?: boolean): EffectsHandlers => {
+    const show = (show?: boolean): EffectsHandlers<V> => {
       context.__context.matchFields(paths).forEach(field => {
         if (typeof show === 'boolean') {
           field.visible = show;
@@ -134,13 +135,17 @@ export const defineEffectsContext = () => {
         }
         return fields[0];
       },
-      toggle: (): EffectsHandlers => {
+      toggle: (): EffectsHandlers<V> => {
         context.__context.matchFields(paths).forEach(field => {
           field.visible = !field.visible;
         });
         return context(...paths);
       },
       value: (value: unknown) => {
+        if (!context.initialized()) {
+          console.warn('SchemaForm尚未初始化');
+          return undefined;
+        }
         const res = context.__context.matchFields(paths).map(it => {
           if (typeof value === 'function') {
             return it.setGetValue(value(it));
@@ -163,23 +168,25 @@ export const defineEffectsContext = () => {
       editable,
       readonly: readOnly,
       enable,
-      setEnum: (options: any): EffectsHandlers => {
-        context.__context.matchFields(paths).forEach(field => {
-          field.enum = options;
+      setEnum: (options: any): EffectsHandlers<V> => {
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            field.enum = options;
+          });
         });
         return context(...paths);
       },
-      setFieldProps: (props): EffectsHandlers => {
+      setFieldProps: (props): EffectsHandlers<V> => {
         context.__context.matchFields(paths).forEach(field => {
           Object.assign(field.props, props);
         });
         return context(...paths);
       },
-      onFieldCreate: (callback): EffectsHandlers => {
+      onFieldCreate: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldCreate, paths, callback);
         return context(...paths);
       },
-      onFieldBlur: (callback): EffectsHandlers => {
+      onFieldBlur: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldBlur, paths, callback);
         return context(...paths);
       },
@@ -189,22 +196,22 @@ export const defineEffectsContext = () => {
         });
         return context(...paths);
       },
-      onFieldFocus: (callback): EffectsHandlers => {
+      onFieldFocus: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldFocus, paths, callback);
         return context(...paths);
       },
-      onFieldCreateOrChange: (callback): EffectsHandlers =>
-        context(...paths).onFieldCreate(callback)
-          .onFieldChange(callback),
-      onFieldChange: (callback): EffectsHandlers => {
+      onFieldCreateOrChange: (callback): EffectsHandlers<V> =>
+          context(...paths).onFieldCreate(callback)
+              .onFieldChange(callback),
+      onFieldChange: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
       },
-      subscribe: (event: string, callback): EffectsHandlers => {
+      subscribe: (event: string, callback): EffectsHandlers<V> => {
         context.subscribe(event, paths, callback);
         return context(...paths);
       },
-      trigger: (event: string, value: any): EffectsHandlers => {
+      trigger: (event: string, value: any): EffectsHandlers<V> => {
         context.__context.matchFields(paths).forEach(field => {
           context.trigger(event, {
             path: field.plainPath,
@@ -214,7 +221,7 @@ export const defineEffectsContext = () => {
         });
         return context(...paths);
       },
-      takePath: (number: number): EffectsHandlers => {
+      takePath: (number: number): EffectsHandlers<V> => {
         if (paths.length === 0) {
           return context();
         } else {
@@ -222,12 +229,12 @@ export const defineEffectsContext = () => {
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-              it, context.__context.store.fields as any
+                it, context.__context.store.fields as any
             )), number));
           }
         }
       },
-      appendPath: (suffix: string): EffectsHandlers => {
+      appendPath: (suffix: string): EffectsHandlers<V> => {
         if (paths.length === 0) {
           return context();
         } else {
@@ -239,9 +246,9 @@ export const defineEffectsContext = () => {
         }
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
-      replaceLastPath: (...last: string[]): EffectsHandlers =>
-        context(...replaceLastPath(paths as string[], last))
-    } as EffectsHandlers;
+      replaceLastPath: (...last: string[]): EffectsHandlers<V> =>
+          context(...replaceLastPath(paths as string[], last))
+    } as EffectsHandlers<V>;
   } as EffectsContext;
   context.subscribes = {};
   context.subscribe = (e: string, pathsOrHandler, handler) => {
@@ -289,7 +296,22 @@ export const defineEffectsContext = () => {
       }
     });
   };
+  context.initialized = () => {
+    return isNotNull(context.__context);
+  };
+  context.callStack = [];
+  context.afterInitialized = (callback: () => void) => {
+    if (context.initialized()) {
+      callback();
+    } else {
+      context.callStack.push(callback);
+    }
+  };
   context.getValue = () => {
+    if (!context.initialized()) {
+      console.warn('SchemaForm尚未初始化');
+      return undefined;
+    }
     return context.__context.currentValue.value;
   };
   context.submit = (forceValidate: boolean, callback: (value) => any) => {
@@ -311,7 +333,10 @@ export const createContext = (store: SchemaFormStore,
 
   const context: EffectsContext = preDefinedContext || defineEffectsContext();
   context.__context = new SchemaContext(store, currentValue, onOk);
-
+  nextTick().then(() => {
+    context.callStack.forEach(it => it());
+    context.callStack = [];
+  });
   store.id = contextId++;
   return context;
 };
