@@ -1,6 +1,7 @@
 import {computed, ComputedRef} from 'vue';
 
-export const getOptionProperty = function getOptionProperty(option: any, property: string | ((option: any) => any)): any {
+export const getOptionProperty = function getOptionProperty(option: string | Record<string, unknown>,
+                                                            property: string | ((option: Record<string, unknown>) => unknown)): unknown {
   if (typeof option === 'string') {
     return option;
   } else if (typeof property === 'string') {

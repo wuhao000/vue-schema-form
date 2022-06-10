@@ -16,10 +16,10 @@ export default defineComponent({
       type: Boolean as PropType<boolean>, default: true
     },
     labelProperty: {
-      type: String, default: 'label'
+      type: [String, Function], default: 'label'
     },
     valueProperty: {
-      type: String, default: 'value'
+      type: [String, Function], default: 'value'
     },
     /**
      * 多选模式下是否在下拉框下放展示收起按钮

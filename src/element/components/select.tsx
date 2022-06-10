@@ -17,10 +17,10 @@ export default defineComponent({
       type: Boolean as PropType<boolean>, default: true
     },
     labelProperty: {
-      type: String, default: 'label'
+      type: [String, Function], default: 'label'
     },
     valueProperty: {
-      type: String, default: 'value'
+      type: [String, Function], default: 'value'
     },
     filterOption: {
       type: [Boolean, Function],

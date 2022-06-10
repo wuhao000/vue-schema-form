@@ -9,10 +9,10 @@ export default defineComponent({
     options: Array,
     span: Number as PropType<number>,
     labelProperty: {
-      type: String, default: 'label'
+      type: [String, Function], default: 'label'
     },
     valueProperty: {
-      type: String, default: 'value'
+      type: [String, Function], default: 'value'
     }
   },
   setup(props) {

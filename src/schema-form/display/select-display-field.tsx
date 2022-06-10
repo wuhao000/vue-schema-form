@@ -1,3 +1,4 @@
+import {getOptionProperty} from '@/schema-form/antd/components/utils';
 import {isVNode} from 'vue';
 
 export default (props) => {
@@ -8,11 +9,11 @@ export default (props) => {
   if (value && options) {
     let selected = [];
     if (field.array) {
-      selected = options.filter(it => value.includes(it[valueProperty]) || value.includes(it));
+      selected = options.filter(it => value.includes(getOptionProperty(it, valueProperty)) || value.includes(it));
     } else {
-      selected = options.filter(it => value === it[valueProperty] || value === it);
+      selected = options.filter(it => value === getOptionProperty(it, valueProperty) || value === it);
     }
-    const labels = selected.map(it => typeof it === 'object' ? it[labelProperty] : it)
+    const labels = selected.map(it => getOptionProperty(it, labelProperty))
     if (labels.some(it => isVNode(it))) {
       return <span>{labels}</span>;
     }
