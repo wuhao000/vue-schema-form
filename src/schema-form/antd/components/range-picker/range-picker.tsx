@@ -1,5 +1,5 @@
 import dayjs, {Dayjs} from 'dayjs';
-import {defineComponent, ref, watch} from 'vue';
+import {defineComponent, PropType, ref, watch} from 'vue';
 import {useBaseInput} from '../../../';
 import {isNotNull} from '../../../utils/utils';
 
@@ -23,7 +23,8 @@ export default defineComponent({
   props: {
     value: {
       type: Array
-    }
+    },
+    placeholder: [String, Array] as PropType<string | string[]>
   },
   setup(props, ctx) {
     const {emit} = ctx;
@@ -52,8 +53,11 @@ export default defineComponent({
       currentValue.value = value;
     };
     const getProps = () => {
+      const placeholder = typeof props.placeholder === 'string' ? [props.placeholder,
+        props.placeholder] : props.placeholder;
       return {
         ...ctx.attrs,
+        placeholder,
         size: size.value,
         value: currentValue.value,
         'onUpdate:value': updateCurrentValue

@@ -1,6 +1,8 @@
 import {DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
+import dayjs, {Dayjs} from 'dayjs';
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib} from '../';
 import {ILibComponents} from '../../../types';
+import {isNotNull} from '../utils/utils';
 import Upload from './upload';
 import NumberInput from './number';
 import {Modal} from 'antd-mobile-vue-next';
@@ -10,8 +12,34 @@ const Slider = (props, ctx) => <m-slider {...props}
 
 const Button = (props, ctx) => <m-button {...props}
                                          v-slots={ctx.slots}/>;
-const DatePickerItem = (props, ctx) => <m-date-picker-item {...props}
-                                                           v-slots={ctx.slots}/>;
+const DatePickerItem = (props, ctx) => {
+  const convertValue = (value: string | Date) => {
+    if (!value) {
+      return undefined;
+    }
+    if (value instanceof Date) {
+      return value;
+    } else if (typeof value === 'string' && props.mode === 'time') {
+      return dayjs(value, props.format || 'HH:mm').toDate();
+    } else {
+      return dayjs(value, props.format).toDate();
+    }
+  };
+  const convertValueBack = (value: Date) => {
+    if (isNotNull(value) && props.mode === 'time') {
+      return dayjs(value).format(props.format || 'HH:mm');
+    }
+    return value;
+  };
+  const value = convertValue(props.value)
+  return <m-date-picker-item
+      {...props}
+      value={value}
+      onUpdate:value={v => {
+        ctx.emit('update:value', convertValueBack(v));
+      }}
+      v-slots={ctx.slots}/>;
+};
 const Input = (props, ctx) => <m-input {...props}
                                        v-slots={ctx.slots}/>;
 const PickerItem = (props, ctx) => <m-picker-item {...props}
@@ -33,8 +61,26 @@ const CheckboxList = (props, ctx) => <m-checkbox-list {...props}
 
 const ImagePicker = (props, ctx) => <m-image-picker {...props}
                                                     v-slots={ctx.slots}/>;
-const CalendarItem = (props, ctx) => <m-calendar-item {...props}
-                                                      v-slots={ctx.slots}/>;
+const CalendarItem = (props, ctx) => {
+  let value = props.value;
+  if (typeof value === 'string' && props.value !== '') {
+    value = dayjs(value, props.format).toDate();
+  } else if (Array.isArray(value)) {
+    value = value.map(it => {
+      if (typeof it === 'string' && it !== '') {
+        return dayjs(it, props.format).toDate();
+      } else {
+        return it;
+      }
+    });
+  }
+  return <m-calendar-item {...props}
+                          value={value}
+                          onUpdate:value={v => {
+                            ctx.emit('update:value', v);
+                          }}
+                          v-slots={ctx.slots}/>;
+};
 
 export const ComponentMap: Record<keyof ILibComponents, any> = {
   alert: null,
@@ -132,6 +178,8 @@ export function registerAntdMobile() {
         FieldTypes.Year,
         FieldTypes.Month,
         FieldTypes.Datetime],
+      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+  registerMobile(DatePickerItem, FieldTypes.Time,
       'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerMobile(CalendarItem, [FieldTypes.DateRange], 'single', () => ({type: 'range'}));
   registerMobile(CalendarItem, [FieldTypes.DateTimeRange], 'single', () => ({type: 'range', pickTime: true}));

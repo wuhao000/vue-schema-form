@@ -36,8 +36,7 @@ export default defineComponent({
     };
   },
   render() {
-    return <a-time-picker {...{
-      ...this.getProps()
-    }}/>;
+    const props = this.getProps();
+    return <a-time-picker {...props}/>;
   }
 });

@@ -140,12 +140,10 @@ export default defineComponent({
             {content}
             {this.$slots.default?.()}
             <a-modal visible={this.previewVisible}
-                     footer={() => {
-                       return <Button type="primary"
-                                      onClick={() => {
-                                        this.cancelPreview();
-                                      }}>确定</Button>;
-                     }}
+                     footer={<Button type="primary"
+                                     onClick={() => {
+                                       this.cancelPreview();
+                                     }}>确定</Button>}
                      onCancel={() => {
                        this.cancelPreview();
                      }}>

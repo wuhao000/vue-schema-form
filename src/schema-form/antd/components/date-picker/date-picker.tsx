@@ -37,7 +37,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     value: {
-      type: [String, Object]
+      type: [String, Object, Number]
     },
     mode: {type: String as PropType<Mode>, default: 'date'},
     format: String
