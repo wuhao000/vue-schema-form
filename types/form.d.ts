@@ -334,6 +334,11 @@ export interface LayoutOptions {
    * 布局组件不适用form-item组件包裹
    */
   noWrap?: boolean;
+
+  /**
+   * 本组件不支持指令 (存在多个根节点)
+   */
+  noDirectives?: boolean;
 }
 
 /**

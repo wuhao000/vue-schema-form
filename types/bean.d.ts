@@ -179,7 +179,7 @@ interface BaseSchemaFormField<V = any> {
   /**
    * 表单输入组件的插槽
    */
-  slots?: Record<string, string | Slot>;
+  slots?: Record<string, string | ((...args: any[]) => VNode[] | VNode)>;
   /**
    * 栅格布局下的栅格数
    */

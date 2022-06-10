@@ -40,7 +40,8 @@ registerLayout({
   types: 'group',
   layoutOptions: {
     noTitle: true,
-    noWrap: true
+    noWrap: true,
+    noDirectives: true
   }
 });
 

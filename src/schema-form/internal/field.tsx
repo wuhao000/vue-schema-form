@@ -2,7 +2,6 @@ import {Slot} from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
-import SchemaFormFieldLabel from './label';
 import {
   computed,
   defineComponent,
@@ -20,10 +19,7 @@ import {
   watch,
   watchEffect
 } from 'vue';
-import {
-  DefaultSchemaFormField,
-  FlatFieldType, GridField, IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore, StepsField
-} from '../../../types';
+import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
 import ArrayWrapper from '../common/array-wrapper';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
@@ -45,13 +41,15 @@ import {
   swap,
   uuid
 } from '../utils/utils';
+import SchemaFormFieldLabel from './label';
 import {
   calcEditable,
   calcShowState,
   FieldDefinition,
   getComponentType,
   getFormItemComponent,
-  getRealFields, isNoWrap,
+  getRealFields,
+  isNoWrap,
   isNullStructValue,
   renderField,
   SchemaFormEvents
@@ -563,17 +561,28 @@ export default defineComponent({
       if (platform === MOBILE && !visible.value) {
         style.display = 'none';
       }
-      return <InputFieldComponent
-          {...propsTmp}
-          v-show={visible.value}
-          v-slots={slots}
-          class={className}
-          style={style}
-          key={field.value.plainPath}
-          ref={el => {
-            inputRef.value = el;
-            field.value.inputRef = el;
-          }}/>;
+      propsTmp.class = className;
+      propsTmp.style = style;
+      if (inputFieldDef.layoutOptions?.noDirectives) {
+        return <InputFieldComponent
+            {...propsTmp}
+            v-slots={slots}
+            key={field.value.plainPath}
+            ref={el => {
+              inputRef.value = el;
+              field.value.inputRef = el;
+            }}/>;
+      } else {
+        return <InputFieldComponent
+            {...propsTmp}
+            v-show={visible.value}
+            v-slots={slots}
+            key={field.value.plainPath}
+            ref={el => {
+              inputRef.value = el;
+              field.value.inputRef = el;
+            }}/>;
+      }
     };
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
