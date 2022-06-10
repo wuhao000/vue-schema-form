@@ -132,10 +132,10 @@ export default defineComponent({
     const preProps = computed<{ [key: string]: unknown }>(() => {
       const localProps: { [key: string]: unknown } = {...field.value.props};
       const renderComponent = fieldComponent.value;
-      if (renderComponent !== undefined && renderComponent.getProps) {
-        Object.assign(localProps, renderComponent.getProps(field.value));
-      }
       const {platform} = store;
+      if (renderComponent !== undefined && renderComponent.getProps) {
+        Object.assign(localProps, renderComponent.getProps(field.value, platform));
+      }
       const {path, schemaPath} = props;
       if (field.value.type === FieldTypes.Object) {
         localProps.platform = platform;

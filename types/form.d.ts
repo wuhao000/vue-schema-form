@@ -233,7 +233,7 @@ export interface SchemaFormComponent {
   arrayMode: ArrayMode;
   layoutOptions?: LayoutOptions;
   getDefaultValue?: (field: FieldDefinition) => any;
-  getProps: (field: FieldDefinition) => { [key: string]: unknown };
+  getProps: (field: FieldDefinition, platform: Platform) => { [key: string]: unknown };
   platform: Platform;
   valueProp?: string;
   wrap?: WrapType;
