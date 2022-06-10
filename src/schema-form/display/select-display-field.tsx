@@ -1,5 +1,5 @@
-import {getOptionProperty} from '@/schema-form/antd/components/utils';
 import {isVNode} from 'vue';
+import {getOptionProperty} from '../utils/utils';
 
 export default (props) => {
   const {field, value} = props;

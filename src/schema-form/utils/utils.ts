@@ -1,3 +1,4 @@
+import {isVNode, VNode} from 'vue';
 import {
   ILibComponents,
   Platform,
@@ -6,7 +7,6 @@ import {
   SchemaFormField
 } from '../../../types';
 import {FieldDefinition} from '../internal/utils';
-import {isVNode, VNode} from 'vue';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -170,7 +170,7 @@ export const resolveTitle = (definition: SchemaFormField,
   } else {
     return definition.title;
   }
-}
+};
 
 export const resolveOptions = (field: FieldDefinition, formValue: any) => {
   const fieldEnum = field.enum;
@@ -297,6 +297,7 @@ export const isNotNull = (value: any) => !isNull(value);
 
 export const fixComponentDefinition = (value: SchemaFormComponentOptions | SchemaFormComponentOptions[],
                                        forDisplay: boolean): SchemaFormComponent => {
+
   let options: SchemaFormComponentOptions = null;
   if (Array.isArray(value)) {
     if (forDisplay) {
@@ -315,9 +316,9 @@ export const fixComponentDefinition = (value: SchemaFormComponentOptions | Schem
     layoutOptions: options.layoutOptions,
     valueProp: options.valueProp || 'value',
     wrap: options.wrap,
-    getProps: (definition: FieldDefinition) => {
+    getProps: (definition: FieldDefinition, platform) => {
       const getProps = options.getProps || (() => ({}));
-      const props: any = getProps(definition, options.platforms as Platform) || {};
+      const props: any = getProps(definition, platform) || {};
       if (definition.title && options.platforms === MOBILE && !props.labelNumber) {
         props.labelNumber = typeof definition.title === 'string' ? (definition.title.length > 7 ? 7 : definition.title.length) : 7;
       }
