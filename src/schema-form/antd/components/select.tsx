@@ -1,4 +1,4 @@
-import {defineComponent, PropType} from 'vue';
+import {defineComponent, PropType, ref} from 'vue';
 import {isNull} from '../../utils/utils';
 import {useOptions} from './utils';
 
@@ -40,7 +40,13 @@ export default defineComponent({
   },
   setup(props) {
     const {options: localOptions} = useOptions(props);
-    return {localOptions};
+    const selectRef = ref();
+    const focus = (e) => {
+      if (selectRef.value && selectRef.value.focus) {
+        selectRef.value.focus(e);
+      }
+    };
+    return {localOptions, selectRef, focus};
   },
   render() {
     const selectProps: any = {
@@ -63,6 +69,7 @@ export default defineComponent({
       };
     }
     return <a-select
+        ref={'selectRef'}
         v-slots={slots}
         {...selectProps}/>;
   }
