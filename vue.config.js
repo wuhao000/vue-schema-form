@@ -15,6 +15,7 @@ module.exports = {
     config.externals = {
       'vue': 'Vue',
       'lodash': '_',
+      dayjs: 'dayjs',
       'ant-design-vue': 'antd'
     };
     config.module.rules.push({
