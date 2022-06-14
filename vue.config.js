@@ -15,11 +15,7 @@ module.exports = {
     config.externals = {
       'vue': 'Vue',
       'lodash': '_',
-      'ant-design-vue': 'antd',
-      'codemirror': 'CodeMirror',
-      'core-js': 'CoreJS'
-      // 'highlight': 'hljs',
-      // 'vue-router': 'VueRouter',
+      'ant-design-vue': 'antd'
     };
     config.module.rules.push({
       test: /\.md$/,
