@@ -16,7 +16,6 @@ module.exports = {
       'vue': 'Vue',
       'lodash': '_',
       'ant-design-vue': 'antd',
-      'antd-mobile-vue-next': 'antdm',
       'codemirror': 'CodeMirror',
       'core-js': 'CoreJS'
       // 'highlight': 'hljs',
