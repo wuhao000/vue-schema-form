@@ -187,6 +187,11 @@ export function registerAntd() {
     }
   });
   registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateRange], 'single');
+  registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateTimeRange], 'single', definition => {
+    return {
+      showTime: true
+    }
+  });
   registerDesktop(createComponentProxy(InputField), [FieldTypes.String], 'single');
   registerDesktop(createTextarea(), [FieldTypes.Text], 'single');
   registerDesktop(createComponentProxy(DatePicker),

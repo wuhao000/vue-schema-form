@@ -24,7 +24,8 @@ export default defineComponent({
     value: {
       type: Array
     },
-    placeholder: [String, Array] as PropType<string | string[]>
+    placeholder: [String, Array] as PropType<string | string[]>,
+    showTime: Boolean
   },
   setup(props, ctx) {
     const {emit} = ctx;
@@ -58,6 +59,7 @@ export default defineComponent({
       return {
         ...ctx.attrs,
         placeholder,
+        showTime: props.showTime,
         size: size.value,
         value: currentValue.value,
         'onUpdate:value': updateCurrentValue

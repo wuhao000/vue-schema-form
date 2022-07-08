@@ -30,6 +30,8 @@ export default defineComponent({
   },
   render() {
     const content = this.getContent();
+    console.log(this.$attrs.class);
+    console.log(this.$attrs.style);
     return <div class="vf-layout-text-box">{content}</div>;
   }
 });

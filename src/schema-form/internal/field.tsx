@@ -163,6 +163,11 @@ export default defineComponent({
       }
       if (renderComponent.mode === 'layout') {
         localProps.layout = definition.layout;
+        if (definition.layoutProps) {
+          Object.keys(definition.layoutProps).forEach(propKey => {
+            localProps[propKey] = definition.layoutProps[propKey];
+          });
+        }
         localProps.fieldDefinitions = relatedSubFields.value;
       }
       localProps.disabled = isDisabled.value;
@@ -233,7 +238,8 @@ export default defineComponent({
       const labelPropName = platform === DESKTOP ? 'label' : 'title';
       if (definition.tip) {
         formItemProps[labelPropName] = <SchemaFormFieldLabel
-            content={<div v-html={definition.tip}/>}
+            content={
+              isVNode(definition.tip) ? <div>{definition.tip}</div> : <div v-html={definition.tip}/>}
             platform={store.platform}
             title={field.value.title}/>;
       } else {
