@@ -1,12 +1,7 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.0-20",
-  "files": [
-    "es",
-    "package.json",
-    "types",
-    "templates"
-  ],
+  "version": "3.2.0-21",
+  "files": ["es", "package.json", "types", "templates"],
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
@@ -29,8 +24,8 @@
     "@types/less": "^3.0.3",
     "async-validator": "^4.0.7",
     "classnames": "^2.2.6",
-    "js-beautify": "^1.13.0",
     "dayjs": "^1.11.2",
+    "js-beautify": "^1.13.0",
     "lodash.chunk": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
@@ -98,8 +93,9 @@
     "pinyin": "^2.10.2",
     "raw-loader": "^4.0.1",
     "tinymce": "^5.10.1",
+    "ts-node": "^10.8.2",
     "ts-loader": "^8.0.3",
-    "typescript": "^4.7.3",
+    "typescript": "^4.7.4",
     "vant": "^3.4.3",
     "vite": "^2.6.13",
     "vite-plugin-md": "^0.11.4",
@@ -114,5 +110,5 @@
     }
   },
   "typings": "types/index.d.ts",
-  "lastVersion": "3.2.0-20"
+  "lastVersion": "3.2.0-21"
 }

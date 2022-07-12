@@ -8,9 +8,11 @@ export default defineComponent({
     value: Array,
     options: Array,
     span: Number as PropType<number>,
+    readonly: Boolean,
     labelProperty: {
       type: [String, Function], default: 'label'
     },
+    disabled: Boolean,
     valueProperty: {
       type: [String, Function], default: 'value'
     },
@@ -60,8 +62,13 @@ export default defineComponent({
       </div> : null}
       <a-checkbox-group {...props}
                         value={this.value}
+                        disabled={this.disabled}
                         onUpdate:value={(v) => {
-                          this.$emit('update:value', v);
+                          if (this.readonly) {
+                            this.$emit('update:value', this.value);
+                          } else if (!this.disabled) {
+                            this.$emit('update:value', v);
+                          }
                         }}
                         v-slots={this.$slots}/>
     </div>;
