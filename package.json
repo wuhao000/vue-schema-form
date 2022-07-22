@@ -1,7 +1,7 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.0-21",
-  "files": ["es", "package.json", "types", "templates"],
+  "version": "3.2.0-23",
+  "files": ["es", "package.json", "types", "templates", "src"],
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
@@ -14,7 +14,7 @@
     "cdn": "npm run lib && ts-node build/cdn.ts",
     "check": "ts-node build/check-ts.ts",
     "version": "ts-node build/version.ts",
-    "release": "npm run version && npm run compile && npm publish && npm run cdn",
+    "release": "npm run compile && npm run version && npm publish && npm run cdn",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
   },
   "publishConfig": {
@@ -110,5 +110,5 @@
     }
   },
   "typings": "types/index.d.ts",
-  "lastVersion": "3.2.0-21"
+  "lastVersion": "3.2.0-23"
 }

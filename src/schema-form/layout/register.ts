@@ -1,5 +1,6 @@
 import {Component} from 'vue';
-import {ArrayMode, FieldDefinition, LayoutOptions, Platform} from '../../../types';
+import {ArrayMode, LayoutOptions, Platform} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import {registerComponent} from '../config';
 import {DESKTOP, MOBILE} from '../utils/utils';
 import Card from './card';

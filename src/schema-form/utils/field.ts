@@ -1,4 +1,4 @@
-import {FieldDefinition} from '../internal/utils';
+import {FieldDefinition} from '../bean/field-definition';
 import {isRef, unref} from 'vue';
 import {setStructValue} from './destruct';
 

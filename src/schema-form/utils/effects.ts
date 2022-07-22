@@ -1,7 +1,8 @@
 import {Subject} from 'rxjs';
 import {nextTick, Ref} from 'vue';
 import {EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore} from '../../../types';
-import {FieldDefinition, SchemaFormEvents} from '../internal/utils';
+import {FieldDefinition} from '../bean/field-definition';
+import {SchemaFormEvents} from '../internal/utils';
 import runValidation from '../uform/validator';
 import {values} from './object';
 import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
@@ -48,9 +49,9 @@ export const defineEffectsContext = <V>() => {
     const hide = (hide?: boolean): EffectsHandlers<V> => {
       context.__context.matchFields(paths).forEach(field => {
         if (typeof hide === 'boolean') {
-          field.visible = !hide;
+          field.setVisible(!hide);
         } else {
-          field.visible = false;
+          field.setVisible(false);
         }
       });
       return context(...paths);
@@ -58,9 +59,9 @@ export const defineEffectsContext = <V>() => {
     const show = (show?: boolean): EffectsHandlers<V> => {
       context.__context.matchFields(paths).forEach(field => {
         if (typeof show === 'boolean') {
-          field.visible = show;
+          field.setVisible(show);
         } else {
-          field.visible = true;
+          field.setVisible(true);
         }
       });
       return context(...paths);
@@ -137,7 +138,7 @@ export const defineEffectsContext = <V>() => {
       },
       toggle: (): EffectsHandlers<V> => {
         context.__context.matchFields(paths).forEach(field => {
-          field.visible = !field.visible;
+          field.setVisible(!field.isVisible());
         });
         return context(...paths);
       },

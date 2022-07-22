@@ -41,7 +41,7 @@ export default defineComponent({
                   style={{paddingTop: '0'}}
                   buttonText="返回"
                   buttonType="primary"
-                  onClick={(e) => {
+                  onClick={() => {
                     this.visible = false;
                   }}/>
         </LibComponentsPopup>

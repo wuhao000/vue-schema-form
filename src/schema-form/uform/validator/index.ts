@@ -1,5 +1,5 @@
 import {IValidateResponse} from '../../../../types';
-import {FieldDefinition} from '../../internal/utils';
+import {FieldDefinition} from '../../bean/field-definition';
 import {flat} from '../../utils/array';
 import {isNotNull} from '../../utils/utils';
 import {format} from './utils';
@@ -11,7 +11,7 @@ export const runValidation = async (
 ): Promise<IValidateResponse[]> => {
   const queue = [];
   fields.forEach(field => {
-    if (field.visible === false ||
+    if (field.isVisible() === false ||
       field.display === false ||
       field.editable === false) {
       return;

@@ -1,4 +1,4 @@
-import {FieldDefinition} from '../internal/utils';
+import {FieldDefinition} from '../bean/field-definition';
 import {SchemaFormField} from '../../../types';
 import {Paths} from '../../../types';
 import {flat} from './array';

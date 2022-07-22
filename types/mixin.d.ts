@@ -1,5 +1,6 @@
 import {ComputedRef} from 'vue';
-import {FieldDefinition, SchemaFormStore} from './bean';
+import {FieldDefinition} from '../src/schema-form/bean/field-definition';
+import {SchemaFormStore} from './bean';
 
 export const useBaseInput: (props, ctx) => {
   store: SchemaFormStore;

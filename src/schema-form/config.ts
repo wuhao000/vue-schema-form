@@ -1,6 +1,6 @@
 import {Component} from 'vue';
 import {CommonFormProps, Platform, PropsTransformer, SchemaFormComponentOptions} from '../../types';
-import {FieldDefinition} from './internal/utils';
+import {FieldDefinition} from './bean/field-definition';
 import {ComponentStore, globalComponentStore} from './utils/register';
 
 

@@ -1,4 +1,4 @@
-import {FieldDefinition} from './internal/utils';
+import {FieldDefinition} from './bean/field-definition';
 
 function resolveWrap(field: FieldDefinition) {
   if (field.getComponent(true).wrap === false) {

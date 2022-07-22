@@ -1,12 +1,13 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {computed, defineComponent, PropType, provide, watch} from 'vue';
 import {SchemaFormField} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import {transformFormProps} from '../config';
 import {isEqual} from '../uform/utils';
 import {SchemaFormObjectStoreKey} from '../utils/key';
 import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
 import {baseFieldComponentProps, useBaseFieldComponent} from './field-based-component';
-import {FieldDefinition, getComponentType, getRealFields, isNoWrap} from './utils';
+import {getComponentType, getRealFields} from './utils';
 
 export default defineComponent({
   name: 'SchemaFormInternal',

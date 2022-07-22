@@ -1,5 +1,6 @@
 import {computed, defineComponent, PropType, ref, watch, watchEffect} from 'vue';
-import {FieldDefinition, SchemaFormField} from '../../../types';
+import {SchemaFormField} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import {flat} from '../utils/array';
 import {baseLayoutProps, useBaseLayout} from './base-layout';
 import './steps.less';

@@ -1,8 +1,8 @@
-import {Slot} from '@vue/runtime-core';
-import {Component, ComponentInternalInstance, VNode} from 'vue';
+import {Component, VNode} from 'vue';
+import {FieldDefinition} from '../src/schema-form/bean/field-definition';
 import {ValidateRules} from './async-validator';
 import {Effects, EffectsContext, SchemaFormComponent, SchemaFormComponentOptions} from './form';
-import {DefaultPatternRule, IFormPathMatcher, IRuleDescription, Path, Rule, TriggerType} from './uform';
+import {DefaultPatternRule, Rule} from './uform';
 
 export type Mode = 'edit' | 'display';
 
@@ -10,64 +10,6 @@ export type FieldDefinitionEnum =
     any[]
     | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>)
     | Promise<any[]>
-
-export class FieldDefinition<V = any> {
-  public array: boolean;
-  public default?: V;
-  public definition: SchemaFormField;
-  public options: any;
-  public description?: string | VNode;
-  public destructPath?: {
-    path: string,
-    destruct: any
-  };
-  public disabled: boolean;
-  public display: boolean;
-  public displayValue?: any;
-  public editable: boolean;
-  public enum: FieldDefinitionEnum;
-  public errors?: string[];
-  public events?: { [key: string]: (...args: any[]) => any };
-  public fields?: FormFields;
-  public focus?: (event?: boolean) => any;
-  public id: string;
-  public loading: boolean;
-  public match?: (path: Path | IFormPathMatcher) => boolean;
-  public max?: number;
-  public min?: number;
-  public name?: string;
-  public onChange?: (fn: () => void) => void;
-  public path?: string[];
-  public plainPath?: string;
-  public inputRef?: any;
-  public processor: ValueProcessor;
-  public props?: { [key: string]: any };
-  public required: boolean;
-  public rules?: IRuleDescription[];
-  public setGetValue?: (value?: any) => any;
-  public slot?: string;
-  public store?: SchemaFormStore;
-  public title: any;
-  public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[];
-  public valid: boolean;
-  public validate?: (trigger?: TriggerType) => (boolean | Promise<unknown>);
-  public value: V;
-  public visible: boolean;
-  public xType: SchemaFormFieldType;
-  public layoutType?: string | { [key: string]: unknown };
-  public layoutProps?: { [key: string]: unknown };
-  public placeholder?: string;
-
-  constructor(definition: SchemaFormField,
-              store: SchemaFormStore,
-              pathPrefix: string[], currentValue: any)
-
-  public generateEvents(): { [key: string]: (...args: any[]) => any }
-
-  public getComponent(): SchemaFormComponent;
-
-  public getRules(): IRuleDescription[];
-}
 
 
 export interface StorePlatformComponents {

@@ -9,7 +9,7 @@ import {
   isProxy,
   isRef,
   isVNode,
-  onBeforeUnmount,
+  onBeforeUnmount, onMounted,
   PropType,
   ref,
   toRaw,
@@ -20,6 +20,7 @@ import {
   watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import ArrayWrapper from '../common/array-wrapper';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
@@ -45,7 +46,6 @@ import SchemaFormFieldLabel from './label';
 import {
   calcEditable,
   calcShowState,
-  FieldDefinition,
   getComponentType,
   getFormItemComponent,
   getRealFields,
@@ -255,9 +255,9 @@ export default defineComponent({
       Object.assign(formItemProps, config.getFormItemProps(component, field.value, platform));
       return formItemProps;
     };
-    const visible = computed(() => field.value.visible || !field.value.plainPath);
+    const visible = computed(() => field.value.isVisible() || !field.value.plainPath);
     const validate = (trigger?: string): IValidateResponse[] | Promise<IValidateResponse[]> => {
-      if (!field.value.visible) {
+      if (!field.value.isVisible()) {
         return [];
       }
       if (fieldComponent.value?.mode === 'layout') {
@@ -326,30 +326,6 @@ export default defineComponent({
         setCurrentValue(val);
       }
     };
-    watchEffect(() => {
-      const v = calcShowState(props.definition, store.value, field.value);
-      if (v !== undefined) {
-        field.value.visible = v;
-      }
-    });
-    watchEffect(() => {
-      const e = calcEditable(props.definition, store.value, field.value);
-      if (e !== undefined) {
-        field.value.editable = e;
-      }
-    });
-    watchEffect(() => {
-      const opts = resolveOptions(field.value, store.value);
-      if (opts !== undefined) {
-        field.value.options = opts;
-      }
-    });
-    watchEffect(() => {
-      const title = resolveTitle(props.definition, store.value, field.value);
-      if (title !== undefined) {
-        field.value.title = title;
-      }
-    });
     const getArrayComponent = () => {
       const definition = props.definition;
       if (typeof definition.arrayComponent === 'string') {
@@ -697,17 +673,41 @@ export default defineComponent({
       if (field.value.type === FieldTypes.Object) {
         return inputComponent;
       }
-      const props: any = {title: field.value.title};
+      const formItemProps: Record<string, unknown> = {title: field.value.title};
       const FormItem: any = LibComponents.formItem['mobile'];
       const slots = {
         extra: () => inputComponent
       };
       return resolveWrap() ? <FormItem
-          {...props}
+          {...formItemProps}
           v-slots={slots}
           v-show={visible.value}
       /> : inputComponent;
     };
+    watchEffect(() => {
+      const v = calcShowState(props.definition, store.value, field.value);
+      if (v !== undefined) {
+        field.value.setVisible(v);
+      }
+    });
+    watchEffect(() => {
+      const e = calcEditable(props.definition, store.value, field.value);
+      if (e !== undefined) {
+        field.value.editable = e;
+      }
+    });
+    watchEffect(() => {
+      const opts = resolveOptions(field.value, store.value);
+      if (opts !== undefined) {
+        field.value.options = opts;
+      }
+    });
+    watchEffect(() => {
+      const title = resolveTitle(props.definition, store.value, field.value);
+      if (title !== undefined) {
+        field.value.title = title;
+      }
+    });
     return {
       editable,
       store,
@@ -719,6 +719,9 @@ export default defineComponent({
   render() {
     const field = this.field;
     const {editable, store: {platform, transitionName, transition}} = this;
+    if (field.plainPath === 'externalDatasourceOptions') {
+      console.log(2, field.isVisible());
+    }
     const definition = this.definition;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];
@@ -727,7 +730,7 @@ export default defineComponent({
         content.forEach((node: VNode) => {
           node.props = node.props ?? {};
           node.props.style = node.props.style ?? {};
-          if (field.visible) {
+          if (field.isVisible()) {
             delete node.props.style.display;
           } else {
             node.props.style.display = 'none';

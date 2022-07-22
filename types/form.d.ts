@@ -1,6 +1,7 @@
 import {Subject} from 'rxjs';
 import {App, Component, Ref, VNode} from 'vue';
-import {DefaultSchemaFormField, FieldDefinition, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
+import {FieldDefinition} from '../src/schema-form/bean/field-definition';
+import {DefaultSchemaFormField, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
 import {IFormPathMatcher, IRuleDescription, Path} from './uform';
 
 export interface IValidateResponse {

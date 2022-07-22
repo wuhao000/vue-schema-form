@@ -2,12 +2,12 @@ import {Component} from '@vue/runtime-core';
 import {
   ArrayMode,
   DisplayComponentOptions,
-  FieldDefinition,
   Platform,
   SchemaFormComponent,
   SchemaFormComponentOptions,
   StorePlatformComponents
 } from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import {registerComponent} from '../config';
 import {DESKTOP, fixComponentDefinition, MOBILE, Mode} from './utils';
 

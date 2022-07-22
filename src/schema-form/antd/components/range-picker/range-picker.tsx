@@ -4,14 +4,15 @@ import {useBaseInput} from '../../../';
 import {isNotNull} from '../../../utils/utils';
 
 const convertValue = (value: Array<Date | number>): any => {
-  if (!value) {
+  if (isNotNull(value)) {
+    return value.filter(it => isNotNull(it)).map(it => dayjs(it));
+  } else {
     return undefined;
   }
-  return value.filter(it => isNotNull(it)).map(it => dayjs(it));
 };
 
 const convertValueBack = (value: Dayjs[] | undefined): Date[] => {
-  if (value !== undefined) {
+  if (isNotNull(value)) {
     return value.map(it => it.toDate());
   } else {
     return undefined;

@@ -1,5 +1,6 @@
 import {Component} from 'vue';
-import {FieldDefinition, Platform} from './bean';
+import {FieldDefinition} from '../src/schema-form/bean/field-definition';
+import {Platform} from './bean';
 import {PropsTransformer} from './form';
 
 

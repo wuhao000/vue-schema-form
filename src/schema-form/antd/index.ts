@@ -9,7 +9,8 @@ import {
   registerDesktopLib,
   registerDisplay
 } from '../';
-import {FieldDefinition, ILibComponents} from '../../../types';
+import {ILibComponents} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import DUrl from '../common/url';
 import {isNotNull} from '../utils/utils';
 import Button from './components/button';

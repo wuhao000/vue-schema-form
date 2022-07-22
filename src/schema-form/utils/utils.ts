@@ -6,7 +6,7 @@ import {
   SchemaFormComponentOptions,
   SchemaFormField
 } from '../../../types';
-import {FieldDefinition} from '../internal/utils';
+import {FieldDefinition} from '../bean/field-definition';
 
 export const ASchemaForm = 'ASchemaForm';
 

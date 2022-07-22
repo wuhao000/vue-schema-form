@@ -2,7 +2,7 @@ import {PlusOutlined} from '@ant-design/icons-vue';
 import classNames from 'classnames';
 import {computed, ComputedRef, defineComponent, inject, PropType} from 'vue';
 import {BaseArrayComponentProps, SchemaFormStore} from '../../../types';
-import {FieldDefinition} from '../internal/utils';
+import {FieldDefinition} from '../bean/field-definition';
 import {SchemaFormStoreKey} from '../utils/key';
 import {
   getButtonComponent, getColComponent, getContentComponent, getLayoutComponent, getRowComponent, getSiderComponent,
