@@ -134,7 +134,9 @@ export default defineComponent({
           <a-upload {...this.uploadProps}
                     listType={this.listType}
                     v-model={[this.fileList, 'fileList']}
+                    openFileDialogOnClick={true}
                     onChange={this.onChange}
+                    capture={undefined}
                     onPreview={this.onPreview}
                     size={this.size}>
             {content}

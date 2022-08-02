@@ -719,9 +719,6 @@ export default defineComponent({
   render() {
     const field = this.field;
     const {editable, store: {platform, transitionName, transition}} = this;
-    if (field.plainPath === 'externalDatasourceOptions') {
-      console.log(2, field.isVisible());
-    }
     const definition = this.definition;
     if (definition.slot) {
       const slot = this.store.root.slots[definition.slot];
