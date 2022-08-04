@@ -68,14 +68,18 @@ export default defineComponent({
         ctx.emit('change', f);
       },
       onPreview(f: AntUploadFile) {
-        if (f.type.indexOf('image/') !== 0) {
+        const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        if (f.type.indexOf('image/') === 0) {
+          previewUrl.value = f.url;
+          if (previewUrl.value) {
+            previewVisible.value = true;
+            ctx.emit('preview', f);
+          }
+        } else if (typeList.includes(f.type)) {
+          window.open(f.url);
+        } else {
           Toast.info('该文件不支持预览');
           return;
-        }
-        previewUrl.value = f.url;
-        if (previewUrl.value) {
-          previewVisible.value = true;
-          ctx.emit('preview', f);
         }
       },
       cancelPreview() {
