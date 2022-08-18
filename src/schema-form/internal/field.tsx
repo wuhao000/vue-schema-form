@@ -9,8 +9,10 @@ import {
   isProxy,
   isRef,
   isVNode,
-  onBeforeUnmount, onMounted,
+  onBeforeUnmount,
   PropType,
+  provide,
+  reactive,
   ref,
   toRaw,
   Transition,
@@ -20,7 +22,6 @@ import {
   watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
-import {FieldDefinition} from '../bean/field-definition';
 import ArrayWrapper from '../common/array-wrapper';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
@@ -46,6 +47,7 @@ import SchemaFormFieldLabel from './label';
 import {
   calcEditable,
   calcShowState,
+  FieldStore,
   getComponentType,
   getFormItemComponent,
   getRealFields,
@@ -54,6 +56,7 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
+import {FieldDefinition} from "../bean/field-definition";
 
 
 export default defineComponent({
@@ -115,6 +118,18 @@ export default defineComponent({
       }
     };
     const fieldOperations: any = inject(SchemaFormFieldOperationStoreKey as any);
+    const localStore = reactive({
+      field: props.field,
+      index: props.index,
+      path: props.path,
+      schemaPath: props.schemaPath,
+      value: props.value
+    });
+    watchEffect(() => {
+      localStore.index = props.index;
+      localStore.value = props.value;
+    });
+    provide(FieldStore, localStore);
     watch(() => field.value, localField => {
       fieldOperations.addField(localField);
     }, {immediate: true});

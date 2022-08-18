@@ -1,6 +1,6 @@
-import {defineComponent, PropType, ref} from 'vue';
-import {isNull} from '../../utils/utils';
-import {useOptions} from './utils';
+import { defineComponent, PropType, ref } from 'vue';
+import { isNull } from '../../utils/utils';
+import { useOptions } from './utils';
 
 
 export default defineComponent({
@@ -33,20 +33,20 @@ export default defineComponent({
             return true;
           }
           return option.label.toString().includes(value)
-              || option.value.toString().includes(value);
+            || option.value.toString().includes(value);
         };
       }
     }
   },
   setup(props) {
-    const {options: localOptions} = useOptions(props);
+    const { options: localOptions } = useOptions(props);
     const selectRef = ref();
-    const focus = (e) => {
-      if (selectRef.value && selectRef.value.focus) {
-        selectRef.value.focus(e);
+    const focus = () => {
+      if (selectRef.value) {
+        selectRef.value.focus();
       }
     };
-    return {localOptions, selectRef, focus};
+    return { localOptions, focus, selectRef };
   },
   render() {
     const selectProps: any = {
@@ -60,17 +60,17 @@ export default defineComponent({
       ...this.$slots
     };
     if (this.showClose) {
-      slots.dropdownRender = ({menuNode, props}) => {
+      slots.dropdownRender = ({ menuNode, props }) => {
         const closeMenu = <a class="multiple-select-close-btn">收起</a>;
         if (this.$slots.dropdownRender) {
-          return [this.$slots.dropdownRender({menuNode, props}), closeMenu];
+          return [this.$slots.dropdownRender({ menuNode, props }), closeMenu];
         }
         return [menuNode, closeMenu];
       };
     }
     return <a-select
-        ref={'selectRef'}
-        v-slots={slots}
-        {...selectProps}/>;
+      ref={'selectRef'}
+      v-slots={slots}
+      {...selectProps} />;
   }
 });

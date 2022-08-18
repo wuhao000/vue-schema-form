@@ -17,6 +17,8 @@ import {globalComponentStore} from '../utils/register';
 import {isNotNull, isNull, LibComponents, Mode} from '../utils/utils';
 import FormField from './field';
 
+export const FieldStore = Symbol('SchemaFormFieldStore');
+
 export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
   const propertyPath = splitPath(property);
   let tmp = currentValue;
