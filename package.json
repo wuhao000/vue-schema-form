@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.3-2",
+  "version": "3.2.3-4",
   "files": ["es", "package.json", "types", "templates", "src"],
   "main": "es/index.js",
   "scripts": {
@@ -110,5 +110,5 @@
     }
   },
   "typings": "types/index.d.ts",
-  "lastVersion": "3.2.3-1"
+  "lastVersion": "3.2.3-3"
 }

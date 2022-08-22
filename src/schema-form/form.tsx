@@ -359,7 +359,9 @@ const SchemaForm = defineComponent({
       this.$slots.footer?.()
     ];
     const classes = className(prefixCls, {
-      [`${prefixCls}-sticky`]: sticky
+      [`${prefixCls}-sticky`]: sticky,
+      [`${prefixCls}-readonly`]: !this.editable,
+      [`${prefixCls}-editable`]: this.editable,
     }, `${prefixCls}-${this.platform}`, this.$attrs.class as any);
     if (this.sticky) {
       content = <LibComponentsContent>

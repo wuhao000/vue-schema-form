@@ -20,6 +20,8 @@ export * from './common/base-url';
 
 export * from './mixin';
 
-export const SchemaFormStoreKey: string;
+export const SchemaFormStoreKey: symbol;
+
+export const FieldStore: symbol;
 
 export default SchemaForm;

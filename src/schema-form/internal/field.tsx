@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {
   computed,
-  defineComponent,
+  defineComponent, h,
   inject,
   isProxy,
   isRef,
@@ -22,6 +22,7 @@ import {
   watchEffect
 } from 'vue';
 import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
 import ArrayWrapper from '../common/array-wrapper';
 import {config, getConfirmFunction} from '../config';
 import Empty from '../empty';
@@ -56,7 +57,6 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
-import {FieldDefinition} from "../bean/field-definition";
 
 
 export default defineComponent({
@@ -629,7 +629,10 @@ export default defineComponent({
       const style = formItemProps.style;
       const inputFieldDef = fieldComponent.value;
       const className = classNames(formItemProps.class, {
-        'is-layout': inputFieldDef.mode === 'layout'
+        'is-layout': inputFieldDef.mode === 'layout',
+        'schema-form-field': true,
+        'schema-form-field-readonly': !editable.value,
+        'schema-form-field-editable': editable.value
       });
       delete formItemProps.className;
       // 是否使用form-item组件包裹
@@ -652,10 +655,12 @@ export default defineComponent({
           label: () => label
         };
       }
+      const slots = formItemProps.slots;
+      delete formItemProps.slots;
       const formItem = noWrap ? inputComponent :
           <FormItemComponent
               {...formItemProps}
-              v-slots={formItemProps.slots}
+              v-slots={slots}
               v-show={visible.value}
               key={props.field.plainPath}
               class={className}
@@ -693,11 +698,17 @@ export default defineComponent({
       const slots = {
         extra: () => inputComponent
       };
+      const classes = classNames(formItemProps.class, {
+        'schema-form-field': true,
+        'schema-form-field-readonly': !editable.value,
+        'schema-form-field-editable': editable.value
+      })
       return resolveWrap() ? <FormItem
           {...formItemProps}
+          class={classes}
           v-slots={slots}
           v-show={visible.value}
-      /> : inputComponent;
+      /> : h(inputComponent, {class: classes});
     };
     watchEffect(() => {
       const v = calcShowState(props.definition, store.value, field.value);

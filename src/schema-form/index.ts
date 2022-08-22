@@ -36,7 +36,7 @@ export {
 } from './antd/components';
 
 export {SchemaFormStoreKey} from './utils/key';
-
+export {FieldStore} from './internal/utils';
 export {registerAntdMobile} from './antdm/register';
 export {registerAntd} from './antd';
 export {registerDesktopLib, resolveOptions, FieldTypes, registerMobileLib} from './utils/utils';
