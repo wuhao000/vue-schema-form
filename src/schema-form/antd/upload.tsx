@@ -76,7 +76,7 @@ export default defineComponent({
             ctx.emit('preview', f);
           }
         } else if (typeList.includes(f.type)) {
-          window.open(f.url);
+          window.open('https://view.officeapps.live.com/op/view.aspx?src=' + f.url);
         } else {
           Toast.info('该文件不支持预览');
           return;
