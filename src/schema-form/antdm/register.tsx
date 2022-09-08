@@ -188,8 +188,7 @@ export function registerAntdMobile() {
   registerComponent({
     component: SwitchItem,
     types: FieldTypes.Boolean,
-    platforms: 'mobile',
-    valueProp: 'checked'
+    platforms: 'mobile'
   });
   registerComponent({
     component: Upload,
