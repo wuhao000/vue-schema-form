@@ -68,7 +68,7 @@ export default defineComponent({
         ctx.emit('change', f);
       },
       onPreview(f: AntUploadFile) {
-        const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
         if (f.type.indexOf('image/') === 0) {
           previewUrl.value = f.url;
           if (previewUrl.value) {
@@ -77,6 +77,8 @@ export default defineComponent({
           }
         } else if (typeList.includes(f.type)) {
           window.open('https://view.officeapps.live.com/op/view.aspx?src=' + f.url);
+        } else if (['application/pdf', 'text/plain', 'video/mpeg', 'audio/mpeg'].includes(f.type)) {
+          window.open(f.url);
         } else {
           Toast.info('该文件不支持预览');
           return;
