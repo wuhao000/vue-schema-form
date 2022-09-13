@@ -96,6 +96,7 @@ export default defineComponent({
     const currentValue = ref(props.value ?? null);
     const field = computed(() => props.field);
     watch(() => currentValue.value, _.debounce(val => {
+      const oldValue = field.value.value;
       field.value.value = val;
       emit(`update:value`, val);
       emit('change', val);
@@ -105,7 +106,8 @@ export default defineComponent({
       store.context.trigger(SchemaFormEvents.fieldChange, {
         path: field.value.plainPath,
         value: val,
-        field: field.value
+        field: field.value,
+        oldValue
       });
     }, 5) as any, {deep: true});
     const editable = computed(() => store.editable && field.value.editable);

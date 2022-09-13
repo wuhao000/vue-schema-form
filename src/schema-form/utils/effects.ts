@@ -277,7 +277,7 @@ export const defineEffectsContext = <V>() => {
             if (isPathMatchPatterns(v.field, patterns)) {
               const h = context(v.field.plainPath);
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
-                handler.call(h, v.value, v.path);
+                handler.call(h, v.value, v.path, v.oldValue);
               } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
                 handler.call(h, v.path, v.event);
               } else {
