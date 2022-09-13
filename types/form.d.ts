@@ -165,9 +165,9 @@ export interface EffectsHandlers<V> {
   isEnabled(): boolean;
 
   onFieldBlur: (cb: (this: EffectsHandlers<V>, path: string, event?: Event) => any) => EffectsHandlers<V>;
-  onFieldChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField) => any) => EffectsHandlers<V>;
+  onFieldChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField, oldValue?: any) => any) => EffectsHandlers<V>;
   onFieldCreate: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField) => any) => EffectsHandlers<V>;
-  onFieldCreateOrChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField) => any) => EffectsHandlers<V>;
+  onFieldCreateOrChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField, oldValue?: unknown) => any) => EffectsHandlers<V>;
   onFieldFocus: (cb: (this: EffectsHandlers<V>, path: string, event?: Event) => any) => EffectsHandlers<V>;
   paths: () => string[];
 
