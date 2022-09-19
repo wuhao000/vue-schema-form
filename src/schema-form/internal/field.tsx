@@ -586,11 +586,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       fieldOperations.removeField(field.value);
     });
-    const onCreated = () => {
-      // 设置默认值
-      if (isNullStructValue(currentValue.value, field.value.destructPath.destruct)) {
-        setCurrentValue(getDefaultValue(field.value));
-      }
+    watch(() => props.field, () => {
       // 初始化属性
       Object.assign(field.value, {
         validate,
@@ -612,6 +608,12 @@ export default defineComponent({
           }
         }
       });
+    }, {immediate: true})
+    const onCreated = () => {
+      // 设置默认值
+      if (isNullStructValue(currentValue.value, field.value.destructPath.destruct)) {
+        setCurrentValue(getDefaultValue(field.value));
+      }
       // 触发创建事件
       store.context.trigger(SchemaFormEvents.fieldCreate, {
         path: field.value.plainPath,
