@@ -339,9 +339,9 @@ const SchemaForm = defineComponent({
     const LibComponentsContent: any = LibComponents.content[this.platform as string];
     const LibComponentsFooter: any = LibComponents.footer[this.platform as string];
     const {sticky, prefixCls, store, currentValue, realSchema} = this;
-    const rootFieldDef: any = Object.assign({}, realSchema, {
+    const rootFieldDef: any = Object.assign({
       type: 'object'
-    });
+    }, realSchema);
     let content: any = [
       this.$slots.header?.(),
       renderField(

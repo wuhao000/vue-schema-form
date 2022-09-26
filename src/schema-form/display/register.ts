@@ -1,5 +1,6 @@
 import {registerComponent} from '../config';
 import InternalForm from '../internal/form';
+import TableRow from '../internal/table-row';
 import {registerDisplay} from '../utils/register';
 import {DESKTOP, FieldTypes, MOBILE} from '../utils/utils';
 import MobileDisplayField from './mobile-display-field';
@@ -79,10 +80,34 @@ registerComponent({
     };
   }
 });
+registerComponent({
+  component: TableRow,
+  platforms: [DESKTOP, MOBILE],
+  types: FieldTypes.TableRow,
+  arrayMode: 'single',
+  getProps: (field, platform) => {
+    return {
+      platform,
+      field
+    };
+  }
+});
 registerDisplay({
   component: InternalForm,
   platforms: [DESKTOP, MOBILE],
   types: FieldTypes.Object,
+  arrayMode: 'single',
+  getProps: (definition, platform) => {
+    return {
+      platform,
+      definition
+    };
+  }
+});
+registerDisplay({
+  component: TableRow,
+  platforms: [DESKTOP, MOBILE],
+  types: FieldTypes.TableRow,
   arrayMode: 'single',
   getProps: (definition, platform) => {
     return {

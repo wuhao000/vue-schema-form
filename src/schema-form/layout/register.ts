@@ -69,7 +69,10 @@ registerLayout({
   component: Table,
   platforms: DESKTOP,
   arrayMode: 'array',
-  types: 'table'
+  types: 'table',
+  getProps: (field, platform) => {
+    return {field, platform}
+  }
 });
 registerLayout({
   component: FormBlock,

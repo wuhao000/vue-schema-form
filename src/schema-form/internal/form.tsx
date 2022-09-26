@@ -1,6 +1,5 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {computed, defineComponent, PropType, provide, watch} from 'vue';
-import {SchemaFormField} from '../../../types';
 import {FieldDefinition} from '../bean/field-definition';
 import {transformFormProps} from '../config';
 import {isEqual} from '../uform/utils';

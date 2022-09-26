@@ -97,6 +97,17 @@ export default [{
   children: [
     
   ]
+},
+{
+  path: '/demo/AntDesignVue/biaoge',
+  component: () => import('../generated/demo/AntDesignVue/biaoge/index.vue'),
+  meta: {
+    tags: ['Ant Design Vue'],
+    name: '表格'
+  },
+  children: [
+    
+  ]
 }
   ]
 }, {

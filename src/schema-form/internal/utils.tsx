@@ -169,7 +169,8 @@ export function renderField(pathPrefix: string[] | null,
                             store: SchemaFormStore,
                             fieldDefinition: SchemaFormField,
                             currentValue: { [p: string]: any } | Array<{ [p: string]: any }>,
-                            index: number, wrap: boolean, emit) {
+                            index: number,
+                            wrap: boolean, emit) {
   let value = null;
   if (fieldDefinition.property?.includes('.')) {
     value = getPropertyValueByPath(fieldDefinition.property.substring(0, fieldDefinition.property.lastIndexOf('.')), currentValue);
@@ -276,7 +277,7 @@ export const isNoWrap = (inputFieldDef: SchemaFormComponent, definition: SchemaF
     const componentDef = getComponentType(store, {
       type: definition.arrayComponent
     });
-    if (componentDef.layoutOptions.noWrap) {
+    if (componentDef.layoutOptions?.noWrap) {
       return true;
     }
   }

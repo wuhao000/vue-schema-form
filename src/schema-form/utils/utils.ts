@@ -47,6 +47,7 @@ export enum FieldTypes {
   Password = 'password',
   TimeRange = 'timerange',
   AutoComplete = 'autocomplete',
+  TableRow = 'table-row',
 }
 
 export const DESKTOP = 'desktop';
@@ -158,8 +159,8 @@ export const LibComponents: ILibComponents = {
 };
 
 export const resolveTitle = (definition: SchemaFormField,
-                             formValue: any,
-                             field: FieldDefinition): string | VNode | VNode[] | undefined => {
+                             formValue?: any,
+                             field?: FieldDefinition): string | VNode | VNode[] | undefined => {
   if (isNull(definition.title)) {
     return undefined;
   }

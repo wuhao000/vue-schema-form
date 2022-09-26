@@ -247,6 +247,7 @@ export interface IIcons {
   info: any;
   plus: any;
   up: any;
+  minus: any;
 }
 
 export interface ILibComponents {

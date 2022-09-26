@@ -550,7 +550,7 @@ export default defineComponent({
         });
         propsTmp.title = formItemProps.title;
       }
-      if (field.value.type === 'object') {
+      if (field.value.type === 'object' || field.value.type === 'table-row') {
         const fields = getRealFields(props.definition);
         const currentFields = (propsTmp.definition as any).fields;
         if (!_.isEqual(currentFields, fields)) {
@@ -640,7 +640,7 @@ export default defineComponent({
       });
       delete formItemProps.className;
       // 是否使用form-item组件包裹
-      const noWrap = isNoWrap(inputFieldDef, definition, store, field.value);
+      const noWrap = isNoWrap(inputFieldDef, definition, store, field.value) || props.wrap === false;
       // 是否使用form-item组件的title
       const noTitle = !!(definition?.wrapperProps?.noTitle ?? inputFieldDef.layoutOptions?.noTitle);
       const label = [];
