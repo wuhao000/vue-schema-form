@@ -702,7 +702,7 @@ export default defineComponent({
       const slots = {
         extra: () => inputComponent
       };
-      const classes = classNames(formItemProps.class, {
+      const classes = classNames(formItemProps.class as string | Record<string, unknown>, {
         'schema-form-field': true,
         'schema-form-field-readonly': !editable.value,
         'schema-form-field-editable': editable.value
