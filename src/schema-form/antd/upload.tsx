@@ -14,6 +14,7 @@ export default defineComponent({
   name: 'DUpload',
   props: {
     hint: String,
+    showError: Boolean,
     ...baseUpdateProps
   },
   emits: ['change', 'preview', 'update:value'],
@@ -68,7 +69,10 @@ export default defineComponent({
         ctx.emit('change', f);
       },
       onPreview(f: AntUploadFile) {
-        const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+        const typeList = ['application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
         if (f.type.indexOf('image/') === 0) {
           previewUrl.value = f.url;
           if (previewUrl.value) {
@@ -136,6 +140,18 @@ export default defineComponent({
             </a-button>
         );
       }
+      const errors = this.showError ? (
+          <ul class={'text-danger'}>
+            {
+              this.fileList.filter(it => it.error).map(it => (
+                  <li>
+                    <label>{it.name}</label>:
+                    <div>{it.error.message}</div>
+                  </li>
+              ))
+            }
+          </ul>
+      ) : undefined;
       return (
           <a-upload {...this.uploadProps}
                     listType={this.listType}
@@ -147,6 +163,7 @@ export default defineComponent({
                     size={this.size}>
             {content}
             {this.$slots.default?.()}
+            {errors}
             <a-modal visible={this.previewVisible}
                      footer={<Button type="primary"
                                      onClick={() => {

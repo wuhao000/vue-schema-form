@@ -17,6 +17,7 @@ export default defineComponent({
           default: () => this.title,
           control: () => <DUpload
               {...{...this.$props, ...this.$attrs}}
+              showError={true}
               mode={"card"}
           />
         }}
