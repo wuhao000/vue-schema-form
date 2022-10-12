@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {defineComponent, inject, TransitionGroup} from 'vue';
+import {defineComponent, inject, isVNode, TransitionGroup} from 'vue';
 import {SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
@@ -156,7 +156,7 @@ export default defineComponent({
       {renderTitle()}
       <TransitionGroup {...props}>
         {
-          fields.length ? fields.map((it, index) => {
+          fields.length ? fields.filter(it => it.type?.toString() !== 'Symbol(Comment)').map((it, index) => {
             const key = it.props.value?.__id__;
             return <FormBlockItem
                 id={key}
