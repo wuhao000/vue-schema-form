@@ -130,7 +130,7 @@ export default defineComponent({
     return <div class="schema-form-block-wrap schema-form-block-wrap-mobile">
       <TransitionGroup {...props}>
         {
-          fields.length ? fields.map((it, index) => {
+          fields.length ? fields.filter(it => it.type?.toString() !== 'Symbol(Comment)').map((it, index) => {
             const key = it.props.value?.__id__;
             return <FormBlockItem
                 id={key}
