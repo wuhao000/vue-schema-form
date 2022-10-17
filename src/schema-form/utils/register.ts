@@ -25,7 +25,7 @@ export class ComponentStore {
       typeDef[options.types as string] = [];
     }
     const def: SchemaFormComponent = fixComponentDefinition(options, options.mode === 'display');
-    typeDef[options.types as string].push(def);
+    typeDef[options.types as string].splice(0,0, def);
   }
 
   public search(mode: Mode,

@@ -10,7 +10,7 @@ export default defineComponent({
   },
   render() {
     if (this.value) {
-      return this.value;
+      return <span>文件</span>;
     }
     return getDefaultEmptyText();
   }
