@@ -1,6 +1,7 @@
 import {computed, defineComponent, PropType} from 'vue';
 import {useOptions} from './utils';
 import classNames from 'classnames';
+import {ClassType} from "../../../../types";
 
 export default defineComponent({
   name: 'DCheckboxGroup',
@@ -44,7 +45,7 @@ export default defineComponent({
     };
   },
   render() {
-    const classes = classNames(this.$attrs.class, {
+    const classes = classNames(this.$attrs.class as ClassType, {
       'ant-checkbox-group-span': this.span > 0,
       ['ant-checkbox-group-span-' + this.span]: this.span > 0
     });

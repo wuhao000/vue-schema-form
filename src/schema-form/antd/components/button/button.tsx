@@ -3,6 +3,7 @@ import {defineComponent, PropType} from 'vue';
 import {baseButtonProps} from '../../../common/base-button';
 import {useBaseInput} from '../../../mixins';
 import './index.less';
+import {ClassType} from "../../../../../types";
 
 export default defineComponent({
   name: 'DButton',
@@ -39,7 +40,7 @@ export default defineComponent({
       onClick: this.onClick,
       htmlType: this.htmlType,
       size: this.size,
-      class: classNames(this.$attrs.class, {
+      class: classNames(this.$attrs.class as ClassType, {
         [this.prefixCls + '-text']: this.text
       }),
       shape: this.circle ? 'circle' : this.$attrs.shape

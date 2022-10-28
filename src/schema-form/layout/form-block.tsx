@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import {defineComponent, inject, isVNode, TransitionGroup} from 'vue';
-import {SchemaFormStore} from '../../../types';
+import {defineComponent, inject, isVNode, PropType, TransitionGroup} from 'vue';
+import {ClassType, SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
 import './form-block.less';
@@ -100,7 +100,7 @@ export default defineComponent({
     title: {
       type: [String, Object]
     },
-    class: [String, Object, Array],
+    class: [String, Object, Array] as PropType<string | string[] | Record<string, unknown>>,
     style: [Object, String],
     removeText: String,
     display: Boolean,
@@ -148,7 +148,7 @@ export default defineComponent({
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
-      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class),
+      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class as ClassType),
       style: this.style,
       tag: 'div'
     };

@@ -13,7 +13,7 @@ import {
   watch, watchEffect
 } from 'vue';
 import {
-  Action,
+  Action, ClassType,
   Effects,
   EffectsContext,
   IValidateResponse,
@@ -362,7 +362,7 @@ const SchemaForm = defineComponent({
       [`${prefixCls}-sticky`]: sticky,
       [`${prefixCls}-readonly`]: !this.editable,
       [`${prefixCls}-editable`]: this.editable,
-    }, `${prefixCls}-${this.platform}`, this.$attrs.class as any);
+    }, `${prefixCls}-${this.platform}`, this.$attrs.class as ClassType);
     if (this.sticky) {
       content = <LibComponentsContent>
         {content}

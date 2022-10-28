@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import {computed, defineComponent, PropType, provide, ref, Ref} from 'vue';
-import {ValidateRules} from '../../../../../types';
+import {ClassType, ValidateRules} from '../../../../../types';
 import {DFORM_STORE_KEY} from './utils';
 
 export default defineComponent({
@@ -185,7 +185,7 @@ emits: ['ok', 'cancel'],
     const layout = this.getLayout();
     const formClassName = classNames({
       [`${prefixCls}-hide-required-mark`]: hideRequiredMark
-    }, this.$attrs.class);
+    }, this.$attrs.class as ClassType);
     return (
       <a-form onSubmit={onSubmit}
               style={this.$attrs.style}

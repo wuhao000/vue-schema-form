@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.3-14",
+  "version": "3.2.3-15",
   "files": ["es", "package.json", "types", "templates", "src"],
   "main": "es/index.js",
   "scripts": {
@@ -13,8 +13,7 @@
     "lint": "vue-cli-service lint --max-warnings 1",
     "cdn": "npm run lib && ts-node build/cdn.ts",
     "check": "ts-node build/check-ts.ts",
-    "version": "ts-node build/version.ts",
-    "release": "npm run compile && npm run version && npm publish && npm run cdn",
+    "release": "npm run compile && npm publish && npm run cdn",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
   },
   "publishConfig": {
