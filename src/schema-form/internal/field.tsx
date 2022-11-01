@@ -95,6 +95,25 @@ export default defineComponent({
     const inputRef = ref<any>(null);
     const currentValue = ref(props.value ?? null);
     const field = computed(() => props.field);
+    watch(() => [props.definition.props, props.definition.xProps], (v, o) => {
+      const index = v[1] ? 1 : 0;
+      const hasDiff = !isEqual(v[index], o?.[index])
+      if (hasDiff) {
+        if (o?.[index]) {
+          Object.keys(v[index]).forEach(key => {
+            const newProp = v[index][key];
+            const oldProp = o[index][key];
+            if (!isEqual(newProp, oldProp)) {
+              field.value.props[key] = newProp;
+            }
+          });
+        } else {
+          Object.keys(v[index]).forEach(key => {
+            field.value.props[key] = v[index][key];
+          });
+        }
+      }
+    });
     watch(() => currentValue.value, _.debounce(val => {
       const oldValue = field.value.value;
       field.value.value = val;

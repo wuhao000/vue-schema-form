@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import {defineComponent, inject, TransitionGroup} from 'vue';
-import {SchemaFormStore} from '../../../types';
+import {ClassType, SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
 import './form-block.less';
@@ -123,7 +123,7 @@ export default defineComponent({
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
-      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class),
+      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class as ClassType),
       style: this.style,
       tag: 'div'
     };

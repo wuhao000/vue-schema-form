@@ -37,94 +37,112 @@ class SchemaContext {
 
 export const defineEffectsContext = <V>() => {
 
-  const context: EffectsContext = function(...paths) {
+  const context: EffectsContext = function (...paths) {
     const required = (required: boolean) => {
-      if (typeof required === 'boolean') {
-        context.__context.matchFields(paths).forEach(field => {
-          field.required = required;
-        });
-      }
+      context.afterInitialized(() => {
+        if (typeof required === 'boolean') {
+          context.__context.matchFields(paths).forEach(field => {
+            field.required = required;
+          });
+        }
+      });
       return context(...paths);
     };
     const hide = (hide?: boolean): EffectsHandlers<V> => {
-      context.__context.matchFields(paths).forEach(field => {
-        if (typeof hide === 'boolean') {
-          field.setVisible(!hide);
-        } else {
-          field.setVisible(false);
-        }
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          if (typeof hide === 'boolean') {
+            field.setVisible(!hide);
+          } else {
+            field.setVisible(false);
+          }
+        });
       });
       return context(...paths);
     };
     const show = (show?: boolean): EffectsHandlers<V> => {
-      context.__context.matchFields(paths).forEach(field => {
-        if (typeof show === 'boolean') {
-          field.setVisible(show);
-        } else {
-          field.setVisible(true);
-        }
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          if (typeof show === 'boolean') {
+            field.setVisible(show);
+          } else {
+            field.setVisible(true);
+          }
+        });
       });
       return context(...paths);
     };
     const disable = (disable?: boolean) => {
-      context.__context.matchFields(paths).forEach(field => {
-        if (typeof disable === 'boolean') {
-          field.disabled = disable;
-        } else {
-          field.disabled = true;
-        }
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          if (typeof disable === 'boolean') {
+            field.disabled = disable;
+          } else {
+            field.disabled = true;
+          }
+        });
       });
       return context(...paths);
     };
     const editable = (value = true) => {
-      context.__context.matchFields(paths).forEach(field => {
-        field.editable = value;
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          field.editable = value;
+        });
       });
       return context(...paths);
     };
     const readOnly = (value = true) => {
-      context.__context.matchFields(paths).forEach(field => {
-        field.editable = !value;
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          field.editable = !value;
+        });
       });
       return context(...paths);
     };
     const enable = (enable?: boolean) => {
-      context.__context.matchFields(paths).forEach(field => {
-        if (typeof enable === 'boolean') {
-          field.disabled = !enable;
-        } else {
-          field.disabled = false;
-        }
+      context.afterInitialized(() => {
+        context.__context.matchFields(paths).forEach(field => {
+          if (typeof enable === 'boolean') {
+            field.disabled = !enable;
+          } else {
+            field.disabled = false;
+          }
+        });
       });
       return context(...paths);
     };
     return {
       setTitle: (title) => {
-        context.__context.matchFields(paths).forEach(field => {
-          if (typeof title === 'function') {
-            field.title = title(field);
-          } else {
-            field.title = title;
-          }
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            if (typeof title === 'function') {
+              field.title = title(field);
+            } else {
+              field.title = title;
+            }
+          });
         });
         return context(...paths);
       },
       setStates: (states: SchemaFormFieldStates) => {
-        if (states.required !== undefined) {
-          required(states.required);
-        }
-        if (states.visible !== undefined) {
-          show(states.visible);
-        }
-        if (states.editable !== undefined) {
-          editable(states.editable);
-        }
-        if (states.readonly !== undefined) {
-          readOnly(states.readonly);
-        }
-        if (states.enable !== undefined) {
-          enable(states.enable);
-        }
+        context.afterInitialized(() => {
+          if (states.required !== undefined) {
+            required(states.required);
+          }
+          if (states.visible !== undefined) {
+            show(states.visible);
+          }
+          if (states.editable !== undefined) {
+            editable(states.editable);
+          }
+          if (states.readonly !== undefined) {
+            readOnly(states.readonly);
+          }
+          if (states.enable !== undefined) {
+            enable(states.enable);
+          }
+        });
         return context(...paths);
       },
       paths: () => context(...paths).fields().map(it => it.plainPath),
@@ -137,8 +155,10 @@ export const defineEffectsContext = <V>() => {
         return fields[0];
       },
       toggle: (): EffectsHandlers<V> => {
-        context.__context.matchFields(paths).forEach(field => {
-          field.setVisible(!field.isVisible());
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            field.setVisible(!field.isVisible());
+          });
         });
         return context(...paths);
       },
@@ -178,8 +198,10 @@ export const defineEffectsContext = <V>() => {
         return context(...paths);
       },
       setFieldProps: (props): EffectsHandlers<V> => {
-        context.__context.matchFields(paths).forEach(field => {
-          Object.assign(field.props, props);
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            Object.assign(field.props, props);
+          });
         });
         return context(...paths);
       },
@@ -192,8 +214,10 @@ export const defineEffectsContext = <V>() => {
         return context(...paths);
       },
       setDisplayValue: (value: any) => {
-        context.__context.matchFields(paths).forEach(field => {
-          field.displayValue = value;
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            field.displayValue = value;
+          });
         });
         return context(...paths);
       },
@@ -202,8 +226,8 @@ export const defineEffectsContext = <V>() => {
         return context(...paths);
       },
       onFieldCreateOrChange: (callback): EffectsHandlers<V> =>
-          context(...paths).onFieldCreate(callback)
-              .onFieldChange(callback),
+        context(...paths).onFieldCreate(callback)
+          .onFieldChange(callback),
       onFieldChange: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
@@ -213,11 +237,13 @@ export const defineEffectsContext = <V>() => {
         return context(...paths);
       },
       trigger: (event: string, value: any): EffectsHandlers<V> => {
-        context.__context.matchFields(paths).forEach(field => {
-          context.trigger(event, {
-            path: field.plainPath,
-            value,
-            field
+        context.afterInitialized(() => {
+          context.__context.matchFields(paths).forEach(field => {
+            context.trigger(event, {
+              path: field.plainPath,
+              value,
+              field
+            });
           });
         });
         return context(...paths);
@@ -230,7 +256,7 @@ export const defineEffectsContext = <V>() => {
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-                it, context.__context.store.fields as any
+              it, context.__context.store.fields as any
             )), number));
           }
         }
@@ -248,7 +274,7 @@ export const defineEffectsContext = <V>() => {
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
       replaceLastPath: (...last: string[]): EffectsHandlers<V> =>
-          context(...replaceLastPath(paths as string[], last))
+        context(...replaceLastPath(paths as string[], last))
     } as EffectsHandlers<V>;
   } as EffectsContext;
   context.subscribes = {};
