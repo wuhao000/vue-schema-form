@@ -52,6 +52,7 @@ export class FieldDefinition<V = any> {
   public required = false;
   public rules?: IRuleDescription[] = null;
   public setGetValue?: (value?: any) => any = null;
+  public reset?: () => void;
   public slot?: string = null;
   public store?: SchemaFormStore = null;
   public title: any = null;
@@ -96,6 +97,7 @@ export class FieldDefinition<V = any> {
     this.default = definition.default;
     this.value = currentValue;
     this.setGetValue = null;
+    this.reset = null;
   }
 
   public getRules() {

@@ -619,6 +619,9 @@ export default defineComponent({
             }
           }
         },
+        reset: () => {
+          setCurrentValue(getDefaultValue(field.value));
+        },
         setGetValue: value => {
           if (value === undefined) {
             return currentValue.value;

@@ -435,6 +435,17 @@ export default [{
   ]
 },
 {
+  path: '/demo/texing/zhongzhi',
+  component: () => import('../generated/demo/texing/zhongzhi/index.vue'),
+  meta: {
+    tags: ['特性'],
+    name: '重置'
+  },
+  children: [
+    
+  ]
+},
+{
   path: '/demo/texing/qiyongjinyong',
   component: () => import('../generated/demo/texing/qiyongjinyong/index.vue'),
   meta: {

@@ -162,6 +162,18 @@ export const defineEffectsContext = <V>() => {
         });
         return context(...paths);
       },
+      reset: (): EffectsHandlers<V> => {
+        if (!context.initialized()) {
+          console.warn('SchemaForm尚未初始化');
+        } else {
+          context.__context.matchFields(paths).map(it => {
+            if (it.plainPath !== '') {
+              it.reset();
+            }
+          });
+        }
+        return context(...paths);
+      },
       value: (value: unknown) => {
         if (!context.initialized()) {
           console.warn('SchemaForm尚未初始化');

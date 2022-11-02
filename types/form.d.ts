@@ -187,6 +187,7 @@ export interface EffectsHandlers<V> {
    * @return {EffectsHandlers}
    */
   required: (required: boolean) => EffectsHandlers<V>;
+  reset: () => EffectsHandlers<V>;
   setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers<V>;
   setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers<V>;
   setFieldProps: (props: { [key: string]: unknown } | ((field: IField) => { [key: string]: unknown })) => EffectsHandlers<V>;
