@@ -1,7 +1,8 @@
-import {computed, defineComponent, PropType, VNode} from 'vue';
+import {Component, computed, defineComponent, PropType, VNode} from 'vue';
 import {getFormItemComponent} from '../internal/utils';
 import {LibComponents, MOBILE} from '../utils/utils';
 import {baseLayoutProps, useBaseLayout} from './base-layout';
+import {FieldDefinition} from '@/schema-form/bean/field-definition';
 
 
 function getColProps(span: number) {
@@ -40,17 +41,19 @@ export default defineComponent({
     const containsArray = computed(() => props.layout.some(it => Array.isArray(it)));
     const isMixed = computed(() =>
       props.layout.some(it => typeof it === 'number' || (!Array.isArray(it) && typeof it === 'object')) && props.layout.some(it => Array.isArray(it)));
-    const getRowStyle = (index) => {
-      if (typeof props.rowStyle === 'function') {
-        return props.rowStyle(index);
+    const getRowStyle = (index: number, visible: boolean) => {
+      const style = (typeof props.rowStyle === 'function' ? props.rowStyle(index) : (props.rowStyle ?? {})) ?? {};
+      if (!visible) {
+        style.display = 'none';
       }
-      return props.rowStyle ?? {};
+      return style;
     };
-    const getColStyle = (index) => {
-      if (typeof props.colStyle === 'function') {
-        return props.colStyle(index);
+    const getColStyle = (index, fieldVisible: boolean) => {
+      const style = (typeof props.colStyle === 'function' ? props.colStyle(index) : (props.colStyle ?? {})) ?? {};
+      if (!fieldVisible) {
+        style.display = 'none';
       }
-      return props.colStyle ?? {};
+      return style;
     };
     const getRowClass = (index) => {
       if (typeof props.rowClass === 'function') {
@@ -90,7 +93,16 @@ export default defineComponent({
         tmpFields.forEach(field => groups.push(field));
       }
       return groups;
-    }
+    };
+    const isFieldVisible = (field: VNode) => {
+      if (typeof field.type === 'object' && (field.type as Component)?.name === "VSchemaFormField") {
+        return (field.props.field as FieldDefinition).isVisible();
+      }
+      return true;
+    };
+    const isGroupVisible = (group: VNode[]) => {
+      return group.some(field => isFieldVisible(field));
+    };
     const layoutFields = computed(() => {
       const fields = slots.default();
       const layout: Array<number | number[]> = props.layout;
@@ -100,16 +112,18 @@ export default defineComponent({
       return normalizedLayout.value.map((span, index) => {
         const group = groups[index];
         if (group) {
+          const visible = isGroupVisible(group);
           if (Array.isArray(span)) {
             return <LibComponentsRow
-              style={getRowStyle(index)}
+              style={getRowStyle(index, visible)}
               class={getRowClass(index)}
               gutter={props.gutter}>
               {
                 span.map((subSpan, subindex) => {
+                  const fieldVisible = isFieldVisible(group[subindex]);
                   return (
                     <LibComponentsCol
-                      style={getColStyle(subindex)}
+                      style={getColStyle(subindex, fieldVisible)}
                       class={getColClass(subindex)}
                       {...getColProps(subSpan)}>
                       {group[subindex]}
@@ -119,13 +133,14 @@ export default defineComponent({
               }
             </LibComponentsRow>;
           } else {
+            const fieldVisible = isFieldVisible(group);
             const col = <LibComponentsCol
-              style={getColStyle(index)}
+              style={getColStyle(index, fieldVisible)}
               class={getColClass(index)}
               {...getColProps(span)}>{group}</LibComponentsCol>;
             if (props.wrapSingle) {
               return <LibComponentsRow
-                style={getRowStyle(index)}
+                style={getRowStyle(index, visible)}
                 class={getRowClass(index)}
                 gutter={props.gutter}>{col}</LibComponentsRow>;
             }
