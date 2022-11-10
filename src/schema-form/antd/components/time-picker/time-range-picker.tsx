@@ -23,7 +23,7 @@ export default defineComponent({
         }
         throw new Error('TimeRangePicker输入值格式应为string');
       }
-      return (value as string[]).map(it => it);
+      return [...value];
     };
     const convertValueBack = (value) => {
       if (props.valueType === 'string') {
@@ -49,11 +49,13 @@ export default defineComponent({
           <div>
             <d-time-picker {...this.fieldProps}
                            v-model={[this.start, 'value']}
+                           valueType={this.valueType === 'date' ? 'date' : 'string'}
                            allow-clear={this.clearable || this.$attrs.allowClear}
                            format={this.format}
                            placeholder={this.placeholder[0]}/>
             <span class="d-time-range-picker-separator">{this.separator}</span>
             <d-time-picker {...this.fieldProps}
+                           valueType={this.valueType === 'date' ? 'date' : 'string'}
                            v-model={[this.end, 'value']}
                            allow-clear={this.clearable || this.$attrs.allowClear}
                            format={this.format}

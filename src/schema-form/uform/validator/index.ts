@@ -10,10 +10,11 @@ export const runValidation = async (
   fields: FieldDefinition[]
 ): Promise<IValidateResponse[]> => {
   const queue = [];
+  const invisiblePaths = fields.filter(field => field.validateIgnore())
+    .map(field => field.plainPath);
   fields.forEach(field => {
-    if (field.isVisible() === false ||
-      field.display === false ||
-      field.editable === false) {
+    if (invisiblePaths.includes(field.plainPath)
+      || invisiblePaths.some(it => field.plainPath.startsWith(it + '.'))) {
       return;
     }
     queue.push(field.validate());

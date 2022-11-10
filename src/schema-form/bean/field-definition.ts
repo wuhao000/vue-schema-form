@@ -61,7 +61,7 @@ export class FieldDefinition<V = any> {
   public validate?: (trigger?: TriggerType) => (boolean | Promise<unknown>) = null;
   public value: V = null;
   public xType: SchemaFormFieldType = null;
-  private visible = true;
+  public visible = true;
 
   constructor(definition: SchemaFormField,
               store: SchemaFormStore,
@@ -106,6 +106,12 @@ export class FieldDefinition<V = any> {
 
   public isVisible() {
     return this.visible;
+  }
+
+  public validateIgnore() {
+    return this.isVisible() === false ||
+      this.display === false ||
+      this.editable === false
   }
 
   public setVisible(visible: boolean) {

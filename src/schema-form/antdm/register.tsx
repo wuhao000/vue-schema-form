@@ -27,7 +27,11 @@ const DatePickerItem = (props, ctx) => {
   };
   const convertValueBack = (value: Date) => {
     if (isNotNull(value) && props.mode === 'time') {
-      return dayjs(value).format(props.format || 'HH:mm');
+      if (props.valueType === 'date') {
+        return value;
+      } else {
+        return dayjs(value).format(props.format || 'HH:mm');
+      }
     }
     return value;
   };

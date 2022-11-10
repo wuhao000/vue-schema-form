@@ -3,7 +3,7 @@ import {computed, PropType, ref, watch} from 'vue';
 export const baseTimeRangePickerProps = {
   value: Array,
   valueType: {
-    type: String as PropType<'string' | 'array'>,
+    type: String as PropType<'string' | 'array' | 'date'>,
     default: 'array'
   },
   separator: {

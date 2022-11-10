@@ -10,7 +10,7 @@ export default defineComponent({
     ...baseTimePickerProps
   },
   setup(props, {emit, attrs}) {
-    const convertValue = (value: string) => {
+    const convertValue = (value: string | Date) => {
       if (!value) {
         return undefined;
       }
@@ -22,7 +22,11 @@ export default defineComponent({
     };
     const convertValueBack = (value: Dayjs) => {
       if (isNotNull(value)) {
-        return value.format(props.format as string);
+        if (props.valueType === 'date') {
+          return value.toDate();
+        } else {
+          return value.format(props.format as string);
+        }
       }
       return value;
     };

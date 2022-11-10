@@ -5,7 +5,11 @@ import {isNotNull, isNull} from '../utils/utils';
 
 export const baseTimePickerProps = {
   value: {
-    type: String
+    type: [String, Date]
+  },
+  valueType: {
+    type: String as PropType<'string' | 'date'>,
+    default: 'string'
   },
   locale: {
     type: Object as PropType<any>,
@@ -28,7 +32,7 @@ export const baseTimePickerProps = {
 export const useBaseTimePicker = (props, {attrs, emit, convertValue, convertValueBack, valueProp}) => {
   const {disabled, size} = useBaseInput(props, {attrs});
   const stateValue = ref(null);
-  watch(() => props.value as string, (value: string) => {
+  watch(() => props.value, (value: string | Date) => {
     const convertedValue: Date = convertValue(value);
     if (isNull(stateValue.value)) {
       stateValue.value = convertedValue;
