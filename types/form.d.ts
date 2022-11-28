@@ -49,7 +49,7 @@ export interface EffectsContext<Path = any, V = FormValue | FormValue[]> {
    */
   initialized(): boolean;
   callStack: Array<() => void>;
-  afterInitialized: (callback: () => void) => void;
+  afterInitialized: (callback: () => void) => number | undefined;
   getValue?: () => V;
   onValidate: (handler: (response: IValidateResponse[]) => any) => void;
   /**

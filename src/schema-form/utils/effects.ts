@@ -1,12 +1,12 @@
-import {Subject} from 'rxjs';
-import {nextTick, Ref} from 'vue';
-import {EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore} from '../../../types';
-import {FieldDefinition} from '../bean/field-definition';
-import {SchemaFormEvents} from '../internal/utils';
+import { Subject } from 'rxjs';
+import { nextTick, Ref } from 'vue';
+import { EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore } from '../../../types';
+import { FieldDefinition } from '../bean/field-definition';
+import { SchemaFormEvents } from '../internal/utils';
 import runValidation from '../uform/validator';
-import {values} from './object';
-import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
-import {isNotNull} from './utils';
+import { values } from './object';
+import { appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath } from './path';
+import { isNotNull } from './utils';
 
 let contextId = 1;
 
@@ -238,8 +238,8 @@ export const defineEffectsContext = <V>() => {
         return context(...paths);
       },
       onFieldCreateOrChange: (callback): EffectsHandlers<V> =>
-        context(...paths).onFieldCreate(callback)
-          .onFieldChange(callback),
+          context(...paths).onFieldCreate(callback)
+              .onFieldChange(callback),
       onFieldChange: (callback): EffectsHandlers<V> => {
         context.subscribe(SchemaFormEvents.fieldChange, paths, callback);
         return context(...paths);
@@ -268,7 +268,7 @@ export const defineEffectsContext = <V>() => {
             return context(...takePath(paths as string[], number));
           } else {
             return context(...takePath((paths).map((it: any) => findFieldPath(
-              it, context.__context.store.fields as any
+                it, context.__context.store.fields as any
             )), number));
           }
         }
@@ -286,7 +286,7 @@ export const defineEffectsContext = <V>() => {
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
       replaceLastPath: (...last: string[]): EffectsHandlers<V> =>
-        context(...replaceLastPath(paths as string[], last))
+          context(...replaceLastPath(paths as string[], last))
     } as EffectsHandlers<V>;
   } as EffectsContext;
   context.subscribes = {};
@@ -343,8 +343,9 @@ export const defineEffectsContext = <V>() => {
     if (context.initialized()) {
       callback();
     } else {
-      context.callStack.push(callback);
+      return context.callStack.push(callback);
     }
+    return undefined;
   };
   context.getValue = () => {
     if (!context.initialized()) {
