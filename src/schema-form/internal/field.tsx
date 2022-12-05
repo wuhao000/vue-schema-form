@@ -101,9 +101,6 @@ export default defineComponent({
     watch(() => props.definition.displayValue, displayValue => {
       field.value.displayValue = displayValue;
     });
-    watch(() => props.definition.title, title => {
-      field.value.title = title;
-    });
     watch(() => [props.definition.props, props.definition.xProps], (v, o) => {
       const index = v[1] ? 1 : 0;
       const hasDiff = !isEqual(v[index], o?.[index])
