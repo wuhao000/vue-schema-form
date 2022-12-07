@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "esnext",
     "strict": true,
     "jsx": "preserve",
     "noEmit": true,
@@ -17,6 +17,12 @@
     "paths": {
       "@/*": ["src/*"],
       "antd-mobile-vue-next/*": ["../antd-mobile-vue-next/src/packages/*"]
-    }
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
   }
 }

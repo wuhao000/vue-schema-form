@@ -39,7 +39,7 @@ export type SchemaFormFieldType =
     | SchemaFormComponentOptions[]
     | (() => VNode | VNode[]);
 
-interface BaseSchemaFormField<V = any> {
+type BaseSchemaFormField<V> = {
   /**
    * 字段值是否数组类型
    */
@@ -103,7 +103,7 @@ interface BaseSchemaFormField<V = any> {
   /**
    * 表单属性名称
    */
-  property?: string;
+  property?: keyof V | string;
 
   /**
    * 字段是否为必填
@@ -146,14 +146,14 @@ interface BaseSchemaFormField<V = any> {
    * 指定额外的组件类型
    */
   xType?: SchemaFormFieldType;
-}
+} & FlatFieldType<V>;
 
 type GridLayoutType = number[] | Array<number | number[]> | Array<GridLayoutType>;
 
 type ClassType = string | string[] | { [key: string]: boolean };
 
 
-export interface StepsField<V = any> extends DefaultSchemaFormField<V> {
+export type StepsField<V = any> = {
   /**
    * 每个步骤包含的组件数量
    */
@@ -167,9 +167,9 @@ export interface StepsField<V = any> extends DefaultSchemaFormField<V> {
     titles: Array<string | VNode>;
     currentStep?: number;
   };
-}
+} & DefaultSchemaFormField<V>;
 
-export interface GridField<V = any> extends DefaultSchemaFormField<V> {
+export type GridField<V = any> = {
   /**
    * 数字或数字数组，可以深层嵌套
    */
@@ -202,19 +202,24 @@ export interface GridField<V = any> extends DefaultSchemaFormField<V> {
      */
     colStyle?: Partial<CSSStyleDeclaration> | ((colIndex: number) => Partial<CSSStyleDeclaration>);
   };
+} & DefaultSchemaFormField<V>;
+
+
+type El<O extends E | E[], E = any> = O extends E[] ? O[0] : O;
+
+type Prefix<Str extends string> = `$${Str}`;
+
+export type FlatFieldType<V> = {
+  [Key in keyof El<V> as Prefix<Key & string>]?: SchemaFormField<El<V>[Key]>;
 }
 
-export type FlatFieldType<V = any> = {
-  [key in `$${string}`]: SchemaFormField<V>;
-}
-
-interface DefaultSchemaFormField<V = any> extends BaseSchemaFormField<V> {
+type DefaultSchemaFormField<V = any> = {
   /**
    * 表单项类型
    */
   type?: SchemaFormFieldType;
 
-  fields?: FormFields;
+  fields?: FormFields<V>;
   /**
    * 布局描述，根据不同的布局有所不同
    */
@@ -228,10 +233,10 @@ interface DefaultSchemaFormField<V = any> extends BaseSchemaFormField<V> {
    */
   xProps?: SchemaFormFieldProps;
 
-}
+} & BaseSchemaFormField<V>;
 
 
-export type SchemaFormField<V = any> = (StepsField<V> | GridField<V> | DefaultSchemaFormField<V>) & FlatFieldType<V>;
+export type SchemaFormField<V = any> = StepsField<V> | GridField<V> | DefaultSchemaFormField<V>;
 
 
 interface ValueProcessor {
@@ -285,12 +290,7 @@ export interface SchemaFormStore {
   value?: any;
 }
 
-export type FormFields = SchemaFormField[] | { [key: string]: SchemaFormField };
-
-export interface FormDescriptor {
-  array?: boolean;
-  fields: FormFields;
-}
+export type FormFields<V> = SchemaFormField<V>[] | { [Key in keyof V]: SchemaFormField<V[Key]> };
 
 interface FormProps {
   labelWidth?: number | string;

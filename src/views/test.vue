@@ -18,7 +18,7 @@
   const ctx = defineSchemaForm({
     fields: {
       title: {
-        type: 'select',
+        xType: 'select',
         title: (v) => '标题' + v.title,
         enum: [
           {label: 'a', value: 'aaa'},
@@ -26,7 +26,7 @@
         ]
       },
       'b.aj': {
-        type: 'select',
+        xType: 'select',
         title: '标题2',
         enum: (v) => {
           return [
@@ -36,14 +36,14 @@
         }
       },
       showValue: {
-        type: 'string',
+        xType: 'string',
         title: '小标题',
         visible: () => {
           return value.value.title === 'aaa';
         }
       },
       showValue2: {
-        type: 'string',
+        xType: 'string',
         title: '小标题2',
         visible: v => {
           if (v.title === 'aaa') {
@@ -53,21 +53,21 @@
         }
       },
       $grid: {
-        type: 'grid',
+        xType: 'grid',
         layout: [12, [12, 13]],
         xProps: {
           colClass: ''
         }
       },
       $steps: {
-        type: 'steps',
+        xType: 'steps',
         layout: [1, 2],
         xProps: {
           titles: ['1']
         },
         fields: {
           $a: {
-            type: 'text',
+            xType: 'text',
             title: 'a'
           }
         }

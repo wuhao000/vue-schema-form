@@ -73,7 +73,7 @@ export interface EffectsContext<Path = any, V = FormValue | FormValue[]> {
   (...path: Paths<Path>): EffectsHandlers<V>;
 }
 
-declare function defineSchemaForm<V = unknown, T extends SchemaFormField<V> = SchemaFormField<V>>(schema: T): EffectsContext<PathType<T> | IDType<T> | string, V>;
+declare function defineSchemaForm<V = any>(schema: SchemaFormField<V>): EffectsContext<PathType<SchemaFormField<V>> | IDType<SchemaFormField<V>> | string, V>;
 declare function defineActions<T extends Action[] = Action[]>(actions: T): T;
 
 export interface SchemaFormDefinition<T extends SchemaFormField> {
