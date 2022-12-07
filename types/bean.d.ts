@@ -103,7 +103,7 @@ type BaseSchemaFormField<V> = {
   /**
    * 表单属性名称
    */
-  property?: keyof V | string;
+  property?: (keyof V & string) | string;
 
   /**
    * 字段是否为必填
@@ -290,7 +290,7 @@ export interface SchemaFormStore {
   value?: any;
 }
 
-export type FormFields<V> = SchemaFormField<V>[] | { [Key in keyof V]: SchemaFormField<V[Key]> };
+export type FormFields<V = any> = SchemaFormField<V>[] | { [Key in keyof V]: SchemaFormField<V[Key]> };
 
 interface FormProps {
   labelWidth?: number | string;
