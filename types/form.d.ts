@@ -1,8 +1,8 @@
-import {Subject} from 'rxjs';
-import {App, Component, Ref, VNode} from 'vue';
-import {FieldDefinition} from '../src/schema-form/bean/field-definition';
-import {DefaultSchemaFormField, FormFields, Platform, SchemaFormField, SchemaFormStore} from './bean';
-import {IFormPathMatcher, IRuleDescription, Path} from './uform';
+import { Subject } from 'rxjs';
+import { App, Component, Ref, VNode } from 'vue';
+import { FieldDefinition } from '../src/schema-form/bean/field-definition';
+import { DefaultSchemaFormField, FormFields, Platform, SchemaFormField, SchemaFormStore } from './bean';
+import { IFormPathMatcher, IRuleDescription, Path } from './uform';
 
 export interface IValidateResponse {
   errors: string[];
@@ -17,16 +17,50 @@ export interface ISubscribers {
 
 export type Paths<Path = any> = Array<Path | SchemaFormField>;
 
-type PathTyp2<S> = {
-  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}`
-}[Extract<keyof S, string>]
+// new type
 
-export type PathType<T> = T extends { fields: infer S } ? (PathTyp2<S>) : never
+type JoinPath<S> = S extends any ? ({
+  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
+}[Extract<keyof S, string>]) : never;
 
-export type IDType<T> = T extends { fields: infer S } ? {
-  [K in Extract<keyof S, string>]: (S[K] extends DefaultSchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
+export type PrefixKey<U extends string | number | symbol> = U extends `$${infer R}` ? R
+    : never;
+
+export type DropDollarKey<T> = T extends any ? (
+    {
+      [K in Extract<keyof T, string>]: PrefixKey<K>
+    }[Extract<keyof T, string>]
+    ) : never;
+
+export type ContainsDollar<U extends string | number | symbol> = U extends `$${infer R}` ? U
+    : never;
+
+export type DollarKey<T> = T extends any ? (
+    {
+      [K in Extract<keyof T, string>]: ContainsDollar<K>
+    }[Extract<keyof T, string>]
+    ) : never;
+
+export type NormalPathType<T> = T extends any ? (
+    (T extends { fields: infer S; [key: string]: unknown } ? (JoinPath<S & DollarKeyObj<T>>)
+        : never) | DropDollarKey<T>
+    ) : never
+
+export type DollarKeyObj<T> = T extends any ? {
+  [Key in DropDollarKey<T>]: T[DollarKey<T>]
+} : never
+
+export type PathType<T> = T extends any ? (
+    NormalPathType<T> | PathType<T[DollarKey<T>]>
+    ) : never;
+
+export type PreIDType<T> = T extends { fields: infer S; [key: string]: unknown } ? {
+  [K in Extract<keyof S, string>]: (S[K] extends { id: infer ID; [key: string]: unknown } ? `${ID & string}` : never) | `${PreIDType<S[K]>}`
 }[Extract<keyof S, string>] : never;
 
+export type IDType<T> = `#${PreIDType<T>}`;
+
+export type AllType<T> = PathType<T> | IDType<T> | '*' | '?'
 
 interface SchemaContext {
   onOk: (forceValidate: boolean, callback?: (value) => any) => Promise<void>;
@@ -35,7 +69,7 @@ interface SchemaContext {
   matchFields: (paths: Paths) => FieldDefinition[];
 }
 
-type FormValue = {[key: string]: unknown};
+type FormValue = { [key: string]: unknown };
 
 /**
  * 副作用函数上下文
@@ -43,11 +77,13 @@ type FormValue = {[key: string]: unknown};
 export interface EffectsContext<Path = any, V = FormValue | FormValue[]> {
   __schema?: SchemaFormField;
   __context?: SchemaContext;
+
   /**
    * 获取表单值
    * @return {any}
    */
   initialized(): boolean;
+
   callStack: Array<() => void>;
   afterInitialized: (callback: () => void) => number | undefined;
   getValue?: () => V;
@@ -73,21 +109,13 @@ export interface EffectsContext<Path = any, V = FormValue | FormValue[]> {
   (...path: Paths<Path>): EffectsHandlers<V>;
 }
 
-declare function defineSchemaForm<V = any>(schema: SchemaFormField<V>): EffectsContext<PathType<SchemaFormField<V>> | IDType<SchemaFormField<V>> | string, V>;
-declare function defineActions<T extends Action[] = Action[]>(actions: T): T;
+declare function defineSchemaForm<V = unknown, T extends SchemaFormField<V> = SchemaFormField<V>>(schema: T): EffectsContext<AllType<T>, V>;
 
-export interface SchemaFormDefinition<T extends SchemaFormField> {
-  $: EffectsContext<PathType<T> | IDType<T>>,
-  schema: T;
-}
+declare function defineActions<T extends Action[] = Action[]>(actions: T): T;
 
 export function registerAntd();
 
 export function registerAntdMobile();
-
-export interface AntdRegisterOptions {
-  confirm: (...args: any[]) => any;
-}
 
 export function registerDesktopLib(map: Record<keyof ILibComponents, any>): void;
 
@@ -121,8 +149,6 @@ export const RadioGroup: any;
 export class SchemaForm {
   public static install: (app: App) => void;
 }
-
-export type ValidateHandler = (response: IValidateResponse[]) => void;
 
 export interface SchemaFormFieldStates {
   enable?: boolean;
@@ -282,9 +308,6 @@ type Action = BuiltInActions | {
   action?: ($: EffectsContext, ...args: any[]) => any;
 };
 
-export interface IFieldMap {
-  [name: string]: IField;
-}
 
 export interface IField<V = any> {
   array?: boolean;
@@ -300,7 +323,7 @@ export interface IField<V = any> {
   editable?: boolean;
   enum: any[];
   errors?: string[];
-  fields?: FormFields;
+  fields?: FormFields<V>;
   focus?: () => any;
   id?: string;
   initialValue?: V;

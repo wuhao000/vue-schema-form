@@ -1,43 +1,43 @@
-import {DefaultSchemaFormField, defineSchemaForm, FlatFieldType, SchemaFormField} from '../types';
+import { defineSchemaForm } from "../types";
 
-interface A {
-  name: string;
-  age: number;
-  details: {
-    name: string;
+const schema = {
+  fields: {
+    a: {
+      id: 'a'
+    },
+    b: {
+      fields: {
+        c: {
+          fields: {
+            f: {
+              fields: {
+                gg: {}
+              }
+            }
+          }
+        }
+      },
+      $e: {
+        fields: {
+          fdas: {}
+        }
+      }
+    },
+  },
+  $d: {},
+  $$e: {
+    fields: {
+      cc: {}
+    }
   }
-}
+} as const
 
-type C<V> = FlatFieldType<V> & {
-  name: string;
+const schema2 = {
+  $$e: {
+    fields: {
+      cc: {}
+    }
+  }
 };
 
-const a: SchemaFormField = {
-  $details: {
-    fields: [
-      {
-        property: 'name'
-      }
-    ]
-  }
-}
-
-type CC<S> = S extends `$${infer D}` ? D : S;
-
-const d: CC<'$name'> = 'name';
-
-type Keys<V> = keyof V
-
-export type IDType<T> = T extends { fields: infer S } ? {
-  [K in Extract<keyof S, string>]: (S[K] extends DefaultSchemaFormField ? `#${S[K]['id']}` : never) | `#${IDType<S[K]>}`
-}[Extract<keyof S, string>] : never;
-
-const ctx = defineSchemaForm<A>(a);
-
-type V = {
-  $age: number;
-  $name: string;
-  aaa: string;
-}
-const c: CC<'$age' | '$name' | 'aaa'> = '$age';
-ctx('')
+const ctx = defineSchemaForm(schema);

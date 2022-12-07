@@ -147,7 +147,7 @@ export default defineComponent({
                   openFileDialogOnClick={true}
                   onChange={this.onChange}
                   capture={undefined}
-                  onPreview={this.onPreview}
+                  onPreview={this.localPreview}
                   size={this.size}>
           {content}
           {this.$slots.default?.()}
