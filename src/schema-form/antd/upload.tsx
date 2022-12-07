@@ -14,6 +14,7 @@ export default defineComponent({
   name: 'DUpload',
   props: {
     hint: String,
+    onPreview: Function,
     ...baseUpdateProps
   },
   emits: ['change', 'preview', 'update:value'],
@@ -30,7 +31,7 @@ export default defineComponent({
           return 'text';
       }
     });
-    const uploadProps = Object.assign({}, ctx.attrs, omit(props, ['value']));
+    const uploadProps = Object.assign({}, ctx.attrs, omit(props, ['value', 'onPreview']));
     const {size} = useBaseInput(props, ctx);
     const previewUrl = ref();
     return {
@@ -67,21 +68,25 @@ export default defineComponent({
         }
         ctx.emit('change', f);
       },
-      onPreview(f: AntUploadFile) {
-        const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
-        if (f.type.indexOf('image/') === 0) {
-          previewUrl.value = f.url;
-          if (previewUrl.value) {
-            previewVisible.value = true;
-            ctx.emit('preview', f);
-          }
-        } else if (typeList.includes(f.type)) {
-          window.open('https://view.officeapps.live.com/op/view.aspx?src=' + f.url);
-        } else if (['application/pdf', 'text/plain', 'video/mpeg', 'audio/mpeg'].includes(f.type)) {
-          window.open(f.url);
+      localPreview(f: AntUploadFile) {
+        if (props.onPreview) {
+          props.onPreview(f);
         } else {
-          Toast.info('该文件不支持预览');
-          return;
+          const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+          if (f.type.indexOf('image/') === 0) {
+            previewUrl.value = f.url;
+            if (previewUrl.value) {
+              previewVisible.value = true;
+              ctx.emit('preview', f);
+            }
+          } else if (typeList.includes(f.type)) {
+            window.open('https://view.officeapps.live.com/op/view.aspx?src=' + f.url);
+          } else if (['application/pdf', 'text/plain', 'video/mpeg', 'audio/mpeg'].includes(f.type)) {
+            window.open(f.url);
+          } else {
+            Toast.info('该文件不支持预览');
+            return;
+          }
         }
       },
       cancelPreview() {
@@ -143,7 +148,7 @@ export default defineComponent({
                     openFileDialogOnClick={true}
                     onChange={this.onChange}
                     capture={undefined}
-                    onPreview={this.onPreview}
+                    onPreview={this.localPreview}
                     size={this.size}>
             {content}
             {this.$slots.default?.()}
