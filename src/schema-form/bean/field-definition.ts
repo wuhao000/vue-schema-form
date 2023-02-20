@@ -262,7 +262,6 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     }
   }
   return _.cloneDeep(rules);
-
 };
 
 const resolveRule = (rule: IRuleDescription | DefaultPatternRule): IRuleDescription => {
