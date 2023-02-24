@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {
   computed,
-  defineComponent, h,
+  defineComponent,
+  h,
   inject,
   isProxy,
   isRef,
@@ -86,6 +87,7 @@ export default defineComponent({
       type: Object as PropType<FieldDefinition>,
       required: true
     },
+    arrayIndex: Number,
     pathPrefix: {type: Array as PropType<string[]>}
   },
   emits: ['change', 'update:value', 'focus', 'click', 'blur', 'keydown', 'keyup'],
@@ -103,7 +105,7 @@ export default defineComponent({
     });
     watch(() => [props.definition.props, props.definition.xProps], (v, o) => {
       const index = v[1] ? 1 : 0;
-      const hasDiff = !isEqual(v[index], o?.[index])
+      const hasDiff = !isEqual(v[index], o?.[index]);
       if (hasDiff) {
         if (o?.[index]) {
           Object.keys(v[index]).forEach(key => {
@@ -148,11 +150,13 @@ export default defineComponent({
     const localStore = reactive({
       field: props.field,
       index: props.index,
+      arrayIndex: props.arrayIndex,
       path: props.path,
       schemaPath: props.schemaPath,
       value: props.value
     });
     watchEffect(() => {
+      localStore.arrayIndex = props.arrayIndex;
       localStore.index = props.index;
       localStore.value = props.value;
     });
@@ -636,7 +640,7 @@ export default defineComponent({
           }
         }
       });
-    }, {immediate: true})
+    }, {immediate: true});
     const onCreated = () => {
       // 设置默认值
       if (isNullStructValue(currentValue.value, field.value.destructPath.destruct)) {
@@ -734,7 +738,7 @@ export default defineComponent({
         'schema-form-field': true,
         'schema-form-field-readonly': !editable.value,
         'schema-form-field-editable': editable.value
-      })
+      });
       return resolveWrap() ? <FormItem
           {...formItemProps}
           class={classes}
