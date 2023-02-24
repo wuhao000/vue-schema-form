@@ -1,43 +1,11 @@
 import { defineSchemaForm } from "../types";
 
-const schema = {
+const ctx = defineSchemaForm<{b: string, a: string;}>({
   fields: {
     a: {
-      id: 'a'
-    },
-    b: {
-      fields: {
-        c: {
-          fields: {
-            f: {
-              fields: {
-                gg: {}
-              }
-            }
-          }
-        }
-      },
-      $e: {
-        fields: {
-          fdas: {}
-        }
-      }
-    },
-  },
-  $d: {},
-  $$e: {
-    fields: {
-      cc: {}
+      id: 'a',
+      type: 'string'
     }
   }
-} as const
-
-const schema2 = {
-  $$e: {
-    fields: {
-      cc: {}
-    }
-  }
-};
-
-const ctx = defineSchemaForm(schema);
+});
+ctx('')

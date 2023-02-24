@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.4-1",
+  "version": "3.2.4-3",
   "files": ["es", "package.json", "types", "templates", "src"],
   "main": "es/index.js",
   "scripts": {

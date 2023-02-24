@@ -20,7 +20,7 @@ export type Paths<Path = any> = Array<Path | SchemaFormField>;
 // new type
 
 type JoinPath<S> = S extends any ? ({
-  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?`
+  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | `${K}.*` | `${K}.?` | (K extends `$${infer R}` ? keyof S[K]['fields'] : never)
 }[Extract<keyof S, string>]) : never;
 
 export type PrefixKey<U extends string | number | symbol> = U extends `$${infer R}` ? R
