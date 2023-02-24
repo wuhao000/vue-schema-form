@@ -26,6 +26,12 @@ const convertValueBack = (value: Dayjs | undefined, mode: Mode): Date | number =
     if (mode === 'year') {
       return value.year();
     }
+    if (mode === 'month') {
+      return value.set('date', 1).set('hour', 0)
+          .set('minute', 0).set('seconds', 0)
+          .set('milliseconds', 0)
+          .toDate();
+    }
     return value.toDate();
   }
 };
