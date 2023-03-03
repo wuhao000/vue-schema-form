@@ -1,7 +1,13 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.4-3",
-  "files": ["es", "package.json", "types", "templates", "src"],
+  "version": "3.2.4-4",
+  "files": [
+    "es",
+    "package.json",
+    "types",
+    "templates",
+    "src"
+  ],
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
@@ -92,8 +98,8 @@
     "pinyin": "^2.10.2",
     "raw-loader": "^4.0.1",
     "tinymce": "^5.10.1",
-    "ts-node": "^10.8.2",
     "ts-loader": "^8.0.3",
+    "ts-node": "^10.8.2",
     "typescript": "^4.9.3",
     "vant": "^3.4.3",
     "vite": "^2.6.13",

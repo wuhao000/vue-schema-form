@@ -166,7 +166,7 @@ export const defineEffectsContext = <V>() => {
         if (!context.initialized()) {
           console.warn('SchemaForm尚未初始化');
         } else {
-          context.__context.matchFields(paths).map(it => {
+          context.__context.matchFields(paths).forEach(it => {
             if (it.plainPath !== '') {
               it.reset();
             }

@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { App, Component, Ref, VNode } from 'vue';
 import { FieldDefinition } from '../src/schema-form/bean/field-definition';
-import { DefaultSchemaFormField, FormFields, Platform, SchemaFormField, SchemaFormStore } from './bean';
+import { FormFields, Platform, SchemaFormField, SchemaFormStore } from './bean';
 import { IFormPathMatcher, IRuleDescription, Path } from './uform';
 
 export interface IValidateResponse {
@@ -60,7 +60,7 @@ export type PreIDType<T> = T extends { fields: infer S; [key: string]: unknown }
 
 export type IDType<T> = `#${PreIDType<T>}`;
 
-export type AllType<T> = PathType<T> | IDType<T> | '*' | '?'
+export type AllType<T> = PathType<T> | IDType<T> | '*' | '?' | `?.${PathType<T>}` | `${number}.${PathType<T>}`
 
 interface SchemaContext {
   onOk: (forceValidate: boolean, callback?: (value) => any) => Promise<void>;
@@ -106,7 +106,7 @@ export interface EffectsContext<Path = any, V = FormValue | FormValue[]> {
    */
   validate: (callback?: (errors: IValidateResponse[], context: EffectsContext<Path>) => any) => Promise<IValidateResponse[]>;
 
-  (...path: Paths<Path>): EffectsHandlers<V>;
+  (...path: Paths<Path>): EffectsHandlers<V, Path>;
 }
 
 declare function defineSchemaForm<V = unknown, T extends SchemaFormField<V> = SchemaFormField<V>>(schema: T): EffectsContext<AllType<T>, V>;
@@ -158,14 +158,14 @@ export interface SchemaFormFieldStates {
   readonly?: boolean;
 }
 
-export interface EffectsHandlers<V> {
-  appendPath(path: string): EffectsHandlers<V>;
+export interface EffectsHandlers<V, Path = any> {
+  appendPath(path: string): EffectsHandlers<V, Path>;
 
   /**
    * 禁用
    * @returns {EffectsHandlers}
    */
-  disable(disable?: boolean): EffectsHandlers<V>;
+  disable(disable?: boolean): EffectsHandlers<V, Path>;
 
   /**
    * 设置表单项是否可编辑
@@ -173,12 +173,12 @@ export interface EffectsHandlers<V> {
    * @param {boolean} editable
    * @returns {EffectsHandlers}
    */
-  editable(editable: boolean): EffectsHandlers<V>;
+  editable(editable: boolean): EffectsHandlers<V, Path>;
 
   /**
    * 启用
    */
-  enable(enable?: boolean): EffectsHandlers<V>;
+  enable(enable?: boolean): EffectsHandlers<V, Path>;
 
   fields: () => FieldDefinition[];
   field: () => FieldDefinition;
@@ -186,15 +186,15 @@ export interface EffectsHandlers<V> {
    * @param {boolean} hide
    * @return {EffectsHandlers}
    */
-  hide: (hide?: boolean) => EffectsHandlers<V>;
+  hide: (hide?: boolean) => EffectsHandlers<V, Path>;
 
   isEnabled(): boolean;
 
-  onFieldBlur: (cb: (this: EffectsHandlers<V>, path: string, event?: Event) => any) => EffectsHandlers<V>;
-  onFieldChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField, oldValue?: any) => any) => EffectsHandlers<V>;
-  onFieldCreate: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField) => any) => EffectsHandlers<V>;
-  onFieldCreateOrChange: (cb: (this: EffectsHandlers<V>, value: any, path?: string, field?: IField, oldValue?: unknown) => any) => EffectsHandlers<V>;
-  onFieldFocus: (cb: (this: EffectsHandlers<V>, path: string, event?: Event) => any) => EffectsHandlers<V>;
+  onFieldBlur: (cb: (this: EffectsHandlers<V, Path>, path: string, event?: Event) => any) => EffectsHandlers<V, Path>;
+  onFieldChange: (cb: (this: EffectsHandlers<V, Path>, value: any, path?: string, field?: IField, oldValue?: any) => any) => EffectsHandlers<V, Path>;
+  onFieldCreate: (cb: (this: EffectsHandlers<V, Path>, value: any, path?: string, field?: IField) => any) => EffectsHandlers<V, Path>;
+  onFieldCreateOrChange: (cb: (this: EffectsHandlers<V, Path>, value: any, path?: Path, field?: IField, oldValue?: unknown) => any) => EffectsHandlers<V, Path>;
+  onFieldFocus: (cb: (this: EffectsHandlers<V, Path>, path: string, event?: Event) => any) => EffectsHandlers<V, Path>;
   paths: () => string[];
 
   /**
@@ -203,34 +203,34 @@ export interface EffectsHandlers<V> {
    * @param {boolean} readonly
    * @returns {EffectsHandlers}
    */
-  readonly(readonly: boolean): EffectsHandlers<V>;
+  readonly(readonly: boolean): EffectsHandlers<V, Path>;
 
-  replaceLastPath(...path: string[]): EffectsHandlers<V>;
+  replaceLastPath(...path: string[]): EffectsHandlers<V, Path>;
 
   /**
    *
    * @param {boolean} required
    * @return {EffectsHandlers}
    */
-  required: (required: boolean) => EffectsHandlers<V>;
-  reset: () => EffectsHandlers<V>;
-  setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers<V>;
-  setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers<V>;
-  setFieldProps: (props: { [key: string]: unknown } | ((field: IField) => { [key: string]: unknown })) => EffectsHandlers<V>;
-  setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers<V>;
-  setStates: (states: SchemaFormFieldStates) => EffectsHandlers<V>;
+  required: (required: boolean) => EffectsHandlers<V, Path>;
+  reset: () => EffectsHandlers<V, Path>;
+  setDisplayValue?: (value: any | ((field: IField) => any)) => EffectsHandlers<V, Path>;
+  setEnum: (options: any | ((field: IField) => any)) => EffectsHandlers<V, Path>;
+  setFieldProps: (props: { [key: string]: unknown } | ((field: IField) => { [key: string]: unknown })) => EffectsHandlers<V, Path>;
+  setTitle: (title: any | ((field: IField) => any)) => EffectsHandlers<V, Path>;
+  setStates: (states: SchemaFormFieldStates) => EffectsHandlers<V, Path>;
   /**
    *
    * @param {boolean} show
    * @return {EffectsHandlers}
    */
-  show: (show?: boolean) => EffectsHandlers<V>;
-  subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers<V>;
-  trigger: (event: string, value: any) => EffectsHandlers<V>;
+  show: (show?: boolean) => EffectsHandlers<V, Path>;
+  subscribe: (event: string, handler: (...args: any) => any) => EffectsHandlers<V, Path>;
+  trigger: (event: string, value: any) => EffectsHandlers<V, Path>;
 
-  takePath(number: number): EffectsHandlers<V>;
+  takePath(number: number): EffectsHandlers<V, Path>;
 
-  toggle: () => EffectsHandlers<V>;
+  toggle: () => EffectsHandlers<V, Path>;
   /**
    * 获取或设置字段值（该方法模拟jQuery的value方法思路）
    * 当value为undefined时，该方法将返回匹配的字段值

@@ -1,6 +1,6 @@
 import { defineSchemaForm } from "../types";
 
-const ctx = defineSchemaForm<{b: string, a: string;}>({
+const ctx = defineSchemaForm({
   fields: {
     a: {
       id: 'a',
@@ -8,4 +8,4 @@ const ctx = defineSchemaForm<{b: string, a: string;}>({
     }
   }
 });
-ctx('')
+ctx('a')
