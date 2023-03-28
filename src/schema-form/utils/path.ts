@@ -2,7 +2,7 @@ import {FieldDefinition} from '../bean/field-definition';
 import {SchemaFormField} from '../../../types';
 import {Paths} from '../../../types';
 import {flat} from './array';
-import {isNull} from "@/schema-form/utils/utils";
+import {isNull} from "./utils";
 
 const CACHE = {};
 
