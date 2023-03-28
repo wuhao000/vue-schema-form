@@ -73,7 +73,6 @@ const SchemaForm = defineComponent({
       }
       return props.schema;
     });
-
     props.components.forEach((comp: SchemaFormComponentOptions) => {
       registerComponent(comp, componentStore);
     });

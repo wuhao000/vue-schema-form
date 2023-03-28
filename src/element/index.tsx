@@ -36,8 +36,6 @@ import {
   registerDesktop,
   registerDesktopLib
 } from '../schema-form';
-import {createComponentProxy} from '../schema-form/antd/utils';
-import DUrl from '../schema-form/common/url';
 import CheckboxGroup from './components/checkbox-group';
 import RadioGroup from './components/radio-group';
 import Select from './components/select';
@@ -84,7 +82,7 @@ export function registerElement() {
   };
   registerComponent({
     component: ElInput,
-    types: [FieldTypes.String],
+    types: [FieldTypes.String, FieldTypes.Url],
     platforms: 'desktop',
     valueProp: 'modelValue'
   });
@@ -159,11 +157,6 @@ export function registerElement() {
     types: [FieldTypes.Range],
     platforms: 'desktop',
     valueProp: 'modelValue'
-  });
-  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, 'single', (def, platform) => {
-    return {
-      platform, valueProp: 'modelValue'
-    };
   });
   registerComponent({
     component: ElTransfer,

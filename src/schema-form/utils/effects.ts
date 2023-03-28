@@ -304,7 +304,8 @@ export const defineEffectsContext = <V>() => {
             if (typeof pathsOrHandler === 'string') {
               patterns = [pathsOrHandler];
             } else {
-              patterns = Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[]).map((item: any) => {
+              patterns = Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[])
+                .filter(it => isNotNull(it)).map((item: any) => {
                 if (typeof item === 'string') {
                   return item;
                 } else {

@@ -11,7 +11,6 @@ import {
 } from '../';
 import {ILibComponents} from '../../../types';
 import {FieldDefinition} from '../bean/field-definition';
-import DUrl from '../common/url';
 import {isNotNull} from '../utils/utils';
 import Button from './components/button';
 import CheckboxGroup from './components/checkbox-group';
@@ -188,12 +187,12 @@ export function registerAntd() {
     }
   });
   registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateRange], 'single');
-  registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateTimeRange], 'single', definition => {
+  registerDesktop(createComponentProxy(RangePicker), [FieldTypes.DateTimeRange], 'single', _ => {
     return {
       showTime: true
     }
   });
-  registerDesktop(createComponentProxy(InputField), [FieldTypes.String], 'single');
+  registerDesktop(createComponentProxy(InputField), [FieldTypes.String, FieldTypes.Url], 'single');
   registerDesktop(createTextarea(), [FieldTypes.Text], 'single');
   registerDesktop(createComponentProxy(DatePicker),
     [FieldTypes.Date, FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
@@ -222,11 +221,6 @@ export function registerAntd() {
     types: FieldTypes.Boolean,
     platforms: 'desktop',
     valueProp: 'checked'
-  });
-  registerDesktop(createComponentProxy(DUrl), FieldTypes.Url, 'single', (def, platform) => {
-    return {
-      platform
-    };
   });
   registerDesktop(createComponentProxy(Select), FieldTypes.Select, 'both', field => {
     return {
