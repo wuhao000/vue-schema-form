@@ -1,7 +1,7 @@
 <template>
   <a-button @click="show">{{ title || '查看数据' }}</a-button>
   <a-modal
-      v-model:visible="visible"
+      v-model:open="open"
       destroy-on-close>
     <code-editor>
       {{ value }}
@@ -23,13 +23,13 @@
     title: String
   });
 
-  const visible = ref(false);
+  const open = ref(false);
 
   const show = () => {
-    visible.value = true;
+    open.value = true;
   };
 
   const close = () => {
-    visible.value = false;
+    open.value = false;
   };
 </script>

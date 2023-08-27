@@ -21,7 +21,7 @@ export default defineComponent({
   emits: ['change', 'preview', 'update:value'],
   setup(props, ctx) {
     const {fileList} = useBaseUpload(props, ctx);
-    const previewVisible = ref(false);
+    const previewOpen = ref(false);
     const listType = computed(() => {
       switch (props.mode) {
         case 'picture':
@@ -40,7 +40,7 @@ export default defineComponent({
       listType,
       fileList,
       uploadProps,
-      previewVisible,
+      previewOpen,
       previewUrl,
       onChange(f: AntUploadObject) {
         if (!props.multiple && fileList.value.length > 1) {
@@ -77,7 +77,7 @@ export default defineComponent({
           if (f.type.indexOf('image/') === 0) {
             previewUrl.value = f.url;
             if (previewUrl.value) {
-              previewVisible.value = true;
+              previewOpen.value = true;
               ctx.emit('preview', f);
             }
           } else if (typeList.includes(f.type)) {
@@ -91,7 +91,7 @@ export default defineComponent({
         }
       },
       cancelPreview() {
-        previewVisible.value = false;
+        previewOpen.value = false;
       }
     };
   },
@@ -151,7 +151,7 @@ export default defineComponent({
                   size={this.size}>
           {content}
           {this.$slots.default?.()}
-          <a-modal visible={this.previewVisible}
+          <a-modal open={this.previewOpen}
                    footer={<Button type="primary"
                                    onClick={() => {
                                      this.cancelPreview();

@@ -36,7 +36,7 @@ export default defineComponent({
             height={'100%'}
             title={this.title}
             showOk={false}
-            v-model={[this.visible, 'visible']}>
+            v-model={[this.visible, 'open']}>
           <Result message={message}
                   style={{paddingTop: '0'}}
                   buttonText="返回"

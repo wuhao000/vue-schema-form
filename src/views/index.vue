@@ -3,14 +3,14 @@
     <router-view v-if="mobile" />
     <a-layout
       v-else
-      class="ant-pro-fixed-header ant-pro-fixed-sider root-layout"
-      theme="light"
-    >
+      class="ant-pro-fixed-header ant-pro-fixed-sider root-layout">
       <a-layout-header>
         <app-banner />
       </a-layout-header>
       <a-layout>
-        <a-layout-sider width="200px">
+        <a-layout-sider
+            theme="light"
+            width="200px">
           <router-view name="nav" />
         </a-layout-sider>
         <a-layout-content class="bg-white">
@@ -23,7 +23,7 @@
   </a-config-provider>
 </template>
 <script lang="tsx" type="text/tsx">
-import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
+import zh_CN from "ant-design-vue/locale/zh_CN";
 import { defineComponent, ref } from "vue";
 import AppBanner from "./banner.vue";
 

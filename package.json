@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.2.4-7",
+  "version": "3.3.0",
   "files": [
     "es",
     "package.json",
@@ -68,8 +68,8 @@
     "@vue/compiler-sfc": "^3.2.26",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
-    "ant-design-vue": "^3.2.3",
-    "antd-mobile-vue-next": "0.0.2-4",
+    "ant-design-vue": "^4.0.1",
+    "antd-mobile-vue-next": "0.1.0",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-assign": "^6.22.0",

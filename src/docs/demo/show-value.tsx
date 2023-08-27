@@ -80,7 +80,7 @@ const ShowValue = defineComponent({
                onOk={() => {
                  this.valueModalVisible = false;
                }}
-               v-model={[this.valueModalVisible, 'visible']}>
+               v-model={[this.valueModalVisible, 'open']}>
         <pre>
           {this.getContent()}
         </pre>
