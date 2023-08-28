@@ -1,5 +1,5 @@
 import {DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs from 'dayjs';
 import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib} from '../';
 import {ILibComponents} from '../../../types';
 import {isNotNull} from '../utils/utils';
@@ -35,7 +35,7 @@ const DatePickerItem = (props, ctx) => {
     }
     return value;
   };
-  const value = convertValue(props.value)
+  const value = convertValue(props.value);
   return <m-date-picker-item
       {...props}
       value={value}
