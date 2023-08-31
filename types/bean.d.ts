@@ -7,9 +7,9 @@ import {DefaultPatternRule, Rule} from './uform';
 export type Mode = 'edit' | 'display';
 
 export type FieldDefinitionEnum =
-    any[]
-    | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>)
-    | Promise<any[]>
+  any[]
+  | ((formValue: any, field: FieldDefinition) => any[] | Promise<any[]>)
+  | Promise<any[]>
 
 
 export interface StorePlatformComponents {
@@ -33,11 +33,11 @@ export class ComponentStore {
 export type Platform = 'desktop' | 'mobile';
 
 export type SchemaFormFieldType =
-    Exclude<string, 'grid' | 'steps'>
-    | Component
-    | SchemaFormComponentOptions
-    | SchemaFormComponentOptions[]
-    | (() => VNode | VNode[]);
+  Exclude<string, 'grid' | 'steps'>
+  | Component
+  | SchemaFormComponentOptions
+  | SchemaFormComponentOptions[]
+  | (() => VNode | VNode[]);
 
 type BaseSchemaFormField<V> = {
   /**
@@ -115,9 +115,8 @@ type BaseSchemaFormField<V> = {
   rules?: Rule;
   /**
    * 表单项渲染使用插槽，当指定插槽时，字段的类型无效
-   * @deprecated
    */
-  slot?: string;
+  slot?: string | (() => VNode);
   /**
    * 表单输入组件的插槽
    */

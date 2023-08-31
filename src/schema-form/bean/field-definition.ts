@@ -53,7 +53,7 @@ export class FieldDefinition<V = any> {
   public rules?: IRuleDescription[] = null;
   public setGetValue?: (value?: any) => any = null;
   public reset?: () => void;
-  public slot?: string = null;
+  public slot?: string | (() => VNode) = null;
   public store?: SchemaFormStore = null;
   public title: any = null;
   public type: string | Component | SchemaFormComponentOptions | SchemaFormComponentOptions[] = null;
@@ -278,7 +278,7 @@ const resolveRule = (rule: IRuleDescription | DefaultPatternRule): IRuleDescript
 interface SimpleField {
   xType?: SchemaFormFieldType;
   type?: SchemaFormFieldType;
-  slot?: string;
+  slot?: string | (() => VNode);
   array?: boolean;
   editable?: boolean | ((value: any, field: FieldDefinition) => boolean);
 }
