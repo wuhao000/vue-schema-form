@@ -152,7 +152,7 @@ export default defineComponent({
                     size={this.size}>
             {content}
             {this.$slots.default?.()}
-            <a-modal visible={this.previewVisible}
+            <a-modal open={this.previewOpen}
                      footer={<Button type="primary"
                                      onClick={() => {
                                        this.cancelPreview();
