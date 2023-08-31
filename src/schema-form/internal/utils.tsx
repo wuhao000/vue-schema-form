@@ -181,11 +181,11 @@ export function renderField(pathPrefix: string[] | null,
   }
   const newField = createField(currentValue, store, pathPrefix, fieldDefinition);
   const component = getComponent(fieldDefinition, store);
-  const props: any = {
+  const props = {
     wrap,
     field: newField,
     path: newField.path,
-    pathPrefix: component.mode === 'input' ? newField.path : pathPrefix,
+    pathPrefix: component?.mode === 'input' ? newField.path : pathPrefix,
     disabled: newField.disabled || store.disabled || store.loading,
     definition: fieldDefinition,
     formValue: currentValue,
@@ -194,9 +194,9 @@ export function renderField(pathPrefix: string[] | null,
     },
     key: `field-${fieldDefinition.property}-${index}`,
     arrayIndex,
+    value: getFieldValue(value, newField, component),
     index
   };
-  props.value = getFieldValue(value, newField, component);
   return <FormField {...props}/>;
 }
 
@@ -228,6 +228,9 @@ export function createField(currentValue: any,
 export const getFieldValue = (value: any,
                               field: FieldDefinition,
                               component: SchemaFormComponent) => {
+  if (field.slot) {
+    return undefined;
+  }
   if (component?.mode?.includes('layout')) {
     return value;
   }

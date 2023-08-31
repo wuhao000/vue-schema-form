@@ -15,7 +15,7 @@ const projectName = pk.name;
 upload();
 
 function upload() {
-  fileNames.forEach(name => {
+  fileNames.filter(it => it.includes('.')).forEach(name => {
     let ContentType = '';
     let realFileName = name;
     let encoding = null;
