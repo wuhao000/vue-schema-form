@@ -783,8 +783,8 @@ export default defineComponent({
     const {editable, store: {platform, transitionName, transition}} = this;
     const definition = this.definition;
     if (definition.slot) {
-      if (isVNode(definition.slot)) {
-        return definition.slot;
+      if (typeof definition.slot === 'function') {
+        return definition.slot();
       }
       const slot = this.store.root.slots[definition.slot];
       const content = slot ? slot() : undefined;
