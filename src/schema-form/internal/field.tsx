@@ -58,6 +58,7 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
+import {ClassType} from "../types";
 
 
 export default defineComponent({
@@ -277,7 +278,6 @@ export default defineComponent({
       const component = getFormItemComponent(platform);
       const formItemProps: any = {
         required: editable.value ? field.value.required : null,
-        title: field.value.title,
         label: field.value.title
       };
 
@@ -664,7 +664,7 @@ export default defineComponent({
       const formItemProps = getFormItemProps();
       const style = formItemProps.style;
       const inputFieldDef = fieldComponent.value;
-      const className = classNames(formItemProps.class, {
+      const className = classNames(formItemProps.class as ClassType, {
         'is-layout': inputFieldDef.mode === 'layout',
         'schema-form-field': true,
         'schema-form-field-readonly': !editable.value,

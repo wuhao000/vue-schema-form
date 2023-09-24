@@ -17,6 +17,7 @@ function getColProps(span: number) {
 
 export default defineComponent({
   name: 'GridLayout',
+  inheritAttrs: false,
   props: {
     ...baseLayoutProps,
     layout: {
