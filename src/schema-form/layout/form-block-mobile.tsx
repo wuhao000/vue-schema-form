@@ -17,12 +17,10 @@ const FormBlockItem = defineComponent({
     onMoveUp: Function,
     onMoveDown: Function,
     onRemove: Function,
-    display: Boolean,
-    platform: String
+    display: Boolean
   },
   emits: ['add', 'remove'],
   setup(props, {slots}) {
-    const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = () => {
       if (props.display || (props.maxItems && props.maxItems <= props.total)) {
         return;
@@ -30,7 +28,6 @@ const FormBlockItem = defineComponent({
       return slots.addButton();
     };
     return {
-      store,
       renderAddBtn
     };
   },
@@ -57,14 +54,13 @@ export default defineComponent({
     class: [String, Object, Array],
     style: [Object, String],
     removeText: String,
-    display: Boolean,
-    platform: String
+    display: Boolean
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderTitle = (index?: number) => {
-      const DeleteIcon = LibComponents.icons[props.platform].delete;
+      const DeleteIcon = LibComponents.icons[store.platform].delete;
       if (!props.title) {
         return;
       }
@@ -119,11 +115,11 @@ export default defineComponent({
     };
   },
   render() {
-    const {renderTitle, renderAddBtn} = this;
+    const {renderTitle, renderAddBtn, store} = this;
     const fields = this.$slots.default();
     const props: any = {
       name: 'flip-list',
-      class: classNames('schema-form-block schema-form-block-' + this.platform, this.class as ClassType),
+      class: classNames('schema-form-block schema-form-block-' + store.platform, this.class as ClassType),
       style: this.style,
       tag: 'div'
     };
@@ -135,7 +131,6 @@ export default defineComponent({
             return <FormBlockItem
                 id={key}
                 index={index}
-                platform={this.platform}
                 total={fields.length}
                 maxItems={this.maxItems}
                 key={key}
