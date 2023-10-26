@@ -4,6 +4,7 @@ import {ClassType, SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
 import './form-block.less';
+import {FORM_BLOCK_PROPS} from './utils';
 
 const FormBlockItem = defineComponent({
   name: 'MFormBlockItem',
@@ -17,12 +18,13 @@ const FormBlockItem = defineComponent({
     onMoveUp: Function,
     onMoveDown: Function,
     onRemove: Function,
-    display: Boolean
+    display: Boolean,
+    showAdd: Boolean
   },
   emits: ['add', 'remove'],
   setup(props, {slots}) {
     const renderAddBtn = () => {
-      if (props.display || (props.maxItems && props.maxItems <= props.total)) {
+      if (props.display || !props.showAdd || (props.maxItems && props.maxItems <= props.total)) {
         return;
       }
       return slots.addButton();
@@ -46,15 +48,7 @@ export default defineComponent({
   name: 'MFormBlock',
   inheritAttrs: false,
   props: {
-    maxItems: Number,
-    addText: String,
-    title: {
-      type: [String, Object]
-    },
-    class: [String, Object, Array],
-    style: [Object, String],
-    removeText: String,
-    display: Boolean
+    ...FORM_BLOCK_PROPS
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit}) {
@@ -70,10 +64,10 @@ export default defineComponent({
             {props.title}
             <span> ({index + 1}) </span>
             {
-              !props.display ? <label class="circle-btn remove-btn"
-                                      onClick={() => {
-                                        emit('remove', index);
-                                      }}>
+              !props.display && props.showRemove ? <label class="circle-btn remove-btn"
+                                                          onClick={() => {
+                                                            emit('remove', index);
+                                                          }}>
                 <DeleteIcon/>
                 <span class="op-name">{props.removeText || '删除'}</span>
               </label> : undefined
@@ -101,7 +95,7 @@ export default defineComponent({
       return <m-list
           class={'form-block form-block-mobile'}
           title={props.title}>
-        {!props.display ? <div class="array-item">
+        {!props.display && props.showAdd ? <div class="array-item">
           {renderAddBtn(0)}
         </div> : undefined}
       </m-list>;
@@ -129,6 +123,7 @@ export default defineComponent({
           fields.filter(it => it.type?.toString() !== 'Symbol(Comment)').map((it, index) => {
             const key = it.props.value?.__id__;
             return <FormBlockItem
+                showAdd={this.showAdd}
                 id={key}
                 index={index}
                 total={fields.length}
@@ -138,15 +133,27 @@ export default defineComponent({
                 removeText={this.removeText}
                 addText={this.addText}
                 onAdd={(index) => {
+                  if (!props.showAdd || props.display) {
+                    return;
+                  }
                   this.$emit('add', index + 1);
                 }}
                 onRemove={() => {
+                  if (!props.showRemove || props.display) {
+                    return;
+                  }
                   this.$emit('remove', index);
                 }}
                 onMoveUp={() => {
+                  if (props.display) {
+                    return;
+                  }
                   this.$emit('move-up', index);
                 }}
                 onMoveDown={() => {
+                  if (props.display) {
+                    return;
+                  }
                   this.$emit('move-down', index);
                 }}
                 v-slots={{

@@ -4,6 +4,7 @@ import {ClassType, SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';
 import './form-block.less';
+import {FORM_BLOCK_PROPS} from './utils';
 
 const FormBlockItem = defineComponent({
   name: 'FormBlockItem',
@@ -17,14 +18,16 @@ const FormBlockItem = defineComponent({
     onMoveUp: Function,
     onMoveDown: Function,
     onRemove: Function,
-    display: Boolean
+    display: Boolean,
+    showAdd: Boolean,
+    showRemove: Boolean
   },
   emits: ['add', 'remove'],
   setup(props, {emit, attrs}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = () => {
       const index = props.index;
-      if (props.display) {
+      if (props.display || !props.showAdd) {
         return;
       }
       const PlusIcon = LibComponents.icons[store.platform].plus;
@@ -60,15 +63,29 @@ const FormBlockItem = defineComponent({
         </div> : null
       ];
     };
+    const renderRemoveBtn = () => {
+      if (props.display || !props.showRemove) {
+        return;
+      }
+      const DeleteIcon = LibComponents.icons[store.platform].delete;
+      return (
+          <div class="circle-btn text-danger"
+               onClick={() => {
+                 emit('remove');
+               }}>
+            <DeleteIcon/>
+          </div>
+      )
+    }
     return {
       store,
       renderOperations,
+      renderRemoveBtn,
       renderAddBtn
     };
   },
   render() {
-    const {renderOperations, renderAddBtn, store} = this;
-    const DeleteIcon = LibComponents.icons[store.platform].delete;
+    const {renderOperations, renderRemoveBtn, renderAddBtn, store} = this;
     return <div class="array-item"
                 key={this.id}>
       <div class="array-index">
@@ -77,12 +94,7 @@ const FormBlockItem = defineComponent({
       <div class="array-item-wrapper">{this.$slots.default()}</div>
       {this.display ? undefined : <div class="array-item-operator">
         {renderOperations(this.index)}
-        <div class="circle-btn text-danger"
-             onClick={() => {
-               this.$emit('remove');
-             }}>
-          <DeleteIcon/>
-        </div>
+        {renderRemoveBtn()}
         {renderAddBtn()}
       </div>
       }
@@ -94,15 +106,7 @@ export default defineComponent({
   name: 'FormBlock',
   inheritAttrs: false,
   props: {
-    maxItems: Number,
-    addText: String,
-    title: {
-      type: [String, Object]
-    },
-    class: [String, Object, Array] as PropType<string | string[] | Record<string, unknown>>,
-    style: [Object, String],
-    removeText: String,
-    display: Boolean
+    ...FORM_BLOCK_PROPS
   },
   emits: ['add', 'move-down', 'move-up', 'remove'],
   setup(props, {emit}) {
@@ -120,6 +124,9 @@ export default defineComponent({
       </div>;
     };
     const onAdd = (index?: number) => {
+      if (!props.showAdd || props.display) {
+        return;
+      }
       emit('add', index);
     };
     const renderEmpty = () => {
@@ -127,7 +134,7 @@ export default defineComponent({
       const EmptyComponent = LibComponents.empty[store.platform];
       return <EmptyComponent description=""
                              onClick={onAdd}>
-        {!props.display ? <div class="array-empty">
+        {!props.display && props.showAdd ? <div class="array-empty">
           <PlusIcon/>
           <span>添加</span>
         </div> : undefined}
@@ -158,6 +165,8 @@ export default defineComponent({
             return <FormBlockItem
                 id={key}
                 index={index}
+                showAdd={this.showAdd}
+                showRemove={this.showRemove}
                 total={fields.length}
                 maxItems={this.maxItems}
                 key={key}

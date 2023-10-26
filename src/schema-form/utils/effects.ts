@@ -1,12 +1,12 @@
-import { Subject } from 'rxjs';
-import { nextTick, Ref } from 'vue';
-import { EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore } from '../../../types';
-import { FieldDefinition } from '../bean/field-definition';
-import { SchemaFormEvents } from '../internal/utils';
+import {Subject} from 'rxjs';
+import {nextTick, Ref} from 'vue';
+import {EffectsContext, EffectsHandlers, Paths, SchemaFormFieldStates, SchemaFormStore} from '../../../types';
+import {FieldDefinition} from '../bean/field-definition';
+import {SchemaFormEvents} from '../internal/utils';
 import runValidation from '../uform/validator';
-import { values } from './object';
-import { appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath } from './path';
-import { isNotNull } from './utils';
+import {values} from './object';
+import {appendPath, findFieldPath, isFuzzyPath, isPathMatchPatterns, match, replaceLastPath, takePath} from './path';
+import {isNotNull} from './utils';
 
 let contextId = 1;
 
@@ -37,7 +37,7 @@ class SchemaContext {
 
 export const defineEffectsContext = <V>() => {
 
-  const context: EffectsContext = function (...paths) {
+  const context: EffectsContext = function(...paths) {
     const required = (required: boolean) => {
       context.afterInitialized(() => {
         if (typeof required === 'boolean') {
@@ -263,25 +263,21 @@ export const defineEffectsContext = <V>() => {
       takePath: (number: number): EffectsHandlers<V> => {
         if (paths.length === 0) {
           return context();
+        } else if (typeof paths[0] === 'string') {
+          return context(...takePath(paths as string[], number));
         } else {
-          if (typeof paths[0] === 'string') {
-            return context(...takePath(paths as string[], number));
-          } else {
-            return context(...takePath((paths).map((it: any) => findFieldPath(
-                it, context.__context.store.fields as any
-            )), number));
-          }
+          return context(...takePath((paths).map((it: any) => findFieldPath(
+              it, context.__context.store.fields as any
+          )), number));
         }
       },
       appendPath: (suffix: string): EffectsHandlers<V> => {
         if (paths.length === 0) {
           return context();
+        } else if (typeof paths[0] === 'string') {
+          return context(...appendPath(paths as string[], suffix));
         } else {
-          if (typeof paths[0] === 'string') {
-            return context(...appendPath(paths as string[], suffix));
-          } else {
-            return context(...appendPath((paths).map((it: any) => findFieldPath(it, context.__context.store.fields as any)), suffix));
-          }
+          return context(...appendPath((paths).map((it: any) => findFieldPath(it, context.__context.store.fields as any)), suffix));
         }
       },
       isEnabled: (): boolean => !context.__context.matchFields(paths).some(it => it.disabled),
@@ -305,18 +301,18 @@ export const defineEffectsContext = <V>() => {
               patterns = [pathsOrHandler];
             } else {
               patterns = Array.isArray(pathsOrHandler) ? (pathsOrHandler as any[])
-                .filter(it => isNotNull(it)).map((item: any) => {
-                if (typeof item === 'string') {
-                  return item;
-                } else {
-                  return findFieldPath(item, context.__context.store.fields as any);
-                }
-              }) : [findFieldPath(pathsOrHandler, context.__context.store.fields as any)];
+                  .filter(it => isNotNull(it)).map((item: any) => {
+                    if (typeof item === 'string') {
+                      return item;
+                    } else {
+                      return findFieldPath(item, context.__context.store.fields as any);
+                    }
+                  }) : [findFieldPath(pathsOrHandler, context.__context.store.fields as any)];
             }
             if (isPathMatchPatterns(v.field, patterns)) {
               const h = context(v.field.plainPath);
               if (e === SchemaFormEvents.fieldChange || e === SchemaFormEvents.fieldCreate) {
-                handler.call(h, v.value, v.path, v.oldValue);
+                handler.call(h, v.value, v.path, v.field, v.oldValue);
               } else if ([SchemaFormEvents.fieldFocus, SchemaFormEvents.fieldBlur].includes(e as any)) {
                 handler.call(h, v.path, v.event);
               } else {

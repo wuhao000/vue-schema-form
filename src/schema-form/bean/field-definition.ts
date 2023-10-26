@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {Component, isVNode, reactive, VNode} from 'vue';
+import {Component, isProxy, isVNode, reactive, toRaw, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FieldDefinitionEnum,
@@ -299,6 +299,7 @@ export const getComponent = (field: SimpleField,
     });
   }
   if (typeof type === 'function' || isVNode(type)) {
+    console.log(1, type);
     return {
       component: type,
       platform,
@@ -314,7 +315,7 @@ export const getComponent = (field: SimpleField,
   }
   if (typeof type === 'object' && (typeof type['setup'] === 'function' || typeof type['render'] === 'function')) {
     return {
-      component: type,
+      component: isProxy(type) ? toRaw(type) : type,
       platform,
       mode: forDisplay ? 'display' : 'input',
       arrayMode: 'single',
