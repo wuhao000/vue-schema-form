@@ -139,6 +139,7 @@ export default defineComponent({
       });
     }, 5) as any, {deep: true});
     const editable = computed(() => store.editable && field.value.editable);
+    const focusState = ref(false);
     const fieldComponent = computed(() => {
       return field.value.getComponent(!editable.value, store.platform);
     });
@@ -173,7 +174,7 @@ export default defineComponent({
     const renderFormField = (localField: SchemaFormField,
                              localValue: { [p: string]: unknown } | Array<{ [p: string]: unknown }>,
                              index: number, wrap: boolean) =>
-        renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
+      renderField(props.pathPrefix, store, localField, localValue, index, wrap, emit);
     const preProps = computed<{ [key: string]: unknown }>(() => {
       const localProps: { [key: string]: unknown } = {...field.value.props};
       const renderComponent = fieldComponent.value;
@@ -224,7 +225,7 @@ export default defineComponent({
       if (!localProps.title && (store.platform === 'mobile' || renderComponent.mode === 'layout')) {
         localProps.title = field.value.title;
       }
-      const events = field.value.generateEvents();
+      const events = field.value.generateEvents(focusState);
       Object.keys(events).forEach(eventKey => {
         localProps[eventKey] = events[eventKey];
       });
@@ -284,10 +285,10 @@ export default defineComponent({
       const labelPropName = platform === DESKTOP ? 'label' : 'title';
       if (definition.tip) {
         formItemProps[labelPropName] = <SchemaFormFieldLabel
-            content={
-              isVNode(definition.tip) ? <div>{definition.tip}</div> : <div v-html={definition.tip}/>}
-            platform={store.platform}
-            title={field.value.title}/>;
+          content={
+            isVNode(definition.tip) ? <div>{definition.tip}</div> : <div v-html={definition.tip}/>}
+          platform={store.platform}
+          title={field.value.title}/>;
       } else {
         formItemProps[labelPropName] = field.value.title;
       }
@@ -400,7 +401,7 @@ export default defineComponent({
           itemProps.definition = Object.assign({}, itemProps.definition);
           delete itemProps.definition.array;
         }
-        const events = field.value.generateEvents();
+        const events = field.value.generateEvents(focusState);
         const className = itemProps.className;
         const style = itemProps.style;
         delete itemProps.className;
@@ -501,7 +502,7 @@ export default defineComponent({
     const getSubFields = () => {
       const noWrap = isNull(field.value.title);
       return relatedSubFields.value.map((localField, index) =>
-          renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
     };
     const wrapText = (content: VNode | string) => {
       if (isVNode(content)) {
@@ -547,7 +548,6 @@ export default defineComponent({
         return renderArrayInputComponent(propsTmp, inputFieldDef);
       }
       const style: any = Object.assign({}, inputProps.value.style ?? {});
-      const className = propsTmp.className;
       delete propsTmp.className;
       delete propsTmp.style;
       const slots: { [name: string]: Slot } = {};
@@ -589,27 +589,32 @@ export default defineComponent({
       if (platform === MOBILE && !visible.value) {
         style.display = 'none';
       }
-      propsTmp.class = className;
+      propsTmp.class = classNames(propsTmp.className as string | string[] | Record<string, boolean>, {
+        'schema-form-field': platform === 'mobile',
+        'schema-form-field-focused': platform === 'mobile' && focusState.value,
+        'schema-form-field-readonly': platform === 'mobile' && !editable.value,
+        'schema-form-field-editable': platform === 'mobile' && editable.value
+      });
       propsTmp.style = style;
       if (inputFieldDef.layoutOptions?.noDirectives) {
         return <InputFieldComponent
-            {...propsTmp}
-            v-slots={slots}
-            key={field.value.plainPath}
-            ref={el => {
-              inputRef.value = el;
-              field.value.inputRef = el;
-            }}/>;
+          {...propsTmp}
+          v-slots={slots}
+          key={field.value.plainPath}
+          ref={el => {
+            inputRef.value = el;
+            field.value.inputRef = el;
+          }}/>;
       } else {
         return <InputFieldComponent
-            {...propsTmp}
-            v-show={visible.value}
-            v-slots={slots}
-            key={field.value.plainPath}
-            ref={el => {
-              inputRef.value = el;
-              field.value.inputRef = el;
-            }}/>;
+          {...propsTmp}
+          v-show={visible.value}
+          v-slots={slots}
+          key={field.value.plainPath}
+          ref={el => {
+            inputRef.value = el;
+            field.value.inputRef = el;
+          }}/>;
       }
     };
     onBeforeUnmount(() => {
@@ -667,6 +672,7 @@ export default defineComponent({
       const className = classNames(formItemProps.class as ClassType, {
         'is-layout': inputFieldDef.mode === 'layout',
         'schema-form-field': true,
+        'schema-form-field-focused': focusState.value,
         'schema-form-field-readonly': !editable.value,
         'schema-form-field-editable': editable.value
       });
@@ -694,19 +700,19 @@ export default defineComponent({
       const slots = formItemProps.slots;
       delete formItemProps.slots;
       const formItem = noWrap ? inputComponent :
-          <FormItemComponent
-              {...formItemProps}
-              v-slots={slots}
-              v-show={visible.value}
-              key={props.field.plainPath}
-              class={className}
-              style={style}>
-            {inputComponent}
-          </FormItemComponent>;
+        <FormItemComponent
+          {...formItemProps}
+          v-slots={slots}
+          v-show={visible.value}
+          key={props.field.plainPath}
+          class={className}
+          style={style}>
+          {inputComponent}
+        </FormItemComponent>;
       if (definition.span) {
         return <ColComponent
-            v-show={visible.value}
-            span={definition.span}>{formItem}</ColComponent>;
+          v-show={visible.value}
+          span={definition.span}>{formItem}</ColComponent>;
       } else {
         return formItem;
       }
@@ -716,7 +722,7 @@ export default defineComponent({
         return false;
       }
       return typeof field.value.getComponent(true).wrap !== 'object'
-          || (field.value.getComponent().wrap as any).mobile !== false;
+        || (field.value.getComponent().wrap as any).mobile !== false;
     };
     /**
      * 兼容性处理，如果需要引入新的组件库，需要修改代码进行支持
@@ -736,14 +742,15 @@ export default defineComponent({
       };
       const classes = classNames(formItemProps.class as string | Record<string, unknown>, {
         'schema-form-field': true,
+        'schema-form-field-focused': focusState.value,
         'schema-form-field-readonly': !editable.value,
         'schema-form-field-editable': editable.value
       });
       return resolveWrap() ? <FormItem
-          {...formItemProps}
-          class={classes}
-          v-slots={slots}
-          v-show={visible.value}
+        {...formItemProps}
+        class={classes}
+        v-slots={slots}
+        v-show={visible.value}
       /> : h(inputComponent, {class: classes});
     };
     watchEffect(() => {
