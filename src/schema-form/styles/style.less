@@ -1,6 +1,6 @@
 @gray-7: #8c8c8c;
 @gray-8: #595959;
-
+@focus-label-color: #0958d9;
 .schema-form {
   &&-sticky {
     display: flex;
@@ -8,6 +8,15 @@
     height: 100%;
   }
   &.schema-form-desktop {
+    & > .schema-form-internal {
+     .schema-form-field-focused {
+       .ant-form-item-label {
+         & > label {
+           color: @focus-label-color;
+         }
+       }
+     }
+    }
     .action-btns {
       text-align: center;
 
@@ -22,6 +31,18 @@
   }
   &.schema-form-mobile {
     background: #f5f4f9;
+    & > .schema-form-internal {
+      .am-list-item {
+        &.schema-form-field-focused {
+          & > .am-list-item-line > .am-list-item-content > .am-list-item-title {
+            .am-input-label,
+            .am-textarea-label {
+              color: @focus-label-color;
+            }
+          }
+        }
+      }
+    }
   }
   .schema-form-field-description {
     margin-top: 8px;

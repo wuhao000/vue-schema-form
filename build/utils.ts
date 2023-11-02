@@ -1,13 +1,10 @@
 import cheerio from 'cheerio';
 import fs from 'fs';
 import {escape, unescape} from 'html-escaper';
-import marked from 'marked';
+import {marked} from 'marked';
 import pinyin from 'pinyin';
 import {DocPluginOptions} from './doc-plugin';
 
-marked.setOptions({
-  xhtml: true
-});
 export const md2Html = (content: string) => marked(content);
 
 export function mkdirs(string) {

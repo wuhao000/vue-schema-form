@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {Component, isProxy, isVNode, reactive, toRaw, VNode} from 'vue';
+import {Component, isProxy, isVNode, reactive, Ref, toRaw, UnwrapRef, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FieldDefinitionEnum,
@@ -118,13 +118,14 @@ export class FieldDefinition<V = any> {
     this.visible = visible;
   }
 
-  public generateEvents(): { [key: string]: (...args: any[]) => any } {
+  public generateEvents(focusState: Ref<boolean>): { [p: string]: (...args: any[]) => any } {
 
     const getEventMetadata = (event) => {
       return {event, path: this.plainPath, field: this};
     };
 
     const onFocus = (event, ...args) => {
+      focusState.value = true;
       if (this.events?.onFocus) {
         this.events?.onFocus?.(this.store.context, event, ...args);
       } else if (this.props?.onBlur) {
@@ -167,6 +168,7 @@ export class FieldDefinition<V = any> {
     };
 
     const onBlur = (event, ...args) => {
+      focusState.value = false;
       if (this.events?.onBlur) {
         this.events?.onBlur?.(this.store.context, event, ...args);
       } else if (this.props?.onBlur) {
