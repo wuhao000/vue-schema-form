@@ -301,7 +301,6 @@ export const getComponent = (field: SimpleField,
     });
   }
   if (typeof type === 'function' || isVNode(type)) {
-    console.log(1, type);
     return {
       component: type,
       platform,
