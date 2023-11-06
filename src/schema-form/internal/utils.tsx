@@ -231,7 +231,7 @@ export const getFieldValue = (value: any,
   if (field.slot) {
     return undefined;
   }
-  if (component?.mode === 'layout' || component?.mode === 'render') {
+  if (component?.mode?.includes('layout')) {
     return value;
   }
   if (field.processor) {

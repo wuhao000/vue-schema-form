@@ -58,7 +58,7 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
-import {ClassType} from '../types';
+import {ClassType} from "../types";
 
 
 export default defineComponent({
@@ -179,7 +179,7 @@ export default defineComponent({
       const localProps: { [key: string]: unknown } = {...field.value.props};
       const renderComponent = fieldComponent.value;
       const {platform} = store;
-      if (renderComponent?.getProps) {
+      if (renderComponent !== undefined && renderComponent.getProps) {
         Object.assign(localProps, renderComponent.getProps(field.value, platform));
       }
       const {path, schemaPath} = props;
@@ -247,10 +247,12 @@ export default defineComponent({
           } else {
             (currentValue.value as any[]).push({});
           }
-        } else if (isNotNull(index)) {
-          (currentValue.value as any[]).splice(index, 0, null);
         } else {
-          (currentValue.value as any[]).push(null);
+          if (isNotNull(index)) {
+            (currentValue.value as any[]).splice(index, 0, null);
+          } else {
+            (currentValue.value as any[]).push(null);
+          }
         }
       } else if (type.value === FieldTypes.Object) {
         setCurrentValue([{}]);
@@ -303,9 +305,6 @@ export default defineComponent({
     const visible = computed(() => field.value.isVisible() || !field.value.plainPath);
     const validate = (trigger?: string): IValidateResponse[] | Promise<IValidateResponse[]> => {
       if (!field.value.isVisible()) {
-        return [];
-      }
-      if (fieldComponent.value?.mode === 'render') {
         return [];
       }
       if (fieldComponent.value?.mode === 'layout') {
@@ -366,9 +365,6 @@ export default defineComponent({
       onValueUpdate(currentValue.value);
     };
     const onValueUpdate = (value) => {
-      if (fieldComponent.value?.mode === 'render') {
-        return;
-      }
       let val = value;
       if (isRef(value)) {
         val = unref(value);
