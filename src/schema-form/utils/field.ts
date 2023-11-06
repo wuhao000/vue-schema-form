@@ -4,7 +4,7 @@ import {setStructValue} from './destruct';
 
 export const setFieldValue = (parentValue: { [key: string]: unknown }, field: FieldDefinition, fieldValue: any, emit) => {
   const value = isRef(fieldValue) ? unref(fieldValue) : fieldValue;
-  if (field.getComponent()?.mode === 'layout' || !field.plainPath) {
+  if (['layout', 'render'].includes(field.getComponent()?.mode) || !field.plainPath) {
     return;
   }
   if (field.processor) {
