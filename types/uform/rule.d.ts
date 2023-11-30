@@ -1,5 +1,6 @@
 import {SyncValidateResult} from 'async-validator';
 import {InternalRuleItem, ValidateOption, Value, Values} from 'async-validator/dist-types/interface';
+import {VNode} from "vue";
 
 export type TriggerType = 'blur' | 'change' | 'focus';
 
@@ -7,7 +8,7 @@ export interface IRuleDescription {
   required?: boolean;
   type?: 'boolean' | 'date' | 'enum' | 'float' | 'function' | 'array'
       | 'integer' | 'null' | 'number' | 'object' | 'regexp' | 'string';
-  message?: string;
+  message?: string | VNode;
   pattern?: RegExp | string;
   asyncValidator?: (rule: InternalRuleItem, value: Value, callback: (error?: string | Error) => void, source: Values, options: ValidateOption) => void | Promise<void>;
   validator?: Validator;

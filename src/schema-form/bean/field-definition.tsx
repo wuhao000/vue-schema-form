@@ -1,19 +1,26 @@
 import _ from 'lodash';
-import {Component, isProxy, isVNode, reactive, Ref, toRaw, UnwrapRef, VNode} from 'vue';
+import {Component, isProxy, isVNode, reactive, Ref, toRaw, VNode} from 'vue';
 import {
   DefaultPatternRule,
   FieldDefinitionEnum,
   FormFields,
   IFormPathMatcher,
   IRuleDescription,
-  Path, Platform, SchemaFormComponent, SchemaFormComponentOptions,
-  SchemaFormField, SchemaFormFieldType, SchemaFormStore, TriggerType,
+  Path,
+  Platform,
+  SchemaFormComponent,
+  SchemaFormComponentOptions,
+  SchemaFormField,
+  SchemaFormFieldType,
+  SchemaFormStore,
+  TriggerType,
   ValueProcessor
 } from '../../../types';
 import {buildArrayPath, getComponentType, getRealFields, SchemaFormEvents} from '../internal/utils';
 import {isArr, parseDestructPath} from '../uform/utils';
 import regexp, {errorMessages} from '../uform/validator/regexp';
-import {fixComponentDefinition, isNotNull} from '../utils/utils';
+import {fixComponentDefinition, isNotNull, isNull} from '../utils/utils';
+import {VNodeNormalizedChildren} from "@vue/runtime-core";
 
 export class FieldDefinition<V = any> {
   public array = false;
@@ -202,7 +209,26 @@ export class FieldDefinition<V = any> {
 
 }
 
-const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
+const extractTextFromVNode = (title: VNodeNormalizedChildren | VNode | VNode[]) => {
+  if (Array.isArray(title)) {
+    return title.map(it => extractTextFromVNode(it))
+      .filter(it => isNotNull(it))
+      .join('');
+  } else {
+    if (typeof title === 'string') {
+      return title;
+    }
+    if (isNull(title.children)) {
+      return '';
+    }
+    if (isVNode(title)) {
+      return extractTextFromVNode(title.children);
+    }
+    return '';
+  }
+};
+
+const getRulesFromProps = (field: SchemaFormField, required: boolean): IRuleDescription[] => {
   const rules: IRuleDescription[] = [];
   if (isArr(field.rules)) {
     field.rules.forEach(rule => {
@@ -211,6 +237,7 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
   } else {
     resolveRule(field.rules);
   }
+  const title = (isVNode(field.title) ? extractTextFromVNode(field.title) : field.title) || '该字段';
   if (required && !rules.some(rule => rule.required)) {
     let type = null;
     switch (field.type) {
@@ -233,34 +260,34 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean) => {
     if (type) {
       rules.push({
         required: true,
-        message: `${field.title ?? '该字段'}为必填项`
+        message: `${title}为必填项`
       }, {
         required: true,
         type,
-        message: `${field.title ?? '该字段'}的值无效`
+        message: `${title}的值无效`
       });
     } else {
       rules.push({
         required: true,
-        message: `${field.title ?? '该字段'}为必填项`
+        message: `${title}为必填项`
       });
     }
   }
   if (field.format && !rules.some(rule => rule.format === field.format)) {
-    rules.push({format: field.format, message: `${field.title ?? '字段'}格式不正确`});
+    rules.push({format: field.format, message: `${title}格式不正确`});
   }
   if (isNotNull(field.min)) {
     if (['integer', 'double', 'number'].includes(field.type as string)) {
-      rules.push({type: 'number', min: field.min, message: `${field.title}不能小于${field.min}`});
+      rules.push({type: 'number', min: field.min, message: `${title}不能小于${field.min}`});
     } else if (['string', 'html', 'code', 'text'].includes(field.type as string)) {
-      rules.push({type: 'string', min: field.min, message: `${field.title}长度不能小于${field.min}`});
+      rules.push({type: 'string', min: field.min, message: `${title}长度不能小于${field.min}`});
     }
   }
   if (isNotNull(field.max)) {
     if (['integer', 'double', 'number'].includes(field.type as string)) {
-      rules.push({type: 'number', max: field.max, message: `${field.title}不能大于${field.max}`});
+      rules.push({type: 'number', max: field.max, message: `${title}不能大于${field.max}`});
     } else if (['string', 'text'].includes(field.type as string)) {
-      rules.push({type: 'string', max: field.max, message: `${field.title}长度不能大于${field.max}`});
+      rules.push({type: 'string', max: field.max, message: `${title}长度不能大于${field.max}`});
     }
   }
   return _.cloneDeep(rules);
@@ -286,9 +313,9 @@ interface SimpleField {
 }
 
 export const getComponent = (field: SimpleField,
-                      store: SchemaFormStore,
-                      forDisplay = false,
-                      platform: Platform = 'desktop'): SchemaFormComponent => {
+                             store: SchemaFormStore,
+                             forDisplay = false,
+                             platform: Platform = 'desktop'): SchemaFormComponent => {
   const type = field.xType || field.type;
   if (field.slot) {
     return undefined;

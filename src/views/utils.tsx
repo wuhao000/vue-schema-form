@@ -53,7 +53,7 @@ export const getValue = () => {
 
 const fields: { [key: string]: SchemaFormField } = {
   expandSelect: {
-    title: '展开单选',
+    title: <span>展开单选</span>,
     required: true,
     type: 'expand-select',
     xProps: {options}
