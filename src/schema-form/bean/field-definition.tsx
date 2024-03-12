@@ -218,7 +218,7 @@ const extractTextFromVNode = (title: VNodeNormalizedChildren | VNode | VNode[]) 
     if (typeof title === 'string') {
       return title;
     }
-    if (isNull(title.children)) {
+    if (isNull(title) || isNull(title.children)) {
       return '';
     }
     if (isVNode(title)) {
