@@ -25,14 +25,14 @@ export const baseTimePickerProps = {
   },
   format: {
     type: String as PropType<string>,
-    default: 'HH:mm:ss'
+    default: 'HH:mm'
   }
 };
 
 export const useBaseTimePicker = (props, {attrs, emit, convertValue, convertValueBack, valueProp}) => {
   const {disabled, size} = useBaseInput(props, {attrs});
   const stateValue = ref(null);
-  watch(() => props.value, (value: string | Date) => {
+  watch(() => props[valueProp], (value: string | Date) => {
     const convertedValue: Date = convertValue(value);
     if (isNull(stateValue.value)) {
       stateValue.value = convertedValue;
@@ -48,7 +48,7 @@ export const useBaseTimePicker = (props, {attrs, emit, convertValue, convertValu
       disabled: disabled.value,
       ...props,
       ...attrs,
-      value: stateValue.value,
+      [valueProp]: stateValue.value,
       [`onUpdate:${valueProp}`]: (value) => {
         if (isNotNull(value) && value.toString() === '[object InputEvent]') {
           return;

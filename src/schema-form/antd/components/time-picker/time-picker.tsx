@@ -11,11 +11,15 @@ export default defineComponent({
   },
   setup(props, {emit, attrs}) {
     const convertValue = (value: string | Date) => {
+      let format = props.format;
+      if (typeof value === 'string' && /\d{2}:\d{2}/.test(value)) {
+        format = 'HH:mm';
+      }
       if (!value) {
         return undefined;
       }
       if (typeof value === 'string') {
-        return dayjs(value, props.format as string);
+        return dayjs(value, format);
       } else {
         return dayjs(value);
       }

@@ -20,14 +20,14 @@ export const baseTimeRangePickerProps = {
   },
   format: {
     type: String as PropType<string>,
-    default: 'HH:mm:ss'
+    default: 'HH:mm'
   }
 };
 
 export const useBaseTimeRangePicker = (props, {attrs, emit, convertValue, convertValueBack, valueProp}) => {
   const start = ref(null);
   const end = ref(null);
-  watch(() => props.value, (value: any) => {
+  watch(() => props[valueProp], (value: any) => {
     const convertedValue = convertValue(value);
     if (!convertedValue) {
       start.value = null;

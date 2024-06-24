@@ -11,7 +11,7 @@ import {
 } from '../';
 import {ILibComponents} from '../../../types';
 import {FieldDefinition} from '../bean/field-definition';
-import {isNotNull} from '../utils/utils';
+import {getTransferOptions, isNotNull} from '../utils/utils';
 import Button from './components/button';
 import CheckboxGroup from './components/checkbox-group';
 import DatePicker from './components/date-picker';
@@ -80,21 +80,6 @@ const ComponentMap: Record<keyof ILibComponents, any> = {
   }
 };
 
-
-function getTransferOptions(array) {
-  return array.map((item: any) => {
-    if (typeof item === 'string') {
-      return {key: item, title: item};
-    } else {
-      return {
-        key: (item.key || item.value).toString(),
-        title: item.title || item.label,
-        description: item.description || item.label,
-        disabled: !!item.disabled
-      };
-    }
-  });
-}
 
 const transferPropsTransform = (def: FieldDefinition) => {
   if (def.options) {

@@ -1,7 +1,7 @@
 import {ElTimePicker} from 'element-plus';
 import dayjs from 'dayjs';
-import {defineComponent} from 'vue';
-import {baseTimeRangePickerProps, useBaseTimeRangePicker} from '../../../schema-form/common/base-time-range-picker';
+import {defineComponent, ref, watch} from 'vue';
+import {baseTimeRangePickerProps, useBaseTimeRangePicker} from '../../../common/base-time-range-picker';
 import DTimePicker from './time-picker';
 import './time-range-picker.less';
 
@@ -12,7 +12,8 @@ export default defineComponent({
   },
   inheritAttrs: false,
   props: {
-    ...baseTimeRangePickerProps
+    ...baseTimeRangePickerProps,
+    modelValue: Array
   },
   setup(props, {attrs, emit}) {
     const convertValue = (value: Array<string> | string): Array<Date | string> => {
@@ -35,23 +36,40 @@ export default defineComponent({
       start,
       end
     } = useBaseTimeRangePicker(props,
-        {emit, attrs, convertValue, convertValueBack, valueProp: 'value'});
+        {emit, attrs, convertValue, convertValueBack, valueProp: 'modelValue'});
+    const stateValue = ref([start.value, end.value]);
+    watch(() => start.value, v => {
+      stateValue.value[0] = v;
+    });
+    watch(() => end.value, v => {
+      stateValue.value[1] = v;
+    });
+    watch(() => stateValue.value, v => {
+      if (v[0] !== start.value) {
+        start.value = v[0]
+      }
+      if (v[1] !== end.value) {
+        end.value = v[1];
+      }
+    });
     return {
       fieldProps,
       start,
-      end
+      end,
+      stateValue
     };
   },
   render() {
     return (
         <div class="d-time-range-picker">
           <div>
-            <ElTimePicker {...this.fieldProps}
-                          v-model={[this.start, 'modelValue']}
-                          allow-clear={this.clearable || this.$attrs.allowClear}
-                          format={this.format}
-                          type="timerange"
-                          placeholder={this.placeholder}/>
+            <el-time-picker {...this.fieldProps}
+                            v-model={[this.stateValue, 'modelValue']}
+                            allow-clear={this.clearable || this.$attrs.allowClear}
+                            format={this.format}
+                            is-range
+                            range-separator="-"
+                            placeholder={this.placeholder}/>
           </div>
         </div>
     );

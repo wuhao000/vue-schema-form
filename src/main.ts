@@ -1,5 +1,6 @@
 import antd from 'ant-design-vue';
 import Antdm from 'antd-mobile-vue-next';
+import Element from 'element-plus';
 import vant from 'vant';
 import 'vant/lib/index.css';
 import {createApp} from 'vue';
@@ -19,6 +20,7 @@ app.config.warnHandler = () => {
   // do not show
 };
 app.use(Antdm);
+app.use(Element);
 app.use(router as any);
 app.use(vant);
 app.use(antd as any);
