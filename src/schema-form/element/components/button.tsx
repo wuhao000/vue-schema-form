@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import {defineComponent, PropType} from 'vue';
-import {baseButtonProps} from '../common/base-button';
-import {useBaseInput} from '../mixins';
-import {ClassType} from "../types";
+import {baseButtonProps} from '../../common/base-button';
+import {useBaseInput} from '../../mixins';
+import {ClassType} from "../../types";
 
 export default defineComponent({
   name: 'DButton',

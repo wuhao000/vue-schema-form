@@ -12,12 +12,12 @@ import {
   config,
   FieldTypes,
   registerComponent,
-  registerDesktopLib
+  registerDesktopLib, registerDisplay
 } from '../index';
 import CheckboxGroup from './components/checkbox-group';
 import RadioGroup from './components/radio-group';
 import Select from './components/select';
-import Button from './button';
+import Button from './components/button';
 import {
   createAlert,
   createAside,
@@ -31,10 +31,12 @@ import {
   createInput,
   createInputNumber, createMain, createPopover, createRate,
   createResult,
-  createRow, createSlider, createSwitch
+  createRow, createSlider, createSwitch, createCascader
 } from "./utils";
 import {FieldDefinition} from "../bean/field-definition";
 import {getTransferOptions} from "../utils/utils";
+import RateDisplay from "./components/display/rate";
+import PasswordDisplay from "./components/display/password";
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
   result: createResult(),
@@ -71,6 +73,10 @@ export function registerElement() {
   config.confirmFn.desktop = ElMessageBox.confirm;
   config.formItemPropTransform.desktop = (component: Component, field) => {
     const props: any = {};
+    if (field.errors.length) {
+      props.error = field.errors.join('、');
+      props.showMessage = true;
+    }
     if (field.definition?.wrapperProps?.noTitle || !field?.definition?.title) {
       props.required = false;
     }
@@ -93,7 +99,12 @@ export function registerElement() {
     types: FieldTypes.Button,
     platforms: 'desktop',
     mode: 'render',
-    wrap: false
+    wrap: false,
+    getProps(definition, platform) {
+      return {
+        title: definition.title
+      }
+    },
   });
   registerComponent({
     component: Select,
@@ -167,6 +178,15 @@ export function registerElement() {
     valueProp: 'modelValue'
   });
   registerComponent({
+    component: createCascader(),
+    types: [FieldTypes.Cascader],
+    platforms: 'desktop',
+    valueProp: 'modelValue',
+    getProps: (field) => {
+      return {options: field.options};
+    },
+  });
+  registerComponent({
     component: createSlider(),
     types: [FieldTypes.Range],
     platforms: 'desktop',
@@ -218,5 +238,14 @@ export function registerElement() {
       };
     }
   });
-
+  registerDisplay({
+    component: RateDisplay,
+    platforms: 'desktop',
+    types: FieldTypes.Rate
+  });
+  registerDisplay({
+    component: PasswordDisplay,
+    platforms: 'desktop',
+    types: FieldTypes.Password
+  });
 }

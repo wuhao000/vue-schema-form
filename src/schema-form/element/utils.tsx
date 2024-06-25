@@ -1,6 +1,10 @@
+import {useBaseInput} from "../mixins";
+
 export const createCard = () => {
   return (props, ctx) => {
     return <el-card {...props}
+                    header={props.title}
+                    shadow={'never'}
                     v-slots={ctx.slots}/>;
   };
 };
@@ -120,7 +124,13 @@ export const createSwitch = () => {
                       v-slots={ctx.slots}/>;
   };
 };
-
+export const createCascader = () => {
+  return (props, ctx) => {
+    const {size} = useBaseInput(props, ctx);
+    return <el-cascader {...{size: size.value, ...props, ...ctx.attrs}}
+                        v-slots={ctx.slots}/>;
+  };
+};
 export const createResult = () => {
   return (props, ctx) => {
     return <el-result {...props}

@@ -6,7 +6,7 @@ import {computed, defineComponent, ref} from 'vue';
 import {baseUpdateProps, useBaseUpload} from '../../common/base-upload';
 import {useBaseInput} from "../../";
 import {isNotNull} from "../../utils/utils";
-import Button from '../button';
+import Button from './button';
 import {UploadFile} from "element-plus/es/components/upload/src/upload";
 import {UploaderFileListItem} from "vant";
 
