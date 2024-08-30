@@ -41,6 +41,7 @@ export const getValue = () => {
     multiSelect: [1, 3],
     expandSelect: 1,
     expandMultiSelect: [1, 2],
+    rate: 3,
     transfer: ['1'],
     subForm: {
       input: 'abs'

@@ -1,7 +1,7 @@
 import {computed, defineComponent, PropType} from 'vue';
-import {useOptions} from './utils';
 import classNames from 'classnames';
 import {ClassType} from "../../../../types";
+import {useOptions} from "../../utils/utils";
 
 export default defineComponent({
   name: 'DCheckboxGroup',

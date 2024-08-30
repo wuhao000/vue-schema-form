@@ -1,22 +1,26 @@
-import {ElTimePicker} from 'element-plus';
 import dayjs from 'dayjs';
 import {defineComponent} from 'vue';
-import {baseTimePickerProps, useBaseTimePicker} from '../../../schema-form/common/base-time-picker';
-import {isNotNull} from '../../../schema-form/utils/utils';
+import {baseTimePickerProps, useBaseTimePicker} from '../../../common/base-time-picker';
+import {isNotNull} from '../../../utils/utils';
 
 export default defineComponent({
   name: 'DTimePicker',
   inheritAttrs: false,
   props: {
-    ...baseTimePickerProps
+    ...baseTimePickerProps,
+    modelValue: [String, Date]
   },
   setup(props, {emit, attrs}) {
     const convertValue = (value: string) => {
       if (!value) {
         return undefined;
       }
+      let format = props.format;
+      if (typeof value === 'string' && /\d{2}:\d{2}/.test(value)) {
+        format = 'HH:mm';
+      }
       if (typeof value === 'string') {
-        return dayjs(value, props.format as string).toDate();
+        return dayjs(value, format).toDate();
       } else {
         return dayjs(value).toDate();
       }
@@ -30,15 +34,14 @@ export default defineComponent({
     const {
       getProps,
       stateValue
-    } = useBaseTimePicker(props, {emit, attrs, convertValue, convertValueBack, valueProp: 'value'});
+    } = useBaseTimePicker(props, {emit, attrs, convertValue, convertValueBack, valueProp: 'modelValue'});
     return {
       getProps,
       stateValue
     };
   },
   render() {
-    return <ElTimePicker {...{
-      ...this.getProps()
-    }}/>;
+    const props = this.getProps();
+    return <el-time-picker {...props}/>;
   }
 });

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import omit from 'omit.js';
 import {defineComponent, PropType} from 'vue';
-import {useOptions} from './utils';
+import {useOptions} from "../../utils/utils";
 
 export default defineComponent({
   name: 'DRadioGroup',

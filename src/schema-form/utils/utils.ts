@@ -1,4 +1,4 @@
-import {isVNode, VNode} from 'vue';
+import {computed, ComputedRef, isVNode, VNode} from 'vue';
 import {
   ILibComponents,
   Platform,
@@ -14,6 +14,42 @@ export enum Mode {
   Edit = 'edit',
   Display = 'display'
 }
+
+
+export const getTransferOptions = (array) => {
+  return array.map((item: any) => {
+    if (typeof item === 'string') {
+      return {key: item, title: item};
+    } else {
+      return {
+        key: (item.key || item.value).toString(),
+        title: item.title || item.label,
+        description: item.description || item.label,
+        disabled: !!item.disabled
+      };
+    }
+  });
+}
+
+
+export const useOptions = (props): {
+  options: ComputedRef<any[]>
+} => {
+  const options = computed(() => {
+    if (props.options) {
+      return props.options.map(option => {
+        const op: any = Object.assign({}, option);
+        op.label = getOptionProperty(option, props.labelProperty);
+        op.value = getOptionProperty(option, props.valueProperty);
+        return op;
+      });
+    } else {
+      return null;
+    }
+  });
+  return {options};
+};
+
 
 export enum FieldTypes {
   Grid = 'grid',

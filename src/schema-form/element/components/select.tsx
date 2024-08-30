@@ -1,7 +1,5 @@
-import {ElOption, ElSelect} from 'element-plus';
 import {defineComponent, PropType} from 'vue';
-import {useOptions} from '../../schema-form/antd/components/utils';
-import {isNull} from '../../schema-form/utils/utils';
+import {isNull, useOptions} from '../../utils/utils';
 
 
 export default defineComponent({
@@ -47,14 +45,14 @@ export default defineComponent({
       allowClear: this.clearable ? true : this.$attrs.allowClear
     };
     delete props.options;
-    return <ElSelect {...props}>
+    return <el-select {...props}>
       {
         this.localOptions.map(option => (
-            <ElOption key={option.value} value={option.value}>
+            <el-option key={option.value} value={option.value}>
               {option.label}
-            </ElOption>
+            </el-option>
         ))
       }
-    </ElSelect>;
+    </el-select>;
   }
 });

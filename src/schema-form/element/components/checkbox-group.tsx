@@ -1,7 +1,7 @@
 import {ElCheckbox, ElCheckboxGroup, ElCol, ElRow} from 'element-plus';
 import chunk from 'lodash.chunk';
 import {defineComponent, PropType} from 'vue';
-import {useOptions} from '../../schema-form/antd/components/utils';
+import {useOptions} from "../../utils/utils";
 
 export default defineComponent({
   name: 'DCheckboxGroup',

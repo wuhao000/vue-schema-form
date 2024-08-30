@@ -1,6 +1,5 @@
 import { defineComponent, PropType, ref } from 'vue';
-import { isNull } from '../../utils/utils';
-import { useOptions } from './utils';
+import {isNull, useOptions} from '../../utils/utils';
 
 
 export default defineComponent({

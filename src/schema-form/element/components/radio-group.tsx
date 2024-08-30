@@ -1,7 +1,6 @@
-import {ElCol, ElRadio, ElRadioGroup, ElRow} from 'element-plus';
 import chunk from 'lodash.chunk';
 import {defineComponent, PropType} from 'vue';
-import {useOptions} from '../../schema-form/antd/components/utils';
+import {useOptions} from "../../utils/utils";
 
 export default defineComponent({
   name: 'DRadioGroup',
@@ -30,20 +29,22 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <ElRow>
+          <el-row>
             {
               c.map(o => (
-                  <ElCol span={this.span}>
-                    <ElRadio {...o}>{o.label}</ElRadio>
-                  </ElCol>
+                  <el-col span={this.span}>
+                    <el-radio {...o}>{o.label}</el-radio>
+                  </el-col>
               ))
             }
-          </ElRow>
+          </el-row>
       )) as any;
     } else {
-      props.options = this.localOptions;
+      slots.default = () => this.localOptions.map(item => (
+          <el-radio {...item}>{item.label}</el-radio>
+      ))
     }
-    return <ElRadioGroup {...props}
-                         v-slots={slots}/>;
+    return <el-radio-group {...props}
+                           v-slots={slots}/>;
   }
 });
