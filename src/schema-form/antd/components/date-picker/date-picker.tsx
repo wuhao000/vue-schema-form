@@ -6,9 +6,7 @@ const convertValue = (value: Date | number, format: string, mode: Mode): any => 
     return undefined;
   }
   if (mode === 'year') {
-    const m = dayjs();
-    m.set('year', value as number);
-    return m;
+    return dayjs().set('year', value as number);
   }
   if (typeof value === 'string') {
     return dayjs(value, format);
