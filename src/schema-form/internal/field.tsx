@@ -785,6 +785,7 @@ export default defineComponent({
       editable,
       store,
       createSimpleMobileFieldComponent,
+      currentValue,
       renderInputComponent,
       renderDesktopComponent
     };
