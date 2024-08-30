@@ -23,7 +23,7 @@
   </a-config-provider>
 </template>
 <script lang="tsx" type="text/tsx">
-import zh_CN from "ant-design-vue/locale/zh_CN";
+import zh_CN from "ant-design-vue/es/locale/zh_CN";
 import { defineComponent, ref } from "vue";
 import AppBanner from "./banner.vue";
 

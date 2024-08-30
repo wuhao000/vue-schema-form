@@ -12,14 +12,14 @@ module.exports = {
     }
   },
   configureWebpack: (config) => {
-    config.externals = {
-      'vue': 'Vue',
-      'lodash': '_',
-      dayjs: 'dayjs',
-      'ant-design-vue': 'antd',
-      'antd-mobile-vue-next': 'antdm',
-      '@ant-design/icons-vue': 'anticons'
-    };
+    // config.externals = {
+    //   'vue': 'Vue',
+    //   'lodash': '_',
+    //   dayjs: 'dayjs',
+    //   'ant-design-vue': 'antd',
+    //   'antd-mobile-vue-next': 'antdm',
+    //   '@ant-design/icons-vue': 'anticons'
+    // };
     config.module.rules.push({
       test: /\.md$/,
       use: [

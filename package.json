@@ -17,13 +17,9 @@
     "lib": "npm run docs && vue-cli-service build --target lib --name VSchemaForm --dest lib src/schema-form/index.ts",
     "docs": "ts-node build/routes.ts",
     "lint": "vue-cli-service lint --max-warnings 1",
-    "cdn": "npm run lib && ts-node build/cdn.ts",
     "check": "ts-node build/check-ts.ts",
-    "release": "npm run compile && npm publish && npm run cdn",
+    "release": "npm run compile && npm publish",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.aegis-info.com/repository/npm-aegis/"
   },
   "dependencies": {
     "@types/less": "^3.0.3",
@@ -73,7 +69,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "ant-design-vue": "4.0.1",
-    "antd-mobile-vue-next": "0.1.0-8",
+    "antd-mobile-vue-next": "0.1.0-9",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-assign": "^6.22.0",

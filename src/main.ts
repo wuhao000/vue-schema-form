@@ -12,6 +12,7 @@ import './styles';
 import './styles/github-markdown.less';
 import App from './views/index.vue';
 import ShowValue from './views/show-value.vue';
+import 'ant-design-vue/dist/antd.min.css';
 
 
 const app = createApp(App);

@@ -1,7 +1,6 @@
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {Toast} from 'antd-mobile-vue-next';
-import {Base64} from 'js-base64';
 import omit from 'omit.js';
 import {computed, defineComponent, ref} from 'vue';
 import {useBaseInput} from '../';
@@ -74,15 +73,13 @@ export default defineComponent({
         if (props.onPreview) {
           props.onPreview(f);
         } else {
-          const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
+          // const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
           if (f.type.indexOf('image/') === 0) {
             previewUrl.value = f.url;
             if (previewUrl.value) {
               previewOpen.value = true;
               ctx.emit('preview', f);
             }
-          } else if (typeList.includes(f.type)) {
-            window.open(`https://fileview.aegis-info.com/preview/onlinePreview?url=${encodeURIComponent(Base64.encode(f.url))}`);
           } else if (['application/pdf', 'text/plain', 'video/mpeg', 'audio/mpeg'].includes(f.type)) {
             window.open(f.url);
           } else {
