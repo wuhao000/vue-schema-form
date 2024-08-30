@@ -16,7 +16,6 @@
     "lib": "npm run docs && vue-cli-service build --target lib --name VSchemaForm --dest lib src/schema-form/index.ts",
     "docs": "ts-node build/routes.ts",
     "lint": "vue-cli-service lint --max-warnings 1",
-    "cdn": "npm run lib && ts-node build/cdn.ts",
     "check": "ts-node build/check-ts.ts",
     "release": "npm run compile && npm publish",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
