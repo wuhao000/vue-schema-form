@@ -1,11 +1,10 @@
 import {PlusOutlined} from '@ant-design/icons-vue';
-import {computed, defineComponent, PropType, provide, watch} from 'vue';
-import {SchemaFormField} from '../../../types';
+import { computed, defineComponent, getCurrentInstance, PropType, provide, watch } from 'vue';
 import {FieldDefinition} from '../bean/field-definition';
 import {transformFormProps} from '../config';
 import {isEqual} from '../uform/utils';
 import {SchemaFormObjectStoreKey} from '../utils/key';
-import {DESKTOP, getButtonComponent, getFormComponent, getRowComponent, MOBILE} from '../utils/utils';
+import { DESKTOP, getButtonComponent, getFormComponent, getRowComponent, LibComponents, MOBILE } from '../utils/utils';
 import {baseFieldComponentProps, useBaseFieldComponent} from './field-based-component';
 import {getComponentType, getRealFields} from './utils';
 
@@ -80,7 +79,8 @@ export default defineComponent({
       });
       return array;
     });
-
+    const instance = getCurrentInstance();
+    const isTable = computed(() => instance.parent?.type?.name === 'TableRow');
     const renderSingleFields = () => {
       const FormComponent: any = getFormComponent(store.platform);
       const {definition, layoutProps, layoutType, inline} = props;
@@ -90,6 +90,9 @@ export default defineComponent({
       };
       if (store.platform === 'mobile' && definition.definition?.array) {
         return groups.value.reduce((a, b) => a.concat(b));
+      }
+      if (isTable.value) {
+        return groups.value.reduce((a, b) => a.concat(b)).map(it => <td>{it}</td>);
       }
       const form = (
           <FormComponent {...formProps}>
@@ -159,10 +162,14 @@ export default defineComponent({
     return {
       renderSingleFields,
       renderAddFormButton,
+      isTable,
       currentValue
     };
   },
   render() {
+    if (this.isTable) {
+      return [...this.renderSingleFields()];
+    }
     return <div class="schema-form-internal">
       {this.renderSingleFields()}
       {this.renderAddFormButton()}

@@ -10,9 +10,8 @@
   "main": "es/index.js",
   "scripts": {
     "dev": "npm run docs && vite",
-    "dev-webpack": "npm run docs && ts-node build/build-components.ts && vue-cli-service serve",
     "compile": "npm run docs && ts-node build/build-components.ts",
-    "build": "npm run compile && vue-cli-service build",
+    "build": "npm run compile && vite build",
     "lib": "npm run docs && vue-cli-service build --target lib --name VSchemaForm --dest lib src/schema-form/index.ts",
     "docs": "ts-node build/routes.ts",
     "lint": "vue-cli-service lint --max-warnings 1",

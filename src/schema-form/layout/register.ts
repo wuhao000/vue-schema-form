@@ -69,7 +69,11 @@ registerLayout({
   component: Table,
   platforms: DESKTOP,
   arrayMode: 'array',
-  types: 'table'
+  types: 'table',
+  layoutOptions: {
+    noTitle: true,
+    noWrap: true
+  }
 });
 registerLayout({
   component: FormBlock,

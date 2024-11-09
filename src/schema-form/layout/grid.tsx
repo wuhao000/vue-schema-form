@@ -96,6 +96,9 @@ export default defineComponent({
       return groups;
     };
     const isFieldVisible = (field: VNode) => {
+      if (!field) {
+        return false;
+      }
       if (typeof field.type === 'object' && (field.type as Component)?.name === "VSchemaFormField") {
         return (field.props.field as FieldDefinition).isVisible();
       }
