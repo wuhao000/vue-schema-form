@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {defineComponent, inject, PropType, TransitionGroup} from 'vue';
+import {defineComponent, inject, TransitionGroup} from 'vue';
 import {ClassType, SchemaFormStore} from '../../../types';
 import {SchemaFormStoreKey} from '../utils/key';
 import {LibComponents} from '../utils/utils';

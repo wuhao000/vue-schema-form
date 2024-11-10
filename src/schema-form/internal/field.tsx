@@ -126,6 +126,9 @@ export default defineComponent({
     watch(() => currentValue.value, _.debounce(val => {
       const oldValue = field.value.value;
       field.value.value = val;
+      if (props.path[0] === 'relatedEntityQueryFields') {
+        console.log(val);
+      }
       emit(`update:value`, val);
       emit('change', val);
       if (!field.value.valid) {
@@ -464,9 +467,7 @@ export default defineComponent({
         },
         onRemove: async (index) => {
           try {
-            const confirmFunc = getConfirmFunction(store.platform);
             try {
-              await confirmFunc('确定删除该条吗？', '提示');
               removeArrayItem(index);
             } catch (e) {
               // do nothing
@@ -562,7 +563,7 @@ export default defineComponent({
         const slotsDef = definition.slots;
         Object.keys(slotsDef).forEach(slotName => {
           if (typeof slotsDef[slotName] === 'string') {
-            if (store.root.slots && store.root.slots[slotsDef[slotName] as string]) {
+            if (store.root.slots?.[slotsDef[slotName] as string]) {
               slots[slotName] = store.root.slots[slotsDef[slotName] as string];
             }
           } else {
@@ -632,10 +633,8 @@ export default defineComponent({
         focus: () => {
           if (isVNode(inputRef.value)) {
             (inputRef.value as VNode).el.focus();
-          } else {
-            if (inputRef.value?.focus) {
-              inputRef.value?.focus?.();
-            }
+          } else if (inputRef.value?.focus) {
+            inputRef.value?.focus?.();
           }
         },
         reset: () => {

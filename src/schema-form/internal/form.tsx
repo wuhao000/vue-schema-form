@@ -92,7 +92,7 @@ export default defineComponent({
         return groups.value.reduce((a, b) => a.concat(b));
       }
       if (isTable.value) {
-        return groups.value.reduce((a, b) => a.concat(b)).map(it => <td>{it}</td>);
+        return groups.value.reduce((a, b) => a.concat(b)).map(it => <div class={'table-cell'}>{it}</div>);
       }
       const form = (
           <FormComponent {...formProps}>
