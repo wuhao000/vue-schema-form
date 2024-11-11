@@ -4,7 +4,7 @@ import { FieldDefinition } from '../bean/field-definition';
 import { LibComponents, resolveTitle } from '../utils/utils';
 import './table.less';
 import { useBaseFieldComponent } from '../internal/field-based-component';
-import { PlusCircleFilled } from '@ant-design/icons-vue';
+import { PlusCircleFilled, PlusCircleTwoTone } from '@ant-design/icons-vue';
 import classNames from 'classnames';
 import { ClassType, SchemaFormStore } from '../../../types';
 import { SchemaFormStoreKey } from '../utils/key';
@@ -82,6 +82,10 @@ export default defineComponent({
   name: 'TableLayout',
   props: {
     ...baseLayoutProps,
+    addText: String,
+    title: {
+      type: [String, Object]
+    },
     showAdd: {
       type: Boolean,
       default: true
@@ -134,64 +138,80 @@ export default defineComponent({
       tag: 'div'
     };
     const rows = this.$slots.default();
+    const FormItem = LibComponents.formItem[this.store.platform];
     return (
-      <div class={'table-layout-wrapper'}>
-        <div
-          class={'table-layout'}>
-          {this.renderTitleRow()}
-          <TransitionGroup {...props}>
-            {rows.map((it, index) => {
-              return <TableRow
-                showMoveDown={index !== rows.length - 1}
-                showRemove={this.showRemove}
-                showMoveUp={it.props.arrayIndex !== 0}
-                onAdd={() => {
-                  this.$emit('add', it.props.arrayIndex + 1);
-                }}
-                onMoveUp={() => {
-                  this.$emit('move-up', it.props.arrayIndex);
-                }}
-                onMoveDown={() => {
-                  this.$emit('move-down', it.props.arrayIndex);
-                }}
-                onRemove={() => {
-                  this.$emit('remove', it.props.arrayIndex);
-                }}
-                onShowAdd={(el: HTMLDivElement) => {
-                  this.addOffset = el.offsetTop + el.offsetHeight;
-                  this.addVisible = true;
-                }}
-                onHideAdd={() => {
-                  this.addVisible = false;
-                }}
-                arrayIndex={it.props.arrayIndex}
-                key={it.props.key}>{it}</TableRow>;
-            })}
-          </TransitionGroup>
+      <FormItem label={this.title}>
+        <div class={'table-layout-wrapper'}>
           <div
-            onMouseenter={() => {
-              this.addVisible = true;
-            }}
-            onMouseleave={() => {
-              this.addVisible = false;
-            }}
-            style={{
-              top: `${this.addOffset}px`
-            }}
-            class={{
-              'add-row': true,
-              'add-row-visible': this.addVisible
-            }}>
-            <div class={'table-cell'}>
-              <div class="add-row-btn" onClick={() => {
-                this.$emit('add');
+            class={'table-layout'}>
+            {this.renderTitleRow()}
+            <TransitionGroup {...props}>
+              {rows.map((it, index) => {
+                return <TableRow
+                  showMoveDown={index !== rows.length - 1}
+                  showRemove={this.showRemove}
+                  showMoveUp={it.props.arrayIndex !== 0}
+                  onAdd={() => {
+                    this.$emit('add', it.props.arrayIndex + 1);
+                  }}
+                  onMoveUp={() => {
+                    this.$emit('move-up', it.props.arrayIndex);
+                  }}
+                  onMoveDown={() => {
+                    this.$emit('move-down', it.props.arrayIndex);
+                  }}
+                  onRemove={() => {
+                    this.$emit('remove', it.props.arrayIndex);
+                    this.addVisible = false;
+                  }}
+                  onShowAdd={(el: HTMLDivElement) => {
+                    if (index !== rows.length - 1) {
+                      this.addOffset = el.offsetTop + el.offsetHeight;
+                      this.addVisible = true;
+                    }
+                  }}
+                  onHideAdd={() => {
+                    this.addVisible = false;
+                  }}
+                  arrayIndex={it.props.arrayIndex}
+                  key={it.props.key}>{it}</TableRow>;
+              })}
+            </TransitionGroup>
+            <div
+              onMouseenter={() => {
+                this.addVisible = true;
+              }}
+              onMouseleave={() => {
+                this.addVisible = false;
+              }}
+              style={{
+                top: `${this.addOffset}px`
+              }}
+              class={{
+                'add-row': true,
+                'add-row-visible': this.addVisible
               }}>
-                <PlusCircleFilled />
+              <div class={'table-cell'}>
+                <div class="add-row-btn" onClick={() => {
+                  this.$emit('add');
+                }}>
+                  <PlusCircleFilled />
+                </div>
               </div>
             </div>
           </div>
+          {
+            this.showAdd ? <div class={'table-row table-row-default-add'}>
+              <div onClick={() => {
+                this.$emit('add')
+              }}>
+                <PlusCircleTwoTone />
+                {this.addText ? <span>{this.addText}</span> : undefined}
+              </div>
+            </div> : undefined
+          }
         </div>
-      </div>
+      </FormItem>
     );
   }
 });
