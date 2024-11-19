@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.3.2-1",
+  "version": "3.3.2-2",
   "files": [
     "es",
     "package.json",
@@ -18,6 +18,9 @@
     "check": "ts-node build/check-ts.ts",
     "release": "npm run compile && npm publish",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
     "@types/less": "^3.0.3",

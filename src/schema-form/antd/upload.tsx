@@ -1,4 +1,4 @@
-import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
+import {PlusOutlined, CameraOutlined, UploadOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {Toast} from 'antd-mobile-vue-next';
 import omit from 'omit.js';
@@ -16,6 +16,7 @@ export default defineComponent({
     hint: String,
     onPreview: Function,
     showError: Boolean,
+    capture: String,
     ...baseUpdateProps
   },
   emits: ['change', 'preview', 'update:value'],
@@ -109,8 +110,10 @@ export default defineComponent({
       if (this.listType === 'picture-card') {
         content = (
             <div class="ant-upload-select-btn">
-              <PlusOutlined/>
-              <div class="ant-upload-text">选择文件</div>
+              {this.capture ? <CameraOutlined /> : <PlusOutlined/>}
+              <div class="ant-upload-text">{
+                this.capture ? '拍照' : '选择文件'
+              }</div>
             </div>
         );
       } else if (this.listType === 'picture') {
@@ -144,7 +147,7 @@ export default defineComponent({
                     v-model={[this.fileList, 'fileList']}
                     openFileDialogOnClick={true}
                     onChange={this.onChange}
-                    capture={undefined}
+                    capture={this.capture}
                     onPreview={this.localPreview}
                     size={this.size}>
             {content}
