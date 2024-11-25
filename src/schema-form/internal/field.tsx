@@ -685,23 +685,26 @@ export default defineComponent({
       // 是否使用form-item组件的title
       const noTitle = !!(definition?.wrapperProps?.noTitle ?? inputFieldDef.layoutOptions?.noTitle);
       const label = [];
-      if (noTitle) {
-        label.push(<span/>);
-      } else {
+      if (!noTitle) {
         if (store.props?.index) {
           label.push(<span class="form-item-index">{props.index + 1}. </span>);
         }
-        label.push(formItemProps.label);
+        if (isNotNull(formItemProps.label)) {
+          label.push(formItemProps.label);
+        }
       }
-      if (formItemProps.slots) {
-        formItemProps.slots.label = () => label;
-      } else {
-        formItemProps.slots = {
-          label: () => label
-        };
+      if (label.length) {
+        if (formItemProps.slots) {
+          formItemProps.slots.label = () => label;
+        } else {
+          formItemProps.slots = {
+            label: () => label
+          };
+        }
       }
       const slots = formItemProps.slots;
       delete formItemProps.slots;
+      delete formItemProps.label;
       const formItem = noWrap ? inputComponent :
         <FormItemComponent
           {...formItemProps}

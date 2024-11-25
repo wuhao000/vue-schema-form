@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import omit from 'omit.js';
-import {defineComponent, PropType} from 'vue';
-import {useOptions} from "../../utils/utils";
+import { defineComponent, PropType } from 'vue';
+import { useOptions } from '../../utils/utils';
 
 export default defineComponent({
   name: 'DRadioGroup',
@@ -23,9 +23,14 @@ export default defineComponent({
     }
   },
   emits: ['update:value'],
-  setup(props) {
+  setup(props, {emit}) {
     const {options: localOptions} = useOptions(props);
-    return {localOptions};
+    const onOptionClick = (o) => {
+      if (o.value === props.value) {
+        emit('update:value', undefined);
+      }
+    };
+    return {localOptions, onOptionClick};
   },
   render() {
     const props = {
@@ -35,39 +40,51 @@ export default defineComponent({
       ...this.$slots
     };
     if (this.localOptions && this.span) {
-      const cols = Math.abs(24 / (this.span as number));
+      const cols = Math.abs(24 / this.span);
       const chunks = _.chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <a-row>
-            {
-              c.map(o => (
-                  <a-col span={this.span}>
-                    {
-                      this.type === 'button' ? <a-radio-button {...o}>{o.label}</a-radio-button>
-                          : <a-radio {...o}>{o.label}</a-radio>
-                    }
-                  </a-col>
-              ))
-            }
-          </a-row>
+        <a-row>
+          {
+            c.map(o => (
+              <a-col span={this.span}>
+                {
+                  this.type === 'button' ? <a-radio-button {...o}
+                                                           onClick={() => {
+                                                             this.onOptionClick(o);
+                                                           }}>{o.label}</a-radio-button>
+                    : <a-radio {...o}
+                               onClick={() => {
+                                 this.onOptionClick(o);
+                               }}>{o.label}</a-radio>
+                }
+              </a-col>
+            ))
+          }
+        </a-row>
       )) as any;
     } else {
       slots.default = () => this.localOptions && this.localOptions.map(it => omit(it, ['children'])).map(o => (
-          this.type === 'button' ? <a-radio-button {...o}>{o.label}</a-radio-button>
-              : <a-radio {...o}>{o.label}</a-radio>
+        this.type === 'button' ? <a-radio-button {...o}
+                                                 onClick={() => {
+                                                   this.onOptionClick(o);
+                                                 }}>{o.label}</a-radio-button>
+          : <a-radio {...o}
+                     onClick={() => {
+                       this.onOptionClick(o);
+                     }}>{o.label}</a-radio>
       )) as any;
     }
     return <a-radio-group
-        {...props}
-        value={this.value}
-        onUpdate:value={(v) => {
-          if (this.readonly) {
-            this.$emit('update:value', this.value);
-          } else if (!this.disabled) {
-            this.$emit('update:value', v);
-          }
-        }}
-        disabled={this.disabled}
-        v-slots={slots}/>;
+      {...props}
+      value={this.value}
+      onUpdate:value={(v) => {
+        if (this.readonly) {
+          this.$emit('update:value', this.value);
+        } else if (!this.disabled) {
+          this.$emit('update:value', v);
+        }
+      }}
+      disabled={this.disabled}
+      v-slots={slots} />;
   }
 });

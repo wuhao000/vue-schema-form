@@ -27,7 +27,7 @@ export default defineComponent({
             style={{width: 'auto'}}
           />;
           if (isAndroid) {
-            return <div>
+            return <div class={'d-upload-android-fix'}>
               {el}
               <DUpload
                 {...{...this.$props, ...this.$attrs}}
