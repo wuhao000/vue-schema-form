@@ -20,7 +20,11 @@ export default defineComponent({
         default: () => this.title,
         control: () => {
           const el = <DUpload
-            {...{...this.$props, ...this.$attrs}}
+            {...{...(this.$props as unknown as Record<string, unknown>), ...this.$attrs}}
+            value={this.value}
+            onUpdate:value={v => {
+              this.$emit('update:value', v);
+            }}
             showError={true}
             capture={this.capture}
             mode={'card'}
@@ -30,12 +34,15 @@ export default defineComponent({
             return <div class={'d-upload-android-fix'}>
               {el}
               <DUpload
-                {...{...this.$props, ...this.$attrs}}
+                {...{...(this.$props as unknown as Record<string, unknown>), ...this.$attrs}}
                 value={undefined}
                 multiple={false}
                 onUpdate:value={(v) => {
-                  if (Array.isArray(this.value)) {
-                    this.$emit('update:value', [...this.value, v]);
+                  if (!v) {
+                    return;
+                  }
+                  if (this.multiple) {
+                    this.$emit('update:value', [...(this.value as Array<unknown> ?? []), v]);
                   } else {
                     this.$emit('update:value', v);
                   }

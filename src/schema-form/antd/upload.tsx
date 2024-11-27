@@ -75,7 +75,7 @@ export default defineComponent({
           props.onPreview(f);
         } else {
           // const typeList = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
-          if (f.type.indexOf('image/') === 0) {
+          if (f.type?.startsWith('image/')) {
             previewUrl.value = f.url;
             if (previewUrl.value) {
               previewOpen.value = true;

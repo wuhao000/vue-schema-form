@@ -1,6 +1,7 @@
 import {computed, PropType, ref, watch} from 'vue';
 import {part} from '../utils/object';
 import {cloneDeep} from 'lodash';
+import { isNotNull } from '../utils/utils';
 
 interface SimpleFile {
   name?: string;
@@ -58,13 +59,11 @@ export const useBaseUpload = (props, {emit}) => {
     }
     let simpleValue = null;
     if (props.multiple) {
-      simpleValue = value.map(it => {
+      simpleValue = value.filter(it => isNotNull(it)).map(it => {
         return props.valueType === 'string' ? it.url : part(it,  [...DEFAULT_FIELDS, ...props.objectFields]) as SimpleFile;
       });
-    } else {
-      if (value.length) {
-        simpleValue = props.valueType === 'string' ? value[0].url : part(value[0], [...DEFAULT_FIELDS, ...props.objectFields]) as SimpleFile;
-      }
+    } else if (value.length) {
+      simpleValue = props.valueType === 'string' ? value[0].url : part(value[0], [...DEFAULT_FIELDS, ...props.objectFields]) as SimpleFile;
     }
     emit('update:value', simpleValue);
   }, {deep: true});
@@ -74,9 +73,9 @@ export const useBaseUpload = (props, {emit}) => {
       if (!value || !value.length) {
         fileList.value = [];
       } else if (props.valueType === 'object') {
-        fileList.value = value.map(it => cloneDeep(it));
+        fileList.value = value.filter(it => isNotNull(it)).map(it => cloneDeep(it));
       } else {
-        value.forEach((v, index) => {
+        value.filter(it => isNotNull(it)).forEach((v, index) => {
           if (props.valueType === 'string') {
             if (!urls.includes(v)) {
               fileList.value.push({
