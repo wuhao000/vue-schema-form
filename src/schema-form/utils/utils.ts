@@ -38,13 +38,13 @@ export const useOptions = (props): {
   const options = computed(() => {
     if (props.options) {
       return props.options.map(option => {
-        const op: any = Object.assign({}, option);
+        const op = {...option};
         op.label = getOptionProperty(option, props.labelProperty);
         op.value = getOptionProperty(option, props.valueProperty);
         return op;
       });
     } else {
-      return null;
+      return [];
     }
   });
   return {options};

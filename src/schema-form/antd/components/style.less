@@ -26,13 +26,18 @@
   .loop-grid-columns(@grid-columns, @class);
 }
 
+.ant-checkbox-group {
+  & > .ant-row {
+    & > .ant-col {
+      margin-bottom: 8px;
+    }
+  }
+}
 
 .ant-checkbox-group-span {
   display: flex;
   flex-flow: row wrap;
-
   .make-grid(ant-checkbox-group);
-
 }
 
 .multiple-select-close-btn {

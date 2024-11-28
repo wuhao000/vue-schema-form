@@ -1,7 +1,8 @@
-import {computed, defineComponent, PropType} from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import classNames from 'classnames';
-import {ClassType} from "../../../../types";
-import {useOptions} from "../../utils/utils";
+import { ClassType } from '../../../../types';
+import { useOptions } from '../../utils/utils';
+import omit from 'omit.js';
 
 export default defineComponent({
   name: 'DCheckboxGroup',
@@ -47,13 +48,31 @@ export default defineComponent({
   render() {
     const classes = classNames(this.$attrs.class as ClassType, {
       'ant-checkbox-group-span': this.span > 0,
-      ['ant-checkbox-group-span-' + this.span]: this.span > 0
     });
     const props = {
       ...this.$attrs,
-      options: this.localOptions ?? [],
       class: classes
     };
+    const slots = {
+      ...this.$slots
+    };
+    if (this.localOptions && this.span) {
+      slots.default = () => (
+        <a-row>
+          {
+            this.localOptions.map(o => (
+              <a-col span={this.span}>
+                <a-checkbox {...o}>{o.label}</a-checkbox>
+              </a-col>
+            ))
+          }
+        </a-row>
+      );
+    } else {
+      slots.default = () => this.localOptions.map(it => omit(it, ['children'])).map(o => (
+        <a-checkbox {...o}>{o.label}</a-checkbox>
+      ));
+    }
     return <div>
       {this.showSelectAll ? <div>
         <a-checkbox
@@ -71,7 +90,7 @@ export default defineComponent({
                             this.$emit('update:value', v);
                           }
                         }}
-                        v-slots={this.$slots}/>
+                        v-slots={slots} />
     </div>;
   }
 });
