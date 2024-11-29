@@ -1,4 +1,4 @@
-import {computed, ComputedRef, isVNode, VNode} from 'vue';
+import { computed, ComputedRef, isVNode, VNode } from 'vue';
 import {
   ILibComponents,
   Platform,
@@ -6,7 +6,7 @@ import {
   SchemaFormComponentOptions,
   SchemaFormField
 } from '../../../types';
-import {FieldDefinition} from '../bean/field-definition';
+import { FieldDefinition } from '../bean/field-definition';
 
 export const ASchemaForm = 'ASchemaForm';
 
@@ -29,7 +29,7 @@ export const getTransferOptions = (array) => {
       };
     }
   });
-}
+};
 
 
 export const useOptions = (props): {
@@ -111,6 +111,10 @@ export const registerDesktopLib = (map: Record<keyof ILibComponents, any>) => {
 
 
 export const LibComponents: ILibComponents = {
+  collapse: {
+    desktop: null,
+    mobile: null
+  },
   result: {
     desktop: null,
     mobile: null
@@ -377,4 +381,14 @@ export const uuid = () => {
   s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
   s[8] = s[13] = s[18] = s[23] = '-';
   return s.join('');
+};
+
+export const pick = (obj: Record<string, unknown>, keys: string[]): Record<string, unknown> => {
+  const result = {};
+  keys.forEach(key => {
+    if (obj[key] !== undefined) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
 };

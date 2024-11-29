@@ -1,8 +1,8 @@
-import {Component} from 'vue';
-import {ArrayMode, LayoutOptions, Platform} from '../../../types';
-import {FieldDefinition} from '../bean/field-definition';
-import {registerComponent} from '../config';
-import {DESKTOP, MOBILE} from '../utils/utils';
+import { Component } from 'vue';
+import { ArrayMode, LayoutOptions, Platform } from '../../../types';
+import { FieldDefinition } from '../bean/field-definition';
+import { registerComponent } from '../config';
+import { DESKTOP, MOBILE } from '../utils/utils';
 import Card from './card';
 import FormBlock from './form-block';
 import FormBlockMobile from './form-block-mobile';
@@ -11,6 +11,7 @@ import GroupLayout from './group';
 import StepsLayout from './steps';
 import Table from './table';
 import TextBox from './text-box';
+import Collapse from './collapse';
 
 /**
  *
@@ -63,6 +64,19 @@ registerLayout({
   layoutOptions: {
     noTitle: true,
     noWrap: true
+  }
+});
+registerLayout({
+  component: Collapse,
+  platforms: [DESKTOP, MOBILE],
+  arrayMode: 'single',
+  types: 'collapse',
+  layoutOptions: {
+    noTitle: true,
+    noWrap: true
+  },
+  getProps(definition, platform) {
+    return {platform};
   }
 });
 registerLayout({

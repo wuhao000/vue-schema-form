@@ -277,6 +277,7 @@ export interface IIcons {
 }
 
 export interface ILibComponents {
+  collapse: any;
   result: any;
   alert?: any;
   button: any;

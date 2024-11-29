@@ -51,6 +51,7 @@ export default defineComponent({
     });
     const props = {
       ...this.$attrs,
+      options: this.localOptions,
       class: classes
     };
     const slots = {

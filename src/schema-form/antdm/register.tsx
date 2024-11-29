@@ -1,17 +1,18 @@
-import {DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutlined} from '@ant-design/icons-vue';
+import { DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutlined } from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
-import {config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib} from '../';
-import {ILibComponents} from '../../../types';
-import {isNotNull} from '../utils/utils';
+import { config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib } from '../';
+import { ILibComponents } from '../../../types';
+import { isNotNull, pick } from '../utils/utils';
 import Upload from './upload';
 import NumberInput from './number';
-import {Modal} from 'antd-mobile-vue-next';
+import { Modal } from 'antd-mobile-vue-next';
+import omit from 'omit.js';
 
 const Slider = (props, ctx) => <m-slider {...props}
-                                         v-slots={ctx.slots}/>;
+                                         v-slots={ctx.slots} />;
 
 const Button = (props, ctx) => <m-button {...props}
-                                         v-slots={ctx.slots}/>;
+                                         v-slots={ctx.slots} />;
 const DatePickerItem = (props, ctx) => {
   const convertValue = (value: string | Date) => {
     if (!value) {
@@ -37,34 +38,34 @@ const DatePickerItem = (props, ctx) => {
   };
   const value = convertValue(props.value);
   return <m-date-picker-item
-      {...props}
-      value={value}
-      onUpdate:value={v => {
-        ctx.emit('update:value', convertValueBack(v));
-      }}
-      v-slots={ctx.slots}/>;
+    {...props}
+    value={value}
+    onUpdate:value={v => {
+      ctx.emit('update:value', convertValueBack(v));
+    }}
+    v-slots={ctx.slots} />;
 };
 const Input = (props, ctx) => <m-input {...props}
-                                       v-slots={ctx.slots}/>;
+                                       v-slots={ctx.slots} />;
 const PickerItem = (props, ctx) => <m-picker-item {...props}
-                                                  v-slots={ctx.slots}/>;
+                                                  v-slots={ctx.slots} />;
 const Textarea = (props, ctx) => <m-textarea {...props}
-                                             v-slots={ctx.slots}/>;
+                                             v-slots={ctx.slots} />;
 const RadioList = (props, ctx) => <m-radio-list {...props}
-                                                v-slots={ctx.slots}/>;
+                                                v-slots={ctx.slots} />;
 const RadioPopupList = (props, ctx) => <m-radio-popup-list {...props}
-                                                           v-slots={ctx.slots}/>;
+                                                           v-slots={ctx.slots} />;
 const SwitchItem = (props, ctx) => <m-switch-item {...props}
-                                                  v-slots={ctx.slots}/>;
+                                                  v-slots={ctx.slots} />;
 const Checkbox = (props, ctx) => <m-checkbox {...props}
-                                             v-slots={ctx.slots}/>;
+                                             v-slots={ctx.slots} />;
 const CheckboxPopupList = (props, ctx) => <m-checkbox-popup-list {...props}
-                                                                 v-slots={ctx.slots}/>;
+                                                                 v-slots={ctx.slots} />;
 const CheckboxList = (props, ctx) => <m-checkbox-list {...props}
-                                                      v-slots={ctx.slots}/>;
+                                                      v-slots={ctx.slots} />;
 
 const ImagePicker = (props, ctx) => <m-image-picker {...props}
-                                                    v-slots={ctx.slots}/>;
+                                                    v-slots={ctx.slots} />;
 const CalendarItem = (props, ctx) => {
   let value = props.value;
   if (typeof value === 'string' && props.value !== '') {
@@ -83,16 +84,31 @@ const CalendarItem = (props, ctx) => {
                           onUpdate:value={v => {
                             ctx.emit('update:value', v);
                           }}
-                          v-slots={ctx.slots}/>;
+                          v-slots={ctx.slots} />;
 };
 
 export const ComponentMap: Record<keyof ILibComponents, any> = {
+  collapse: (props, ctx) => {
+    const collapsePropKeys = ['accordion',
+      'activeKey',
+      'openAnimation',
+      'accordion',
+      'onUpdate:activeKey'
+    ];
+    return <m-accordion {...pick(props, collapsePropKeys)}>
+      <m-accordion-panel
+        {...omit(props, collapsePropKeys)}
+        key={'panel'}
+        v-slots={ctx.slots}
+      />
+    </m-accordion>;
+  },
   alert: null,
   col: null,
   content: null,
   empty: (props, ctx) => <m-empty
-      {...props}
-      v-slots={ctx.slots}/>,
+    {...props}
+    v-slots={ctx.slots} />,
   footer: null,
   header: null,
   layout: null,
@@ -112,20 +128,20 @@ export const ComponentMap: Record<keyof ILibComponents, any> = {
                          return <m-card-body>{ctx.slots.default?.()}</m-card-body>;
                        }
                      }
-                   }}/>;
+                   }} />;
   },
   checkbox: Checkbox,
   button: Button,
   form: (props, ctx) => <m-list {...props}
-                                v-slots={ctx.slots}/>,
+                                v-slots={ctx.slots} />,
   formItem: (props, ctx) => <m-list-item {...props}
-                                         v-slots={ctx.slots}/>,
+                                         v-slots={ctx.slots} />,
   popup: (props, ctx) => <m-popup {...props}
-                                  v-slots={ctx.slots}/>,
+                                  v-slots={ctx.slots} />,
   result: (props, ctx) => <m-result {...props}
-                                    v-slots={ctx.slots}/>,
+                                    v-slots={ctx.slots} />,
   popover: (props, ctx) => <m-popover {...props}
-                                      v-slots={ctx.slots}/>,
+                                      v-slots={ctx.slots} />,
   icons: {
     info: InfoCircleOutlined,
     up: UpOutlined,
@@ -144,7 +160,7 @@ export function registerAntdMobile() {
   config.confirmFn.mobile = (content: string, title?: string) => {
     return new Promise((resolve, reject) => {
       Modal.confirm(
-          title, content
+        title, content
       ).then(value => {
         resolve(value);
       }).catch(err => {
@@ -168,23 +184,23 @@ export function registerAntdMobile() {
   // todo
   // registerMobile(ImagePicker, [FieldTypes.Picture, FieldTypes.File]);
   registerMobile(Input, [FieldTypes.String, FieldTypes.Url], 'single',
-      () => ({textAlign: 'right'}));
+    () => ({textAlign: 'right'}));
   registerMobile(NumberInput, [FieldTypes.Number, FieldTypes.Integer], 'single',
-      () => ({type: 'number', textAlign: 'right'}));
+    () => ({type: 'number', textAlign: 'right'}));
   registerMobile(NumberInput, [FieldTypes.Double], 'single',
-      () => ({type: 'digit', textAlign: 'right'}));
+    () => ({type: 'digit', textAlign: 'right'}));
   registerMobile(Input, [FieldTypes.Password], 'single',
-      () => ({type: 'password'}));
+    () => ({type: 'password'}));
   // registerMobile(Range, [FieldTypes.Range], 'single');
   registerMobile(Textarea, [FieldTypes.Text], 'single');
   registerMobile(DatePickerItem, [
-        FieldTypes.Date,
-        FieldTypes.Year,
-        FieldTypes.Month,
-        FieldTypes.Datetime],
-      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+      FieldTypes.Date,
+      FieldTypes.Year,
+      FieldTypes.Month,
+      FieldTypes.Datetime],
+    'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerMobile(DatePickerItem, FieldTypes.Time,
-      'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
+    'single', (definition) => ({mode: (definition.type as string).toLowerCase()}));
   registerMobile(CalendarItem, [FieldTypes.DateRange], 'single', () => ({type: 'range'}));
   registerMobile(CalendarItem, [FieldTypes.DateTimeRange], 'single', () => ({type: 'range', pickTime: true}));
   registerMobile(SwitchItem, FieldTypes.Checkbox, 'single');

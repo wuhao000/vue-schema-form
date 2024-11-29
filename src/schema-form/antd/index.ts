@@ -31,7 +31,7 @@ import {
   createCard,
   createCascader,
   createCheckbox,
-  createCol,
+  createCol, createCollapse,
   createComponentProxy,
   createEmpty,
   createInput,
@@ -52,6 +52,7 @@ import {
 import {Alert, Modal} from 'ant-design-vue';
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
+  collapse: createCollapse(),
   card: createCard(),
   checkbox: createCheckbox(),
   empty: createEmpty(),
