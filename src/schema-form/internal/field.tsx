@@ -1,4 +1,4 @@
-import {Slot} from '@vue/runtime-core';
+import { Slot } from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -22,14 +22,14 @@ import {
   watch,
   watchEffect
 } from 'vue';
-import {IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore} from '../../../types';
-import {FieldDefinition} from '../bean/field-definition';
+import { IValidateResponse, SchemaFormComponent, SchemaFormField, SchemaFormStore } from '../../../types';
+import { FieldDefinition } from '../bean/field-definition';
 import ArrayWrapper from '../common/array-wrapper';
-import {config, getConfirmFunction} from '../config';
+import { config } from '../config';
 import Empty from '../empty';
-import {isEqual} from '../uform/utils';
-import {flat} from '../utils/array';
-import {SchemaFormFieldOperationStoreKey, SchemaFormStoreKey} from '../utils/key';
+import { isEqual } from '../uform/utils';
+import { flat } from '../utils/array';
+import { SchemaFormFieldOperationStoreKey, SchemaFormStoreKey } from '../utils/key';
 import {
   addRule,
   DESKTOP,
@@ -58,7 +58,7 @@ import {
   renderField,
   SchemaFormEvents
 } from './utils';
-import {ClassType} from '../types';
+import { ClassType } from '../types';
 
 
 export default defineComponent({
@@ -238,7 +238,7 @@ export default defineComponent({
       return localProps;
     });
 
-    const isDisabled = computed(() => props.disabled || field.value.disabled || (field.value.props && field.value.props.disabled));
+    const isDisabled = computed(() => props.disabled || field.value.disabled || field.value.props?.disabled);
     const removeArrayItem = (index: number) => {
       (currentValue.value as any[]).splice(index, 1);
     };
@@ -287,9 +287,9 @@ export default defineComponent({
       if (definition.tip) {
         formItemProps[labelPropName] = <SchemaFormFieldLabel
           content={
-            isVNode(definition.tip) ? <div>{definition.tip}</div> : <div v-html={definition.tip}/>}
+            isVNode(definition.tip) ? <div>{definition.tip}</div> : <div v-html={definition.tip} />}
           platform={store.platform}
-          title={field.value.title}/>;
+          title={field.value.title} />;
       } else {
         formItemProps[labelPropName] = field.value.title;
       }
@@ -400,12 +400,15 @@ export default defineComponent({
       const ArrayComponent = getArrayComponent();
       const valueProp = inputFieldDef.valueProp;
       const arrayContent = currentValue.value ? (currentValue.value as any[]).map((v, index) => {
-        const itemProps: any = Object.assign({}, propsTmp, {
+        const itemProps: any = {
+          ...propsTmp,
           pathPrefix: (props.path as Array<string | number>).concat(index),
           schemaPath: props.path
-        });
+        };
         if (field.value.type === FieldTypes.Object) {
-          itemProps.definition = Object.assign({}, itemProps.definition);
+          itemProps.definition = {
+            ...itemProps.definition
+          };
           delete itemProps.definition.array;
         }
         const events = field.value.generateEvents(focusState);
@@ -444,9 +447,9 @@ export default defineComponent({
             }
           }
         });
-        return <InputFieldComponent {...itemProps}/>;
+        return <InputFieldComponent {...itemProps} />;
       }) : null;
-      const arrayProps = Object.assign({}, propsTmp, definition.arrayProps);
+      const arrayProps = {...propsTmp, ...definition.arrayProps};
       const arrayClass = arrayProps.className;
       const arrayStyle = arrayProps.style;
       delete arrayProps.className;
@@ -498,7 +501,7 @@ export default defineComponent({
                              v-show={visible.value}
                              v-slots={{
                                default: () => arrayContent
-                             }}/>;
+                             }} />;
     };
     const relatedSubFields = computed(() => {
       const definition = props.definition;
@@ -507,7 +510,9 @@ export default defineComponent({
     const getSubFields = () => {
       const noWrap = isNull(field.value.title);
       return relatedSubFields.value.map((localField, index) =>
-        renderFormField(localField, props.value as { [p: string]: any } | Array<{ [p: string]: any }>, index, !noWrap)) as any;
+        renderFormField(localField, props.value as { [p: string]: any } | Array<{
+          [p: string]: any
+        }>, index, !noWrap)) as any;
     };
     const wrapText = (content: VNode | string) => {
       if (isVNode(content)) {
@@ -594,7 +599,7 @@ export default defineComponent({
       if (platform === MOBILE && !visible.value) {
         style.display = 'none';
       }
-      propsTmp.class = classNames(propsTmp.className as string | string[] | Record<string, boolean>, {
+      propsTmp.class = classNames(props.definition.class, propsTmp.className as string | string[] | Record<string, boolean>, {
         'schema-form-field': platform === 'mobile',
         'schema-form-field-focused': platform === 'mobile' && focusState.value,
         'schema-form-field-readonly': platform === 'mobile' && !editable.value,
@@ -609,7 +614,7 @@ export default defineComponent({
           ref={el => {
             inputRef.value = el;
             field.value.inputRef = el;
-          }}/>;
+          }} />;
       } else {
         return <InputFieldComponent
           {...propsTmp}
@@ -619,7 +624,7 @@ export default defineComponent({
           ref={el => {
             inputRef.value = el;
             field.value.inputRef = el;
-          }}/>;
+          }} />;
       }
     };
     onBeforeUnmount(() => {
@@ -632,7 +637,7 @@ export default defineComponent({
         value: currentValue.value,
         focus: () => {
           if (isVNode(inputRef.value)) {
-            (inputRef.value as VNode).el.focus();
+            inputRef.value.el.focus();
           } else if (inputRef.value?.focus) {
             inputRef.value?.focus?.();
           }
@@ -665,7 +670,7 @@ export default defineComponent({
 
     const renderDesktopComponent = () => {
       const inputComponent = renderInputComponent();
-      const definition = props.definition as SchemaFormField;
+      const definition = props.definition;
       const {platform} = store;
       const FormItemComponent: any = getFormItemComponent(platform);
       const ColComponent: any = getColComponent(store.platform);

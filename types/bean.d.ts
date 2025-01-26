@@ -232,6 +232,8 @@ type DefaultSchemaFormField<V = any> = {
    */
   xProps?: SchemaFormFieldProps;
 
+  class: string | string[] | { [key: string]: boolean };
+
 } & BaseSchemaFormField<V>;
 
 

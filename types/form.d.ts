@@ -19,9 +19,15 @@ export type Paths<Path = any> = Array<Path | SchemaFormField>;
 
 // new type
 
-type JoinPath<S> = S extends any ? ({
-  [K in Extract<keyof S, string>]: K | `${K}.${PathType<S[K]>}` | PathType<S[K]> | `${K}.*` | `${K}.?` | `${K}.?.${PathType<S[K]>}` | (K extends `$${infer R}` ? keyof S[K]['fields'] : never)
-}[Extract<keyof S, string>]) : never;
+type JoinPath<S> = S extends { fields: any } ? {
+  [K in keyof S['fields']]: K extends string ? 
+    K | 
+    `${K}.${string}` | 
+    `${K}.*` | 
+    `${K}.?` | 
+    `${K}.?.${string}`
+  : never
+}[keyof S['fields']] : never;
 
 export type PrefixKey<U extends string | number | symbol> = U extends `$${infer R}` ? R
     : never;
@@ -50,9 +56,10 @@ export type DollarKeyObj<T> = T extends any ? {
   [Key in DropDollarKey<T>]: T[DollarKey<T>]
 } : never
 
-export type PathType<T> = T extends any ? (
-    NormalPathType<T> | PathType<T[DollarKey<T>]>
-    ) : never;
+export type PathType<T> = T extends { fields: any } ? 
+  keyof T['fields'] & string | 
+  `${keyof T['fields'] & string}.${string}` : 
+  never;
 
 export type PreIDType<T> = T extends { fields: infer S; [key: string]: unknown } ? {
   [K in Extract<keyof S, string>]: (S[K] extends { id: infer ID; [key: string]: unknown } ? `${ID & string}` : never) | `${PreIDType<S[K]>}`

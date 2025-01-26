@@ -6,6 +6,20 @@ const ctx = defineSchemaForm({
       id: 'a',
       type: 'string'
     }
+  },
+  $b: {
+    type: 'string'
+  },
+  '$c.e': {
+    type: 'object',
+    $f: {
+      type: 'string'
+    },
+    fields: {
+      g: {
+        type: 'string'
+      }
+    }
   }
 });
-ctx('a')
+ctx('c.e.g')
