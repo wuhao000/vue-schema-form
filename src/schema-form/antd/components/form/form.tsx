@@ -93,10 +93,6 @@ emits: ['ok', 'cancel'],
       if (typeof copyCallback !== 'function' && Promise) {
         promise = new Promise((resolve, reject) => {
           copyCallback = valid => {
-            const errorField = fields.value.find(it => it.currentValidateStatus === 'error');
-            if (errorField) {
-              errorField.focus();
-            }
             valid ? resolve(valid) : reject(valid);
           };
         });

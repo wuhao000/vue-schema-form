@@ -2,6 +2,7 @@ import { defineComponent, ref } from 'vue';
 import { LibComponents } from '../utils/utils';
 
 export default defineComponent({
+  name: 'DCollapse',
   props: {
     platform: String,
     defaultExpand: {

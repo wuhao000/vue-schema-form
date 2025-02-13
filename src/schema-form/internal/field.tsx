@@ -126,9 +126,6 @@ export default defineComponent({
     watch(() => currentValue.value, _.debounce(val => {
       const oldValue = field.value.value;
       field.value.value = val;
-      if (props.path[0] === 'relatedEntityQueryFields') {
-        console.log(val);
-      }
       emit(`update:value`, val);
       emit('change', val);
       if (!field.value.valid) {
