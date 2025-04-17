@@ -20,16 +20,13 @@ export default defineComponent({
     type: {
       type: String as PropType<'button' | 'radio'>,
       default: 'radio'
-    },
-    allowClear: {
-      type: Boolean
     }
   },
   emits: ['update:value'],
   setup(props, {emit}) {
     const {options: localOptions} = useOptions(props);
     const onOptionClick = (o) => {
-      if (o.value === props.value && props.allowClear) {
+      if (o.value === props.value) {
         emit('update:value', undefined);
       }
     };

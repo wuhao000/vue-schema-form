@@ -23,7 +23,7 @@ const FormBlockItem = defineComponent({
     showRemove: Boolean
   },
   emits: ['add', 'remove'],
-  setup(props, {emit}) {
+  setup(props, {emit, attrs}) {
     const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const renderAddBtn = () => {
       const index = props.index;
