@@ -1,7 +1,7 @@
 import { Slot } from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
-import _ from 'lodash';
+import debounce from 'lodash.debounce';
 import {
   computed,
   defineComponent,
@@ -45,7 +45,7 @@ import {
   swap,
   uuid
 } from '../utils/utils';
-import SchemaFormFieldLabel from './label';
+import SchemaFormFieldLabel from './label.vue';
 import {
   calcEditable,
   calcShowState,
@@ -123,7 +123,7 @@ export default defineComponent({
         }
       }
     });
-    watch(() => currentValue.value, _.debounce(val => {
+    watch(() => currentValue.value, debounce(val => {
       const oldValue = field.value.value;
       field.value.value = val;
       emit(`update:value`, val);
@@ -589,7 +589,7 @@ export default defineComponent({
       if (field.value.type === 'object') {
         const fields = getRealFields(props.definition);
         const currentFields = (propsTmp.definition as any).fields;
-        if (!_.isEqual(currentFields, fields)) {
+        if (!isEqual(currentFields, fields)) {
           (propsTmp.definition as any).fields = fields;
         }
       }

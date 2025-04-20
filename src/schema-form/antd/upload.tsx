@@ -1,12 +1,11 @@
-import {PlusOutlined, CameraOutlined, UploadOutlined} from '@ant-design/icons-vue';
-import {message} from 'ant-design-vue';
-import {Toast} from 'antd-mobile-vue-next';
+import { Toast } from 'antd-mobile-vue-next';
 import omit from 'omit.js';
-import {computed, defineComponent, ref} from 'vue';
-import {useBaseInput} from '../';
-import {AntUploadFile, AntUploadObject} from '../../../types';
-import {baseUpdateProps, useBaseUpload} from '../common/base-upload';
-import {isNotNull} from '../utils/utils';
+import { computed, defineComponent, ref } from 'vue';
+import { useBaseInput } from '../';
+import { AntUploadFile, AntUploadObject } from '../../../types';
+import { baseUpdateProps, useBaseUpload } from '../common/base-upload';
+import { config } from '../config';
+import { isNotNull, LibComponents } from '../utils/utils';
 import Button from './components/button';
 import './upload.less';
 
@@ -21,7 +20,7 @@ export default defineComponent({
   },
   emits: ['change', 'preview', 'update:value'],
   setup(props, ctx) {
-    const {fileList} = useBaseUpload(props, ctx);
+    const { fileList } = useBaseUpload(props, ctx);
     const previewOpen = ref(false);
     const listType = computed(() => {
       switch (props.mode) {
@@ -34,7 +33,7 @@ export default defineComponent({
       }
     });
     const uploadProps = Object.assign({}, ctx.attrs, omit(props, ['value', 'onPreview']));
-    const {size} = useBaseInput(props, ctx);
+    const { size } = useBaseInput(props, ctx);
     const previewUrl = ref();
     return {
       size,
@@ -64,7 +63,7 @@ export default defineComponent({
             } else {
               file.status = 'error';
               file.error = f.file.response.msg;
-              message.error(f.file.response.msg);
+              config.message.desktop.error(f.file.response.msg);
             }
           }
         }
@@ -96,21 +95,24 @@ export default defineComponent({
   },
   render() {
     if (this.mode === 'dragger') {
+      const UploadIcon = LibComponents.icons.desktop.upload;
       return <a-upload-dragger {...this.uploadProps}>
-        <div class={{disabled: this.$attrs.disabled}}>
+        <div class={{ disabled: this.$attrs.disabled }}>
           <p class="ant-upload-drag-icon">
-            <UploadOutlined/>
+            <UploadIcon />
           </p>
           <p class="ant-upload-text">点击或者拖动文件到虚线框内上传</p>
           <p class="ant-upload-hint">{this.hint}</p>
         </div>
       </a-upload-dragger>;
     } else {
+      const PlusIcon = LibComponents.icons.desktop.plus;
+      const CameraIcon = LibComponents.icons.desktop.camera;
       let content = null;
       if (this.listType === 'picture-card') {
         content = (
             <div class="ant-upload-select-btn">
-              {this.capture ? <CameraOutlined /> : <PlusOutlined/>}
+              {this.capture ? <CameraIcon /> : <PlusIcon />}
               <div class="ant-upload-text">{
                 this.capture ? '拍照' : '选择文件'
               }</div>
@@ -123,11 +125,11 @@ export default defineComponent({
                 this.fileList.length && this.fileList[0].url ? (
                         <img src={this.fileList[0].url}
                              alt=""
-                             style="height: 100%;width: 100%;"/>
+                             style="height: 100%;width: 100%;" />
                     )
                     : (
                         <div class="ant-upload-plus">
-                          <PlusOutlined/>
+                          <PlusIcon />
                         </div>
                     )
               }
@@ -162,7 +164,7 @@ export default defineComponent({
                      }}>
               <img alt="example"
                    style="width: 100%"
-                   src={this.previewUrl}/>
+                   src={this.previewUrl} />
             </a-modal>
           </a-upload>
       );

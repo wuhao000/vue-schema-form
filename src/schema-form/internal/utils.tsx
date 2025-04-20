@@ -1,25 +1,21 @@
-import _ from 'lodash';
-import {v4} from 'uuid';
-import {reactive} from 'vue';
-import {
-  Platform,
-  SchemaFormComponent,
-  SchemaFormField,
-  SchemaFormStore,
-  ShowFieldCondition
-} from '../../../types';
-import {FieldDefinition, getComponent} from '../bean/field-definition';
+import get from 'lodash.get';
+import { v4 } from 'uuid';
+import { reactive } from 'vue';
+import { Platform, SchemaFormComponent, SchemaFormField, SchemaFormStore, ShowFieldCondition } from '../../../types';
+import { FieldDefinition, getComponent } from '../bean/field-definition';
 import Empty from '../empty';
-import {getStructValue} from '../utils/destruct';
-import {setFieldValue} from '../utils/field';
-import {splitPath} from '../utils/path';
-import {globalComponentStore} from '../utils/register';
-import {isNotNull, isNull, LibComponents, Mode} from '../utils/utils';
+import { getStructValue } from '../utils/destruct';
+import { setFieldValue } from '../utils/field';
+import { splitPath } from '../utils/path';
+import { globalComponentStore } from '../utils/register';
+import { isNotNull, isNull, LibComponents, Mode } from '../utils/utils';
 import FormField from './field';
 
 export const FieldStore = Symbol('SchemaFormFieldStore');
 
-export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{ [p: string]: any }>) {
+export function getPropertyValueByPath(property: string, currentValue: { [p: string]: any } | Array<{
+  [p: string]: any
+}>) {
   const propertyPath = splitPath(property);
   let tmp = currentValue;
   propertyPath.forEach(path => {
@@ -28,14 +24,14 @@ export function getPropertyValueByPath(property: string, currentValue: { [p: str
     }
     tmp = tmp[path];
   });
-  return _.get(currentValue, property);
+  return get(currentValue, property);
 }
 
 export function calcEditable(definition: SchemaFormField,
                              currentValue: any,
                              field: FieldDefinition): boolean | undefined {
   if (isNull(definition.editable)) {
-    return undefined
+    return undefined;
   }
   if (typeof definition.editable === 'function') {
     return definition.editable(currentValue, field);
@@ -197,7 +193,7 @@ export function renderField(pathPrefix: string[] | null,
     value: getFieldValue(value, newField, component),
     index
   };
-  return <FormField {...props}/>;
+  return <FormField {...props} />;
 }
 
 export function buildArrayPath(pathPrefix: string[], field: SchemaFormField): string[] {

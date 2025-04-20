@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import chunk from 'lodash.chunk';
 import omit from 'omit.js';
 import { defineComponent, PropType } from 'vue';
 import { useOptions } from '../../utils/utils';
@@ -44,7 +44,7 @@ export default defineComponent({
     };
     if (this.localOptions && this.span) {
       const cols = Math.abs(24 / this.span);
-      const chunks = _.chunk(this.localOptions, cols);
+      const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
         <a-row>
           {

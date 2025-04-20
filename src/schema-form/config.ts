@@ -5,7 +5,7 @@ import {ComponentStore, globalComponentStore} from './utils/register';
 
 
 export const getConfirmFunction = (platform: Platform) => {
-  return platform === 'mobile' ? config.confirmFn.mobile : config.confirmFn.desktop;
+  return platform === 'mobile' ? config.confirm.mobile : config.confirm.desktop;
 };
 
 const formItemPropTransform = {
@@ -13,12 +13,29 @@ const formItemPropTransform = {
   desktop: null
 };
 
+export type ConfirmType = 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
+
+export type ConfirmFn = (content: string, title?: string, type?: ConfirmType) => Promise<any>;
+
+
+export interface MessageInstance {
+  error: (msg: string, duration?: number) => void;
+  info: (msg: string, duration?: number) => void;
+  success: (msg: string, duration?: number) => void;
+  warn: (msg: string, duration?: number) => void;
+  loading: (msg: string, duration?: number) => void;
+}
+
 type SchemaFormBaseConfig = {
   defaultEmptyText: string;
-  confirmFn: {
-    mobile: (...args: any[]) => any;
-    desktop: (...args: any[]) => any;
+  confirm: {
+    mobile: ConfirmFn;
+    desktop: ConfirmFn;
   };
+  message: {
+    mobile: MessageInstance;
+    desktop: MessageInstance;
+  },
   formItemPropTransform: {
     mobile: any;
     desktop: any;
@@ -28,9 +45,13 @@ type SchemaFormBaseConfig = {
 
 export const config : SchemaFormBaseConfig = {
   defaultEmptyText: 'N/A',
-  confirmFn: {
+  confirm: {
     mobile: null,
     desktop: null
+  },
+  message: {
+    desktop: null,
+    mobile: null
   },
   formItemPropTransform,
   getFormItemProps: (component: Component, field: FieldDefinition, platform: Platform) => {

@@ -67,7 +67,7 @@ export type PreIDType<T> = T extends { fields: infer S; [key: string]: unknown }
 
 export type IDType<T> = `#${PreIDType<T>}`;
 
-export type AllType<T> = PathType<T> | IDType<T> | '*' | '?' | `?.${PathType<T>}` | `${number}.${PathType<T>}`
+export type AllType<T> = PathType<T> | IDType<T> | '*' | '?' | `?.${PathType<T>}` | `${number}.${PathType<T>}` | string;
 
 interface SchemaContext {
   onOk: (forceValidate: boolean, callback?: (value) => any) => Promise<void>;
@@ -281,6 +281,8 @@ export interface IIcons {
   info: any;
   plus: any;
   up: any;
+  upload?: any;
+  camera?: any;
 }
 
 export interface ILibComponents {

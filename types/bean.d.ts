@@ -291,7 +291,7 @@ export interface SchemaFormStore {
   value?: any;
 }
 
-export type FormFields<V = any> = SchemaFormField<V>[] | { [Key in keyof V]: SchemaFormField<V[Key]> };
+export type FormFields<V = Record<string, unknown>> = SchemaFormField<V>[] | { [Key in keyof V]: SchemaFormField<V[Key]> };
 
 interface FormProps {
   labelWidth?: number | string;

@@ -1,13 +1,14 @@
-import {App} from 'vue';
-import {CheckboxGroup, Form, FormItem, RadioGroup} from './antd/components';
+import { App } from 'vue';
+import { CheckboxGroup, Form, FormItem, RadioGroup } from './antd/components';
 import DUrl from './common/url';
-import {config} from './config';
+import { config } from './config';
 import './display/register';
 import SchemaForm from './form';
 import SchemaFormField from './internal/field';
 import './layout/register';
 import './styles/fix.less';
 import './styles/style.less';
+import MobileDisplayField from './display/mobile-display-field.vue';
 
 SchemaForm.Field = SchemaFormField;
 
@@ -19,7 +20,8 @@ SchemaForm.install = (app) => {
 SchemaForm.config = config;
 
 export {
-  DUrl
+  DUrl,
+  MobileDisplayField
 };
 
 export {
@@ -35,12 +37,11 @@ export {
   Select as DSelect
 } from './antd/components';
 
-export {SchemaFormStoreKey} from './utils/key';
-export {FieldStore} from './internal/utils';
-export {registerAntdMobile} from './antdm/register';
-export {registerAntd} from './antd';
-export {registerDesktopLib, resolveOptions, FieldTypes, registerMobileLib} from './utils/utils';
-export {MobileDisplayField} from './display/mobile-display-field';
+export { SchemaFormStoreKey } from './utils/key';
+export { FieldStore } from './internal/utils';
+export { registerAntdMobile } from './antdm/register';
+export { registerAntd } from './antd';
+export { registerDesktopLib, resolveOptions, FieldTypes, registerMobileLib } from './utils/utils';
 export {
   registerDesktop,
   register,
@@ -48,14 +49,14 @@ export {
   registerMobile,
   registerResponsiveComponent
 } from './utils/register';
-export {registerComponent} from './config';
+export { registerComponent } from './config';
 export * from './common/base-button';
 export * from './common/base-url';
 export * from './common/base-upload';
 export * from './config';
 export * from './mixins';
 export * from './create';
-export {SchemaFormEvents} from './internal/utils';
+export { SchemaFormEvents } from './internal/utils';
 
 SchemaForm.install = (app: App) => {
   app.component(Form.name, Form);

@@ -1,5 +1,6 @@
-import _ from 'lodash';
-import {Component, isProxy, isVNode, reactive, Ref, toRaw, VNode} from 'vue';
+import { VNodeNormalizedChildren } from '@vue/runtime-core';
+import cloneDeep from 'lodash.clonedeep';
+import { Component, isProxy, isVNode, reactive, Ref, toRaw, VNode } from 'vue';
 import {
   DefaultPatternRule,
   FieldDefinitionEnum,
@@ -16,11 +17,10 @@ import {
   TriggerType,
   ValueProcessor
 } from '../../../types';
-import {buildArrayPath, getComponentType, getRealFields, SchemaFormEvents} from '../internal/utils';
-import {isArr, parseDestructPath} from '../uform/utils';
-import regexp, {errorMessages} from '../uform/validator/regexp';
-import {fixComponentDefinition, isNotNull, isNull} from '../utils/utils';
-import {VNodeNormalizedChildren} from "@vue/runtime-core";
+import { buildArrayPath, getComponentType, getRealFields, SchemaFormEvents } from '../internal/utils';
+import { isArr, parseDestructPath } from '../uform/utils';
+import regexp, { errorMessages } from '../uform/validator/regexp';
+import { fixComponentDefinition, isNotNull, isNull } from '../utils/utils';
 
 export class FieldDefinition<V = any> {
   public array = false;
@@ -117,8 +117,8 @@ export class FieldDefinition<V = any> {
 
   public validateIgnore() {
     return this.isVisible() === false ||
-      this.display === false ||
-      this.editable === false
+        this.display === false ||
+        this.editable === false;
   }
 
   public setVisible(visible: boolean) {
@@ -128,7 +128,7 @@ export class FieldDefinition<V = any> {
   public generateEvents(focusState: Ref<boolean>): { [p: string]: (...args: any[]) => any } {
 
     const getEventMetadata = (event) => {
-      return {event, path: this.plainPath, field: this};
+      return { event, path: this.plainPath, field: this };
     };
 
     const onFocus = (event, ...args) => {
@@ -147,9 +147,9 @@ export class FieldDefinition<V = any> {
       }
       if (el) {
         if (el.focus) {
-          el.focus({preventScroll: false});
+          el.focus({ preventScroll: false });
           if (event === true) {
-            el.scrollIntoView({behavior: 'smooth'});
+            el.scrollIntoView({ behavior: 'smooth' });
           }
         }
         this.store.context.trigger(SchemaFormEvents.fieldFocus, getEventMetadata(event));
@@ -212,8 +212,8 @@ export class FieldDefinition<V = any> {
 const extractTextFromVNode = (title: VNodeNormalizedChildren | VNode | VNode[]) => {
   if (Array.isArray(title)) {
     return title.map(it => extractTextFromVNode(it))
-      .filter(it => isNotNull(it))
-      .join('');
+        .filter(it => isNotNull(it))
+        .join('');
   } else {
     if (typeof title === 'string') {
       return title;
@@ -274,23 +274,23 @@ const getRulesFromProps = (field: SchemaFormField, required: boolean): IRuleDesc
     }
   }
   if (field.format && !rules.some(rule => rule.format === field.format)) {
-    rules.push({format: field.format, message: `${title}格式不正确`});
+    rules.push({ format: field.format, message: `${title}格式不正确` });
   }
   if (isNotNull(field.min)) {
     if (['integer', 'double', 'number'].includes(field.type as string)) {
-      rules.push({type: 'number', min: field.min, message: `${title}不能小于${field.min}`});
+      rules.push({ type: 'number', min: field.min, message: `${title}不能小于${field.min}` });
     } else if (['string', 'html', 'code', 'text'].includes(field.type as string)) {
-      rules.push({type: 'string', min: field.min, message: `${title}长度不能小于${field.min}`});
+      rules.push({ type: 'string', min: field.min, message: `${title}长度不能小于${field.min}` });
     }
   }
   if (isNotNull(field.max)) {
     if (['integer', 'double', 'number'].includes(field.type as string)) {
-      rules.push({type: 'number', max: field.max, message: `${title}不能大于${field.max}`});
+      rules.push({ type: 'number', max: field.max, message: `${title}不能大于${field.max}` });
     } else if (['string', 'text'].includes(field.type as string)) {
-      rules.push({type: 'string', max: field.max, message: `${title}长度不能大于${field.max}`});
+      rules.push({ type: 'string', max: field.max, message: `${title}长度不能大于${field.max}` });
     }
   }
-  return _.cloneDeep(rules);
+  return cloneDeep(rules);
 };
 
 const resolveRule = (rule: IRuleDescription | DefaultPatternRule): IRuleDescription => {
@@ -356,4 +356,4 @@ export const getComponent = (field: SimpleField,
     };
   }
   return fixComponentDefinition(type as SchemaFormComponentOptions | SchemaFormComponentOptions[], !field.editable);
-}
+};

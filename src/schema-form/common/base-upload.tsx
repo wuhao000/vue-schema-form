@@ -1,6 +1,6 @@
 import {computed, PropType, ref, watch} from 'vue';
 import {part} from '../utils/object';
-import {cloneDeep} from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { isNotNull } from '../utils/utils';
 
 interface SimpleFile {

@@ -7,10 +7,29 @@
       :context="ctx"/>
 </template>
 <script lang="tsx" setup>
+  import { Modal } from 'ant-design-vue';
   import {ref} from 'vue';
   import {defineSchemaForm, registerAntd} from '../schema-form';
+  import {message} from 'ant-design-vue';
 
-  registerAntd();
+  registerAntd({
+    confirm: (content: string, title?: string, type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm') => {
+      return new Promise((resolve, reject) => {
+        Modal.confirm({
+          content,
+          title,
+          type,
+          onCancel: () => {
+            reject();
+          },
+          onOk: () => {
+            resolve(undefined);
+          }
+        });
+      });
+    },
+    message
+  });
 
   const value = ref({
     title: ''

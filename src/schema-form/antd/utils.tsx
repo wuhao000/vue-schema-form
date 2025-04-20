@@ -110,6 +110,16 @@ export const createPopup = () => {
                     v-slots={ctx.slots} />;
   };
 };
+
+export const createAlert = () => {
+  return (props, ctx) => {
+    return <a-alert
+        {...props}
+        v-slots={ctx.slots}
+    />
+  }
+}
+
 export const createResult = () => {
   return (props, ctx) => {
     return <a-result {...props}

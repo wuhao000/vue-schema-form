@@ -1,4 +1,3 @@
-import locale from 'ant-design-vue/es/time-picker/locale/zh_CN';
 import {PropType, ref, watch} from 'vue';
 import {useBaseInput} from '../mixins';
 import {isNotNull, isNull} from '../utils/utils';
@@ -10,14 +9,6 @@ export const baseTimePickerProps = {
   valueType: {
     type: String as PropType<'string' | 'date'>,
     default: 'string'
-  },
-  locale: {
-    type: Object as PropType<any>,
-    default: () => locale
-  },
-  localeCode: {
-    type: String as PropType<string>,
-    default: 'zh'
   },
   clearable: {
     type: Boolean as PropType<boolean>,

@@ -2,15 +2,15 @@ import {registerComponent} from '../config';
 import InternalForm from '../internal/form';
 import {registerDisplay} from '../utils/register';
 import {DESKTOP, FieldTypes, MOBILE} from '../utils/utils';
-import MobileDisplayField from './mobile-display-field';
-import PlainDisplayField from './plain-display-field';
-import RangeDisplayField from './range-display-field';
-import SelectDisplayField from './select-display-field';
-import SwitchDisplayField from './switch-display-field';
-import TimeDisplayField from './time-display-field';
-import NumberDisplay from './number';
-import TextDisplay from './text-display-field';
-import HtmlDisplayField from './html-display-field';
+import MobileDisplayField from './mobile-display-field.vue';
+import PlainDisplayField from './plain-display-field.vue';
+import RangeDisplayField from './range-display-field.vue';
+import SelectDisplayField from './select-display-field.vue';
+import SwitchDisplayField from './switch-display-field.vue';
+import TimeDisplayField from './time-display-field.vue';
+import NumberDisplay from './number.vue';
+import TextDisplay from './text-display-field.vue';
+import HtmlDisplayField from './html-display-field.vue';
 
 registerDisplay({
   component: RangeDisplayField,

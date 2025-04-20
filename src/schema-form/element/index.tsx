@@ -1,42 +1,44 @@
-import TimePicker from './components/time-picker';
-import Upload from './components/upload';
-import Transfer from './components/transfer';
-import {
-  ElIcon,
-  ElMessageBox,
-} from 'element-plus';
+import { ElIcon, ElMessageBox } from 'element-plus';
 import 'element-plus/dist/index.css';
-import {Component} from 'vue';
-import {ILibComponents} from '../../../types';
-import {
-  config,
-  FieldTypes,
-  registerComponent,
-  registerDesktopLib, registerDisplay
-} from '../index';
+import { Component } from 'vue';
+import { ILibComponents } from '../../../types';
+import { FieldDefinition } from '../bean/field-definition';
+import { config, ConfirmType, FieldTypes, registerComponent, registerDesktopLib, registerDisplay } from '../index';
+import { getTransferOptions } from '../utils/utils';
+import Button from './components/button';
 import CheckboxGroup from './components/checkbox-group';
+import PasswordDisplay from './components/display/password';
+import RateDisplay from './components/display/rate';
 import RadioGroup from './components/radio-group';
 import Select from './components/select';
-import Button from './components/button';
+import TimePicker from './components/time-picker';
+import Transfer from './components/transfer';
+import Upload from './components/upload';
 import {
   createAlert,
   createAside,
   createCard,
+  createCascader,
   createCheckbox,
-  createPassword,
   createCol,
-  createContainer, createDatePicker, createEmpty, createFooter,
+  createContainer,
+  createDatePicker,
+  createEmpty,
+  createFooter,
   createForm,
-  createFormItem, createHeader,
+  createFormItem,
+  createHeader,
   createInput,
-  createInputNumber, createMain, createPopover, createRate,
+  createInputNumber,
+  createMain,
+  createPassword,
+  createPopover,
+  createRate,
   createResult,
-  createRow, createSlider, createSwitch, createCascader
-} from "./utils";
-import {FieldDefinition} from "../bean/field-definition";
-import {getTransferOptions} from "../utils/utils";
-import RateDisplay from "./components/display/rate";
-import PasswordDisplay from "./components/display/password";
+  createRow,
+  createSlider,
+  createSwitch
+} from './utils';
 
 const ComponentMap: Record<keyof ILibComponents, any> = {
   result: createResult(),
@@ -58,6 +60,7 @@ const ComponentMap: Record<keyof ILibComponents, any> = {
   content: createMain(),
   popup: createPopover(),
   popover: createPopover(),
+  collapse: null,
   icons: {
     info: <ElIcon class="el-info"/>,
     up: <ElIcon class="el-up"/>,
@@ -70,7 +73,11 @@ const ComponentMap: Record<keyof ILibComponents, any> = {
 export function registerElement() {
   console.debug('注册Element Plus表单组件');
   registerDesktopLib(ComponentMap);
-  config.confirmFn.desktop = ElMessageBox.confirm;
+  config.confirm.desktop = (message: string, title?: string, type?: ConfirmType) => {
+    return ElMessageBox.confirm(message, title, {
+      type: type as unknown as 'success' | 'warning' | 'info' | 'error'
+    }) as Promise<any>;
+  };
   config.formItemPropTransform.desktop = (component: Component, field) => {
     const props: any = {};
     if (field.errors.length) {
@@ -103,8 +110,8 @@ export function registerElement() {
     getProps(definition, platform) {
       return {
         title: definition.title
-      }
-    },
+      };
+    }
   });
   registerComponent({
     component: Select,
@@ -144,7 +151,7 @@ export function registerElement() {
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
-      return {options: field.options, multiple: true};
+      return { options: field.options, multiple: true };
     }
   });
   registerComponent({
@@ -153,7 +160,7 @@ export function registerElement() {
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: field => {
-      return {options: field.options, multiple: true};
+      return { options: field.options, multiple: true };
     }
   });
   registerComponent({
@@ -169,7 +176,7 @@ export function registerElement() {
       FieldTypes.Year, FieldTypes.Month, FieldTypes.Datetime],
     platforms: 'desktop',
     valueProp: 'modelValue',
-    getProps: definition => ({type: (definition.type as string).toLowerCase()})
+    getProps: definition => ({ type: (definition.type as string).toLowerCase() })
   });
   registerComponent({
     component: createRate(),
@@ -183,8 +190,8 @@ export function registerElement() {
     platforms: 'desktop',
     valueProp: 'modelValue',
     getProps: (field) => {
-      return {options: field.options};
-    },
+      return { options: field.options };
+    }
   });
   registerComponent({
     component: createSlider(),
@@ -199,10 +206,10 @@ export function registerElement() {
     valueProp: 'modelValue',
     getProps: (def: FieldDefinition) => {
       if (def.options) {
-        return {data: def.options, render: (item) => item.title};
+        return { data: def.options, render: (item) => item.title };
       }
       const dataSource = def.props?.dataSource || getTransferOptions(def.enum || []);
-      return {data: dataSource, render: (item) => item.title};
+      return { data: dataSource, render: (item) => item.title };
     }
   });
   registerComponent({

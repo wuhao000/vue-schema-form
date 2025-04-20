@@ -7,7 +7,7 @@ import Card from './card';
 import FormBlock from './form-block';
 import FormBlockMobile from './form-block-mobile';
 import GridLayout from './grid';
-import GroupLayout from './group';
+import GroupLayout from './group.vue';
 import StepsLayout from './steps';
 import Table from './table';
 import TextBox from './text-box';

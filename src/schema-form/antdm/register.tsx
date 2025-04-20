@@ -157,7 +157,7 @@ export const ComponentMap: Record<keyof ILibComponents, any> = {
 export function registerAntdMobile() {
   console.debug('注册Ant Design Mobile Vue表单组件');
   registerMobileLib(ComponentMap);
-  config.confirmFn.mobile = (content: string, title?: string) => {
+  config.confirm.mobile = (content: string, title?: string) => {
     return new Promise((resolve, reject) => {
       Modal.confirm(
         title, content

@@ -1,9 +1,10 @@
+import { InfoCircleOutlined, UpOutlined, UploadOutlined, CameraOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import antd from 'ant-design-vue';
 import Antdm from 'antd-mobile-vue-next';
 import Element from 'element-plus';
 import vant from 'vant';
 import 'vant/lib/index.css';
-import {createApp} from 'vue';
+import { createApp } from 'vue';
 import CodeContainer from './components/code-container.vue';
 import CodeEditor from './components/code-editor.vue';
 import DemoWrapper from './components/demo-wrapper.vue';
@@ -13,7 +14,6 @@ import './styles';
 import './styles/github-markdown.less';
 import App from './views/index.vue';
 import ShowValue from './views/show-value.vue';
-
 
 const app = createApp(App);
 app.config.warnHandler = () => {
@@ -29,4 +29,11 @@ app.component('DemoWrapper', DemoWrapper);
 app.component('CodeContainer', CodeContainer);
 app.component('CodeEditor', CodeEditor);
 app.component('ShowValue', ShowValue);
+app.component('InfoCircleOutlined', InfoCircleOutlined);
+app.component('UpOutlined', UpOutlined);
+app.component('DownOutlined', DownOutlined);
+app.component('DeleteOutlined', DeleteOutlined);
+app.component('PlusOutlined', PlusOutlined);
+app.component('UploadOutlined', UploadOutlined);
+app.component('CameraOutlined', CameraOutlined);
 app.mount('#app');
