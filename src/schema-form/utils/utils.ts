@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { computed, ComputedRef, isVNode, VNode } from 'vue';
 import {
   ILibComponents,
@@ -15,11 +16,10 @@ export enum Mode {
   Display = 'display'
 }
 
-
 export const getTransferOptions = (array) => {
   return array.map((item: any) => {
     if (typeof item === 'string') {
-      return {key: item, title: item};
+      return { key: item, title: item };
     } else {
       return {
         key: (item.key || item.value).toString(),
@@ -31,14 +31,13 @@ export const getTransferOptions = (array) => {
   });
 };
 
-
 export const useOptions = (props): {
   options: ComputedRef<any[]>
 } => {
   const options = computed(() => {
     if (props.options) {
       return props.options.map(option => {
-        const op = {...option};
+        const op = { ...option };
         op.label = getOptionProperty(option, props.labelProperty);
         op.value = getOptionProperty(option, props.valueProperty);
         return op;
@@ -47,9 +46,8 @@ export const useOptions = (props): {
       return [];
     }
   });
-  return {options};
+  return { options };
 };
-
 
 export enum FieldTypes {
   Grid = 'grid',
@@ -88,7 +86,6 @@ export enum FieldTypes {
 export const DESKTOP = 'desktop';
 export const MOBILE = 'mobile';
 
-
 export function swap(array, x, y) {
   array.splice(x, 1, ...array.splice(y, 1, array[x]));
 }
@@ -108,7 +105,6 @@ export const registerDesktopLib = (map: Record<keyof ILibComponents, any>) => {
     LibComponents[key].desktop = map[key];
   });
 };
-
 
 export const LibComponents: ILibComponents = {
   collapse: {
@@ -274,7 +270,6 @@ export const getDefaultValue = (field: FieldDefinition) => {
   }
 };
 
-
 export const getFormComponent = (platform: Platform) => LibComponents.form[platform];
 
 export const getRowComponent = (platform: Platform) => LibComponents.row[platform];
@@ -370,17 +365,9 @@ export const fixComponentDefinition = (value: SchemaFormComponentOptions | Schem
   };
 };
 
-
 export const uuid = () => {
-  const s = [];
-  const hexDigits = '0123456789abcdef';
-  for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substring(Math.floor(Math.random() * 0x10), 1);
-  }
-  s[14] = '4';  // bits 12-15 of the time_hi_and_version field to 0010
-  s[19] = hexDigits.substring((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[8] = s[13] = s[18] = s[23] = '-';
-  return s.join('');
+  const id = v4();
+  return id.substring(id.length - 7);
 };
 
 export const pick = (obj: Record<string, unknown>, keys: string[]): Record<string, unknown> => {

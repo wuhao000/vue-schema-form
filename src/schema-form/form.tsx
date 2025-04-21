@@ -150,7 +150,7 @@ const SchemaForm = defineComponent({
       }
     };
 
-    const setCurrentValue = () => {
+    const calcCurrentValue = () => {
       if (!currentValue.value || !isEqual(props.value, currentValue.value)){
         if (props.value) {
           if (isVNode(props.value)) {
@@ -302,7 +302,7 @@ const SchemaForm = defineComponent({
       }
     };
     watch(() => props.value, () => {
-      setCurrentValue();
+      calcCurrentValue();
     });
     watch(() => currentValue.value, (v) => {
       const cloneValue = cloneDeep(v);
@@ -319,7 +319,7 @@ const SchemaForm = defineComponent({
       }
     });
 
-    setCurrentValue();
+    calcCurrentValue();
     store.context = createContext(store, localOnOk, currentValue, props.context);
     store.editable = props.editable as boolean;
     return {
@@ -331,7 +331,10 @@ const SchemaForm = defineComponent({
       store,
       renderButtons,
       currentValue,
-      realSchema
+      realSchema,
+      setCurrentValue: v => {
+        currentValue.value = v;
+      }
     };
   },
   render() {
@@ -350,7 +353,9 @@ const SchemaForm = defineComponent({
           currentValue,
           0,
           false,
-          this.$emit
+          this.$emit,
+        undefined,
+        this.setCurrentValue
       )
     ];
     let footer: any = [

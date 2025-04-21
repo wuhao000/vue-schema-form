@@ -168,7 +168,8 @@ export function renderField(pathPrefix: string[] | null,
                             index: number,
                             wrap: boolean,
                             emit,
-                            arrayIndex: number = undefined) {
+                            arrayIndex: number = undefined,
+                            setCurrentValue: ((val: unknown) => void) = undefined) {
   let value = null;
   if (fieldDefinition.property?.includes('.')) {
     value = getPropertyValueByPath(fieldDefinition.property.substring(0, fieldDefinition.property.lastIndexOf('.')), currentValue);
@@ -186,7 +187,11 @@ export function renderField(pathPrefix: string[] | null,
     definition: fieldDefinition,
     formValue: currentValue,
     'onUpdate:value': v => {
-      setFieldValue(value, newField, v, emit);
+      if (setCurrentValue) {
+        setCurrentValue(v);
+      } else {
+        setFieldValue(value, newField, v, emit);
+      }
     },
     key: `field-${fieldDefinition.property}-${index}`,
     arrayIndex,

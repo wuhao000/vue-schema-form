@@ -9,8 +9,8 @@ import FormBlockMobile from './form-block-mobile';
 import GridLayout from './grid';
 import GroupLayout from './group.vue';
 import StepsLayout from './steps';
-import Table from './table';
-import TextBox from './text-box';
+import Table from './table.vue';
+import TextBox from './text-box.vue';
 import Collapse from './collapse';
 
 /**

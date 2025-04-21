@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, UpOutlined, UploadOutlined, CameraOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import { InfoCircleOutlined, PlusCircleFilled, PlusCircleOutlined, PlusCircleTwoTone, UpOutlined, UploadOutlined, CameraOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import antd from 'ant-design-vue';
 import Antdm from 'antd-mobile-vue-next';
 import Element from 'element-plus';
@@ -36,4 +36,7 @@ app.component('DeleteOutlined', DeleteOutlined);
 app.component('PlusOutlined', PlusOutlined);
 app.component('UploadOutlined', UploadOutlined);
 app.component('CameraOutlined', CameraOutlined);
+app.component('PlusCircleOutlined', PlusCircleOutlined);
+app.component('PlusCircleTwoTone', PlusCircleTwoTone);
+app.component('PlusCircleFilled', PlusCircleFilled);
 app.mount('#app');

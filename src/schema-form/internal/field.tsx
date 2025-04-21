@@ -236,9 +236,6 @@ export default defineComponent({
     });
 
     const isDisabled = computed(() => props.disabled || field.value.disabled || field.value.props?.disabled);
-    const removeArrayItem = (index: number) => {
-      (currentValue.value as any[]).splice(index, 1);
-    };
     const addArrayItem = (index) => {
       if (isNotNull(currentValue.value)) {
         if (type.value === FieldTypes.Object) {
@@ -468,7 +465,7 @@ export default defineComponent({
         onRemove: async (index) => {
           try {
             try {
-              removeArrayItem(index);
+              (currentValue.value as any[]).splice(index, 1);
             } catch (e) {
               // do nothing
             }
@@ -480,14 +477,14 @@ export default defineComponent({
           if (index <= (currentValue.value as any[]).length - 1) {
             const newArray = [...currentValue.value as any[]];
             swap(newArray, index, index + 1);
-            currentValue.value = newArray;
+            onValueUpdate([...newArray]);
           }
         },
         onMoveUp: index => {
           if (index > 0) {
             const newArray = [...currentValue.value as any[]];
             swap(newArray, index, index - 1);
-            currentValue.value = newArray;
+            onValueUpdate([...newArray]);
           }
         },
         onAdd: (index) => {

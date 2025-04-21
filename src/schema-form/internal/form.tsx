@@ -80,7 +80,9 @@ export default defineComponent({
       return array;
     });
     const instance = getCurrentInstance();
-    const isTable = computed(() => instance.parent?.type?.name === 'TableRow');
+    const isTable = computed(() => {
+      return instance.parent?.type?.name === 'TableRow'
+    });
     const renderSingleFields = () => {
       const FormComponent: any = getFormComponent(store.platform);
       const {definition, layoutProps, layoutType, inline} = props;
