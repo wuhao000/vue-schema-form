@@ -217,7 +217,12 @@ export const resolveOptions = (field: FieldDefinition, formValue: any) => {
     if (field.props.options) {
       return field.props.options;
     }
-    if (typeof fieldEnum === 'function') {
+    if (fieldEnum instanceof Promise) {
+      fieldEnum.then(data => {
+        field.props.options = data;
+      });
+      return [];
+    } else if (typeof fieldEnum === 'function') {
       const result = fieldEnum(formValue, field);
       if (Array.isArray(result)) {
         return result;
@@ -227,11 +232,6 @@ export const resolveOptions = (field: FieldDefinition, formValue: any) => {
         });
         return [];
       }
-    } else if (typeof fieldEnum === 'object' && fieldEnum['then']) {
-      fieldEnum['then'](data => {
-        field.props.options = data;
-      });
-      return [];
     }
     return fieldEnum;
   }

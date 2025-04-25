@@ -9,6 +9,8 @@ import './layout/register';
 import './styles/fix.less';
 import './styles/style.less';
 import MobileDisplayField from './display/mobile-display-field.vue';
+import VForm from './vform/v-form';
+import VFormItem from './vform/v-form-item';
 
 SchemaForm.Field = SchemaFormField;
 
@@ -20,6 +22,8 @@ SchemaForm.install = (app) => {
 SchemaForm.config = config;
 
 export {
+  VForm,
+  VFormItem,
   DUrl,
   MobileDisplayField
 };
@@ -65,6 +69,8 @@ SchemaForm.install = (app: App) => {
   app.component(RadioGroup.name, RadioGroup);
   app.component(DUrl.name, DUrl);
   app.component(SchemaForm.name, SchemaForm);
+  app.component(VForm.name, VForm);
+  app.component(VFormItem.name, VFormItem);
 };
 
 export default SchemaForm as typeof SchemaForm & {
