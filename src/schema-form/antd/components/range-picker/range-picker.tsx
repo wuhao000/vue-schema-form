@@ -11,8 +11,11 @@ const convertValue = (value: Array<Date | number>): any => {
   }
 };
 
-const convertValueBack = (value: Dayjs[] | undefined): Date[] => {
+const convertValueBack = (value: Dayjs[] | undefined, format: string): Date[] | string[] => {
   if (isNotNull(value)) {
+    if (format) {
+      return value.map(it => it.format(format));
+    }
     return value.map(it => it.toDate());
   } else {
     return undefined;
@@ -26,7 +29,8 @@ export default defineComponent({
       type: Array
     },
     placeholder: [String, Array] as PropType<string | string[]>,
-    showTime: Boolean
+    showTime: Boolean,
+    format: String,
   },
   setup(props, ctx) {
     const {emit} = ctx;
@@ -44,7 +48,7 @@ export default defineComponent({
       }
     }, {immediate: true});
     watch(() => currentValue.value, (value) => {
-      const val = convertValueBack(value);
+      const val = convertValueBack(value, props.format);
       if (ctx.attrs['onUpdate:value']) {
         emit('update:value', val);
       }
