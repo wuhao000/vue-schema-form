@@ -1,6 +1,6 @@
-import chunk from 'lodash.chunk';
-import {defineComponent, PropType} from 'vue';
-import {useOptions} from "../../utils/utils";
+import { chunk } from 'lodash';
+import { defineComponent, PropType } from 'vue';
+import { useOptions } from '../../utils/utils';
 
 export default defineComponent({
   name: 'DRadioGroup',
@@ -15,8 +15,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const {options: localOptions} = useOptions(props);
-    return {localOptions};
+    const { options: localOptions } = useOptions(props);
+    return { localOptions };
   },
   render() {
     const props = {
@@ -29,22 +29,22 @@ export default defineComponent({
       const cols = Math.abs(24 / (this.span as number));
       const chunks = chunk(this.localOptions, cols);
       slots.default = () => chunks.map(c => (
-          <el-row>
-            {
-              c.map(o => (
-                  <el-col span={this.span}>
-                    <el-radio {...o}>{o.label}</el-radio>
-                  </el-col>
-              ))
-            }
-          </el-row>
+        <el-row>
+          {
+            c.map(o => (
+              <el-col span={this.span}>
+                <el-radio {...o}>{o.label}</el-radio>
+              </el-col>
+            ))
+          }
+        </el-row>
       )) as any;
     } else {
       slots.default = () => this.localOptions.map(item => (
-          <el-radio {...item}>{item.label}</el-radio>
-      ))
+        <el-radio {...item}>{item.label}</el-radio>
+      ));
     }
     return <el-radio-group {...props}
-                           v-slots={slots}/>;
+                           v-slots={slots} />;
   }
 });

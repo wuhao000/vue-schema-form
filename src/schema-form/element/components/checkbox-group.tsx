@@ -1,5 +1,5 @@
 import {ElCheckbox, ElCheckboxGroup, ElCol, ElRow} from 'element-plus';
-import chunk from 'lodash.chunk';
+import { chunk } from 'lodash';
 import {defineComponent, PropType} from 'vue';
 import {useOptions} from "../../utils/utils";
 

@@ -1,7 +1,7 @@
 import { Slot } from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import {
   computed,
   defineComponent,

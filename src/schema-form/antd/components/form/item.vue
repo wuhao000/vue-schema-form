@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ComponentInternalInstance } from '@vue/runtime-core';
 import AsyncValidator from 'async-validator';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import {
   computed,
   ComputedRef,

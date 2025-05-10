@@ -1,5 +1,5 @@
 import { VNodeNormalizedChildren } from '@vue/runtime-core';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 import { Component, isProxy, isVNode, reactive, Ref, toRaw, VNode } from 'vue';
 import {
   DefaultPatternRule,

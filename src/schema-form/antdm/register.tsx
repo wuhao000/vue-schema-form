@@ -2,7 +2,8 @@ import { DeleteOutlined, DownOutlined, InfoCircleOutlined, PlusOutlined, UpOutli
 import dayjs from 'dayjs';
 import { config, FieldTypes, register, registerComponent, registerMobile, registerMobileLib } from '../';
 import { ILibComponents } from '../../../types';
-import { isNotNull, pick } from '../utils/utils';
+import { isNotNull } from '../utils/utils';
+import { pick } from '../utils/pick';
 import Upload from './upload';
 import NumberInput from './number';
 import { Modal } from 'antd-mobile-vue-next';

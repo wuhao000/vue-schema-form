@@ -1,4 +1,4 @@
-import get from 'lodash.get';
+import { get } from 'lodash';
 import { v4 } from 'uuid';
 import { reactive } from 'vue';
 import { Platform, SchemaFormComponent, SchemaFormField, SchemaFormStore, ShowFieldCondition } from '../../../types';

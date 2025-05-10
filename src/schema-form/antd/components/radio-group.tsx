@@ -1,4 +1,4 @@
-import chunk from 'lodash.chunk';
+import { chunk } from 'lodash';
 import omit from 'omit.js';
 import { defineComponent, PropType } from 'vue';
 import { useOptions } from '../../utils/utils';

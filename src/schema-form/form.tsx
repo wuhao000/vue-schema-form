@@ -1,5 +1,5 @@
 import className from 'classnames';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 import {
   computed, CSSProperties,
   defineComponent,
