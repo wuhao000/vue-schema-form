@@ -1,6 +1,6 @@
 <template>
   <template
-    v-for="(item, key) in menus"
+    v-for="(item) in menus"
     :key="item.path">
     <a-sub-menu
       v-if="item.children && item.children.length"

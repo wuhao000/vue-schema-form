@@ -3,6 +3,7 @@ import { App, Component, Ref, VNode } from 'vue';
 import { FieldDefinition } from '../src/schema-form/bean/field-definition';
 import { FormFields, Platform, SchemaFormField, SchemaFormStore } from './bean';
 import { IFormPathMatcher, IRuleDescription, Path } from './uform';
+import { ConfirmFn, MessageInstance } from '../src/schema-form';
 
 export interface IValidateResponse {
   errors: string[];
@@ -120,7 +121,10 @@ declare function defineSchemaForm<V = unknown, T extends SchemaFormField<V> = Sc
 
 declare function defineActions<T extends Action[] = Action[]>(actions: T): T;
 
-export function registerAntd();
+export function registerAntd(options: {
+  message: MessageInstance,
+  confirm: ConfirmFn
+});
 
 export function registerAntdMobile();
 

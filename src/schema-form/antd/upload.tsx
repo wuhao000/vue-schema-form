@@ -1,8 +1,8 @@
 import { Toast } from 'antd-mobile-vue-next';
 import omit from 'omit.js';
-import { computed, defineComponent, ref } from 'vue';
-import { useBaseInput } from '../';
-import { AntUploadFile, AntUploadObject } from '../../../types';
+import { computed, defineComponent, inject, ref } from 'vue';
+import { SchemaFormStoreKey, useBaseInput } from '../';
+import { AntUploadFile, AntUploadObject, SchemaFormStore } from '../../../types';
 import { baseUpdateProps, useBaseUpload } from '../common/base-upload';
 import { config } from '../config';
 import { isNotNull, LibComponents } from '../utils/utils';
@@ -21,6 +21,7 @@ export default defineComponent({
   emits: ['change', 'preview', 'update:value'],
   setup(props, ctx) {
     const { fileList } = useBaseUpload(props, ctx);
+    const store: SchemaFormStore = inject(SchemaFormStoreKey);
     const previewOpen = ref(false);
     const listType = computed(() => {
       switch (props.mode) {
@@ -41,6 +42,7 @@ export default defineComponent({
       fileList,
       uploadProps,
       previewOpen,
+      store,
       previewUrl,
       onChange(f: AntUploadObject) {
         if (!props.multiple && fileList.value.length > 1) {
@@ -63,6 +65,7 @@ export default defineComponent({
             } else {
               file.status = 'error';
               file.error = f.file.response.msg;
+              file.name = f.file.response.msg;
               config.message.desktop.error(f.file.response.msg);
             }
           }
@@ -106,8 +109,9 @@ export default defineComponent({
         </div>
       </a-upload-dragger>;
     } else {
-      const PlusIcon = LibComponents.icons.desktop.plus;
-      const CameraIcon = LibComponents.icons.desktop.camera;
+
+      const PlusIcon = LibComponents.icons[this.store.platform ?? 'desktop'].plus;
+      const CameraIcon = LibComponents.icons[this.store.platform ?? 'desktop'].camera;
       let content = null;
       if (this.listType === 'picture-card') {
         content = (

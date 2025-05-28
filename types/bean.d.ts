@@ -156,8 +156,8 @@ export type StepsField<V = any> = {
   /**
    * 每个步骤包含的组件数量
    */
-  layout: number[];
-  type: 'steps';
+  layout?: number[];
+  type?: 'steps';
   props?: SchemaFormFieldProps;
   xProps: {
     /**
@@ -172,8 +172,8 @@ export type GridField<V = any> = {
   /**
    * 数字或数字数组，可以深层嵌套
    */
-  layout: GridLayoutType;
-  type: 'grid';
+  layout?: GridLayoutType;
+  type?: 'grid';
   props?: SchemaFormFieldProps;
   xProps?: {
     /**
@@ -232,7 +232,7 @@ type DefaultSchemaFormField<V = any> = {
    */
   xProps?: SchemaFormFieldProps;
 
-  class: string | string[] | { [key: string]: boolean };
+  class?: string | string[] | { [key: string]: boolean };
 
 } & BaseSchemaFormField<V>;
 

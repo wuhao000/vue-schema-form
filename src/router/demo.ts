@@ -274,6 +274,93 @@ export default [{
 }
   ]
 }, {
+  path: '/demo/Vant',
+  redirect: '/demo/Vant/jiandanbuju',
+  component: RootComponent,
+  meta: {
+    tags: [],
+    name: 'Vant'
+  },
+  children: [
+    {
+  path: '/demo/Vant/jiandanbuju',
+  component: () => import('../generated/demo/Vant/jiandanbuju/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '简单布局'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/xiangqingmoshi',
+  component: () => import('../generated/demo/Vant/xiangqingmoshi/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '详情模式'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/shujuxiaoyan',
+  component: () => import('../generated/demo/Vant/shujuxiaoyan/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '数据校验'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/fuzuoyonghanshu',
+  component: () => import('../generated/demo/Vant/fuzuoyonghanshu/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '副作用函数'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/dongtaibiaodan',
+  component: () => import('../generated/demo/Vant/dongtaibiaodan/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '动态表单'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/jiegoufuzhi',
+  component: () => import('../generated/demo/Vant/jiegoufuzhi/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '解构赋值'
+  },
+  children: [
+    
+  ]
+},
+{
+  path: '/demo/Vant/duixiangliebiao',
+  component: () => import('../generated/demo/Vant/duixiangliebiao/index.vue'),
+  meta: {
+    tags: ['Vant'],
+    name: '对象列表'
+  },
+  children: [
+    
+  ]
+}
+  ]
+}, {
   path: '/demo/zibiaodan',
   redirect: '/demo/zibiaodan/yidongduan',
   component: RootComponent,

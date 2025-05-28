@@ -14,11 +14,13 @@ import './styles';
 import './styles/github-markdown.less';
 import App from './views/index.vue';
 import ShowValue from './views/show-value.vue';
+import Vant from 'vant';
 
 const app = createApp(App);
 app.config.warnHandler = () => {
   // do not show
 };
+app.use(Vant);
 app.use(Antdm);
 app.use(Element);
 app.use(router as any);

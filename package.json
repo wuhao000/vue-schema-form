@@ -1,6 +1,6 @@
 {
   "name": "v-schema-form",
-  "version": "3.3.2-22",
+  "version": "3.3.2-23",
   "files": [
     "es",
     "package.json",
@@ -16,7 +16,7 @@
     "docs": "ts-node build/routes.ts",
     "lint": "vue-cli-service lint --max-warnings 1",
     "check": "ts-node build/check-ts.ts",
-    "release": "npm run compile && npm publish",
+    "release": "npm run compile && npm publish --tag latest",
     "test": "ts-node build/test.ts && ts-node build/test.ts"
   },
   "publishConfig": {
@@ -30,6 +30,7 @@
     "js-base64": "^3.7.5",
     "js-beautify": "^1.13.0",
     "lodash.chunk": "^4.2.0",
+    "vant": "^4.9.19",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
@@ -74,7 +75,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "ant-design-vue": "4.2.6",
-    "antd-mobile-vue-next": "0.1.0-10",
+    "antd-mobile-vue-next": "^0.1.0-16",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-assign": "^6.22.0",
@@ -106,7 +107,6 @@
     "ts-loader": "^8.0.3",
     "ts-node": "^10.8.2",
     "typescript": "^4.9.3",
-    "vant": "^3.4.3",
     "vite": "^2.6.13",
     "vite-plugin-md": "^0.11.4",
     "vite-plugin-string": "^1.0.1",

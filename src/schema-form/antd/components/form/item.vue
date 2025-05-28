@@ -1,9 +1,13 @@
 <template>
   <a-form-item v-bind="formItemProps">
-    <template v-if="$slots.default" #default>
+    <template
+v-if="$slots.default"
+#default>
       <slot></slot>
     </template>
-    <template v-if="$slots.label" #label>
+    <template
+v-if="$slots.label"
+#label>
       <slot name="label"></slot>
     </template>
   </a-form-item>

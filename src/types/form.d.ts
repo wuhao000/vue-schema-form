@@ -1,5 +1,6 @@
 import {PropType, VNode} from 'vue';
 import {EffectsContext, SchemaFormField} from '../../types';
+import { JSX } from 'vue/jsx-runtime';
 
 export interface SchemaFormProps {
   prefixCls: string;
@@ -17,5 +18,15 @@ export interface SchemaFormProps {
   inline: boolean;
   sticky: boolean;
   components: any[];
+}
+
+export interface SelectOption {
+  children?: Array<SelectOption>;
+  label: string | VNode | JSX.Element;
+  value: string | number;
+  disabled?: boolean;
+  selected?: boolean;
+
+  [key: string]: unknown;
 }
 
