@@ -1,7 +1,6 @@
-import {defineComponent, ref} from 'vue';
-import {useRouter} from 'vue-router';
-import {resolveMenus} from '../utils/menu';
-import SubMenu from './sub-menu.vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { resolveMenus } from '../utils/menu';
 
 export default (routes) => {
   return defineComponent({
@@ -19,37 +18,36 @@ export default (routes) => {
       };
     },
     render() {
-      return (
-          <a-menu
-              openKeys={this.openKeys}
-              mode="inline">
-            {
-              this.menus.map((item) => {
-                if (item.children.length) {
-                  return (
-                      <a-sub-menu
-                          key={item.path}
-                          title={item.name}>
-                        <SubMenu
-                            menus={item.children}
-                            title={item.path}>
-                        </SubMenu>
-                      </a-sub-menu>
-                  );
-                } else {
-                  return (
-                      <a-menu-item
-                          key={item.path}
-                          onClick={() => {
-                            this.to(item.path);
-                          }}>
-                        {item.name}
-                      </a-menu-item>
-                  );
-                }
-              })
+      const toMenuItem = (item) => {
+        const menu: {
+          key: string;
+          label: string;
+          title: string;
+          children?: any[];
+          onClick?: () => void;
+        } = {
+          key: item.path,
+          label: item.name,
+          title: item.name,
+        };
+        if (item.children?.length) {
+          menu.children = item.children.map(toMenuItem);
+        } else {
+          menu.onClick = () => {
+            if (!item.children?.length) {
+              this.to(item.path);
             }
-          </a-menu>
+          }
+        }
+        return menu;
+      };
+
+      return (
+        <a-menu
+          openKeys={this.openKeys}
+          mode="inline"
+          items={this.menus.map(toMenuItem)}
+        />
       );
     }
   });

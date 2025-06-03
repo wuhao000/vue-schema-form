@@ -1,7 +1,8 @@
 import { Toast } from 'antd-mobile-vue-next';
 import omit from 'omit.js';
 import { computed, defineComponent, inject, ref } from 'vue';
-import { SchemaFormStoreKey, useBaseInput } from '../';
+import { SchemaFormStoreKey } from '../utils/key';
+import { useBaseInput } from '../mixins';
 import { AntUploadFile, AntUploadObject, SchemaFormStore } from '../../../types';
 import { baseUpdateProps, useBaseUpload } from '../common/base-upload';
 import { config } from '../config';

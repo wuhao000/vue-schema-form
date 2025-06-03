@@ -1,7 +1,7 @@
-import dayjs, {Dayjs} from 'dayjs';
-import {defineComponent, PropType, ref, watch} from 'vue';
-import {useBaseInput} from '../../../';
-import {isNotNull} from '../../../utils/utils';
+import dayjs, { Dayjs } from 'dayjs';
+import { defineComponent, PropType, ref, watch } from 'vue';
+import { useBaseInput } from '../../../mixins';
+import { isNotNull } from '../../../utils/utils';
 
 const convertValue = (value: Array<Date | number>): any => {
   if (isNotNull(value)) {
@@ -30,10 +30,10 @@ export default defineComponent({
     },
     placeholder: [String, Array] as PropType<string | string[]>,
     showTime: Boolean,
-    format: String,
+    format: String
   },
   setup(props, ctx) {
-    const {emit} = ctx;
+    const { emit } = ctx;
     const currentValue = ref<Dayjs[]>(null);
     watch(() => props.value, (value: any) => {
       const convertedValue = convertValue(value);
@@ -46,7 +46,7 @@ export default defineComponent({
           currentValue.value = convertedValue;
         }
       }
-    }, {immediate: true});
+    }, { immediate: true });
     watch(() => currentValue.value, (value) => {
       const val = convertValueBack(value, props.format);
       if (ctx.attrs['onUpdate:value']) {
@@ -54,7 +54,7 @@ export default defineComponent({
       }
       emit('change', val);
     });
-    const {size} = useBaseInput(props, ctx);
+    const { size } = useBaseInput(props, ctx);
     const updateCurrentValue = (value) => {
       currentValue.value = value;
     };
@@ -70,7 +70,7 @@ export default defineComponent({
         'onUpdate:value': updateCurrentValue
       };
     };
-    return {getProps};
+    return { getProps };
   },
   render() {
     return <a-range-picker {...this.getProps() as any}

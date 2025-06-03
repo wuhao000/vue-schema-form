@@ -1,14 +1,14 @@
-import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
-import {ElMessage, ElUpload} from 'element-plus';
-import {Base64} from 'js-base64';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons-vue';
+import { ElMessage, ElUpload } from 'element-plus';
+import { Base64 } from 'js-base64';
 import omit from 'omit.js';
-import {computed, defineComponent, ref} from 'vue';
-import {baseUpdateProps, useBaseUpload} from '../../common/base-upload';
-import {useBaseInput} from "../../";
-import {isNotNull} from "../../utils/utils";
+import { computed, defineComponent, ref } from 'vue';
+import { baseUpdateProps, useBaseUpload } from '../../common/base-upload';
+import { useBaseInput } from '../../mixins';
+import { isNotNull } from '../../utils/utils';
 import Button from './button';
-import {UploadFile} from "element-plus/es/components/upload/src/upload";
-import {UploaderFileListItem} from "vant";
+import { UploadFile } from 'element-plus/es/components/upload/src/upload';
+import { UploaderFileListItem } from 'vant';
 
 export default defineComponent({
   name: 'DUpload',
@@ -20,7 +20,7 @@ export default defineComponent({
   },
   emits: ['change', 'preview', 'update:value'],
   setup(props, ctx) {
-    const {fileList} = useBaseUpload(props, ctx);
+    const { fileList } = useBaseUpload(props, ctx);
     const previewOpen = ref(false);
     const listType = computed(() => {
       switch (props.mode) {
@@ -33,7 +33,7 @@ export default defineComponent({
       }
     });
     const uploadProps = Object.assign({}, ctx.attrs, omit(props, ['value', 'onPreview']));
-    const {size} = useBaseInput(props, ctx);
+    const { size } = useBaseInput(props, ctx);
     const previewUrl = ref();
     return {
       size,
@@ -100,7 +100,7 @@ export default defineComponent({
     if (this.mode === 'dragger') {
       content = [
         <el-icon class="el-icon--upload">
-          <UploadOutlined/>
+          <UploadOutlined />
         </el-icon>,
         <div class="el-upload__text">
           拖拽文件至此或 <em>点击上传</em>
@@ -108,62 +108,62 @@ export default defineComponent({
       ];
     } else if (this.listType === 'picture-card') {
       content = (
-          <div class="el-upload-select-btn">
-            <el-icon><PlusOutlined/></el-icon>
-          </div>
+        <div class="el-upload-select-btn">
+          <el-icon><PlusOutlined /></el-icon>
+        </div>
       );
     } else if (this.listType === 'picture') {
       content = (
-          <div class="el-upload-image-wrapper">
-            {
-              this.fileList.length && this.fileList[0].url ? (
-                      <img src={this.fileList[0].url}
-                           alt=""
-                           style="height: 100%;width: 100%;"/>
-                  )
-                  : (
-                      <div class="el-upload-plus">
-                        <PlusOutlined/>
-                      </div>
-                  )
-            }
-          </div>
+        <div class="el-upload-image-wrapper">
+          {
+            this.fileList.length && this.fileList[0].url ? (
+                <img src={this.fileList[0].url}
+                     alt=""
+                     style="height: 100%;width: 100%;" />
+              )
+              : (
+                <div class="el-upload-plus">
+                  <PlusOutlined />
+                </div>
+              )
+          }
+        </div>
       );
     } else if (this.listType === 'text') {
       content = (
-          <a-button
-              disabled={this.$attrs.disabled}
-              size={this.size}>选择文件
-          </a-button>
+        <a-button
+          disabled={this.$attrs.disabled}
+          size={this.size}>选择文件
+        </a-button>
       );
     }
-    const a = <ElUpload/>
+    const a = <ElUpload />;
     return (
-        <el-upload
-            {...this.uploadProps}
-            listType={this.listType}
-            v-model:fileList={[this.fileList, 'fileList']}
-            openFileDialogOnClick={true}
-            drag={this.mode === 'dragger'}
-            onChange={this.onChange}
-            capture={undefined}
-            onPreview={this.localPreview}
-            size={this.size}>
-          {content}
-          {this.$slots.default?.()}
-          <el-dialog open={this.previewOpen}
-                     footer={<Button type="primary"
-                                     onClick={() => {
-                                       this.cancelPreview();
-                                     }}>确定</Button>}
-                     onCancel={() => {
-                       this.cancelPreview();
-                     }}>
-            <img alt="example"
-                 style="width: 100%"
-                 src={this.previewUrl}/>
-          </el-dialog>
-        </el-upload>
+      <el-upload
+        {...this.uploadProps}
+        listType={this.listType}
+        v-model:fileList={[this.fileList, 'fileList']}
+        openFileDialogOnClick={true}
+        drag={this.mode === 'dragger'}
+        onChange={this.onChange}
+        capture={undefined}
+        onPreview={this.localPreview}
+        size={this.size}>
+        {content}
+        {this.$slots.default?.()}
+        <el-dialog open={this.previewOpen}
+                   footer={<Button type="primary"
+                                   onClick={() => {
+                                     this.cancelPreview();
+                                   }}>确定</Button>}
+                   onCancel={() => {
+                     this.cancelPreview();
+                   }}>
+          <img alt="example"
+               style="width: 100%"
+               src={this.previewUrl} />
+        </el-dialog>
+      </el-upload>
     );
   }
 });

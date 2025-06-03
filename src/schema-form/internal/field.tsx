@@ -45,7 +45,7 @@ import {
   swap,
   uuid
 } from '../utils/utils';
-import SchemaFormFieldLabel from './label.vue';
+import SchemaFormFieldLabel from './label';
 import {
   calcEditable,
   calcShowState,

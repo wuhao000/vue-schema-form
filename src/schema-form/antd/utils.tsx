@@ -1,4 +1,4 @@
-import { useBaseInput } from '../';
+import { useBaseInput } from '../mixins';
 import { pick } from '../utils/utils';
 import omit from 'omit.js';
 
